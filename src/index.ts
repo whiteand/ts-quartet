@@ -4,10 +4,12 @@ import {
   InstanceSettings,
   IObjectSchema,
   IVariantSchema,
+  QuartetInstance,
   Schema,
   TypeGuardValidator,
   Validator
 } from "./global";
+import { methods } from "./methods";
 
 const doExplanations = (
   value: any,
@@ -268,8 +270,9 @@ const compile = (
 const defaultSettings: InstanceSettings = {
   allErrors: true
 };
+
 const createInstance = (settings: InstanceSettings = defaultSettings) => {
-  const compiler = <T = any>(
+  const compiler: any = <T = any>(
     schema?: Schema,
     explanation?: Explanation,
     innerSettings?: InstanceSettings
@@ -286,7 +289,10 @@ const createInstance = (settings: InstanceSettings = defaultSettings) => {
     ): value is T => compiled(value, explanations || [], parents || []);
     return resTypeGuard;
   };
-  return compiler;
+  for (const [methodName, method] of Object.entries(methods)) {
+    compiler[methodName] = method;
+  }
+  return compiler as QuartetInstance;
 };
 
 export default createInstance;

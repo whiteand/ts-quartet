@@ -1,3 +1,4 @@
+import { IMethods } from "./methods";
 export interface IKeyParentSchema {
   key: any;
   parent: any;
@@ -46,3 +47,10 @@ export type InstanceSettings = Partial<{
   onValid: FromValidationParams;
   allErrors: boolean;
 }>;
+
+type QuartetInstance = (<T = any>(
+  schema?: Schema,
+  explanation?: Explanation,
+  innerSettings?: InstanceSettings
+) => TypeGuardValidator<T>) &
+  IMethods;
