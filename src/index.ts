@@ -1,52 +1,10 @@
-interface IKeyParent {
-  key: any;
-  parent: any;
-  schema: any;
-}
-
-type Validator<T = any> = (
-  value: any,
-  explanations?: any[],
-  parents?: IKeyParent[],
-  settings?: InstanceSettings
-) => value is T;
-
-interface IObjectSchema {
-  [key: string]: Schema;
-}
-
-type Schema<T = any> =
-  | null
-  | number
-  | string
-  | symbol
-  | undefined
-  | boolean
-  | Validator<T>
-  | IVariantSchema
-  | IObjectSchema;
-interface IVariantSchema extends Array<Schema> {}
-
-type FromValidationParams<T = any> = (
-  value: any,
-  schema: Schema,
-  settings: InstanceSettings,
-  parents?: IKeyParent[]
-) => T;
-type Explanation<T = any> = T | FromValidationParams<T>;
-
-type InstanceSettings = Partial<{
-  defaultExplanation: Explanation;
-  onInvalid: FromValidationParams;
-  onValid: FromValidationParams;
-  allErrors: boolean;
-}>;
+import { Explanation, IKeyParentSchema, InstanceSettings, IObjectSchema, IVariantSchema, Schema, TypeGuardValidator, Validator } from "./global";
 
 const doExplanations = (
   value: any,
   schema: Schema,
   settings: InstanceSettings,
-  parents?: IKeyParent[],
+  parents?: IKeyParentSchema[],
   explanation?: Explanation,
   explanations?: any[]
 ) => {
@@ -65,17 +23,17 @@ const doExplanations = (
   }
 };
 
-const compileFunction = <T = any>(
+const compileFunction = (
   settings: InstanceSettings,
-  schema: Validator<T>,
+  schema: Validator,
   explanation?: Explanation
-): Validator<T> & { schema: Schema } => {
-  const res: Validator<T> & { schema: Schema } = (
+): Validator & { schema: Schema } => {
+  const res: Validator & { schema: Schema } = (
     value,
     explanations,
     parents
-  ): value is T => {
-    const isValid = schema(value, explanations, parents, settings);
+  ): boolean => {
+    const isValid = schema(value, explanations, parents);
     if (!isValid) {
       doExplanations(
         value,
@@ -99,20 +57,20 @@ const compileFunction = <T = any>(
   return res;
 };
 
-const compileVariantSchema = <T = any>(
+const compileVariantSchema = (
   settings: InstanceSettings,
   schema: IVariantSchema,
   explanation?: Explanation
-): Validator<T> & { schema: Schema } => {
+): Validator & { schema: Schema } => {
   const validators = schema.map(innerSchema => compile(settings, innerSchema));
-  const resValidator: Validator<T> & { schema: Schema } = (
+  const resValidator: Validator & { schema: Schema } = (
     value,
     explanations,
     parents
-  ): value is T => {
+  ): boolean => {
     const innerExplanations: any[] = [];
-    const isValid = validators.some(check =>
-      check(value, innerExplanations, parents, settings)
+    const isValid = validators.some((check: Validator) =>
+      check(value, innerExplanations, parents)
     );
     if (!isValid) {
       if (explanations) {
@@ -140,20 +98,20 @@ const compileVariantSchema = <T = any>(
   return resValidator;
 };
 
-const compileFirstErrorObjectSchema = <T = any>(
+const compileFirstErrorObjectSchema = (
   settings: InstanceSettings,
   schema: IObjectSchema,
   explanation?: Explanation
-): Validator<T> & { schema: Schema } => {
+): Validator & { schema: Schema } => {
   const entries = Object.entries(schema).map(([key, innerSchema]) => ({
     check: compile(settings, innerSchema),
     key
   }));
-  const resValidator: Validator<T> & { schema: Schema } = (
+  const resValidator: Validator & { schema: Schema } = (
     value,
     explanations,
     parents
-  ): value is T => {
+  ): boolean => {
     if (!value) {
       doExplanations(
         value,
@@ -170,7 +128,7 @@ const compileFirstErrorObjectSchema = <T = any>(
     }
     const isValid = entries.every(({ key, check }) => {
       const newParents = [{ key, parent: value, schema }, ...(parents || [])];
-      return check(value[key], explanations, newParents, settings);
+      return check(value[key], explanations, newParents);
     });
 
     if (!isValid) {
@@ -196,20 +154,20 @@ const compileFirstErrorObjectSchema = <T = any>(
   return resValidator;
 };
 
-const compileAllErrorsObjectSchema = <T = any>(
+const compileAllErrorsObjectSchema = (
   settings: InstanceSettings,
   schema: IObjectSchema,
   explanation?: Explanation
-): Validator<T> & { schema: Schema } => {
+): Validator & { schema: Schema } => {
   const entries = Object.entries(schema).map(([key, innerSchema]) => ({
     check: compile(settings, innerSchema),
     key,
   }));
-  const resValidator: Validator<T> & { schema: Schema } = (
+  const resValidator: Validator & { schema: Schema } = (
     value,
     explanations,
     parents
-  ): value is T => {
+  ): boolean => {
     if (!value) {
       doExplanations(
         value,
@@ -227,7 +185,7 @@ const compileAllErrorsObjectSchema = <T = any>(
     let isValid = true;
     for (const { key, check } of entries) {
       const newParents = [{ key, parent: value, schema }, ...(parents || [])];
-      const isValidProp = check(value[key], explanations, newParents, settings);
+      const isValidProp = check(value[key], explanations, newParents);
       isValid = isValid && isValidProp;
     }
 
@@ -254,15 +212,15 @@ const compileAllErrorsObjectSchema = <T = any>(
   return resValidator;
 };
 
-const compileObjectSchema = <T = any>(
+const compileObjectSchema = (
   settings: InstanceSettings,
   schema: IObjectSchema,
   explanation?: Explanation
-): Validator<T> & { schema: Schema } => {
+): Validator & { schema: Schema } => {
   if (settings.allErrors) {
-    return compileAllErrorsObjectSchema<T>(settings, schema, explanation);
+    return compileAllErrorsObjectSchema(settings, schema, explanation);
   }
-  return compileFirstErrorObjectSchema<T>(settings, schema, explanation);
+  return compileFirstErrorObjectSchema(settings, schema, explanation);
 };
 
 const isConstantSchema = (
@@ -278,19 +236,19 @@ const isConstantSchema = (
     typeof possiblyConstantSchema
   ) >= 0 || possiblyConstantSchema === null;
 
-const compile = <T = any>(
+const compile = (
   settings: InstanceSettings,
-  schema?: Schema<T>,
+  schema?: Schema,
   explanation?: Explanation
-): Validator<T> => {
+): Validator => {
   if (typeof schema === "function") {
-    return compileFunction<T>(settings, schema, explanation);
+    return compileFunction(settings, schema, explanation);
   }
   if (Array.isArray(schema)) {
-    return compileVariantSchema<T>(settings, schema, explanation);
+    return compileVariantSchema(settings, schema, explanation);
   }
   if (isConstantSchema(schema)) {
-    return (value: any): value is T => value === schema;
+    return (value: any): boolean => value === schema;
   }
   if (typeof schema === "object") {
     return compileObjectSchema(settings, schema, explanation);
@@ -306,12 +264,14 @@ const createInstance = (settings: InstanceSettings = defaultSettings) => {
     schema?: Schema,
     explanation?: Explanation,
     innerSettings?: InstanceSettings
-  ): Validator<T> => {
+  ): TypeGuardValidator<T> => {
     const newSettings: InstanceSettings = {
       ...settings,
       ...(innerSettings || {})
     };
-    return compile(newSettings, schema, explanation);
+    const compiled = compile(newSettings, schema, explanation)
+    const resTypeGuard: TypeGuardValidator<T> = (value, explanations, parents): value is T => compiled(value, explanations || [], parents || [])
+    return resTypeGuard
   };
   return compiler;
 };
