@@ -88,6 +88,7 @@ const compileFunction = <T = any>(
       if (settings.onInvalid) {
         settings.onInvalid(value, schema, settings, parents);
       }
+      return false;
     }
     if (settings.onValid) {
       settings.onValid(value, schema, settings, parents);
@@ -128,6 +129,7 @@ const compileVariantSchema = <T = any>(
       if (settings.onInvalid) {
         settings.onInvalid(value, schema, settings, parents);
       }
+      return false;
     }
     if (settings.onValid) {
       settings.onValid(value, schema, settings, parents);
@@ -143,9 +145,55 @@ const compileFirstErrorObjectSchema = <T = any>(
   schema: IObjectSchema,
   explanation?: Explanation
 ): Validator<T> & { schema: Schema } => {
-  const isValid = (value: any): value is T => false;
-  isValid.schema = schema;
-  return isValid;
+  const entries = Object.entries(schema).map(([key, innerSchema]) => ({
+    check: compile(settings, innerSchema),
+    key
+  }));
+  const resValidator: Validator<T> & { schema: Schema } = (
+    value,
+    explanations,
+    parents
+  ): value is T => {
+    if (!value) {
+      doExplanations(
+        value,
+        schema,
+        settings,
+        parents,
+        explanation,
+        explanations
+      );
+      if (settings.onInvalid) {
+        settings.onInvalid(value, schema, settings, parents);
+      }
+      return false;
+    }
+    const isValid = entries.every(({ key, check }) => {
+      const newParents = [{ key, parent: value, schema }, ...(parents || [])];
+      return check(value[key], explanations, newParents, settings);
+    });
+
+    if (!isValid) {
+      doExplanations(
+        value,
+        schema,
+        settings,
+        parents,
+        explanation,
+        explanations
+      );
+      if (settings.onInvalid) {
+        settings.onInvalid(value, schema, settings, parents);
+      }
+      return false;
+    }
+    if (settings.onValid) {
+      settings.onValid(value, schema, settings, parents);
+    }
+    return isValid;
+  };
+  resValidator.schema = schema;
+  return resValidator;
 };
 
 const compileAllErrorsObjectSchema = <T = any>(
@@ -153,9 +201,57 @@ const compileAllErrorsObjectSchema = <T = any>(
   schema: IObjectSchema,
   explanation?: Explanation
 ): Validator<T> & { schema: Schema } => {
-  const isValid = (value: any): value is T => false; // TODO: write this
-  isValid.schema = schema;
-  return isValid;
+  const entries = Object.entries(schema).map(([key, innerSchema]) => ({
+    check: compile(settings, innerSchema),
+    key,
+  }));
+  const resValidator: Validator<T> & { schema: Schema } = (
+    value,
+    explanations,
+    parents
+  ): value is T => {
+    if (!value) {
+      doExplanations(
+        value,
+        schema,
+        settings,
+        parents,
+        explanation,
+        explanations
+      );
+      if (settings.onInvalid) {
+        settings.onInvalid(value, schema, settings, parents);
+      }
+      return false;
+    }
+    let isValid = true;
+    for (const { key, check } of entries) {
+      const newParents = [{ key, parent: value, schema }, ...(parents || [])];
+      const isValidProp = check(value[key], explanations, newParents, settings);
+      isValid = isValid && isValidProp;
+    }
+
+    if (!isValid) {
+      doExplanations(
+        value,
+        schema,
+        settings,
+        parents,
+        explanation,
+        explanations
+      );
+      if (settings.onInvalid) {
+        settings.onInvalid(value, schema, settings, parents);
+      }
+      return false;
+    }
+    if (settings.onValid) {
+      settings.onValid(value, schema, settings, parents);
+    }
+    return isValid;
+  };
+  resValidator.schema = schema;
+  return resValidator;
 };
 
 const compileObjectSchema = <T = any>(
@@ -219,3 +315,5 @@ const createInstance = (settings: InstanceSettings = defaultSettings) => {
   };
   return compiler;
 };
+
+export default createInstance
