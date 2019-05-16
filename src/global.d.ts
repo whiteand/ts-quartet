@@ -8,7 +8,7 @@ export type TypeGuardValidator<T = any> = (
   value: any,
   explanations?: any[],
   parents?: IKeyParentSchema[]
-) => value is T
+) => value is T;
 
 export type Validator = (
   value: any,

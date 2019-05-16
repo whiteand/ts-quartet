@@ -1,4 +1,13 @@
-import { Explanation, IKeyParentSchema, InstanceSettings, IObjectSchema, IVariantSchema, Schema, TypeGuardValidator, Validator } from "./global";
+import {
+  Explanation,
+  IKeyParentSchema,
+  InstanceSettings,
+  IObjectSchema,
+  IVariantSchema,
+  Schema,
+  TypeGuardValidator,
+  Validator
+} from "./global";
 
 const doExplanations = (
   value: any,
@@ -161,7 +170,7 @@ const compileAllErrorsObjectSchema = (
 ): Validator & { schema: Schema } => {
   const entries = Object.entries(schema).map(([key, innerSchema]) => ({
     check: compile(settings, innerSchema),
-    key,
+    key
   }));
   const resValidator: Validator & { schema: Schema } = (
     value,
@@ -269,11 +278,15 @@ const createInstance = (settings: InstanceSettings = defaultSettings) => {
       ...settings,
       ...(innerSettings || {})
     };
-    const compiled = compile(newSettings, schema, explanation)
-    const resTypeGuard: TypeGuardValidator<T> = (value, explanations, parents): value is T => compiled(value, explanations || [], parents || [])
-    return resTypeGuard
+    const compiled = compile(newSettings, schema, explanation);
+    const resTypeGuard: TypeGuardValidator<T> = (
+      value,
+      explanations,
+      parents
+    ): value is T => compiled(value, explanations || [], parents || []);
+    return resTypeGuard;
   };
   return compiler;
 };
 
-export default createInstance
+export default createInstance;
