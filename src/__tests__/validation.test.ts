@@ -1,4 +1,4 @@
-import { IKeyParentSchema, InstanceSettings, Validator } from "../global.d";
+import { IKeyParentSchema, InstanceSettings, Validator } from "../global";
 import quartet from "../index";
 
 test("quartet is function", () => {

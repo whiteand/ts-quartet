@@ -1,11 +1,9 @@
-import { QuartetInstance, Schema, TypeGuardValidator } from "../global";
-
 export interface IMethods {
-  array: TypeGuardValidator<any[]>;
-  finite: TypeGuardValidator<number>;
-  number: TypeGuardValidator<number>;
-  safeInteger: TypeGuardValidator<number>;
-  string: TypeGuardValidator<string>;
+  array: Validator;
+  finite: Validator;
+  number: Validator;
+  safeInteger: Validator;
+  string: Validator;
 }
 export const methods: IMethods = {
   array: (value): value is any[] => Array.isArray(value),

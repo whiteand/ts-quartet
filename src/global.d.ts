@@ -1,21 +1,18 @@
 import { IMethods } from "./methods";
+
 export interface IKeyParentSchema {
   key: any;
   parent: any;
   schema: any;
 }
 
-export type TypeGuardValidator<T = any> = (
+export type Validator = (
   value: any,
   explanations?: any[],
   parents?: IKeyParentSchema[]
-) => value is T;
-
-export type Validator = (
-  value: any,
-  explanations: any[],
-  parents: IKeyParentSchema[]
 ) => boolean;
+
+export type ValidatorWithSchema = Validator & { schema: Schema };
 
 export interface IObjectSchema {
   [key: string]: Schema;
@@ -48,9 +45,9 @@ export type InstanceSettings = Partial<{
   allErrors: boolean;
 }>;
 
-type QuartetInstance = (<T = any>(
+export type QuartetInstance = ((
   schema?: Schema,
   explanation?: Explanation,
   innerSettings?: InstanceSettings
-) => TypeGuardValidator<T>) &
+) => Validator) &
   IMethods;
