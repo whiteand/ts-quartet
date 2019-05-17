@@ -1,4 +1,4 @@
-import quartet from "../index";
+import { quartet } from "../index";
 import { IKeyParentSchema, InstanceSettings, Validator } from "../types";
 
 test("quartet is function", () => {
