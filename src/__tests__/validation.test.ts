@@ -1,5 +1,5 @@
-import { IKeyParentSchema, InstanceSettings, Validator } from "../index.ts";
 import quartet from "../index";
+import { IKeyParentSchema, InstanceSettings, Validator } from "../types";
 
 test("quartet is function", () => {
   expect(typeof quartet).toBe("function");

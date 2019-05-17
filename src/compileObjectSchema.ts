@@ -1,124 +1,133 @@
 import { compile } from "./compile";
 import { doExplanations } from "./doExplanation";
+import { has } from "./helpers";
+import { REST } from "./symbols";
 import {
   Explanation,
+  IKeyParentSchema,
   InstanceSettings,
   IObjectSchema,
+  Validator,
   ValidatorWithSchema
 } from "./types";
 
-const compileFirstErrorObjectSchema = (
-  settings: InstanceSettings,
-  schema: IObjectSchema,
-  explanation?: Explanation
-): ValidatorWithSchema => {
-  const entries = Object.entries(schema).map(([key, innerSchema]) => ({
-    check: compile(settings, innerSchema),
-    key
-  }));
-  const resValidator: ValidatorWithSchema = (
-    value,
-    explanations,
-    parents
-  ): boolean => {
-    if (!value) {
-      doExplanations(
-        value,
-        schema,
-        settings,
-        parents,
-        explanation,
-        explanations
-      );
-      if (settings.onInvalid) {
-        settings.onInvalid(value, schema, settings, parents);
-      }
-      return false;
-    }
-    const isValid = entries.every(({ key, check }) => {
-      const newParents = [{ key, parent: value, schema }, ...(parents || [])];
-      return check(value[key], explanations, newParents);
-    });
+interface IPrecompiledValidationData {
+  hasRest: boolean;
+  restValidator: Validator;
+  validatorsDict: { [prop: string]: Validator };
+}
 
-    if (!isValid) {
-      doExplanations(
-        value,
-        schema,
-        settings,
-        parents,
-        explanation,
-        explanations
-      );
-      if (settings.onInvalid) {
-        settings.onInvalid(value, schema, settings, parents);
-      }
-      return false;
-    }
-    if (settings.onValid) {
-      settings.onValid(value, schema, settings, parents);
-    }
-    return isValid;
-  };
-  resValidator.schema = schema;
-  return resValidator;
+// Returns true if handled
+type ObjectValidationHandler = (
+  precompiledData: IPrecompiledValidationData,
+  value: any,
+  schema: IObjectSchema,
+  settings: InstanceSettings,
+  parents?: IKeyParentSchema[],
+  explanation?: Explanation,
+  explanations?: any[]
+) => { handled: boolean; isValid: boolean };
+
+const notObjectHandler: ObjectValidationHandler = (
+  precompiledData,
+  value,
+  schema,
+  settings,
+  parents,
+  explanation,
+  explanations
+) => {
+  if (!value) {
+    doExplanations(value, schema, settings, parents, explanation, explanations);
+  }
+  return { handled: !value, isValid: false };
 };
 
-const compileAllErrorsObjectSchema = (
-  settings: InstanceSettings,
+const getParentsGetter = (
+  parent: any,
   schema: IObjectSchema,
-  explanation?: Explanation
-): ValidatorWithSchema => {
-  const entries = Object.entries(schema).map(([key, innerSchema]) => ({
-    check: compile(settings, innerSchema),
-    key
-  }));
-  const resValidator: ValidatorWithSchema = (
-    value,
-    explanations,
-    parents
-  ): boolean => {
-    if (!value) {
-      doExplanations(
-        value,
-        schema,
-        settings,
-        parents,
-        explanation,
-        explanations
-      );
-      if (settings.onInvalid) {
-        settings.onInvalid(value, schema, settings, parents);
-      }
-      return false;
-    }
-    let isValid = true;
-    for (const { key, check } of entries) {
-      const newParents = [{ key, parent: value, schema }, ...(parents || [])];
-      const isValidProp = check(value[key], explanations, newParents);
-      isValid = isValid && isValidProp;
-    }
+  parents?: IKeyParentSchema[]
+) => (key: string) => [{ key, schema, parent }, ...(parents || [])];
 
-    if (!isValid) {
-      doExplanations(
-        value,
-        schema,
-        settings,
-        parents,
-        explanation,
-        explanations
-      );
-      if (settings.onInvalid) {
-        settings.onInvalid(value, schema, settings, parents);
-      }
-      return false;
+const propValidationHandler: ObjectValidationHandler = (
+  precompiledData,
+  value,
+  schema,
+  settings,
+  parents,
+  explanation,
+  explanations
+) => {
+  const { hasRest, validatorsDict, restValidator } = precompiledData;
+  const firstStepPropsTesting = hasRest
+    ? Object.keys(value)
+    : Object.keys(validatorsDict);
+  const getParents = getParentsGetter(value, schema, parents);
+  let isValid = true;
+  for (const prop of firstStepPropsTesting) {
+    const propValue = value[prop];
+    const isRestProp = !has(validatorsDict, prop);
+    const propValidator = isRestProp ? restValidator : validatorsDict[prop];
+    const isValidProp = propValidator(
+      propValue,
+      explanations,
+      getParents(prop)
+    );
+    isValid = isValid && isValidProp;
+    if (!isValid && !settings.allErrors) {
+      return { handled: true, isValid };
     }
-    if (settings.onValid) {
-      settings.onValid(value, schema, settings, parents);
+  }
+
+  const secondStepAgenda = Object.entries(validatorsDict).filter(
+    ([key]) => !firstStepPropsTesting.includes(key)
+  );
+  for (const [prop, propValidator] of secondStepAgenda) {
+    const propValue = value[prop];
+    const isValidProp = propValidator(
+      propValue,
+      explanations,
+      getParents(prop)
+    );
+    isValid = isValid && isValidProp;
+    if (!isValid && !settings.allErrors) {
+      return { handled: true, isValid };
     }
-    return isValid;
+  }
+
+  return { handled: true, isValid };
+};
+
+const validationAgenda: ObjectValidationHandler[] = [
+  notObjectHandler,
+  propValidationHandler
+];
+
+type GetCurrentData = (
+  settings: InstanceSettings,
+  schema: IObjectSchema
+) => IPrecompiledValidationData;
+
+const getValidatorsDict = (settings: InstanceSettings, schema: IObjectSchema) =>
+  Object.entries(schema)
+    .filter(([key]) => key !== REST)
+    .reduce(
+      (dict, [prop, propSchema]) => ({
+        ...dict,
+        [prop]: compile(settings, propSchema)
+      }),
+      {}
+    );
+
+const getPrecompiledValidationData: GetCurrentData = (settings, schema) => {
+  const hasRest = has(schema, REST);
+  const validatorsDict = getValidatorsDict(settings, schema);
+  const restValidator = hasRest ? compile(settings, schema[REST]) : () => true;
+  return {
+    hasRest,
+    restValidator,
+    validatorsDict
   };
-  resValidator.schema = schema;
-  return resValidator;
 };
 
 export const compileObjectSchema = (
@@ -126,8 +135,35 @@ export const compileObjectSchema = (
   schema: IObjectSchema,
   explanation?: Explanation
 ): ValidatorWithSchema => {
-  if (settings.allErrors) {
-    return compileAllErrorsObjectSchema(settings, schema, explanation);
-  }
-  return compileFirstErrorObjectSchema(settings, schema, explanation);
+  const precompiledData = getPrecompiledValidationData(settings, schema);
+  const validator: ValidatorWithSchema = (value, explanations, parents) => {
+    for (const handler of validationAgenda) {
+      const { handled, isValid } = handler(
+        precompiledData,
+        value,
+        schema,
+        settings,
+        parents,
+        explanation,
+        explanations
+      );
+      if (handled) {
+        if (!isValid) {
+          doExplanations(
+            value,
+            schema,
+            settings,
+            parents,
+            explanation,
+            explanations
+          );
+        }
+        return isValid;
+      }
+    }
+    return true;
+  };
+  validator.schema = schema;
+
+  return validator;
 };
