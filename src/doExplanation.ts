@@ -3,7 +3,7 @@ import {
   IKeyParentSchema,
   InstanceSettings,
   Schema
-} from "./global";
+} from "./types";
 
 export const doExplanations = (
   value: any,

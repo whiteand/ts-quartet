@@ -5,7 +5,7 @@ import {
   IVariantSchema,
   Schema,
   Validator
-} from "./global";
+} from "./types";
 
 import { compileFunction } from "./compileFunction";
 

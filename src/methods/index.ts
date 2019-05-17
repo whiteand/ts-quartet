@@ -1,3 +1,5 @@
+import { Validator } from "../types";
+
 export interface IMethods {
   array: Validator;
   finite: Validator;

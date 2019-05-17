@@ -10,6 +10,6 @@
         "dom"
     ]
   },
-  "include": ["src", "src/global.d.ts"],
+  "include": ["src", "src/index.d.ts"],
   "exclude": ["node_modules", "**/__tests__/*"]
 }

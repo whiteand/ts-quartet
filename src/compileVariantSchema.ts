@@ -6,7 +6,7 @@ import {
   IVariantSchema,
   Validator,
   ValidatorWithSchema
-} from "./global";
+} from "./types";
 
 export const compileVariantSchema = (
   settings: InstanceSettings,

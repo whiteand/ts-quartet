@@ -4,7 +4,8 @@ import {
   InstanceSettings,
   Validator,
   ValidatorWithSchema
-} from "./global.d";
+} from "./types";
+
 export const compileFunction = (
   settings: InstanceSettings,
   schema: Validator,

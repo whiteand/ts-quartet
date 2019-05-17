@@ -5,7 +5,7 @@ import {
   InstanceSettings,
   IObjectSchema,
   ValidatorWithSchema
-} from "./global";
+} from "./types";
 
 const compileFirstErrorObjectSchema = (
   settings: InstanceSettings,

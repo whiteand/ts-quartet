@@ -1,12 +1,12 @@
 import { compile } from "./compile";
+import { methods } from "./methods";
 import {
   Explanation,
   InstanceSettings,
   QuartetInstance,
   Schema,
   Validator
-} from "./global";
-import { methods } from "./methods";
+} from "./types";
 
 const defaultSettings: InstanceSettings = {
   allErrors: true
