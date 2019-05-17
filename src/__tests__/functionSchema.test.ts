@@ -1,47 +1,24 @@
-import quartet from "../index";
+import quartet from '../index'
 import { IKeyParentSchema, InstanceSettings, Validator } from "../types";
-
-test("quartet is function", () => {
-  expect(typeof quartet).toBe("function");
-});
-
-test("constant validations", () => {
-  const v = quartet();
-  expect(typeof v).toBe("function");
-  expect(v("string")("str")).toBe(false);
-  expect(v("string")("string")).toBe(true);
-  expect(v(1)(2)).toBe(false);
-  expect(v(1)(1)).toBe(true);
-  expect(v(null)({})).toBe(false);
-  expect(v(null)(null)).toBe(true);
-  expect(v(undefined)(2)).toBe(false);
-  expect(v(undefined)(undefined)).toBe(true);
-  expect(v(true)(false)).toBe(false);
-  expect(v(true)(true)).toBe(true);
-  expect(v(false)(true)).toBe(false);
-  expect(v(false)(false)).toBe(true);
-  const symbol = Symbol.for("test");
-  expect(v(symbol)(2)).toBe(false);
-  expect(v(symbol)(symbol)).toBe(true);
-});
-
-test("function schema", () => {
-  const v = quartet();
+const v = quartet()
   let lastArgs: {
     value: any;
     explanations?: any[];
     parents?: IKeyParentSchema[];
     settings?: InstanceSettings;
   } | null = null;
-  const isEven: Validator = (value, explanations, parents) => {
-    lastArgs = {
-      explanations,
-      parents,
-      value
-    };
-    return value % 2 === 0;
+
+const isEven: Validator = (value, explanations, parents) => {
+  lastArgs = {
+    explanations,
+    parents,
+    value
   };
-  const checkEven = v(isEven);
+  return value % 2 === 0;
+};
+const checkEven = v(isEven);
+
+test("function schema: negative" , () => {
   const isOneEven = checkEven(1);
   expect(isOneEven).toBe(false);
   expect(lastArgs).toEqual({
@@ -49,6 +26,9 @@ test("function schema", () => {
     parents: [],
     value: 1
   });
+})
+
+test('function schema: positive', () => {
   const isTwoEven = checkEven(2);
   expect(isTwoEven).toBe(true);
   expect(lastArgs).toEqual({
@@ -56,6 +36,8 @@ test("function schema", () => {
     parents: [],
     value: 2
   });
+})
+test('function schema: undefined passed', () => {
   const parent = {};
   expect(
     v({
@@ -67,6 +49,8 @@ test("function schema", () => {
     parents: [{ key: "evenNumber", parent, schema: { evenNumber: isEven } }],
     value: undefined
   });
+})
+test('function schema: parents passed', () => {
   const parent2 = { evenNumber: 2 };
   expect(
     v({
@@ -80,6 +64,8 @@ test("function schema", () => {
     ],
     value: 2
   });
+})
+test('function schema: explanation passed', () => {
   const parent3 = { evenNumber: 3 };
   expect(
     v({
