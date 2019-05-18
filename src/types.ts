@@ -19,15 +19,16 @@ export interface IObjectSchema {
 }
 
 export type Schema =
+  | boolean
   | null
   | number
   | string
   | symbol
   | undefined
-  | boolean
-  | Validator
+  | IObjectSchema
   | IVariantSchema
-  | IObjectSchema;
+  | Validator;
+
 export interface IVariantSchema extends Array<Schema> {}
 
 export type FromValidationParams<T = any> = (
@@ -40,14 +41,13 @@ export type Explanation<T = any> = T | FromValidationParams<T>;
 
 export type InstanceSettings = Partial<{
   defaultExplanation: Explanation;
-  onInvalid: FromValidationParams;
-  onValid: FromValidationParams;
   allErrors: boolean;
 }>;
 
-export type QuartetInstance = ((
+export type CompilerFunction = (
   schema?: Schema,
   explanation?: Explanation,
   innerSettings?: InstanceSettings
-) => Validator) &
-  IMethods;
+) => Validator;
+
+export type QuartetInstance = CompilerFunction & IMethods;

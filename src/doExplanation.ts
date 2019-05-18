@@ -21,8 +21,15 @@ export const doExplanations = (
     return;
   }
   const getExplanation =
-    typeof paramExplanation === "function" ? paramExplanation : () => paramExplanation;
-  const actualExplanation = getExplanation(value, schema, settings, parents || []);
+    typeof paramExplanation === "function"
+      ? paramExplanation
+      : () => paramExplanation;
+  const actualExplanation = getExplanation(
+    value,
+    schema,
+    settings,
+    parents || []
+  );
   if (explanations && actualExplanation !== undefined) {
     explanations.push(actualExplanation);
   }
