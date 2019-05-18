@@ -22,13 +22,7 @@ export const compileFunction = (
         explanation,
         explanations
       );
-      if (settings.onInvalid) {
-        settings.onInvalid(value, schema, settings, parents);
-      }
       return false;
-    }
-    if (settings.onValid) {
-      settings.onValid(value, schema, settings, parents);
     }
     return isValid;
   };

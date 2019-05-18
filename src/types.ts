@@ -12,7 +12,7 @@ export type Validator = (
   parents?: IKeyParentSchema[]
 ) => boolean;
 
-export type ValidatorWithSchema = Validator & { schema: Schema };
+export type ValidatorWithSchema<T = Schema> = Validator & { schema: T };
 
 export interface IObjectSchema {
   [key: string]: Schema;
@@ -50,6 +50,6 @@ export type CompilerFunction = (
   innerSettings?: InstanceSettings
 ) => Validator;
 
-export type GetFromSettings<T = Validator> = (settings: InstanceSettings) => T
+export type GetFromSettings<T = Validator> = (settings: InstanceSettings) => T;
 
 export type QuartetInstance = CompilerFunction & IMethods & { rest: string };

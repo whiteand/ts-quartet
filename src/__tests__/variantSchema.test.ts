@@ -6,7 +6,7 @@ test("variant schema: constants", () => {
     male: "male"
   };
   const isSex = v([SEX.female, SEX.male]);
-  expect(isSex('male')).toBe(true)
-  expect(isSex('female')).toBe(true)
-  expect(isSex('Female')).toBe(false)
+  expect(isSex("male")).toBe(true);
+  expect(isSex("female")).toBe(true);
+  expect(isSex("Female")).toBe(false);
 });
