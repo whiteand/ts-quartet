@@ -2,8 +2,11 @@ import { quartet } from "../index";
 const v = quartet();
 test("variant schema: constants", () => {
   const SEX = {
-    male: "male",
-    female: "female"
+    female: "female",
+    male: "male"
   };
-  const isSex = v(Object.values(SEX));
+  const isSex = v([SEX.female, SEX.male]);
+  expect(isSex('male')).toBe(true)
+  expect(isSex('female')).toBe(true)
+  expect(isSex('Female')).toBe(false)
 });

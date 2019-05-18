@@ -1,5 +1,6 @@
 import { compile } from "./compile";
 import { getMethods } from "./methods";
+import { REST } from "./symbols";
 import {
   CompilerFunction,
   FromValidationParams,
@@ -21,7 +22,7 @@ export const quartet = (settings: InstanceSettings = defaultSettings) => {
       compiledValidator(value, explanations, parents);
   };
   const methods = getMethods(settings);
-  return Object.assign(compiler, methods);
+  return Object.assign(compiler, methods, { rest: REST });
 };
 
 export const v = quartet({

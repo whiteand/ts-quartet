@@ -50,4 +50,6 @@ export type CompilerFunction = (
   innerSettings?: InstanceSettings
 ) => Validator;
 
-export type QuartetInstance = CompilerFunction & IMethods;
+export type GetFromSettings<T = Validator> = (settings: InstanceSettings) => T
+
+export type QuartetInstance = CompilerFunction & IMethods & { rest: string };
