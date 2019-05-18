@@ -1,5 +1,5 @@
-import { getArrayOfValidator } from "../arrayOf";
 import { IKeyParentSchema } from "../../types";
+import { getArrayOfValidator } from "../arrayOf";
 const arrayOf = getArrayOfValidator({});
 
 test("negative", () => {

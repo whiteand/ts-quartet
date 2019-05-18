@@ -2,6 +2,7 @@ import { compile } from "./compile";
 import { getMethods } from "./methods";
 import { REST } from "./symbols";
 import {
+  Explanation,
   FromValidationParams,
   IKeyParentSchema,
   InstanceSettings,
@@ -15,7 +16,7 @@ const defaultSettings: InstanceSettings = {
 export const quartet = (settings: InstanceSettings = defaultSettings) => {
   const compiler = <T = any>(
     schema: any,
-    explanation?: any[],
+    explanation?: Explanation,
     innerSettings?: InstanceSettings
   ) => {
     const newSettings: InstanceSettings = {
