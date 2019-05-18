@@ -45,5 +45,7 @@ test("parents", () => {
   expect(actualParents).toEqual([
     { key: 3, parent, schema: isNumberArray }
   ])
+  expect(actualParents[0].parent).toBe(parent)
+  expect(actualParents[0].schema).toBe(isNumberArray)
   
 })
