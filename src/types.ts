@@ -18,6 +18,12 @@ export interface IObjectSchema {
   [key: string]: Schema;
 }
 
+export type TypeGuardValidator<T = any> = (
+  value: any,
+  explanations?: any[],
+  parents?: IKeyParentSchema
+) => value is T;
+
 export type Schema =
   | boolean
   | null
@@ -44,11 +50,11 @@ export type InstanceSettings = Partial<{
   allErrors: boolean;
 }>;
 
-export type CompilerFunction = (
+export type CompilerFunction = <T = any>(
   schema?: Schema,
   explanation?: Explanation,
   innerSettings?: InstanceSettings
-) => Validator;
+) => TypeGuardValidator<T>;
 
 export type GetFromSettings<T = Validator> = (settings: InstanceSettings) => T;
 

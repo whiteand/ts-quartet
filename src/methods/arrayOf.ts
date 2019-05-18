@@ -6,7 +6,9 @@ import {
   ValidatorWithSchema
 } from "../types";
 
-type ArrayOfMethod = (schema: Schema) => ValidatorWithSchema<{ type: "ARRAY_OF", innerSchema: Schema }>;
+type ArrayOfMethod = (
+  schema: Schema
+) => ValidatorWithSchema<{ type: "ARRAY_OF"; innerSchema: Schema }>;
 
 export const getArrayOfValidator: GetFromSettings<
   ArrayOfMethod
@@ -40,5 +42,8 @@ export const getArrayOfValidator: GetFromSettings<
   function getArrayValidator() {
     return result;
   }
-  return result as ValidatorWithSchema<{ type: 'ARRAY_OF', innerSchema: Schema }>;
+  return result as ValidatorWithSchema<{
+    type: "ARRAY_OF";
+    innerSchema: Schema;
+  }>;
 };

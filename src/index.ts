@@ -2,9 +2,10 @@ import { compile } from "./compile";
 import { getMethods } from "./methods";
 import { REST } from "./symbols";
 import {
-  CompilerFunction,
   FromValidationParams,
-  InstanceSettings
+  IKeyParentSchema,
+  InstanceSettings,
+  TypeGuardValidator
 } from "./types";
 
 const defaultSettings: InstanceSettings = {
@@ -12,14 +13,23 @@ const defaultSettings: InstanceSettings = {
 };
 
 export const quartet = (settings: InstanceSettings = defaultSettings) => {
-  const compiler: CompilerFunction = (schema, explanation, innerSettings) => {
+  const compiler = <T = any>(
+    schema: any,
+    explanation?: any[],
+    innerSettings?: InstanceSettings
+  ) => {
     const newSettings: InstanceSettings = {
       ...settings,
       ...(innerSettings || {})
     };
     const compiledValidator = compile(newSettings, schema, explanation);
-    return (value, explanations = [], parents = []) =>
-      compiledValidator(value, explanations, parents);
+    return ((
+      value: any,
+      explanations: any[] = [],
+      parents: IKeyParentSchema[] = []
+    ) => compiledValidator(value, explanations, parents)) as TypeGuardValidator<
+      T
+    >;
   };
   const methods = getMethods(settings);
   return Object.assign(compiler, methods, { rest: REST });

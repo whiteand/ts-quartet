@@ -33,19 +33,15 @@ test("explanations", () => {
   expect(e).toBe(passedExp);
 });
 
-
 test("parents", () => {
-  const parent = [1,2,3,4]
-  let actualParents: IKeyParentSchema[] = []
+  const parent = [1, 2, 3, 4];
+  let actualParents: IKeyParentSchema[] = [];
   const isNumberArray = arrayOf((value, explanations, parents) => {
-    actualParents = parents || []
-    return typeof value === 'number'
-  })
-  expect(isNumberArray(parent)).toBe(true)
-  expect(actualParents).toEqual([
-    { key: 3, parent, schema: isNumberArray }
-  ])
-  expect(actualParents[0].parent).toBe(parent)
-  expect(actualParents[0].schema).toBe(isNumberArray)
-  
-})
+    actualParents = parents || [];
+    return typeof value === "number";
+  });
+  expect(isNumberArray(parent)).toBe(true);
+  expect(actualParents).toEqual([{ key: 3, parent, schema: isNumberArray }]);
+  expect(actualParents[0].parent).toBe(parent);
+  expect(actualParents[0].schema).toBe(isNumberArray);
+});
