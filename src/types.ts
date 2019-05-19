@@ -21,7 +21,7 @@ export interface IObjectSchema {
 export type TypeGuardValidator<T = any> = (
   value: any,
   explanations?: any[],
-  parents?: IKeyParentSchema
+  parents?: IKeyParentSchema[]
 ) => value is T;
 
 export type Schema =
@@ -44,6 +44,10 @@ export type FromValidationParams<T = any> = (
   parents?: IKeyParentSchema[]
 ) => T;
 export type Explanation<T = any> = T | FromValidationParams<T>;
+
+export interface IDictionary<T = any> {
+  [key: string]: T;
+}
 
 export type InstanceSettings = Partial<{
   defaultExplanation: Explanation;

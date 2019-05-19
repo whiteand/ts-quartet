@@ -1,4 +1,10 @@
-import { InstanceSettings, Schema, ValidatorWithSchema } from "../types";
+import {
+  IDictionary,
+  InstanceSettings,
+  Schema,
+  TypeGuardValidator,
+  ValidatorWithSchema
+} from "../types";
 import { getArrayValidator } from "./array";
 import { getArrayOfValidator } from "./arrayOf";
 import { ValidatorType } from "./constants";
@@ -6,17 +12,23 @@ import { getDictionaryOfMethod } from "./dictionaryOf";
 import { getEnumMethod } from "./enum";
 
 type FromSettings<T = any> = (settings: InstanceSettings) => T;
-export type ArrayMethod = ValidatorWithSchema<{ type: ValidatorType }>;
-export type ArrayOfMethod = (
+export type ArrayMethod = TypeGuardValidator<any[]> & {
+  schema: { type: ValidatorType };
+};
+export type ArrayOfMethod = <T = any>(
   schema: Schema
-) => ValidatorWithSchema<{ type: ValidatorType; innerSchema: Schema }>;
+) => TypeGuardValidator<T[]> & {
+  schema: { type: ValidatorType; innerSchema: Schema };
+};
 export type EnumMethod = (
   ...values: any
 ) => ValidatorWithSchema<{ type: ValidatorType; innerSchema: any[] }>;
 
-export type DictionaryOfMethod = (
+export type DictionaryOfMethod = <T = any>(
   schema: Schema
-) => ValidatorWithSchema<{ type: ValidatorType; innerSchema: Schema }>;
+) => TypeGuardValidator<IDictionary<T>> & {
+  schema: { type: ValidatorType; innerSchema: Schema };
+};
 
 export interface IMethods {
   array: ArrayMethod;
