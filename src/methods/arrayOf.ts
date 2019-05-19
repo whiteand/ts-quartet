@@ -5,10 +5,8 @@ import {
   Validator,
   ValidatorWithSchema
 } from "../types";
-
-type ArrayOfMethod = (
-  schema: Schema
-) => ValidatorWithSchema<{ type: "ARRAY_OF"; innerSchema: Schema }>;
+import { ValidatorType } from "./constants";
+import { ArrayOfMethod } from "./index";
 
 export const getArrayOfValidator: GetFromSettings<
   ArrayOfMethod
@@ -37,13 +35,13 @@ export const getArrayOfValidator: GetFromSettings<
     return isValid;
   };
   const result = Object.assign(arrayValidator, {
-    schema: { type: "ARRAY_OF", innerSchema: schema }
+    schema: { type: ValidatorType.ArrayOf, innerSchema: schema }
   });
   function getArrayValidator() {
     return result;
   }
   return result as ValidatorWithSchema<{
-    type: "ARRAY_OF";
+    type: ValidatorType;
     innerSchema: Schema;
   }>;
 };
