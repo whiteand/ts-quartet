@@ -26,8 +26,8 @@ export const getArrayOfValidator: GetFromSettings<
     for (let i = 0; i < value.length; i += 1) {
       const elem = value[i];
       const currentParents = [getParent(i), ...parents];
-      isValid =
-        isValid && compiledElementValidator(elem, explanations, currentParents);
+      const isValidElem = compiledElementValidator(elem, explanations, currentParents);
+      isValid = isValid && isValidElem
       if (!isValid && !allErrors) {
         return false;
       }

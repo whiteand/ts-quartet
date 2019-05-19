@@ -1,5 +1,6 @@
 export enum ValidatorType {
   Array = "Array",
   ArrayOf = "ArrayOf",
-  Enum = "Enum"
+  Enum = "Enum",
+  DictionaryOf = "DictionaryOf"
 }
