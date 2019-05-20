@@ -2,8 +2,8 @@ import { getStringValidator } from "../string";
 const isString = getStringValidator({});
 test("string: positive", () => {
   const strings = ["", "1"];
-  for (const n of strings) {
-    expect(isString(n)).toBe(true);
+  for (const s of strings) {
+    expect(isString(s)).toBe(true);
   }
 });
 
@@ -17,7 +17,7 @@ test("string: negative", () => {
     // tslint:disable-next-line:no-construct
     new String("123")
   ];
-  for (const n of notStrings) {
-    expect(isString(n)).toBe(false);
+  for (const notS of notStrings) {
+    expect(isString(notS)).toBe(false);
   }
 });

@@ -7,15 +7,21 @@ test("big object", () => {
     a: number;
     arr: number[];
     array: any[];
+    und: undefined;
     dict: { [key: string]: number };
     int: number;
     neg: number;
+    b: boolean;
+    s: string;
     pos: number;
   }
   const checkObj = v<Obj>({
     a: v.number,
     arr: arrayOf(v.number),
     array,
+    b: v.boolean,
+    s: v.string,
+    und: undefined,
     dict: dictionaryOf(v.number),
     int: v.safeInteger,
     neg: negative,
@@ -29,6 +35,9 @@ test("big object", () => {
       dict: { a: 1, b: 2 },
       int: 1,
       neg: -1,
+      b: true,
+      s: "test",
+      und: undefined,
       pos: 2
     },
     {
@@ -37,7 +46,10 @@ test("big object", () => {
       array: [],
       dict: {},
       int: 0,
+      b: false,
+      s: "",
       neg: -2,
+      und: undefined,
       pos: 1
     }
   ];
@@ -50,6 +62,19 @@ test("big object", () => {
       dict: { a: 1, b: 2 },
       int: 1,
       neg: -1,
+      b: true,
+      s: "test",
+      pos: 2
+    },
+    {
+      a: 1,
+      arr: [1, 2, 3, 4, 5],
+      array: ["1", 2],
+      dict: { a: 1, b: 2 },
+      int: 1,
+      neg: -1,
+      b: "true",
+      s: "test",
       pos: 2
     },
     {

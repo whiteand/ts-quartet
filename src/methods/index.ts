@@ -7,6 +7,7 @@ import {
 } from "../types";
 import { getArrayValidator } from "./array";
 import { getArrayOfValidator } from "./arrayOf";
+import { getBooleanValidator } from "./boolean";
 import { ValidatorType } from "./constants";
 import { getDictionaryOfMethod } from "./dictionaryOf";
 import { getEnumMethod } from "./enum";
@@ -46,10 +47,14 @@ export type NumberValidationMethod = TypeGuardValidator<number> & {
 export type StringMethod = TypeGuardValidator<string> & {
   schema: { type: ValidatorType };
 };
+export type BooleanMethod = TypeGuardValidator<boolean> & {
+  schema: { type: ValidatorType };
+};
 
 export interface IMethods {
   array: ArrayMethod;
   arrayOf: ArrayOfMethod;
+  boolean: BooleanMethod;
   dictionaryOf: DictionaryOfMethod;
   enum: EnumMethod;
   negative: NumberValidationMethod;
@@ -67,6 +72,9 @@ export const getMethods: FromSettings<IMethods> = settings => {
       schema: { type: ValidatorType.Array }
     }),
     arrayOf: getArrayOfValidator(settings),
+    boolean: Object.assign(getBooleanValidator(settings), {
+      schema: { type: ValidatorType.Boolean }
+    }),
     dictionaryOf: getDictionaryOfMethod(settings),
     enum: getEnumMethod(settings),
     negative: Object.assign(getNegativeValidator(settings), {
