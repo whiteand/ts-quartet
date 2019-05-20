@@ -1,4 +1,5 @@
 export enum ValidatorType {
+  And = "And",
   Array = "Array",
   ArrayOf = "ArrayOf",
   Boolean = "Boolean",

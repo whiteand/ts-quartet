@@ -7,7 +7,7 @@ export interface IKeyParentSchema {
 }
 
 export type Validator = (
-  value: any,
+  value?: any,
   explanations?: any[],
   parents?: IKeyParentSchema[]
 ) => boolean;

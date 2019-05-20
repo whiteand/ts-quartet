@@ -131,3 +131,34 @@ test("big object", () => {
     expect(checkObj(invalidObj)).toBe(false);
   }
 });
+
+test("and demo: ", () => {
+  const checkPerson = v.and(
+    {
+      name: v.string,
+      age: v.number
+    },
+    {
+      sex: ["male", "female"]
+    }
+  );
+
+  expect(
+    checkPerson({
+      name: "andrew",
+      age: 19
+    })
+  ).toBe(false);
+  expect(
+    checkPerson({
+      sex: "male"
+    })
+  ).toBe(false);
+  expect(
+    checkPerson({
+      sex: "male",
+      age: 22,
+      name: "Andrew"
+    })
+  ).toBe(true);
+});

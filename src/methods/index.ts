@@ -5,6 +5,7 @@ import {
   TypeGuardValidator,
   ValidatorWithSchema
 } from "../types";
+import { getAndMethod } from "./and";
 import { getArrayValidator } from "./array";
 import { getArrayOfValidator } from "./arrayOf";
 import { getBooleanValidator } from "./boolean";
@@ -50,8 +51,12 @@ export type StringMethod = TypeGuardValidator<string> & {
 export type BooleanMethod = TypeGuardValidator<boolean> & {
   schema: { type: ValidatorType };
 };
+export type AndMethod = (
+  ...schemas: Schema[]
+) => ValidatorWithSchema<{ type: ValidatorType; innerSchema: Schema[] }>;
 
 export interface IMethods {
+  and: AndMethod;
   array: ArrayMethod;
   arrayOf: ArrayOfMethod;
   boolean: BooleanMethod;
@@ -68,6 +73,7 @@ export interface IMethods {
 
 export const getMethods: FromSettings<IMethods> = settings => {
   const methods: IMethods = {
+    and: getAndMethod(settings),
     array: Object.assign(getArrayValidator(settings), {
       schema: { type: ValidatorType.Array }
     }),
