@@ -6,6 +6,7 @@ import {
   FromValidationParams,
   IKeyParentSchema,
   InstanceSettings,
+  Quartet,
   TypeGuardValidator
 } from "./types";
 
@@ -13,7 +14,9 @@ const defaultSettings: InstanceSettings = {
   allErrors: true
 };
 
-export const quartet = (settings: InstanceSettings = defaultSettings) => {
+export const quartet: Quartet = (
+  settings: InstanceSettings = defaultSettings
+) => {
   const compiler = <T = any>(
     schema: any,
     explanation?: Explanation,
