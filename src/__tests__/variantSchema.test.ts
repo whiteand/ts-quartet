@@ -35,7 +35,7 @@ test("calculation: empty", () => {
 test("explanations", () => {
   const passedExplanations: any[] = [];
   const isValid = v([
-    (value, explanations) => {
+    (value: any, explanations?: any[]) => {
       if (value <= 0 && explanations) {
         explanations.push("less-than-zero");
       }
@@ -49,9 +49,9 @@ test("explanations", () => {
 
 test("Removed unnecessary explanations", () => {
   const isValid = v([
-    v(value => value === null, (value: any) => `${value} is not null`),
+    v((value: any) => value === null, (value: any) => `${value} is not null`),
     v(
-      value => typeof value === "string",
+      (value: any) => typeof value === "string",
       (value: any) => `${value} is not string`
     )
   ]);
