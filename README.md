@@ -31,6 +31,7 @@ Today more than ever there is a need to verify data coming from third parties. W
     - [`boolean`](#boolean)
     - [`dictionaryOf`](#dictionaryof)
     - [`enum`](#enum)
+    - [`explain`](#explain)
     - [`just`](#just)
     - [`max` and `min`](#max-and-min)
     - [`negative`, `nonPositive`, `nonNegative`, `positive`](#negative-nonpositive-nonnegative-positive)
@@ -560,6 +561,49 @@ isValid(42)               // true
 isValid({ a: 1 }) // false, because of strict comparison
 isValid([1,2,3])  // false, because of strict comparison
 isValid('42')     // false
+```
+
+### `explain`
+
+```typescript
+type ExplainMethod = (
+  schema?: Schema,
+  explanation?: Explanation
+) => (value: any) => null | any[]
+```
+
+This method take `schema` and explanation for `schema`(optionally) and returns function that returns `null` if value is valid, or array of explanations if `value` is invalid.
+
+**Example:**
+
+```typescript
+const checkPerson = v({ // validator of person
+  name: v( // validator 
+    v.and(v.string, v.min(1))
+    'wrong name' // explanation
+  ),
+  age: v(
+    v.and( // validator
+      v.safeInteger
+      v.min(0),
+      v.max(140)
+    ),
+    'wrong age' // explanation
+  )
+})
+
+const validPerson = {
+  name: 'andrew',
+  age: 22
+}
+const invalidPerson = {
+  name: '',
+  age: 32
+}
+
+const getExplanation = v.explain(checkPerson, 'wrong person')
+getExplanation(validPerson)   // null
+getExplanation(invalidPerson) // ['wrong name', 'wrong person']
 ```
 
 ### `just`
