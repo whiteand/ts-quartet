@@ -18,6 +18,7 @@ import {
   getNonPositiveValidator,
   getPositiveValidator
 } from "./signs";
+import { getStringValidator } from "./string";
 
 type FromSettings<T = any> = (settings: InstanceSettings) => T;
 export type ArrayMethod = TypeGuardValidator<any[]> & {
@@ -42,17 +43,22 @@ export type NumberValidationMethod = TypeGuardValidator<number> & {
   schema: { type: ValidatorType };
 };
 
+export type StringMethod = TypeGuardValidator<string> & {
+  schema: { type: ValidatorType };
+};
+
 export interface IMethods {
   array: ArrayMethod;
   arrayOf: ArrayOfMethod;
-  enum: EnumMethod;
   dictionaryOf: DictionaryOfMethod;
-  safeInteger: NumberValidationMethod;
-  number: NumberValidationMethod;
-  positive: NumberValidationMethod;
+  enum: EnumMethod;
   negative: NumberValidationMethod;
   nonNegative: NumberValidationMethod;
   nonPositive: NumberValidationMethod;
+  number: NumberValidationMethod;
+  positive: NumberValidationMethod;
+  safeInteger: NumberValidationMethod;
+  string: StringMethod;
 }
 
 export const getMethods: FromSettings<IMethods> = settings => {
@@ -80,6 +86,9 @@ export const getMethods: FromSettings<IMethods> = settings => {
     }),
     safeInteger: Object.assign(getSafeIntegerValidator(settings), {
       schema: { type: ValidatorType.SafeInteger }
+    }),
+    string: Object.assign(getStringValidator(settings), {
+      schema: { type: ValidatorType.String }
     })
   };
   return methods;
