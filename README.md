@@ -149,7 +149,7 @@ npm i -S quartet
 1. Import quartet library and instantiate quartet instance
 
 ```typescript
-import quartet from 'quartet'
+import { quartet } from 'quartet'
 const v = quartet()
 
 // or use default instance
@@ -196,5 +196,129 @@ personValidator(actualPerson) // => true
 
 ## API
 
+### Validator
+
+Validator - function that defines if value is valid
+
+```typescript
+type Validator = (
+  value?: any,
+  explanations?: any[],
+  parents?: IKeyParentSchema[]
+) => boolean;
+
+```
+
+TypeGuardValidator - function that defines if value has passed type `T`
+
+```
+type TypeGuardValidator<T = any> = (
+  value: any,
+  explanations?: any[],
+  parents?: IKeyParentSchema[]
+) => value is T;
+```
+IKeyParentSchema - is an item of `parents` array passed into all validators.
+
+It contains of the information of the parents of the value.
+```typescript
+interface IKeyParentSchema {
+  key: any;
+  parent: any;
+  schema: any;
+}
+```
+Example: 
+```typescript
+const checkAge = (age, explanations, parents) => {
+  console.log(parents)
+  return typeof age === 'number' && age > 0
+}
+const agedSchema = {
+  age: checkAge
+}
+
+const checkAged = v(agedSchema)
+
+checkAged({
+  age: 122
+})
+// => true
+// console: [{ key: 'age', parent: { age: 122 }, schema: { age: checkAge }]
+
+```
+
+### Schema
+
+```typescript
+type Schema =
+  | boolean
+  | null
+  | number
+  | string
+  | symbol
+  | undefined
+  | IObjectSchema
+  | IVariantSchema
+  | Validator;
+```
+
 ### Quartet
 
+```typescript
+export type Quartet = (settings?: InstanceSettings) => QuartetInstance;
+export const quartet: Quartet
+```
+
+`quartet` - is the "constructor" for quartet instances.
+
+You can get it by import from 'quartet':
+
+```typescript
+import { quartet } from 'quartet'
+```
+
+### InstanceSettings
+
+```typescript
+type InstanceSettings = {
+  defaultExplanation?: Explanation;
+  allErrors?: boolean;
+}
+```
+
+| Schema  |  Validator explained by schema |
+|:-:|:-:|
+| **`defaultExplanation`** | explanation that will be added for to all validators created by instance. Default value: `undefined` |
+| **`allErrors`** | if `allErrors` is `true`, it means that validator will collect all invalidation errors. If `allErrors` is `false` it means that validator will push first error explanation into `explanations` parameter if it's passed. Default value: `true` |
+
+### QuartetInstance
+```typescript
+export type QuartetInstance =
+  <T = any>(
+    schema?: Schema,
+    explanation?: Explanation,
+    innerSettings?: InstanceSettings
+  ) => TypeGuardValidator<T>
+  & {
+    and: (...schemas: Schema[]) => Validator;
+    array: TypeGuardValidator<any[]>;
+    arrayOf: <T = any>(elemSchema: Schema) => TypeGuardValidator<T[]>;
+    boolean: TypeGuardValidator<boolean>;
+    dictionaryOf: <T = any>(elementSchema: Schema) => TypeGuardValidator<{
+      [key: string]: T
+    }>;
+    enum: (...values: any[]) => Validator;
+    max: (maxValue: number);
+    min: MinMethod;
+    negative: NumberValidationMethod;
+    nonNegative: NumberValidationMethod;
+    nonPositive: NumberValidationMethod;
+    number: NumberValidationMethod;
+    positive: NumberValidationMethod;
+    safeInteger: NumberValidationMethod;
+    string: StringMethod;
+    test: TestMethod;
+    rest: string
+  }
+```

@@ -1,6 +1,6 @@
 import {
+  GetFromSettings,
   IDictionary,
-  InstanceSettings,
   ITest,
   Schema,
   TypeGuardValidator,
@@ -13,6 +13,7 @@ import { getBooleanValidator } from "./boolean";
 import { ValidatorType } from "./constants";
 import { getDictionaryOfMethod } from "./dictionaryOf";
 import { getEnumMethod } from "./enum";
+import { getJustMethod } from './just';
 import { getMaxMethod, getMinMethod } from "./minmax";
 import { getNumberValidator } from "./number";
 import { getSafeIntegerValidator } from "./safeInteger";
@@ -25,15 +26,23 @@ import {
 import { getStringValidator } from "./string";
 import { getTestMethod } from "./testMethod";
 
-type FromSettings<T = any> = (settings: InstanceSettings) => T;
+export type AndMethod = (
+  ...schemas: Schema[]
+) => ValidatorWithSchema<{ type: ValidatorType; innerSchema: Schema[] }>;
+
 export type ArrayMethod = TypeGuardValidator<any[]> & {
   schema: { type: ValidatorType };
 };
 export type ArrayOfMethod = <T = any>(
-  schema: Schema
+  elementSchema: Schema
 ) => TypeGuardValidator<T[]> & {
   schema: { type: ValidatorType; innerSchema: Schema };
 };
+
+export type BooleanMethod = TypeGuardValidator<boolean> & {
+  schema: { type: ValidatorType };
+};
+
 export type EnumMethod = (
   ...values: any
 ) => ValidatorWithSchema<{ type: ValidatorType; innerSchema: any[] }>;
@@ -51,12 +60,7 @@ export type NumberValidationMethod = TypeGuardValidator<number> & {
 export type StringMethod = TypeGuardValidator<string> & {
   schema: { type: ValidatorType };
 };
-export type BooleanMethod = TypeGuardValidator<boolean> & {
-  schema: { type: ValidatorType };
-};
-export type AndMethod = (
-  ...schemas: Schema[]
-) => ValidatorWithSchema<{ type: ValidatorType; innerSchema: Schema[] }>;
+
 
 export type TestMethod = (
   test: ITest
@@ -82,6 +86,8 @@ export type MaxMethod = (
   };
 };
 
+export type JustMethod = <T = any>(schema?: Schema) => (value: any) => value is T
+
 export interface IMethods {
   and: AndMethod;
   array: ArrayMethod;
@@ -89,6 +95,7 @@ export interface IMethods {
   boolean: BooleanMethod;
   dictionaryOf: DictionaryOfMethod;
   enum: EnumMethod;
+  just: JustMethod;
   max: MaxMethod;
   min: MinMethod;
   negative: NumberValidationMethod;
@@ -101,7 +108,7 @@ export interface IMethods {
   test: TestMethod;
 }
 
-export const getMethods: FromSettings<IMethods> = settings => {
+export const getMethods: GetFromSettings<IMethods> = settings => {
   const methods: IMethods = {
     and: getAndMethod(settings),
     array: Object.assign(getArrayValidator(settings), {
@@ -113,6 +120,7 @@ export const getMethods: FromSettings<IMethods> = settings => {
     }),
     dictionaryOf: getDictionaryOfMethod(settings),
     enum: getEnumMethod(settings),
+    just: getJustMethod(settings),
     max: getMaxMethod(settings),
     min: getMinMethod(settings),
     negative: Object.assign(getNegativeValidator(settings), {
