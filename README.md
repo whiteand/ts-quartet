@@ -6,7 +6,7 @@ Today more than ever there is a need to verify data coming from third parties. W
 
 ## Concepts
 
-### Just Validator
+## Just Validator
 
 A **Just Validator** is a function that determines whether data has a suitable structure and content.
 
@@ -18,7 +18,7 @@ type JustValidator = (value: any) => boolean
 
 As we see from this description JustValidator takes value of any type and returns `true` if value is valid and `false` if value is not valid.
 
-### Validator
+## Concept of Validator
 
 But `quartet` library uses a little bit wider concept of *explanatory validator*
 
@@ -32,11 +32,11 @@ type Validator = (value: any, explanations?: any[]) => boolean
 
 As we see from this description Validator takes value of any type and returns `true` if the value is valid, and `false` if the value is not valid. But additionaly it pushes explanation of the invalidity into `explanations` parameter(if value is invalid and `explanations` parameter is passed).
 
-### Quartet Instance
+## Quartet Instance
 
 Quartet instance - is an concept that represents function that takes schema of validation and returns Validator.
 
-In typescript we can represent it by such definition: 
+In typescript we can represent it by such definition:
 ```typescript
 type QuartetInstance = (schema: Schema, explanation?: Explanation) => Validator
 ```
@@ -45,7 +45,7 @@ As we can see from this definition - quartet instance is a function that takes s
 
 Explanation is the value that can describe what is went wrong.
 
-Examples:
+### Example 1
 ```typescript
 const v = quartet() // creating of quartet instance
 const numberSchema = __SCHEMA__ // what will be a schema described in the next concept
@@ -60,7 +60,7 @@ console.log(explanations) // => ['not number passed']
 
 ```
 
-### Schema
+## Concept of schema
 
 A **schema** is a value that explains what the validator should check. *`quartet` instance* uses schemas to create (compile) validators.
 
@@ -81,7 +81,7 @@ type Schema =
 
 - The best definition of what must be checked by Validator is the Validator itself.
 
-**Examples:**
+### Example 2
 
 ```typescript
 const numberSchema = value => typeof value === 'number'
@@ -97,11 +97,11 @@ const explainedSexSchema = (value, explanations) => {
 }
 ```
 
-As we can see such type of schema is the most wordy variant of possible schemas. 
+As we can see such type of schema is the most wordy variant of possible schemas.
 
 - If schema is a value of primitive types (`boolean`, `null`, `number`, `string`, `symbol`, `undefined`) it explains that created validator should check if the value that is being validated should be equal to schema.
 
-**Examples**:
+### Example 3
 
 | Schema  |  Validator explained by schema |
 |:-:|:-:|
@@ -114,7 +114,7 @@ As we can see such type of schema is the most wordy variant of possible schemas.
 
 - When a schema is an array of schemas(`IVariantSchema`), this means that the validator created by this schema must determine if there is such a schema within this array, according to which the value is valid
 
-**Examples**:
+### Example 4
 
 | Schema  |  Validator explained by schema |
 |:-:|:-:|
@@ -196,7 +196,7 @@ personValidator(actualPerson) // => true
 
 ## API
 
-### Validator
+## Validator
 
 Validator - function that defines if value is valid
 
@@ -211,16 +211,18 @@ type Validator = (
 
 TypeGuardValidator - function that defines if value has passed type `T`
 
-```
+```typescript
 type TypeGuardValidator<T = any> = (
   value: any,
   explanations?: any[],
   parents?: IKeyParentSchema[]
 ) => value is T;
 ```
+
 IKeyParentSchema - is an item of `parents` array passed into all validators.
 
 It contains of the information of the parents of the value.
+
 ```typescript
 interface IKeyParentSchema {
   key: any;
@@ -228,7 +230,9 @@ interface IKeyParentSchema {
   schema: any;
 }
 ```
-Example: 
+
+### Example 5
+
 ```typescript
 const checkAge = (age, explanations, parents) => {
   console.log(parents)
@@ -248,7 +252,7 @@ checkAged({
 
 ```
 
-### Schema
+## Schema
 
 ```typescript
 type Schema =
@@ -263,7 +267,7 @@ type Schema =
   | Validator;
 ```
 
-### Quartet
+## Quartet
 
 ```typescript
 export type Quartet = (settings?: InstanceSettings) => QuartetInstance;
@@ -278,7 +282,7 @@ You can get it by import from 'quartet':
 import { quartet } from 'quartet'
 ```
 
-### InstanceSettings
+## InstanceSettings
 
 ```typescript
 type InstanceSettings = {
@@ -292,7 +296,8 @@ type InstanceSettings = {
 | **`defaultExplanation`** | explanation that will be added for to all validators created by instance. Default value: `undefined` |
 | **`allErrors`** | if `allErrors` is `true`, it means that validator will collect all invalidation errors. If `allErrors` is `false` it means that validator will push first error explanation into `explanations` parameter if it's passed. Default value: `true` |
 
-### QuartetInstance
+## QuartetInstance
+
 ```typescript
 export type QuartetInstance =
   <T = any>(
@@ -300,25 +305,380 @@ export type QuartetInstance =
     explanation?: Explanation,
     innerSettings?: InstanceSettings
   ) => TypeGuardValidator<T>
+  & IMethods // All methods will be described below
   & {
-    and: (...schemas: Schema[]) => Validator;
-    array: TypeGuardValidator<any[]>;
-    arrayOf: <T = any>(elemSchema: Schema) => TypeGuardValidator<T[]>;
-    boolean: TypeGuardValidator<boolean>;
-    dictionaryOf: <T = any>(elementSchema: Schema) => TypeGuardValidator<{
-      [key: string]: T
-    }>;
-    enum: (...values: any[]) => Validator;
-    max: (maxValue: number);
-    min: MinMethod;
-    negative: NumberValidationMethod;
-    nonNegative: NumberValidationMethod;
-    nonPositive: NumberValidationMethod;
-    number: NumberValidationMethod;
-    positive: NumberValidationMethod;
-    safeInteger: NumberValidationMethod;
-    string: StringMethod;
-    test: TestMethod;
     rest: string
   }
+```
+
+Quartet instance is a function, with additional methods.
+Quartet instance parameters described below:
+
+| Parameter | Description |
+|:-:|:-:|
+| schema | Schema of validator to be created by quartet instance |
+| explanation | Explanation that must be pushed into `explanations` parameter of created validator |
+| innerSettings | Specification of settings if necessary |
+
+## Methods
+
+### `and`
+
+```typescript
+type AndMethod = (...schemas: Schema[]) => Validator;
+```
+
+This method takes as input a set of validation schemes and returns a validator that checks if the specified value matches **ALL** passed schemes.
+
+**Example:**
+
+```javascript
+const checkPositiveInteger = v.and(
+  v.safeInteger,
+  v.positive
+)
+
+[1, 2, 3].every(checkPositiveInteger)   // => true
+[1.2, 0, -1].some(checkPositiveInteger) // => false
+```
+
+### `array`
+
+```typescript
+type ArrayMethod = TypeGuardValidator<any[]>
+```
+
+This method is a validator that determines whether a `value` is an array.
+
+**Example:**
+
+```javascript
+// Simple
+v.array([]) // true
+v.array([1,2,3]) // true
+v.array('string') // false
+
+// Not so simple
+const response = {
+  users: [{ id: 1 }, { uid: 2}, {}, 'Andrew' ] // array of different types
+}
+
+const checkResponse = v({
+  users: v.array
+})
+
+checkResponse(response) // true
+```
+
+### `arrayOf`
+
+```typescript
+type ArrayOfMethod = <T = any>(
+  elementSchema: Schema
+) => TypeGuardValidator<T[]>
+```
+
+This method is a validator that determines whether a `value` is an array consisting of elements that can be described by the passed `schema`. It can take a type parameter - thus prompting the typescript of the valid value.
+
+**Example:**
+
+```typescript
+// Simple
+const isNumberArray = v.arrayOf(v.number)
+isNumberArray([])          // true
+isNumberArray([1, 2, 3])   // true
+isNumberArray([1, 2, '3']) // false, because it has element '3', that is not a number
+
+// Not so simple
+type Person = {
+  name: string
+}
+
+const checkPersonArray = v.arrayOf<Person>({
+  name: v.string
+})
+
+const persons: any = [
+  { name: 'Vlad' },
+  { name: 'Petya' },
+  { name: 'Batya' },
+  { name: 'Viktor' },
+  { name: 'Leonid' }
+]
+// persons: any
+if (checkPersonArray(persons)) {
+  // persons: Person[]
+  console.log(persons.map(e => e.name).join(', '))
+}
+// persons: any
+```
+
+### `boolean`
+
+```typescript
+type BooleanMethod = TypeGuardValidator<boolean>
+```
+
+This method is a validator that determines whether the 'value' is a boolean type (`true` or `false`)
+
+**Example:**
+
+```typescript
+// Simple
+v.boolean(true)    // true
+v.boolean(false)   // true
+v.boolean('false') // false, because 'false' is not a boolean value
+
+// Not so simple
+const validateBooleanArray = v.explain(
+  v.arrayOf(
+     v(
+      v.boolean,
+      value => `${JSON.stringify(value)} is not a boolean`
+    )
+  )
+)
+const explanations = validateBooleanArray([true, false, 'not a boolean'])
+console.log(explanations) // ['"not a boolean" is not a boolean']
+
+const explanations2 = validateBooleanArray([true, false])
+console.log(explanations2) // null
+```
+
+### `dictionaryOf`
+
+```typescript
+type DictionaryOfMethod = <T = any>(
+  schema: Schema
+) => TypeGuardValidator<{ [key: string]: T }>
+```
+
+This method accepts a validation scheme and returns a validator of the object `value`, which determines whether all values of this object are valid with respect to the passed scheme. Also it can take type parameter of type of values.
+
+**Example:**
+
+```typescript
+const checkStringDictionary = v.dictionaryOf(v.string)
+// Simple
+checkStringDictionary({})    // true
+checkStringDictionary({      // true
+  andrew: 'Andrew',
+  bohdan: 'Bohdan'
+})
+checkStringDictionary({      // false
+  andrew: 'Andrew',
+  bohdan: null // not a string
+})
+
+// Not so simple
+const Sex = {
+  male: 'male',
+  female: 'female'
+}
+
+const sexOfPersonsDict = {
+  andrew: 'male',
+  lena: 'female',
+  leonid: 'male',
+  vasilina: 'female'
+}
+
+const checkSexOfPersonsDict = v.dictionaryOf(
+  Object.values(Sex)
+)
+checkSexOfPersonsDict(sexOfPersonsDict) // true
+
+checkSexOfPersonsDict({ // false, because of invalidity of `null` value
+  ...sexOfPersonsDict,
+  sasha: null // invalid
+})
+```
+
+### `enum`
+
+```typescript
+type EnumMethod = (...values: any) => Validator
+```
+
+This method accepts all valid values and returns a validator, which determines whether the `value` is one of `values`.
+
+The best explanation is code:
+
+```typescript
+enum: (...values) => value => values.includes(value)
+```
+
+**Example:**
+
+```typescript
+const firstValidValue = { a: 1 }
+const secondValidValue = [1,2,3]
+const thirdValidValue = 42
+
+const isValid = v.enum(
+  firstValidValue,
+  secondValidValue,
+  thirdValidValue
+)
+
+isValid(firstValidValue)  // true
+isValid(secondValidValue) // true
+isValid(42)               // true
+isValid({ a: 1 }) // false, because of strict comparison
+isValid([1,2,3])  // false, because of strict comparison
+isValid('42')     // false
+```
+
+### `just`
+
+```typescript
+type JustMethod = <T = any>(schema?: Schema) => (value: any) => value is T
+```
+
+This method accepts a scheme and simply returns a JustValidator, that is, a function with a single parameter — a validated `value`. Has a type parameter of the validated `value` type.
+
+**Example:**
+
+```typescript
+v(v.number) // (value: any, explanations?: any[], parents?: IKeyParentSchema[] ) => boolean
+v.just(v.number) // (value: any): boolean
+
+v<number>(v.number)
+// (
+//    value: any,
+//    explanations?: any[],
+//    parents?: IKeyParentSchema[]
+// ) => value is number
+v.just<number>(v.number)
+// (value: any): value is number
+```
+
+### `max` and `min`
+
+```typescript
+type MaxMethod = (
+  maxValue: number,
+  exclusive?: boolean
+) => TypeGuardValidator<string | number | any[]>
+
+type MinMethod = (
+  maxValue: number,
+  exclusive?: boolean
+) => TypeGuardValidator<string | number | any[]>
+
+```
+
+These methods take a limit value as an input, and return a validator that checks according to the following order:
+
+1) If the `value` is a number, then this number must correspond to the given limit
+2) If the `value` is an array or a string, then the length of this string or array must match the specified limit.
+
+**Example:**
+
+```typescript
+const checkNegative = v.max(0, true) // check [-Infinity, 0)
+[-1, 0, 1].map(checkNegative) // [true, false, false]
+
+const checkNonPositive = v.max(0)    // check [-Infinity, 0]
+[-1, 0, 1].map(checkNonPositive) // [true, true, false]
+
+const checkNonNegative = v.min(0)    // check [0, Infinity]
+[-1, 0, 1].map(checkNonNegative) // [false, true, true]
+
+const checkPositive = v.min(0, true) // check (0, Infinity]
+[-1, 0, 1].map(checkPositive) // [false, false, true]
+
+// Not so simple
+const checkRating = v.and( // Only 1, 2, 3, 4, 5 are valid
+  v.safeInteger,
+  v.min(1),
+  v.max(5)
+)
+checkRating(0) // false
+checkRating(1) // true
+checkRating(1.2) // false
+checkRating(2) // true
+checkRating(3) // true
+checkRating(4) // true
+checkRating(5) // true
+checkRating(6) // false
+
+// Tip: checkRating = v([1,2,3,4,5])
+```
+
+### `negative`, `nonPositive`, `nonNegative`, `positive`
+
+```typescript
+type Negative = TypeGuardValidator<number>
+type NonPositive = TypeGuardValidator<number>
+type NonNegative = TypeGuardValidator<number>
+type Positive = TypeGuardValidator<number>
+```
+
+These methods are validators that determine whether a value refers to certain sets of numbers.
+
+The best explanation is code:
+```javascript
+{
+  negative: value => typeof value === 'number' && value < 0,
+  nonPositive: value => typeof value === 'number' && value <= 0,
+  nonNegative: value => typeof value === 'number' && value >= 0,
+  positive: value => typeof value === 'number' && value > 0,
+}
+```
+
+**Example:**
+
+```typescript
+[-1, 0, 1].map(v.negative) // [true, false, false]
+[-1, 0, 1].map(v.nonPositive) // [true, true, false]
+[-1, 0, 1].map(v.nonNegative) // [false, true, true]
+[-1, 0, 1].map(v.positive) // [false, false, true]
+
+// Not so simple
+const isValidAge = v.and(
+  v.safeInteger,
+  v.positive
+)
+
+isValidAge(0)    // false
+isValidAge('22') // false
+isValidAge(22)   // true
+```
+
+### `safeInteger`
+
+```typescript
+type SafeInteger = TypeGuardValidator<number>
+```
+
+This method is a validator that determines whether passed `value` is a number is an integer
+
+The best explanation is code:
+```javascript
+{
+  safeInteger: value => Number.isSafeInteger(value),
+}
+```
+
+**Example:**
+
+```typescript
+v.safeInteger(1.5)      // false
+v.safeInteger(NaN)      // false
+v.safeInteger(1e102)    // false
+v.safeInteger(Infinity) // false
+v.safeInteger(-1)       // true
+v.safeInteger(0)       // true
+v.safeInteger(1)       // true
+
+// Not so simple
+const isValidAge = v.and(
+  v.safeInteger,
+  v.positive
+)
+
+isValidAge(0)    // false
+isValidAge('22') // false
+isValidAge(22)   // true
 ```
