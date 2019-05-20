@@ -4,7 +4,8 @@ import {
   ITest,
   Schema,
   TypeGuardValidator,
-  ValidatorWithSchema
+  ValidatorWithSchema,
+  Explanation
 } from "../types";
 import { getAndMethod } from "./and";
 import { getArrayValidator } from "./array";
@@ -87,6 +88,8 @@ export type MaxMethod = (
 };
 
 export type JustMethod = <T = any>(schema?: Schema) => (value: any) => value is T
+
+export type ExplainMethod = (schema?: Schema, explanation?: Explanation) => (value: any) => null | any[]
 
 export interface IMethods {
   and: AndMethod;
