@@ -162,3 +162,9 @@ test("and demo: ", () => {
     })
   ).toBe(true);
 });
+
+test("min max", () => {
+  const checkRating = v.and(v.safeInteger, v.min(1), v.max(5))
+  expect([1,2,3,4,5].every(value => checkRating(value))).toBe(true)
+  expect([1.5,'2',0,6].some(value => checkRating(value))).toBe(false)
+})

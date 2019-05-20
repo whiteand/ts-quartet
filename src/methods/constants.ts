@@ -6,6 +6,8 @@ export enum ValidatorType {
   DictionaryOf = "DictionaryOf",
   Enum = "Enum",
   Finite = "Finite",
+  Max = "Max",
+  Min = "Min",
   Negative = "Negative",
   NonNegative = "NonNegative",
   NonPositive = "NonPositive",

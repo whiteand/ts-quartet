@@ -13,6 +13,7 @@ import { getBooleanValidator } from "./boolean";
 import { ValidatorType } from "./constants";
 import { getDictionaryOfMethod } from "./dictionaryOf";
 import { getEnumMethod } from "./enum";
+import { getMaxMethod, getMinMethod } from './minmax'
 import { getNumberValidator } from "./number";
 import { getSafeIntegerValidator } from "./safeInteger";
 import {
@@ -61,6 +62,14 @@ export type TestMethod = (
   test: ITest
 ) => ValidatorWithSchema<{ type: ValidatorType; innerSchema: ITest }>;
 
+export type MinMethod = (minValue: number, exclusive?: boolean) => TypeGuardValidator<string|number|any[]> & {
+  schema: { type: ValidatorType, innerSchema: { minValue: number, exclusive: boolean } };
+}
+
+export type MaxMethod = (maxValue: number, exclusive?: boolean) => TypeGuardValidator<string|number|any[]> & {
+  schema: { type: ValidatorType, innerSchema: { maxValue: number, exclusive: boolean } };
+}
+
 export interface IMethods {
   and: AndMethod;
   array: ArrayMethod;
@@ -68,6 +77,8 @@ export interface IMethods {
   boolean: BooleanMethod;
   dictionaryOf: DictionaryOfMethod;
   enum: EnumMethod;
+  max: MaxMethod;
+  min: MinMethod;
   negative: NumberValidationMethod;
   nonNegative: NumberValidationMethod;
   nonPositive: NumberValidationMethod;
@@ -90,6 +101,8 @@ export const getMethods: FromSettings<IMethods> = settings => {
     }),
     dictionaryOf: getDictionaryOfMethod(settings),
     enum: getEnumMethod(settings),
+    max: getMaxMethod(settings),
+    min: getMinMethod(settings),
     negative: Object.assign(getNegativeValidator(settings), {
       schema: { type: ValidatorType.Negative }
     }),
