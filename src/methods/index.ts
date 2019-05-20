@@ -13,7 +13,7 @@ import { getBooleanValidator } from "./boolean";
 import { ValidatorType } from "./constants";
 import { getDictionaryOfMethod } from "./dictionaryOf";
 import { getEnumMethod } from "./enum";
-import { getMaxMethod, getMinMethod } from './minmax'
+import { getMaxMethod, getMinMethod } from "./minmax";
 import { getNumberValidator } from "./number";
 import { getSafeIntegerValidator } from "./safeInteger";
 import {
@@ -62,13 +62,25 @@ export type TestMethod = (
   test: ITest
 ) => ValidatorWithSchema<{ type: ValidatorType; innerSchema: ITest }>;
 
-export type MinMethod = (minValue: number, exclusive?: boolean) => TypeGuardValidator<string|number|any[]> & {
-  schema: { type: ValidatorType, innerSchema: { minValue: number, exclusive: boolean } };
-}
+export type MinMethod = (
+  minValue: number,
+  exclusive?: boolean
+) => TypeGuardValidator<string | number | any[]> & {
+  schema: {
+    type: ValidatorType;
+    innerSchema: { minValue: number; exclusive: boolean };
+  };
+};
 
-export type MaxMethod = (maxValue: number, exclusive?: boolean) => TypeGuardValidator<string|number|any[]> & {
-  schema: { type: ValidatorType, innerSchema: { maxValue: number, exclusive: boolean } };
-}
+export type MaxMethod = (
+  maxValue: number,
+  exclusive?: boolean
+) => TypeGuardValidator<string | number | any[]> & {
+  schema: {
+    type: ValidatorType;
+    innerSchema: { maxValue: number; exclusive: boolean };
+  };
+};
 
 export interface IMethods {
   and: AndMethod;
