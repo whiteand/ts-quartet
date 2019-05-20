@@ -4,6 +4,39 @@
 
 Today more than ever there is a need to verify data coming from third parties. When you need to have guarantees that the structure and content of the data this library will provide you with these guarantees.
 
+- [Quartet 8](#quartet-8)
+  - [Goals](#goals)
+  - [Concepts](#concepts)
+  - [Just Validator](#just-validator)
+  - [Concept of Validator](#concept-of-validator)
+  - [Quartet Instance](#quartet-instance)
+    - [Example 1](#example-1)
+  - [Concept of schema](#concept-of-schema)
+    - [Example 2](#example-2)
+    - [Example 3](#example-3)
+    - [Example 4](#example-4)
+  - [Installation](#installation)
+  - [Usage](#usage)
+  - [API](#api)
+  - [Validator](#validator)
+    - [Example 5](#example-5)
+  - [Schema](#schema)
+  - [Quartet](#quartet)
+  - [InstanceSettings](#instancesettings)
+  - [QuartetInstance](#quartetinstance)
+  - [Methods](#methods)
+    - [`and`](#and)
+    - [`array`](#array)
+    - [`arrayOf`](#arrayof)
+    - [`boolean`](#boolean)
+    - [`dictionaryOf`](#dictionaryof)
+    - [`enum`](#enum)
+    - [`just`](#just)
+    - [`max` and `min`](#max-and-min)
+    - [`negative`, `nonPositive`, `nonNegative`, `positive`](#negative-nonpositive-nonnegative-positive)
+    - [`safeInteger`](#safeinteger)
+    - [`test`](#test)
+
 ## Concepts
 
 ## Just Validator
@@ -681,4 +714,43 @@ const isValidAge = v.and(
 isValidAge(0)    // false
 isValidAge('22') // false
 isValidAge(22)   // true
+```
+
+### `test`
+
+```typescript
+type  TestMethod = (
+  test: { test(value: any): boolean }
+) => Validator
+```
+
+This method takes an object with `test` method(ex. RegExp) that will  be called on the `value` passed into Validator. If `test` returns `true`: `value` is valid, otherwise: `value` is invalid
+
+The best explanation is code:
+```javascript
+{
+  test: testObj => value => testObj.test(value),
+}
+```
+
+**Example:**
+
+```typescript
+const checkWord = v.test(/^\w+$/)
+checkWord(' abc ')    // false
+checkWord('testtest') // true
+checkWord('test test') // false
+
+// Not so simple
+const checkPassword = v.and(
+  v.string,
+  v.min(8),
+  v.test(/[0-9]/),
+  v.test(/[a-z]/)
+  v.test(/[A-Z]/)
+)
+checkPassword('123123')    // false, because of absense of letters,
+checkPassword(123)         // false, because 123 is not a string
+checkPassword('123qwe')    // false, because of absence of big letter
+checkPassword('123qweQWE') // true
 ```

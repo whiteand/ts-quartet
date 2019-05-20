@@ -1,11 +1,11 @@
 import {
+  Explanation,
   GetFromSettings,
   IDictionary,
   ITest,
   Schema,
   TypeGuardValidator,
-  ValidatorWithSchema,
-  Explanation
+  ValidatorWithSchema
 } from "../types";
 import { getAndMethod } from "./and";
 import { getArrayValidator } from "./array";
@@ -14,7 +14,7 @@ import { getBooleanValidator } from "./boolean";
 import { ValidatorType } from "./constants";
 import { getDictionaryOfMethod } from "./dictionaryOf";
 import { getEnumMethod } from "./enum";
-import { getJustMethod } from './just';
+import { getJustMethod } from "./just";
 import { getMaxMethod, getMinMethod } from "./minmax";
 import { getNumberValidator } from "./number";
 import { getSafeIntegerValidator } from "./safeInteger";
@@ -62,7 +62,6 @@ export type StringMethod = TypeGuardValidator<string> & {
   schema: { type: ValidatorType };
 };
 
-
 export type TestMethod = (
   test: ITest
 ) => ValidatorWithSchema<{ type: ValidatorType; innerSchema: ITest }>;
@@ -87,9 +86,14 @@ export type MaxMethod = (
   };
 };
 
-export type JustMethod = <T = any>(schema?: Schema) => (value: any) => value is T
+export type JustMethod = <T = any>(
+  schema?: Schema
+) => (value: any) => value is T;
 
-export type ExplainMethod = (schema?: Schema, explanation?: Explanation) => (value: any) => null | any[]
+export type ExplainMethod = (
+  schema?: Schema,
+  explanation?: Explanation
+) => (value: any) => null | any[];
 
 export interface IMethods {
   and: AndMethod;
