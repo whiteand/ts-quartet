@@ -1,6 +1,7 @@
 import {
   IDictionary,
   InstanceSettings,
+  ITest,
   Schema,
   TypeGuardValidator,
   ValidatorWithSchema
@@ -21,6 +22,7 @@ import {
   getPositiveValidator
 } from "./signs";
 import { getStringValidator } from "./string";
+import { getTestMethod } from "./testMethod";
 
 type FromSettings<T = any> = (settings: InstanceSettings) => T;
 export type ArrayMethod = TypeGuardValidator<any[]> & {
@@ -55,6 +57,10 @@ export type AndMethod = (
   ...schemas: Schema[]
 ) => ValidatorWithSchema<{ type: ValidatorType; innerSchema: Schema[] }>;
 
+export type TestMethod = (
+  test: ITest
+) => ValidatorWithSchema<{ type: ValidatorType; innerSchema: ITest }>;
+
 export interface IMethods {
   and: AndMethod;
   array: ArrayMethod;
@@ -69,6 +75,7 @@ export interface IMethods {
   positive: NumberValidationMethod;
   safeInteger: NumberValidationMethod;
   string: StringMethod;
+  test: TestMethod;
 }
 
 export const getMethods: FromSettings<IMethods> = settings => {
@@ -103,7 +110,8 @@ export const getMethods: FromSettings<IMethods> = settings => {
     }),
     string: Object.assign(getStringValidator(settings), {
       schema: { type: ValidatorType.String }
-    })
+    }),
+    test: getTestMethod(settings)
   };
   return methods;
 };

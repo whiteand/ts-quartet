@@ -14,6 +14,10 @@ export type Validator = (
 
 export type ValidatorWithSchema<T = Schema> = Validator & { schema: T };
 
+export interface ITest {
+  test: (value: any) => boolean;
+}
+
 export interface IObjectSchema {
   [key: string]: Schema;
 }

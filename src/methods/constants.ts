@@ -12,5 +12,6 @@ export enum ValidatorType {
   Number = "Number",
   Positive = "Positive",
   SafeInteger = "SafeInteger",
-  String = "String"
+  String = "String",
+  Test = "Test"
 }
