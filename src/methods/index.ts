@@ -26,6 +26,7 @@ import {
 } from "./signs";
 import { getStringValidator } from "./string";
 import { getTestMethod } from "./testMethod";
+import { getExplainMethod } from "./explain";
 
 export type AndMethod = (
   ...schemas: Schema[]
@@ -102,6 +103,7 @@ export interface IMethods {
   boolean: BooleanMethod;
   dictionaryOf: DictionaryOfMethod;
   enum: EnumMethod;
+  explain: ExplainMethod;
   just: JustMethod;
   max: MaxMethod;
   min: MinMethod;
@@ -127,6 +129,7 @@ export const getMethods: GetFromSettings<IMethods> = settings => {
     }),
     dictionaryOf: getDictionaryOfMethod(settings),
     enum: getEnumMethod(settings),
+    explain: getExplainMethod(settings),
     just: getJustMethod(settings),
     max: getMaxMethod(settings),
     min: getMinMethod(settings),
