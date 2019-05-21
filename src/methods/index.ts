@@ -27,7 +27,7 @@ import {
 } from "./signs";
 import { getStringValidator } from "./string";
 import { getTestMethod } from "./testMethod";
-import { getThrowErrorMethod } from './throwError';
+import { getThrowErrorMethod } from "./throwError";
 
 export type AndMethod = (
   ...schemas: Schema[]

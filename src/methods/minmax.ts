@@ -17,7 +17,7 @@ export const getMinMethod: GetFromSettings<MinMethod> = () => (
       return false;
     }
     const actualValue = typeof value === "number" ? value : value.length;
-    return exclusive ? value > minValue : value >= minValue;
+    return exclusive ? actualValue > minValue : actualValue >= minValue;
   };
   return Object.assign(minValidator, {
     schema: { type: ValidatorType.Min, innerSchema: { minValue, exclusive } }
@@ -39,7 +39,7 @@ export const getMaxMethod: GetFromSettings<MaxMethod> = () => (
       return false;
     }
     const actualValue = typeof value === "number" ? value : value.length;
-    return exclusive ? value < maxValue : value <= maxValue;
+    return exclusive ? actualValue < maxValue : actualValue <= maxValue;
   };
   return Object.assign(maxValidator, {
     schema: { type: ValidatorType.Max, innerSchema: { maxValue, exclusive } }
