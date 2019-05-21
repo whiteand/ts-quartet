@@ -4,40 +4,6 @@
 
 Today more than ever there is a need to verify data coming from third parties. When you need to have guarantees that the structure and content of the data this library will provide you with these guarantees.
 
-- [Quartet 8](#quartet-8)
-  - [Goals](#goals)
-  - [Concepts](#concepts)
-  - [Just Validator](#just-validator)
-  - [Concept of Validator](#concept-of-validator)
-  - [Quartet Instance](#quartet-instance)
-    - [Example 1](#example-1)
-  - [Concept of schema](#concept-of-schema)
-    - [Example 2](#example-2)
-    - [Example 3](#example-3)
-    - [Example 4](#example-4)
-  - [Installation](#installation)
-  - [Usage](#usage)
-  - [API](#api)
-  - [Validator](#validator)
-    - [Example 5](#example-5)
-  - [Schema](#schema)
-  - [Quartet](#quartet)
-  - [InstanceSettings](#instancesettings)
-  - [QuartetInstance](#quartetinstance)
-  - [Methods](#methods)
-    - [`and`](#and)
-    - [`array`](#array)
-    - [`arrayOf`](#arrayof)
-    - [`boolean`](#boolean)
-    - [`dictionaryOf`](#dictionaryof)
-    - [`enum`](#enum)
-    - [`explain`](#explain)
-    - [`just`](#just)
-    - [`max` and `min`](#max-and-min)
-    - [`negative`, `nonPositive`, `nonNegative`, `positive`](#negative-nonpositive-nonnegative-positive)
-    - [`safeInteger`](#safeinteger)
-    - [`test`](#test)
-
 ## Concepts
 
 ## Just Validator
@@ -180,7 +146,7 @@ npm i -S quartet
 
 ## Usage
 
-1. Import quartet library and instantiate quartet instance
+1) Import quartet library and instantiate quartet instance
 
 ```typescript
 import { quartet } from 'quartet'
@@ -191,7 +157,7 @@ const v = quartet()
 import { v } from 'quartet'
 ```
 
-2. Write schema of the validation
+2) Write schema of the validation
 
 ```typescript
 const personSchema = {
@@ -209,13 +175,13 @@ const personSchema = {
 }
 ```
 
-3. Create Validator using quartet instance
+3) Create Validator using quartet instance
 
 ```typescript
 const personValidator = v(personSchema)
 ```
 
-4. Use validator
+4) Use validator
 
 ```typescript
 const actualPerson = {
@@ -797,4 +763,26 @@ checkPassword('123123')    // false, because of absense of letters,
 checkPassword(123)         // false, because 123 is not a string
 checkPassword('123qwe')    // false, because of absence of big letter
 checkPassword('123qweQWE') // true
+```
+
+### `throwError`
+
+```typescript
+type ThrowErrorMethod = <T = any>(
+  schema: Schema,
+  errorMessage: string | ((value: any) => string)
+) => (value: any) => T
+```
+
+This method accepts a validation schema and an error message (or a function that will accept an invalid value and return an error message). And returns this transmitted value if it is valid, otherwise it throws an error with the transmitted message. If before the type parameter, the return value will be cast to this type.
+
+**Example:**
+
+```typescript
+const throwIfNotString = v.throwError(
+  v.string,
+  value => `${value} is not a string`
+)
+throwIfNotString('123') // => '123'
+throwIfNotString(123)   // throws new TypeError('123 is not a string')
 ```

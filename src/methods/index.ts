@@ -1,3 +1,4 @@
+import { getThrowErrorMethod } from './throwError';
 import {
   Explanation,
   GetFromSettings,
@@ -14,6 +15,7 @@ import { getBooleanValidator } from "./boolean";
 import { ValidatorType } from "./constants";
 import { getDictionaryOfMethod } from "./dictionaryOf";
 import { getEnumMethod } from "./enum";
+import { getExplainMethod } from "./explain";
 import { getJustMethod } from "./just";
 import { getMaxMethod, getMinMethod } from "./minmax";
 import { getNumberValidator } from "./number";
@@ -26,7 +28,6 @@ import {
 } from "./signs";
 import { getStringValidator } from "./string";
 import { getTestMethod } from "./testMethod";
-import { getExplainMethod } from "./explain";
 
 export type AndMethod = (
   ...schemas: Schema[]
@@ -66,6 +67,11 @@ export type StringMethod = TypeGuardValidator<string> & {
 export type TestMethod = (
   test: ITest
 ) => ValidatorWithSchema<{ type: ValidatorType; innerSchema: ITest }>;
+
+export type ThrowErrorMethod = <T = any>(
+  schema: Schema,
+  errorMessage: string | ((value: any) => string)
+) => (value: any) => T;
 
 export type MinMethod = (
   minValue: number,
@@ -115,6 +121,7 @@ export interface IMethods {
   safeInteger: NumberValidationMethod;
   string: StringMethod;
   test: TestMethod;
+  throwError: ThrowErrorMethod;
 }
 
 export const getMethods: GetFromSettings<IMethods> = settings => {
@@ -154,7 +161,8 @@ export const getMethods: GetFromSettings<IMethods> = settings => {
     string: Object.assign(getStringValidator(settings), {
       schema: { type: ValidatorType.String }
     }),
-    test: getTestMethod(settings)
+    test: getTestMethod(settings),
+    throwError: getThrowErrorMethod(settings)
   };
   return methods;
 };
