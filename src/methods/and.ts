@@ -1,11 +1,11 @@
 import { compile } from "../compile";
+import { ValidatorType } from "../constants";
 import {
   GetFromSettings,
   Schema,
   Validator,
   ValidatorWithSchema
 } from "../types";
-import { ValidatorType } from "../constants";
 import { AndMethod } from "./index";
 
 export const getAndMethod: GetFromSettings<AndMethod> = settings => (

@@ -1,5 +1,5 @@
-import { GetFromSettings, TypeGuardValidator } from "../types";
 import { ValidatorType } from "../constants";
+import { GetFromSettings, TypeGuardValidator } from "../types";
 import { MaxMethod, MinMethod } from "./index";
 
 export const getMinMethod: GetFromSettings<MinMethod> = () => (

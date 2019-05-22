@@ -1,5 +1,5 @@
-import { ValidatorType } from "./constants";
 import { compile } from "./compile";
+import { ValidatorType } from "./constants";
 import { doExplanations } from "./doExplanation";
 import { has } from "./helpers";
 import { REST } from "./symbols";
@@ -18,7 +18,6 @@ interface IPrecompiledValidationData {
   validatorsDict: { [prop: string]: Validator };
 }
 
-// Returns true if handled
 type ObjectValidationHandler = (
   precompiledData: IPrecompiledValidationData,
   value: any,
@@ -29,18 +28,7 @@ type ObjectValidationHandler = (
   explanations?: any[]
 ) => { handled: boolean; isValid: boolean };
 
-const notObjectHandler: ObjectValidationHandler = (
-  precompiledData,
-  value,
-  schema,
-  settings,
-  parents,
-  explanation,
-  explanations
-) => {
-  if (!value) {
-    doExplanations(value, schema, settings, parents, explanation, explanations);
-  }
+const notObjectHandler: ObjectValidationHandler = (precompiledData, value) => {
   return { handled: !value, isValid: false };
 };
 

@@ -1,3 +1,4 @@
+import { ValidatorType } from "../constants";
 import {
   Explanation,
   GetFromSettings,
@@ -11,7 +12,6 @@ import { getAndMethod } from "./and";
 import { getArrayValidator } from "./array";
 import { getArrayOfValidator } from "./arrayOf";
 import { getBooleanValidator } from "./boolean";
-import { ValidatorType } from "../constants";
 import { getDictionaryOfMethod } from "./dictionaryOf";
 import { getEnumMethod } from "./enum";
 import { getExplainMethod } from "./explain";

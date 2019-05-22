@@ -41,8 +41,8 @@ export const compileVariantSchema = (
   };
   return Object.assign(resValidator, {
     schema: {
-      type: ValidatorType.Variant,
-      innerSchema: schema
+      innerSchema: schema,
+      type: ValidatorType.Variant
     }
   });
 };

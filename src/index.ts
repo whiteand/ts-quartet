@@ -131,5 +131,3 @@ export const obj = quartet(
     };
   })([])
 );
-
-obj.explain(obj.and(obj.string))(123); //?
