@@ -1,3 +1,4 @@
+import { ValidatorType } from "./constants";
 import { doExplanations } from "./doExplanation";
 import {
   Explanation,
@@ -10,8 +11,8 @@ export const compileFunction = (
   settings: InstanceSettings,
   schema: Validator,
   explanation?: Explanation
-): ValidatorWithSchema => {
-  const res: ValidatorWithSchema = (value, explanations, parents): boolean => {
+): ValidatorWithSchema<{ type: ValidatorType; innerSchema: Validator }> => {
+  const res: Validator = (value, explanations, parents): boolean => {
     const isValid = schema(value, explanations, parents);
     if (!isValid) {
       doExplanations(
@@ -26,6 +27,10 @@ export const compileFunction = (
     }
     return isValid;
   };
-  res.schema = schema;
-  return res;
+  return Object.assign(res, {
+    schema: {
+      innerSchema: schema,
+      type: ValidatorType.Function
+    }
+  });
 };

@@ -1,4 +1,5 @@
 import { compile } from "./compile";
+import { has } from "./helpers";
 import { getMethods } from "./methods";
 import { REST } from "./symbols";
 import {
@@ -44,7 +45,7 @@ export const v = quartet({
   defaultExplanation: undefined
 });
 
-export const obj = quartet(
+export const full = quartet(
   ((dict: any[]) => {
     const defaultExplanation: FromValidationParams = (
       value,
@@ -71,3 +72,64 @@ export const obj = quartet(
     };
   })([])
 );
+
+export const obj = quartet(
+  ((dict: any[]) => {
+    function transformToObj(schema: any): any {
+      if (!schema) {
+        return schema;
+      }
+      if (!["object", "function"].includes(typeof schema)) {
+        return schema;
+      }
+      if (Array.isArray(schema)) {
+        return schema.map(transformToObj);
+      }
+      if (typeof schema === "object") {
+        return Object.entries(schema)
+          .map(([prop, innerSchema]) => [prop, transformToObj(innerSchema)])
+          .reduce(
+            (objSchema, [prop, innerObjSchema]) => ({
+              ...objSchema,
+              [prop]: innerObjSchema
+            }),
+            {}
+          );
+      }
+      if (schema.schema) {
+        return transformToObj(schema.schema);
+      }
+      if (!schema.type) {
+        return schema;
+      }
+      return has(schema, "innerSchema")
+        ? { ...schema, innerSchema: transformToObj(schema.innerSchema) }
+        : { ...schema };
+    }
+    const defaultExplanation: FromValidationParams = (
+      value,
+      schema,
+      settings,
+      parents
+    ) => {
+      let id = dict.indexOf(schema);
+      if (id < 0) {
+        id = dict.length;
+        dict.push(schema);
+      }
+      return {
+        id,
+        parents,
+        schema: transformToObj(schema),
+        settings,
+        value
+      };
+    };
+    return {
+      allErrors: true,
+      defaultExplanation
+    };
+  })([])
+);
+
+obj.explain(obj.and(obj.string))(123); //?

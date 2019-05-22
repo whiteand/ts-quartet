@@ -1,3 +1,4 @@
+import { ValidatorType } from "./constants";
 import { compile } from "./compile";
 import { doExplanations } from "./doExplanation";
 import { has } from "./helpers";
@@ -134,9 +135,9 @@ export const compileObjectSchema = (
   settings: InstanceSettings,
   schema: IObjectSchema,
   explanation?: Explanation
-): ValidatorWithSchema => {
+): ValidatorWithSchema<{ type: ValidatorType; innerSchema: IObjectSchema }> => {
   const precompiledData = getPrecompiledValidationData(settings, schema);
-  const validator: ValidatorWithSchema = (value, explanations, parents) => {
+  const validator: Validator = (value, explanations, parents) => {
     for (const handler of validationAgenda) {
       const { handled, isValid } = handler(
         precompiledData,
@@ -163,7 +164,11 @@ export const compileObjectSchema = (
     }
     return true;
   };
-  validator.schema = schema;
 
-  return validator;
+  return Object.assign(validator, {
+    schema: {
+      innerSchema: schema,
+      type: ValidatorType.Object
+    }
+  });
 };

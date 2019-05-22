@@ -3,17 +3,21 @@ export enum ValidatorType {
   Array = "Array",
   ArrayOf = "ArrayOf",
   Boolean = "Boolean",
+  Constant = "Constant",
   DictionaryOf = "DictionaryOf",
   Enum = "Enum",
   Finite = "Finite",
+  Function = "Function",
   Max = "Max",
   Min = "Min",
   Negative = "Negative",
   NonNegative = "NonNegative",
   NonPositive = "NonPositive",
   Number = "Number",
+  Object = "Object",
   Positive = "Positive",
   SafeInteger = "SafeInteger",
   String = "String",
-  Test = "Test"
+  Test = "Test",
+  Variant = "Variant"
 }

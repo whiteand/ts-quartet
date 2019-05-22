@@ -1,6 +1,6 @@
 import { compile } from "../compile";
 import { GetFromSettings, Schema, TypeGuardValidator } from "../types";
-import { ValidatorType } from "./constants";
+import { ValidatorType } from "../constants";
 import { ArrayOfMethod } from "./index";
 
 export const getArrayOfValidator: GetFromSettings<ArrayOfMethod> = settings => <

@@ -5,7 +5,7 @@ import {
   Validator,
   ValidatorWithSchema
 } from "../types";
-import { ValidatorType } from "./constants";
+import { ValidatorType } from "../constants";
 import { TestMethod } from "./index";
 
 export const getTestMethod: GetFromSettings<TestMethod> = settings => (

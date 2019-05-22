@@ -1,4 +1,5 @@
 import { compile } from "./compile";
+import { ValidatorType } from "./constants";
 import { doExplanations } from "./doExplanation";
 import {
   Explanation,
@@ -12,13 +13,12 @@ export const compileVariantSchema = (
   settings: InstanceSettings,
   schema: IVariantSchema,
   explanation?: Explanation
-): ValidatorWithSchema => {
+): ValidatorWithSchema<{
+  type: ValidatorType;
+  innerSchema: IVariantSchema;
+}> => {
   const validators = schema.map(innerSchema => compile(settings, innerSchema));
-  const resValidator: ValidatorWithSchema = (
-    value,
-    explanations,
-    parents
-  ): boolean => {
+  const resValidator: Validator = (value, explanations, parents): boolean => {
     const innerExplanations: any[] = [];
     const isValid = validators.some((check: Validator) =>
       check(value, innerExplanations, parents)
@@ -39,6 +39,10 @@ export const compileVariantSchema = (
     }
     return isValid;
   };
-  resValidator.schema = schema;
-  return resValidator;
+  return Object.assign(resValidator, {
+    schema: {
+      type: ValidatorType.Variant,
+      innerSchema: schema
+    }
+  });
 };

@@ -1,3 +1,4 @@
+import { ValidatorType } from "./constants";
 import {
   Explanation,
   InstanceSettings,
@@ -39,8 +40,10 @@ const compileAgenda: ICompileAgendaItem[] = [
     test: schema => Array.isArray(schema)
   },
   {
-    compiler: (settings, schema: Schema) => (value: any): boolean =>
-      value === schema,
+    compiler: (settings, schema: Schema) =>
+      Object.assign((value: any): boolean => value === schema, {
+        schema: { type: ValidatorType.Constant, innerSchema: schema }
+      }),
     test: isConstantSchema
   },
   {

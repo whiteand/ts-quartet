@@ -5,7 +5,7 @@ import {
   Schema,
   TypeGuardValidator
 } from "../types";
-import { ValidatorType } from "./constants";
+import { ValidatorType } from "../constants";
 import { DictionaryOfMethod } from "./index";
 
 export const getDictionaryOfMethod: GetFromSettings<
