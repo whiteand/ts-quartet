@@ -1,6 +1,6 @@
 {
   "name": "quartet",
-  "version": "8.2.1",
+  "version": "8.2.2",
   "description": "functional and convenient validation library",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -13,7 +13,9 @@
     "prepublishOnly": "npm test && npm run lint",
     "preversion": "npm run lint",
     "version": "npm run format && git add -A src",
-    "postversion": "git push && git push --tags"
+    "postversion": "git push && git push --tags",
+    
+    "coveralls": "jest --coverage --config jestconfig.json && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
   },
   "repository": {
     "type": "git",
@@ -33,6 +35,7 @@
   "homepage": "https://github.com/whiteand/ts-quartet#readme",
   "devDependencies": {
     "@types/jest": "^24.0.13",
+    "coveralls": "^3.0.3",
     "jest": "^24.8.0",
     "prettier": "^1.17.1",
     "ts-jest": "^24.0.2",
