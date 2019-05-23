@@ -37,7 +37,7 @@ export const quartet: Quartet = (
     >;
   };
   const methods = getMethods(settings);
-  return Object.assign(compiler, methods, { rest: REST });
+  return Object.assign(compiler, methods, { rest: REST, settings });
 };
 
 export const v = quartet({
