@@ -11,5 +11,5 @@
     ]
   },
   "include": ["src", "src/index.d.ts"],
-  "exclude": ["node_modules", "**/__tests__/*"]
+  "exclude": ["node_modules", "**/__tests__/*", "examples"]
 }

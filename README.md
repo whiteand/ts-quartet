@@ -41,7 +41,7 @@
 
 ## Examples
 
-If you want to see examples - look [here](https://github.com/whiteand/ts-quartet/tree/master/examples).
+If you want to see examples look [here](https://github.com/whiteand/ts-quartet/tree/master/examples).
 
 ## Goals
 
