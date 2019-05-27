@@ -4,6 +4,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/whiteand/ts-quartet/badge.svg?branch=master)](https://coveralls.io/github/whiteand/ts-quartet?branch=master)
 
 - [Quartet 8](#quartet-8)
+  - [Examples](#examples)
   - [Goals](#goals)
   - [Concepts](#concepts)
   - [Just Validator](#just-validator)
@@ -37,6 +38,10 @@
     - [`safeInteger`](#safeinteger)
     - [`test`](#test)
     - [`throwError`](#throwerror)
+
+## Examples
+
+If you want to see examples - look [here](https://github.com/whiteand/ts-quartet/tree/master/examples).
 
 ## Goals
 
