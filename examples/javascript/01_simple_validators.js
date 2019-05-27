@@ -5,7 +5,7 @@
  * 
  * These functions only return true/false if value is valid/invalid. That's all
  * 
- * They are used in more complicated schemas of validation. But can be used separately as simple validators.
+ * They are used within other schemas of validation
  */
 
 // import v - pre-created instance of quartet.
