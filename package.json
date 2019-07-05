@@ -1,6 +1,6 @@
 {
   "name": "quartet",
-  "version": "8.2.4",
+  "version": "8.2.5",
   "description": "functional and convenient validation library",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -14,7 +14,6 @@
     "preversion": "npm run lint",
     "version": "npm run format && git add -A src",
     "postversion": "git push && git push --tags",
-    
     "coveralls": "jest --coverage --config jestconfig.json && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
   },
   "repository": {

@@ -129,14 +129,14 @@ type Schema =
 ```typescript
 const numberSchema = value => typeof value === 'number'
 const stringSchema = value => typeof value === 'string'
-const sexSchema = value => ['male', 'female'].includes(value)
+const genderSchema = value => ['male', 'female'].includes(value)
 // etc
-const explainedSexSchema = (value, explanations) => {
-  const isSex = ['male', 'female'].includes(value)
-  if (!isSex && explanations) {
-    explanations.push(`${value} is not a valid value of the sex`)
+const explainedGenderSchema = (value, explanations) => {
+  const isGender = ['male', 'female'].includes(value)
+  if (!isGender && explanations) {
+    explanations.push(`${value} is not a valid value of the gender`)
   }
-  return isSex
+  return isGender
 }
 ```
 
@@ -169,13 +169,13 @@ As we can see such type of schema is the most wordy variant of possible schemas.
 ```typescript
 const personSchema = { // object schema
   name: name => typeof name === 'string', // means value.name must be string
-  sex: ['male','female'] // means value.sex must be one of 'male' or 'female'
+  gender: ['male','female'] // means value.gender must be one of 'male' or 'female'
 }
 const checkPerson = v(personSchema) // v - is an instance quartet
 
 const person = {
   name: 'Andrew',
-  sex: 'male'
+  gender: 'male'
 }
 
 const isPersonValid = checkPerson(person) // => true
@@ -209,7 +209,7 @@ const personSchema = {
     v.safeInteger,     // integer
     v.nonNegative      // >= 0
   ),
-  sex: ['male', 'female'], // age: 'male' | 'female'
+  gender: ['male', 'female'], // age: 'male' | 'female'
   house: [                 // null | { address: string }
     null,                        // null
     { address: v.string }        // { address: string }
@@ -230,7 +230,7 @@ const personValidator = v(personSchema)
 const actualPerson = {
   name: 'Andrew Beletskiy',
   age: 22,
-  sex: 'male',
+  gender: 'male',
   house: null,
   money: 132
 }
@@ -514,25 +514,25 @@ checkStringDictionary({      // false
 })
 
 // Not so simple
-const Sex = {
+const Gender = {
   male: 'male',
   female: 'female'
 }
 
-const sexOfPersonsDict = {
+const genderOfPersonsDict = {
   andrew: 'male',
   lena: 'female',
   leonid: 'male',
   vasilina: 'female'
 }
 
-const checkSexOfPersonsDict = v.dictionaryOf(
-  Object.values(Sex)
+const checkGenderOfPersonsDict = v.dictionaryOf(
+  Object.values(Gender)
 )
-checkSexOfPersonsDict(sexOfPersonsDict) // true
+checkGenderOfPersonsDict(genderOfPersonsDict) // true
 
-checkSexOfPersonsDict({ // false, because of invalidity of `null` value
-  ...sexOfPersonsDict,
+checkGenderOfPersonsDict({ // false, because of invalidity of `null` value
+  ...genderOfPersonsDict,
   sasha: null // invalid
 })
 ```
