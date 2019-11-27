@@ -8,6 +8,7 @@ import {
   TypeGuardValidator,
   ValidatorWithSchema
 } from "../types";
+
 import { getAndMethod } from "./and";
 import { getArrayValidator } from "./array";
 import { getArrayOfValidator } from "./arrayOf";
@@ -17,8 +18,8 @@ import { getEnumMethod } from "./enum";
 import { getExplainMethod } from "./explain";
 import { getJustMethod } from "./just";
 import { getMaxMethod, getMinMethod } from "./minmax";
-import { getNumberValidator } from "./number";
 import { getNotMethod } from "./not";
+import { getNumberValidator } from "./number";
 import { getSafeIntegerValidator } from "./safeInteger";
 import {
   getNegativeValidator,
@@ -124,13 +125,13 @@ export interface IMethods {
   negative: NumberValidationMethod;
   nonNegative: NumberValidationMethod;
   nonPositive: NumberValidationMethod;
+  not: NotMethod;
   number: NumberValidationMethod;
   positive: NumberValidationMethod;
   safeInteger: NumberValidationMethod;
   string: StringMethod;
   test: TestMethod;
   throwError: ThrowErrorMethod;
-  not: NotMethod;
 }
 
 export const getMethods: GetFromSettings<IMethods> = settings => {
@@ -158,6 +159,7 @@ export const getMethods: GetFromSettings<IMethods> = settings => {
     nonPositive: Object.assign(getNonPositiveValidator(settings), {
       schema: { type: ValidatorType.NonPositive }
     }),
+    not: getNotMethod(settings),
     number: Object.assign(getNumberValidator(settings), {
       schema: { type: ValidatorType.Number }
     }),
@@ -171,8 +173,7 @@ export const getMethods: GetFromSettings<IMethods> = settings => {
       schema: { type: ValidatorType.String }
     }),
     test: getTestMethod(settings),
-    throwError: getThrowErrorMethod(settings),
-    not: getNotMethod(settings)
+    throwError: getThrowErrorMethod(settings)
   };
   return methods;
 };

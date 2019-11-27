@@ -1,12 +1,13 @@
 import { compile } from "../compile";
+import { ValidatorType } from "../constants";
 import {
-  GetFromSettings,
-  Schema,
   Explanation,
-  IKeyParentSchema
+  GetFromSettings,
+  IKeyParentSchema,
+  Schema
 } from "../types";
 import { NotMethod } from "./index";
-import { ValidatorType } from "../constants";
+import { doExplanations } from "../doExplanation";
 
 export const getNotMethod: GetFromSettings<NotMethod> = settings => {
   const notMethod = <T = any>(schema?: Schema, explanation?: Explanation) => {
@@ -18,8 +19,15 @@ export const getNotMethod: GetFromSettings<NotMethod> = settings => {
         parents: IKeyParentSchema[] = []
       ): value is T => {
         const isValid = compiled(value, [], parents);
-        if (isValid && explanations && explanation) {
-          explanations.push(explanation);
+        if (isValid) {
+          doExplanations(
+            value,
+            schema,
+            settings,
+            parents,
+            explanation,
+            explanations
+          );
         }
         return !isValid;
       },

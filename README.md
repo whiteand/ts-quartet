@@ -349,7 +349,8 @@ export type QuartetInstance = <T = any>(
   explanation?: Explanation,
   innerSettings?: InstanceSettings
 ) => TypeGuardValidator<T> &
-  IMethods & { // All methods will be described below
+  IMethods & {
+    // All methods will be described below
     rest: string;
   };
 ```
@@ -823,21 +824,38 @@ throwIfNotString(123); // throws new TypeError('123 is not a string')
 ### `not`
 
 ```typescript
-type ThrowErrorMethod = <T = any>(
-  schema: Schema,
-  errorMessage: string | ((value: any) => string)
-) => (value: any) => T;
+type NotMethod = <T = any>(
+  schema?: Schema,
+  explanation?: Explanation
+) => TypeGuardValidator<T> & {
+  schema: { type: ValidatorType; innerSchema: Schema };
+};
 ```
 
-This method accepts a validation schema and an error message (or a function that will accept an invalid value and return an error message). And returns this transmitted value if it is valid, otherwise it throws an error with the transmitted message. If before the type parameter, the return value will be cast to this type.
+This method accepts a validation schema and returns validator of some js value. If this value is valid according to the schema. This validator will return `false`. And pushed `explanation` to `explanations` array. It will return `true` otherwise.
 
 **Example:**
 
 ```typescript
-const throwIfNotString = v.throwError(
-  v.string,
-  value => `${value} is not a string`
-);
-throwIfNotString("123"); // => '123'
-throwIfNotString(123); // throws new TypeError('123 is not a string')
+const notANumber = v.not(v.number, "number occurred");
+
+const explanations = [];
+console.log(notANumber("1")); // true
+console.log(explanations); // []
+
+console.log(notANumber(123));
+console.log(explanations); // ['number occurred']
+```
+
+With function explanation:
+
+```typescript
+const notANumber = v.not(v.number, value => `${value} is a number`);
+
+const explanations = [];
+console.log(notANumber("1")); // true
+console.log(explanations); // []
+
+console.log(notANumber(123));
+console.log(explanations); // ['123 is a number']
 ```
