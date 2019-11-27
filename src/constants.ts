@@ -13,6 +13,7 @@ export enum ValidatorType {
   Negative = "Negative",
   NonNegative = "NonNegative",
   NonPositive = "NonPositive",
+  Not = "Not",
   Number = "Number",
   Object = "Object",
   Positive = "Positive",

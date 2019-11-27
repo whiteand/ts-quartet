@@ -18,6 +18,7 @@ import { getExplainMethod } from "./explain";
 import { getJustMethod } from "./just";
 import { getMaxMethod, getMinMethod } from "./minmax";
 import { getNumberValidator } from "./number";
+import { getNotMethod } from "./not";
 import { getSafeIntegerValidator } from "./safeInteger";
 import {
   getNegativeValidator,
@@ -102,6 +103,13 @@ export type ExplainMethod = (
   explanation?: Explanation
 ) => (value: any) => null | any[];
 
+export type NotMethod = <T = any>(
+  schema?: Schema,
+  explanation?: Explanation
+) => TypeGuardValidator<T> & {
+  schema: { type: ValidatorType; innerSchema: Schema };
+};
+
 export interface IMethods {
   and: AndMethod;
   array: ArrayMethod;
@@ -122,6 +130,7 @@ export interface IMethods {
   string: StringMethod;
   test: TestMethod;
   throwError: ThrowErrorMethod;
+  not: NotMethod;
 }
 
 export const getMethods: GetFromSettings<IMethods> = settings => {
@@ -162,7 +171,8 @@ export const getMethods: GetFromSettings<IMethods> = settings => {
       schema: { type: ValidatorType.String }
     }),
     test: getTestMethod(settings),
-    throwError: getThrowErrorMethod(settings)
+    throwError: getThrowErrorMethod(settings),
+    not: getNotMethod(settings)
   };
   return methods;
 };
