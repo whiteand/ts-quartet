@@ -1,5 +1,6 @@
 import { compile } from "../compile";
 import { ValidatorType } from "../constants";
+import { doExplanations } from "../doExplanation";
 import {
   Explanation,
   GetFromSettings,
@@ -7,7 +8,6 @@ import {
   Schema
 } from "../types";
 import { NotMethod } from "./index";
-import { doExplanations } from "../doExplanation";
 
 export const getNotMethod: GetFromSettings<NotMethod> = settings => {
   const notMethod = <T = any>(schema?: Schema, explanation?: Explanation) => {
