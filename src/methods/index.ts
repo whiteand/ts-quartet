@@ -31,9 +31,9 @@ import { getStringValidator } from "./string";
 import { getTestMethod } from "./testMethod";
 import { getThrowErrorMethod } from "./throwError";
 
-export type AndMethod = (
+export type AndMethod = <T = any>(
   ...schemas: Schema[]
-) => ValidatorWithSchema<{ type: ValidatorType; innerSchema: Schema[] }>;
+) => TypeGuardValidator<T> & { schema: { type: ValidatorType; innerSchema: Schema[] } };
 
 export type ArrayMethod = TypeGuardValidator<any[]> & {
   schema: { type: ValidatorType };

@@ -41,7 +41,7 @@ export const quartet: Quartet = (
 };
 
 export const v = quartet({
-  allErrors: true,
+  allErrors: false,
   defaultExplanation: undefined
 });
 

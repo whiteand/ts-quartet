@@ -23,7 +23,7 @@ export interface IObjectSchema {
 }
 
 export type TypeGuardValidator<T = any> = (
-  value: any,
+  value?: any,
   explanations?: any[],
   parents?: IKeyParentSchema[]
 ) => value is T;
