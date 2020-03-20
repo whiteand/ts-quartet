@@ -126,7 +126,7 @@ export const obj = quartet(
       };
     };
     return {
-      allErrors: true,
+      allErrors: false,
       defaultExplanation
     };
   })([])
