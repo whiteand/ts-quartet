@@ -34,7 +34,7 @@ test("obj has obj explanation", () => {
             )
           ),
           settings: (v: any) => typeof v === "object",
-          value: () => true,
+          value: () => true
         },
         explanation => explanation.hasOwnProperty("schema")
       )
