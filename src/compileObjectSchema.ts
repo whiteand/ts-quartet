@@ -38,6 +38,14 @@ const getParentsGetter = (
   parents?: IKeyParentSchema[]
 ) => (key: string) => [{ key, schema, parent }, ...(parents || [])];
 
+const empty: any = {};
+const hasProperty = (obj: any, key: string) => {
+  if (empty[key]) {
+    return Object.prototype.hasOwnProperty.call(obj, key);
+  }
+  return obj[key] !== undefined || key in obj;
+};
+
 const propValidationHandler: ObjectValidationHandler = (
   precompiledData,
   value,
@@ -48,9 +56,8 @@ const propValidationHandler: ObjectValidationHandler = (
   explanations
 ) => {
   const { hasRest, validatorsDict, restValidator } = precompiledData;
-  const firstStepPropsTesting = hasRest
-    ? Object.keys(value)
-    : Object.keys(validatorsDict);
+  const firstStepsPropsTestingDict = hasRest ? value : validatorsDict;
+  const firstStepPropsTesting = Object.keys(firstStepsPropsTestingDict);
   const getParents = getParentsGetter(value, schema, parents);
   let isValid = true;
   for (const prop of firstStepPropsTesting) {
@@ -67,11 +74,15 @@ const propValidationHandler: ObjectValidationHandler = (
       return { handled: true, isValid };
     }
   }
+  const validatorsDictEntries = Object.entries(validatorsDict);
+  // tslint:disable-next-line
+  for (let i = 0; i < validatorsDictEntries.length; i++) {
+    const [prop, propValidator] = validatorsDictEntries[i];
 
-  const secondStepAgenda = Object.entries(validatorsDict).filter(
-    ([key]) => !firstStepPropsTesting.includes(key)
-  );
-  for (const [prop, propValidator] of secondStepAgenda) {
+    if (hasProperty(firstStepPropsTesting, prop)) {
+      continue;
+    }
+
     const propValue = value[prop];
     const isValidProp = propValidator(
       propValue,
@@ -97,16 +108,23 @@ type GetCurrentData = (
   schema: IObjectSchema
 ) => IPrecompiledValidationData;
 
-const getValidatorsDict = (settings: InstanceSettings, schema: IObjectSchema) =>
-  Object.entries(schema)
-    .filter(([key]) => key !== REST)
-    .reduce(
-      (dict, [prop, propSchema]) => ({
-        ...dict,
-        [prop]: compile(settings, propSchema)
-      }),
-      {}
-    );
+const getValidatorsDict = (
+  settings: InstanceSettings,
+  schema: IObjectSchema
+) => {
+  const entries = Object.entries(schema);
+  const dict: any = {};
+  // tslint:disable-next-line
+  for (let i = 0; i < entries.length; i++) {
+    const entry = entries[i];
+    const prop = entry[0];
+    if (prop === REST) {
+      continue;
+    }
+    dict[prop] = compile(settings, entry[1]);
+  }
+  return dict;
+};
 
 const getPrecompiledValidationData: GetCurrentData = (settings, schema) => {
   const hasRest = has(schema, REST);

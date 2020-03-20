@@ -16,6 +16,7 @@ import { getBooleanValidator } from "./boolean";
 import { getDictionaryOfMethod } from "./dictionaryOf";
 import { getEnumMethod } from "./enum";
 import { getExplainMethod } from "./explain";
+import { getFunctionValidator } from "./function";
 import { getInMethod } from "./in";
 import { getJustMethod } from "./just";
 import { getMaxMethod, getMinMethod } from "./minmax";
@@ -31,7 +32,6 @@ import {
 import { getStringValidator } from "./string";
 import { getTestMethod } from "./testMethod";
 import { getThrowErrorMethod } from "./throwError";
-import { getFunctionValidator } from "./function";
 
 export type AndMethod = <T = any>(
   ...schemas: Schema[]
@@ -45,6 +45,7 @@ export type InMethod = <T = any>(
   schema: { type: ValidatorType; innerSchema: object };
 };
 
+// tslint:disable-next-line
 export type FunctionMethod = TypeGuardValidator<Function> & {
   schema: { type: ValidatorType };
 };

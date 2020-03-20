@@ -18,8 +18,10 @@ export const compileVariantSchema = (
   innerSchema: IVariantSchema;
 }> => {
   const validators: Validator[] = [];
-  let dict: Record<string | number, boolean> = {};
-  const primitives: (boolean | null | undefined)[] = [];
+  const dict: Record<string | number, boolean> = {};
+  const primitives: Array<boolean | null | undefined> = [];
+
+  // tslint:disable-next-line
   for (let i = 0; i < schema.length; i++) {
     const innerSchema = schema[i];
     if (typeof innerSchema === "string" || typeof innerSchema === "number") {

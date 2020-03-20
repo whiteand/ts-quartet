@@ -83,18 +83,21 @@ export const obj = quartet(
         return schema;
       }
       if (Array.isArray(schema)) {
-        return schema.map(transformToObj);
+        const variants: any[] = [];
+        // tslint:disable-next-line
+        for (let i = 0; i < schema.length; i++) {
+          variants.push(transformToObj(schema[i]));
+        }
+        return variants;
       }
       if (typeof schema === "object") {
-        return Object.entries(schema)
-          .map(([prop, innerSchema]) => [prop, transformToObj(innerSchema)])
-          .reduce(
-            (objSchema, [prop, innerObjSchema]) => ({
-              ...objSchema,
-              [prop]: innerObjSchema
-            }),
-            {}
-          );
+        const entries = Object.entries(schema);
+        const objSchema: any = {};
+        // tslint:disable-next-line
+        for (let i = 0; i < entries.length; i++) {
+          objSchema[entries[i][0]] = transformToObj(entries[i][1]);
+        }
+        return objSchema;
       }
       if (schema.schema) {
         return transformToObj(schema.schema);
