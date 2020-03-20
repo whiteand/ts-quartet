@@ -6,6 +6,7 @@ export enum ValidatorType {
   Constant = "Constant",
   DictionaryOf = "DictionaryOf",
   Enum = "Enum",
+  In = "In",
   Finite = "Finite",
   Function = "Function",
   Max = "Max",

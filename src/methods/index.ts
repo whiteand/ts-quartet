@@ -16,6 +16,7 @@ import { getBooleanValidator } from "./boolean";
 import { getDictionaryOfMethod } from "./dictionaryOf";
 import { getEnumMethod } from "./enum";
 import { getExplainMethod } from "./explain";
+import { getInMethod } from "./in";
 import { getJustMethod } from "./just";
 import { getMaxMethod, getMinMethod } from "./minmax";
 import { getNotMethod } from "./not";
@@ -30,10 +31,23 @@ import {
 import { getStringValidator } from "./string";
 import { getTestMethod } from "./testMethod";
 import { getThrowErrorMethod } from "./throwError";
+import { getFunctionValidator } from "./function";
 
 export type AndMethod = <T = any>(
   ...schemas: Schema[]
-) => TypeGuardValidator<T> & { schema: { type: ValidatorType; innerSchema: Schema[] } };
+) => TypeGuardValidator<T> & {
+  schema: { type: ValidatorType; innerSchema: Schema[] };
+};
+
+export type InMethod = <T = any>(
+  dictionary: object
+) => TypeGuardValidator<T> & {
+  schema: { type: ValidatorType; innerSchema: object };
+};
+
+export type FunctionMethod = TypeGuardValidator<Function> & {
+  schema: { type: ValidatorType };
+};
 
 export type ArrayMethod = TypeGuardValidator<any[]> & {
   schema: { type: ValidatorType };
@@ -119,6 +133,8 @@ export interface IMethods {
   dictionaryOf: DictionaryOfMethod;
   enum: EnumMethod;
   explain: ExplainMethod;
+  function: FunctionMethod;
+  in: InMethod;
   just: JustMethod;
   max: MaxMethod;
   min: MinMethod;
@@ -147,6 +163,10 @@ export const getMethods: GetFromSettings<IMethods> = settings => {
     dictionaryOf: getDictionaryOfMethod(settings),
     enum: getEnumMethod(settings),
     explain: getExplainMethod(settings),
+    function: Object.assign(getFunctionValidator(settings), {
+      schema: { type: ValidatorType.Function }
+    }),
+    in: getInMethod(settings),
     just: getJustMethod(settings),
     max: getMaxMethod(settings),
     min: getMinMethod(settings),

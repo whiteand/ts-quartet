@@ -32,10 +32,13 @@
     - [`dictionaryOf`](#dictionaryof)
     - [`enum`](#enum)
     - [`explain`](#explain)
+    - [`function`](#function)
+    - [`in`](#in)
     - [`just`](#just)
     - [`max` and `min`](#max-and-min)
     - [`negative`, `nonPositive`, `nonNegative`, `positive`](#negative-nonpositive-nonnegative-positive)
     - [`safeInteger`](#safeinteger)
+    - [`string`](#string)
     - [`test`](#test)
     - [`throwError`](#throwerror)
     - [`not`](#not)
@@ -606,6 +609,48 @@ getExplanation(validPerson)   // null
 getExplanation(invalidPerson) // ['wrong name', 'wrong person']
 ```
 
+### `function`
+
+```typescript
+type FunctionMethod = (value: any) => value is Function;
+```
+
+This method is the same as: `value => typeof value === 'function'`
+
+### `in`
+
+```typescript
+type InMethod = <T = any>(
+  dictionary: Record<any, any>
+) => (key: any) => key is T;
+```
+
+This method accepts object, and returns validator, that takes key and returns `dictionary[key] !== undefined`.
+
+**Example:**
+
+```typescript
+const blackListDictionary = {
+  smoking: true,
+  beer: { a: 1 },
+  reading: undefined
+};
+
+const checkIsBadThing = v.in(blackListDictionary);
+
+checkIsBadThing("smoking"); // => true
+checkIsBadThing("beer"); // => true
+checkIsBadThing("reading"); // => false
+checkIsBadThing("running"); // => false
+```
+
+**IMPORTANT:**
+All valid values should be own properties of the dictionary:
+
+```typescript
+checkIsBadThing("toString"); // => false
+```
+
 ### `just`
 
 ```typescript
@@ -760,6 +805,14 @@ isValidAge(0); // false
 isValidAge("22"); // false
 isValidAge(22); // true
 ```
+
+### `string`
+
+```typescript
+type StringMethod = (value: any) => value is string;
+```
+
+This method is the same as `value => typeof value === 'string'`
 
 ### `test`
 
