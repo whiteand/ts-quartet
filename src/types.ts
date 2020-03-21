@@ -42,6 +42,8 @@ export interface IHandleSchemaHandlers<R> {
 export interface IMethods {
   and: (<T = any>(...schemas: Schema[]) => TypedCompilationResult<T>) &
     ((...schemas: Schema[]) => CompilationResult);
+  arrayOf: (<T = any>(schema: Schema) => TypedCompilationResult<T[]>) &
+    ((schema: Schema) => CompilationResult);
   bigint: FunctionSchema;
   boolean: FunctionSchema;
   function: FunctionSchema;

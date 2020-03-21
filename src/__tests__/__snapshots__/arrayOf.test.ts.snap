@@ -1,0 +1,75 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`arrayOf constant schema 1`] = `
+Object {
+  "_": "function validator(value) {
+    if (!value || !Array.isArray(value)) return false
+    for (let i = 0; i < value.length; i++) {
+      const elem = value[i]
+      if (elem !== 1) return false
+    }
+    return true
+  }",
+  "explanations": Array [],
+}
+`;
+
+exports[`arrayOf constant schema 2`] = `
+Object {
+  "_": "function validator(value) {
+    if (!value || !Array.isArray(value)) return false
+    for (let i = 0; i < value.length; i++) {
+      const elem = value[i]
+      if (elem !== \\"1\\") return false
+    }
+    return true
+  }",
+  "explanations": Array [],
+}
+`;
+
+exports[`arrayOf constant schema 3`] = `
+Object {
+  "_": "function validator(value) {
+    if (!value || !Array.isArray(value)) return false
+    for (let i = 0; i < value.length; i++) {
+      const elem = value[i]
+      if (elem !== 'true') return false
+    }
+    return true
+  }",
+  "explanations": Array [],
+}
+`;
+
+exports[`arrayOf constant schema 4`] = `
+Object {
+  "_": "function validator(value) {
+    if (!value || !Array.isArray(value)) return false
+    for (let i = 0; i < value.length; i++) {
+      const elem = value[i]
+      if (elem !== validator['symbol-element-0']) return false
+    }
+    return true
+  }",
+  "explanations": Array [],
+  "symbol-element-0": Symbol(name),
+}
+`;
+
+exports[`arrayOf function 1`] = `
+Object {
+  "_": "function validator(value) {
+    if (!value || !Array.isArray(value)) return false
+    for (let i = 0; i < value.length; i++) {
+      const elem = value[i]
+      if (elem !== \\"A\\") {
+        validator.explanations.push(\\"Is not A\\")
+        return false
+      }
+    }
+    return true
+  }",
+  "explanations": Array [],
+}
+`;

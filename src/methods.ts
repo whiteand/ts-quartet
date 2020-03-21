@@ -1,9 +1,13 @@
 import { compileAnd } from "./compileAnd";
 import { IMethods, Schema, TypedCompilationResult } from "./types";
+import { arrayOf } from "./compileArrayOf";
 
 export const methods: IMethods = {
   and<T>(...schemas: Schema[]) {
     return compileAnd(this as any, schemas) as TypedCompilationResult<T>;
+  },
+  arrayOf<T>(schema: Schema) {
+    return arrayOf(this as any, schema) as TypedCompilationResult<T[]>;
   },
   bigint: () => ({
     check: valueId => `typeof ${valueId} === 'bigint'`,
