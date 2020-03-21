@@ -1,0 +1,75 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`v.and v({ a: v.number }, { b: v.string}) 1`] = `
+Object {
+  "0-0": "function validator(value) {
+    validator.explanations = []
+    if (!value) return false
+    if (typeof value.a !== 'number') return false
+    return true
+  }",
+  "0-0.__validValues": Object {},
+  "0-0.explanations": Array [],
+  "1-0": "function validator(value) {
+    validator.explanations = []
+    if (!value) return false
+    if (typeof value.b !== 'string') return false
+    return true
+  }",
+  "1-0.__validValues": Object {},
+  "1-0.explanations": Array [],
+  "_": "function validator(value) {
+    validator.explanations = []
+    if (!validator['0-0'](value)) {
+      validator.explanations.push(...validator['0-0'].explanations)
+      return false
+    }
+    if (!validator['1-0'](value)) {
+      validator.explanations.push(...validator['1-0'].explanations)
+      return false
+    }
+    return true
+  }",
+  "explanations": Array [],
+}
+`;
+
+exports[`v.and v.and() 1`] = `
+Object {
+  "_": "function () { return true; }",
+  "explanations": Array [],
+}
+`;
+
+exports[`v.and v.and(1) 1`] = `
+Object {
+  "_": "function (value) { return value === c; }",
+  "explanations": Array [],
+}
+`;
+
+exports[`v.and v.and(1, 1) 1`] = `
+Object {
+  "_": "function (value) { return value === c; }",
+  "explanations": Array [],
+}
+`;
+
+exports[`v.and v.and(1, 1, 2) 1`] = `
+Object {
+  "_": "function () { return false; }",
+  "explanations": Array [],
+}
+`;
+
+exports[`v.and v.and(v.positive, v.number) 1`] = `
+Object {
+  "_": "function validator(value) {
+    validator.explanations = []
+    if (value <= 0) return false
+    if (typeof value !== 'number') return false
+    return true
+  }",
+  "explanations": Array [],
+}
+`;

@@ -1,7 +1,7 @@
 import { IContext } from "./types";
 
 const toContextCounter: Record<string, number> = {};
-export const toContext = (prefix: string, value: any) => {
+export const toContext = (prefix: string | number, value: any) => {
   if (!toContextCounter[prefix]) {
     toContextCounter[prefix] = 0;
   }

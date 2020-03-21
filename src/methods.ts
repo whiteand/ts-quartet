@@ -1,6 +1,10 @@
-import { IMethods } from "./types";
+import { compileAnd } from "./compileAnd";
+import { IMethods, Schema, TypedCompilationResult } from "./types";
 
 export const methods: IMethods = {
+  and<T>(...schemas: Schema[]) {
+    return compileAnd(this as any, schemas) as TypedCompilationResult<T>;
+  },
   bigint: () => ({
     check: valueId => `typeof ${valueId} === 'bigint'`,
     not: valueId => `typeof ${valueId} !== 'bigint'`

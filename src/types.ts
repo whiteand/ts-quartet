@@ -40,6 +40,8 @@ export interface IHandleSchemaHandlers<R> {
 }
 
 export interface IMethods {
+  and: (<T = any>(...schemas: Schema[]) => TypedCompilationResult<T>) &
+    ((...schemas: Schema[]) => CompilationResult);
   bigint: FunctionSchema;
   boolean: FunctionSchema;
   function: FunctionSchema;
@@ -52,7 +54,7 @@ export interface IMethods {
   symbol: FunctionSchema;
 }
 
-type TypedCompilationResult<T> = ((value: any) => value is T) & IContext;
+export type TypedCompilationResult<T> = ((value: any) => value is T) & IContext;
 export type CompilationResult = ((value: any) => boolean) & IContext;
 export type QuartetInstance = IMethods &
   (<T>(schema: Schema) => TypedCompilationResult<T>) &
