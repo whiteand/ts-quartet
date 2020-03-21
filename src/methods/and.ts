@@ -11,14 +11,9 @@ import { AndMethod } from "./index";
 export const getAndMethod: GetFromSettings<AndMethod> = settings => <T = any>(
   ...schemas: Schema[]
 ) => {
-  const compiledValidators: (
-    | Validator
-    | string
-    | null
-    | number
-    | boolean
-    | undefined
-    | symbol)[] = [];
+  const compiledValidators: Array<
+    Validator | string | null | number | boolean | undefined | symbol
+  > = [];
   // tslint:disable-next-line
   for (let i = 0; i < schemas.length; i++) {
     const schema = schemas[i];
