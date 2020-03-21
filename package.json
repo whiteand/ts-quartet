@@ -1,6 +1,6 @@
 {
   "name": "quartet",
-  "version": "8.4.1",
+  "version": "8.4.2",
   "description": "functional and convenient validation library",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
