@@ -14,8 +14,9 @@ import {
 
 interface IPrecompiledValidationData {
   hasRest: boolean;
-  restValidator: Validator;
-  validatorsDict: { [prop: string]: Validator };
+  validatorsDict: {
+    [prop: string]: Validator | number | boolean | string | null | undefined;
+  };
 }
 
 type ObjectValidationHandler = (
@@ -37,18 +38,24 @@ const checkWithRest: ObjectValidationHandler = (
   explanation,
   explanations
 ) => {
-  const { validatorsDict, restValidator } = precompiledData;
+  const { validatorsDict } = precompiledData;
+  const restValidator = compile(settings, schema[REST]);
   const keysToBeTested = Object.keys(value);
   let isValid = true;
-  for (const key of keysToBeTested) {
+  // tslint:disable-next-line
+  for (let i = 0; i < keysToBeTested.length; i++) {
+    const key = keysToBeTested[i];
     const propValidator = has(validatorsDict, key)
       ? validatorsDict[key]
       : restValidator;
 
-    const isValidProp = propValidator(value[key], explanations, [
-      { key, schema, parent: value },
-      ...parents
-    ]);
+    const isValidProp =
+      typeof propValidator === "function"
+        ? propValidator(value[key], explanations, [
+            { key, schema, parent: value },
+            ...parents
+          ])
+        : propValidator === value[key];
     if (!isValidProp) {
       isValid = false;
     }
@@ -57,23 +64,24 @@ const checkWithRest: ObjectValidationHandler = (
     }
   }
 
-  const entries = Object.entries(validatorsDict);
+  const keys = Object.keys(validatorsDict);
   // tslint:disable-next-line
-  for (let i = 0; i < entries.length; i++) {
-    const entry = entries[i];
-    const key = entry[0];
+  for (let i = 0; i < keys.length; i++) {
+    const key = keys[i];
 
     if (has(value, key)) {
       continue;
     }
 
-    const propValidator = entry[1];
+    const propValidator = validatorsDict[key];
 
-    const propValue = value[key];
-    const isValidProp = propValidator(propValue, explanations, [
-      { key, schema, parent: value },
-      ...parents
-    ]);
+    const isValidProp =
+      typeof propValidator === "function"
+        ? propValidator(value[key], explanations, [
+            { key, schema, parent: value },
+            ...parents
+          ])
+        : propValidator === value[key];
     isValid = isValid && isValidProp;
     if (!isValid && !settings.allErrors) {
       return isValid;
@@ -93,12 +101,18 @@ const checkWithoutRest: ObjectValidationHandler = (
   const { validatorsDict } = precompiledData;
   const firstStepPropsTesting = Object.keys(validatorsDict);
   let isValid = true;
-  for (const key of firstStepPropsTesting) {
+  // tslint:disable-next-line
+  for (let i = 0; i < firstStepPropsTesting.length; i++) {
+    const key = firstStepPropsTesting[i];
+
     const propValidator = validatorsDict[key];
-    const isValidProp = propValidator(value[key], explanations, [
-      { key, schema, parent: value },
-      ...parents
-    ]);
+    const isValidProp =
+      typeof propValidator === "function"
+        ? propValidator(value[key], explanations, [
+            { key, schema, parent: value },
+            ...parents
+          ])
+        : propValidator === value[key];
     if (!isValidProp) {
       isValid = false;
     }
@@ -150,14 +164,19 @@ const getValidatorsDict = (
   settings: InstanceSettings,
   schema: IObjectSchema
 ) => {
-  const entries = Object.entries(schema);
+  const keys = Object.keys(schema);
   const dict: any = {};
-  for (let i = 0; i < entries.length; i++) {
-    const entry = entries[i];
-    const prop = entry[0];
-    if (prop === REST) continue;
-    const propSchema = entry[1];
-    dict[prop] = compile(settings, propSchema);
+  // tslint:disable-next-line
+  for (let i = 0; i < keys.length; i++) {
+    const prop = keys[i];
+    if (prop === REST) {
+      continue;
+    }
+    const propSchema = schema[prop];
+    dict[prop] =
+      propSchema && typeof propSchema === "object"
+        ? compile(settings, propSchema)
+        : propSchema;
   }
   return dict;
 };
@@ -165,10 +184,8 @@ const getValidatorsDict = (
 const getPrecompiledValidationData: GetCurrentData = (settings, schema) => {
   const hasRest = has(schema, REST);
   const validatorsDict = getValidatorsDict(settings, schema);
-  const restValidator = hasRest ? compile(settings, schema[REST]) : () => true;
   return {
     hasRest,
-    restValidator,
     validatorsDict
   };
 };
