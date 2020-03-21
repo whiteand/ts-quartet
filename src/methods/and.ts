@@ -11,10 +11,22 @@ import { AndMethod } from "./index";
 export const getAndMethod: GetFromSettings<AndMethod> = settings => <T = any>(
   ...schemas: Schema[]
 ) => {
-  const compiledValidators: Validator[] = [];
+  const compiledValidators: (
+    | Validator
+    | string
+    | null
+    | number
+    | boolean
+    | undefined
+    | symbol)[] = [];
   // tslint:disable-next-line
   for (let i = 0; i < schemas.length; i++) {
-    compiledValidators.push(compile(settings, schemas[i]));
+    const schema = schemas[i];
+    compiledValidators.push(
+      schema && typeof schema === "object"
+        ? compile(settings, schemas[i])
+        : schema
+    );
   }
   const andValidator: TypeGuardValidator<T> = (
     value,
@@ -23,7 +35,12 @@ export const getAndMethod: GetFromSettings<AndMethod> = settings => <T = any>(
   ): value is T => {
     // tslint:disable-next-line
     for (let i = 0; i < compiledValidators.length; i++) {
-      if (!compiledValidators[i](value, explanations, parents)) {
+      const validator = compiledValidators[i];
+      if (
+        typeof validator === "function"
+          ? !validator(value, explanations, parents)
+          : value !== validator
+      ) {
         return false;
       }
     }
