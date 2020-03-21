@@ -41,10 +41,11 @@ const checkWithRest: ObjectValidationHandler = (
   const keysToBeTested = Object.keys(value);
   let isValid = true;
   for (const key of keysToBeTested) {
-    const propValue = value[key];
-    const isRestProp = !has(validatorsDict, key);
-    const propValidator = isRestProp ? restValidator : validatorsDict[key];
-    const isValidProp = propValidator(propValue, explanations, [
+    const propValidator = has(validatorsDict, key)
+      ? validatorsDict[key]
+      : restValidator;
+
+    const isValidProp = propValidator(value[key], explanations, [
       { key, schema, parent: value },
       ...parents
     ]);
@@ -93,9 +94,8 @@ const checkWithoutRest: ObjectValidationHandler = (
   const firstStepPropsTesting = Object.keys(validatorsDict);
   let isValid = true;
   for (const key of firstStepPropsTesting) {
-    const propValue = value[key];
     const propValidator = validatorsDict[key];
-    const isValidProp = propValidator(propValue, explanations, [
+    const isValidProp = propValidator(value[key], explanations, [
       { key, schema, parent: value },
       ...parents
     ]);
@@ -146,16 +146,21 @@ type GetCurrentData = (
   schema: IObjectSchema
 ) => IPrecompiledValidationData;
 
-const getValidatorsDict = (settings: InstanceSettings, schema: IObjectSchema) =>
-  Object.entries(schema)
-    .filter(([key]) => key !== REST)
-    .reduce(
-      (dict, [prop, propSchema]) => ({
-        ...dict,
-        [prop]: compile(settings, propSchema)
-      }),
-      {}
-    );
+const getValidatorsDict = (
+  settings: InstanceSettings,
+  schema: IObjectSchema
+) => {
+  const entries = Object.entries(schema);
+  const dict: any = {};
+  for (let i = 0; i < entries.length; i++) {
+    const entry = entries[i];
+    const prop = entry[0];
+    if (prop === REST) continue;
+    const propSchema = entry[1];
+    dict[prop] = compile(settings, propSchema);
+  }
+  return dict;
+};
 
 const getPrecompiledValidationData: GetCurrentData = (settings, schema) => {
   const hasRest = has(schema, REST);
