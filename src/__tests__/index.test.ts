@@ -27,10 +27,11 @@ describe("c", () => {
   test("function schema compilation without handle and prepare", () => {
     const validator = c(v.number);
     expect(validator.toString()).toMatchInlineSnapshot(`
-                                                                        "function validator(value) {
-                                                                                  return typeof value === 'number'
-                                                                                }"
-                                                `);
+                        "function validator(value) {
+                                  validator.explanations = []
+                                  return typeof value === 'number'
+                                }"
+                `);
     expect(validator("1")).toBe(false);
     expect(validator(undefined)).toBe(false);
     expect(validator(0)).toBe(true);
@@ -49,10 +50,11 @@ describe("c", () => {
         `${valueId} ? ${ctxId}['${isEvenNumberMethodName}'](${valueId}.id) : false`
     }));
     expect(validator.toString()).toMatchInlineSnapshot(`
-                                                                  "function validator(value) {
-                                                                            return value ? validator['isEvenNumber-0'](value.id) : false
-                                                                          }"
-                                            `);
+                        "function validator(value) {
+                                  validator.explanations = []
+                                  return value ? validator['isEvenNumber-0'](value.id) : false
+                                }"
+                `);
     expect(validator({ id: 1 })).toBe(false);
     expect(validator({ id: 2 })).toBe(true);
     expect(validator({})).toBe(false);
@@ -63,36 +65,27 @@ describe("c", () => {
     const isEvenNumberMethodName = uniqId("isEvenNumber");
     const validator = c(evenIdSchema("isEven"));
     expect(validator.toString()).toMatchInlineSnapshot(`
-                                          "function validator(value) {
-                                                  if (value && validator['isEven'](value.id)) {
-                                                    return true
-                                                  }
-                                                  validator.explanations.push({ type: 'IdIsNotAnEvenNumber', value: value })
-                                                  return false
-                                                }"
-                            `);
+                        "function validator(value) {
+                                validator.explanations = []
+                                if (value && validator['isEven'](value.id)) {
+                                  return true
+                                }
+                                validator.explanations.push({ type: 'IdIsNotAnEvenNumber', value: value })
+                                return false
+                              }"
+                `);
     expect(validator({ id: 1 })).toBe(false);
     expect(validator({ id: 2 })).toBe(true);
     expect(validator({})).toBe(false);
     expect(validator(null)).toBe(false);
     expect(validator.explanations).toMatchInlineSnapshot(`
-                                                            Array [
-                                                              Object {
-                                                                "type": "IdIsNotAnEvenNumber",
-                                                                "value": Object {
-                                                                  "id": 1,
-                                                                },
-                                                              },
-                                                              Object {
-                                                                "type": "IdIsNotAnEvenNumber",
-                                                                "value": Object {},
-                                                              },
-                                                              Object {
-                                                                "type": "IdIsNotAnEvenNumber",
-                                                                "value": null,
-                                                              },
-                                                            ]
-                                        `);
+                        Array [
+                          Object {
+                            "type": "IdIsNotAnEvenNumber",
+                            "value": null,
+                          },
+                        ]
+                `);
   });
   test("constant symbol", () => {
     const nameSymbol = Symbol.for("name");
@@ -133,17 +126,17 @@ describe("c", () => {
     const schema = [null, v.string, [1, 2, 3], evenIdSchema("isEven")];
     const validator = c(schema);
     expect(validator.toString().trim()).toMatchInlineSnapshot(`
-      "function validator(value) {
+                        "function validator(value) {
 
-            if (validator.validValuesDict[value] === true) return true
-      if (value === null) return true
-      if (typeof value === 'string') return true;
+                              if (validator.validValuesDict[value] === true) return true
+                        if (value === null) return true
+                        if (typeof value === 'string') return true;
 
-      if (value && validator['isEven'](value.id)) return true;
-      validator.explanations.push({ type: 'IdIsNotAnEvenNumber', value: value })
-            return false
-          }"
-    `);
+                        if (value && validator['isEven'](value.id)) return true;
+                        validator.explanations.push({ type: 'IdIsNotAnEvenNumber', value: value })
+                              return false
+                            }"
+                `);
     expect({ ...validator }).toMatchInlineSnapshot(`
                         Object {
                           "isEven": [Function],
@@ -154,5 +147,53 @@ describe("c", () => {
                           },
                         }
                 `);
+  });
+  test("object function", () => {
+    const isThirteen: FunctionSchema = () => ({
+      check: valueId => `${valueId} === 13`,
+      not: valueId => `${valueId} !== 13`
+    });
+    const validator = c({
+      id: isThirteen
+    });
+    expect(validator.toString()).toMatchInlineSnapshot(`
+                  "function validator(value) {
+                          if (!value) return false
+                  validator.explanations = []
+                  if (value.id !== 13) return false
+
+                          return true
+                        }"
+            `);
+  });
+  test("object function with constant", () => {
+    const isThirteen: FunctionSchema = () => ({
+      check: valueId => `${valueId} === 13`,
+      not: valueId => `${valueId} !== 13`
+    });
+    const validator = c({
+      id: isThirteen,
+      answer: 42
+    });
+    expect(validator.toString()).toMatchInlineSnapshot(`
+            "function validator(value) {
+                    if (!value) return false
+            validator.explanations = []
+            if (!validator.__validValues.answer[value.answer]) return false
+            if (value.id !== 13) return false
+
+                    return true
+                  }"
+        `);
+    expect({ ...validator }).toMatchInlineSnapshot(`
+      Object {
+        "__validValues": Object {
+          "answer": Object {
+            "42": true,
+          },
+        },
+        "explanations": Array [],
+      }
+    `);
   });
 });
