@@ -73,3 +73,17 @@ Object {
   "explanations": Array [],
 }
 `;
+
+exports[`arrayOf works 1`] = `
+Object {
+  "_": "function validator(value) {
+    if (!value || !Array.isArray(value)) return false
+    for (let i = 0; i < value.length; i++) {
+      const elem = value[i]
+      if (typeof elem !== 'number') return false
+    }
+    return true
+  }",
+  "explanations": Array [],
+}
+`;

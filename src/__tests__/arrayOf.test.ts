@@ -1,5 +1,5 @@
 import { v } from "../index";
-import { snapshot } from "./utils";
+import { snapshot, tables } from "./utils";
 import { getExplanatoryFunc } from "./getExplanatoryFunc";
 
 describe("arrayOf", () => {
@@ -11,5 +11,14 @@ describe("arrayOf", () => {
   });
   test("function", () => {
     snapshot(v.arrayOf(getExplanatoryFunc("A", "Is not A")));
+  });
+  test("works", () => {
+    const checkNumberArr = v.arrayOf(v.number);
+    tables(
+      checkNumberArr,
+      [[], [1], [-1, 0, 1], [1, 1.5, Infinity, NaN]],
+      [null, { length: 1, 0: 1 }, [1, 2, "3"], ["1"]]
+    );
+    snapshot(checkNumberArr);
   });
 });
