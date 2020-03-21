@@ -13,9 +13,17 @@ export const methods: IMethods = {
     check: valueId => `typeof ${valueId} === 'function'`,
     not: valueId => `typeof ${valueId} !== 'function'`
   }),
+  negative: () => ({
+    check: valueId => `${valueId} < 0`,
+    not: valueId => `${valueId} >= 0`
+  }),
   number: () => ({
     check: valueId => `typeof ${valueId} === 'number'`,
     not: valueId => `typeof ${valueId} !== 'number'`
+  }),
+  positive: () => ({
+    check: valueId => `${valueId} > 0`,
+    not: valueId => `${valueId} <= 0`
   }),
   rest: "__quartet/rest__",
   safeInteger: () => ({

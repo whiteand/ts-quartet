@@ -43,7 +43,9 @@ export interface IMethods {
   bigint: FunctionSchema;
   boolean: FunctionSchema;
   function: FunctionSchema;
+  negative: FunctionSchema;
   number: FunctionSchema;
+  positive: FunctionSchema;
   rest: string;
   safeInteger: FunctionSchema;
   string: FunctionSchema;

@@ -62,9 +62,9 @@ function compilePropValidationWithoutRest(
         ctxId,
         () => ({
           check: () => `${ctxId}['${id}'](${valueId})`,
-          not: () => `!${ctxId}['${id}'](${valueId})`,
           handleError: () =>
-            `${ctxId}.explanations.push(...${ctxId}['${id}'].explanations)`
+            `${ctxId}.explanations.push(...${ctxId}['${id}'].explanations)`,
+          not: () => `!${ctxId}['${id}'](${valueId})`
         }),
         preparations,
         stringNumbersSymbols
@@ -81,9 +81,9 @@ function compilePropValidationWithoutRest(
         ctxId,
         () => ({
           check: () => `${ctxId}['${id}'](${valueId})`,
-          not: () => `!${ctxId}['${id}'](${valueId})`,
           handleError: () =>
-            `${ctxId}.explanations.push(...${ctxId}['${id}'].explanations)`
+            `${ctxId}.explanations.push(...${ctxId}['${id}'].explanations)`,
+          not: () => `!${ctxId}['${id}'](${valueId})`
         }),
         preparations,
         stringNumbersSymbols
@@ -114,9 +114,9 @@ function compilePropValidationWithoutRest(
         ctxId,
         () => ({
           check: () => `${ctxId}['${id}'](${valueId})`,
-          not: () => `!${ctxId}['${id}'](${valueId})`,
           handleError: () =>
-            `${ctxId}.explanations.push(...${ctxId}['${id}'].explanations)`
+            `${ctxId}.explanations.push(...${ctxId}['${id}'].explanations)`,
+          not: () => `!${ctxId}['${id}'](${valueId})`
         }),
         preparations,
         stringNumbersSymbols
