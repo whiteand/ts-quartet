@@ -15,7 +15,7 @@ function getDescription(validator: any) {
       [key, typeof value === "function" ? value.toString().trim() : value],
       ...(typeof value === "function"
         ? toPairs(getDescription(value)).map(([key2, value]: any[]) => [
-            key + key2,
+            `${key}.${key2}`,
             value
           ])
         : [])
@@ -99,13 +99,13 @@ describe("c", () => {
     expect(validator({})).toBe(false);
     expect(validator(null)).toBe(false);
     expect(validator.explanations).toMatchInlineSnapshot(`
-                                                                                                            Array [
-                                                                                                              Object {
-                                                                                                                "type": "IdIsNotAnEvenNumber",
-                                                                                                                "value": null,
-                                                                                                              },
-                                                                                                            ]
-                                                                        `);
+                  Array [
+                    Object {
+                      "type": "IdIsNotAnEvenNumber",
+                      "value": null,
+                    },
+                  ]
+            `);
   });
   test("constant symbol", () => {
     const nameSymbol = Symbol.for("name");
@@ -146,25 +146,26 @@ describe("c", () => {
     const schema = [null, v.string, [1, 2, 3], evenIdSchema("isEven")];
     const validator = c(schema);
     expect(validator.toString().trim()).toMatchInlineSnapshot(`
-            "function validator(value) {
-                if (validator.__validValuesDict[value] === true) return true
-                if (value === null) return true
-                if (typeof value === 'string') return true;
-                if (value && validator['isEven'](value.id)) return true;
-                validator.explanations.push({ type: 'IdIsNotAnEvenNumber', value: value })
-                return false
-              }"
-        `);
+                  "function validator(value) {
+                      if (validator.__validValuesDict[value] === true) return true
+                      if (value === null) return true
+                      if (typeof value === 'string') return true;
+                      if (value && validator['isEven'](value.id)) return true;
+                      validator.explanations.push({ type: 'IdIsNotAnEvenNumber', value: value })
+                      return false
+                    }"
+            `);
     expect(getDescription(validator)).toMatchInlineSnapshot(`
-                                    Object {
-                                      "__validValuesDict": Object {
-                                        "1": true,
-                                        "2": true,
-                                        "3": true,
-                                      },
-                                      "isEven": "function (n) { return n % 2 === 0; }",
-                                    }
-                        `);
+                  Object {
+                    "__validValuesDict": Object {
+                      "1": true,
+                      "2": true,
+                      "3": true,
+                    },
+                    "explanations": Array [],
+                    "isEven": "function (n) { return n % 2 === 0; }",
+                  }
+            `);
   });
   test("object function", () => {
     const isThirteen: FunctionSchema = () => ({
@@ -176,22 +177,22 @@ describe("c", () => {
       id: isThirteen
     });
     expect(validator.toString()).toMatchInlineSnapshot(`
-      "function validator(value) {
-          if (!value) return false
-          validator.explanations = []
-          if (value.id !== 13) {
-            console.log(value.id)
-            return false
-          }
-          return true
-        }"
-    `);
+                  "function validator(value) {
+                      if (!value) return false
+                      validator.explanations = []
+                      if (value.id !== 13) {
+                        console.log(value.id)
+                        return false
+                      }
+                      return true
+                    }"
+            `);
     expect(getDescription(validator)).toMatchInlineSnapshot(`
-                                                Object {
-                                                  "__validValues": Object {},
-                                                  "explanations": Array [],
-                                                }
-                                `);
+                  Object {
+                    "__validValues": Object {},
+                    "explanations": Array [],
+                  }
+            `);
   });
   test("object function with constant", () => {
     const isThirteen: FunctionSchema = () => ({
@@ -203,24 +204,24 @@ describe("c", () => {
       answer: 42
     });
     expect(validator.toString()).toMatchInlineSnapshot(`
-      "function validator(value) {
-          if (!value) return false
-          validator.explanations = []
-          if (!validator.__validValues.answer[value.answer]) return false
-          if (value.id !== 13) return false
-          return true
-        }"
-    `);
+                  "function validator(value) {
+                      if (!value) return false
+                      validator.explanations = []
+                      if (!validator.__validValues.answer[value.answer]) return false
+                      if (value.id !== 13) return false
+                      return true
+                    }"
+            `);
     expect(getDescription(validator)).toMatchInlineSnapshot(`
-                                                Object {
-                                                  "__validValues": Object {
-                                                    "answer": Object {
-                                                      "42": true,
-                                                    },
-                                                  },
-                                                  "explanations": Array [],
-                                                }
-                                `);
+                  Object {
+                    "__validValues": Object {
+                      "answer": Object {
+                        "42": true,
+                      },
+                    },
+                    "explanations": Array [],
+                  }
+            `);
   });
   test("object function with variants", () => {
     const validator = c({
@@ -229,38 +230,40 @@ describe("c", () => {
       isStudent: [true, false]
     });
     expect(validator.toString()).toMatchInlineSnapshot(`
-      "function validator(value) {
-          if (!value) return false
-          validator.explanations = []
-          if (!validator.__validValues.answer[value.answer]) return false
-          if (!validator['gender-0'](value.gender)) return false
-          if (!validator['isStudent-0'](value.isStudent)) return false
-          return true
-        }"
-    `);
+                  "function validator(value) {
+                      if (!value) return false
+                      validator.explanations = []
+                      if (!validator.__validValues.answer[value.answer]) return false
+                      if (!validator['gender-0'](value.gender)) return false
+                      if (!validator['isStudent-0'](value.isStudent)) return false
+                      return true
+                    }"
+            `);
     expect(getDescription(validator)).toMatchInlineSnapshot(`
-            Object {
-              "__validValues": Object {
-                "answer": Object {
-                  "42": true,
-                },
-              },
-              "explanations": Array [],
-              "gender-0": "function validator(value) {
-                if (validator.__validValuesDict[value] === true) return true
-                return false
-              }",
-              "gender-0__validValuesDict": Object {
-                "female": true,
-                "male": true,
-              },
-              "isStudent-0": "function validator(value) {
-                if (value === true) return true
-                if (value === false) return true
-                return false
-              }",
-            }
-        `);
+                  Object {
+                    "__validValues": Object {
+                      "answer": Object {
+                        "42": true,
+                      },
+                    },
+                    "explanations": Array [],
+                    "gender-0": "function validator(value) {
+                      if (validator.__validValuesDict[value] === true) return true
+                      return false
+                    }",
+                    "gender-0.__validValuesDict": Object {
+                      "female": true,
+                      "male": true,
+                    },
+                    "gender-0.explanations": Array [],
+                    "isStudent-0": "function validator(value) {
+                      if (value === true) return true
+                      if (value === false) return true
+                      return false
+                    }",
+                    "isStudent-0.explanations": Array [],
+                  }
+            `);
 
     expect(validator({})).toBe(false);
     expect(validator({ id: 1 })).toBe(false);
@@ -279,71 +282,254 @@ describe("c", () => {
       wife: [null, { name: v.string, age: v.number, gender: "female" }],
       husband: [null, { name: v.string, age: v.number, gender: "male" }]
     });
+
+    const valids = [
+      {
+        name: "Andrew",
+        age: 23,
+        gender: "male",
+        wife: { name: "Vasilina", age: 20, gender: "female" },
+        husband: null
+      },
+      {
+        name: "Vasilina",
+        age: 20,
+        gender: "female",
+        wife: null,
+        husband: { name: "Andrew", age: 23, gender: "male" }
+      }
+    ];
+    const invalids = [
+      {
+        name: null,
+        age: 23,
+        gender: "male",
+        wife: { name: "Vasilina", age: 20, gender: "female" },
+        husband: null
+      },
+      {
+        name: "Andrew",
+        age: "23",
+        gender: "male",
+        wife: { name: "Vasilina", age: 20, gender: "female" },
+        husband: null
+      },
+      {
+        name: "Andrew",
+        age: 23,
+        gender: "m",
+        wife: { name: "Vasilina", age: 20, gender: "female" },
+        husband: null
+      },
+      {
+        name: "Andrew",
+        age: 23,
+        gender: "male",
+        wife: { name: null, age: 20, gender: "female" },
+        husband: null
+      },
+      {
+        name: "Andrew",
+        age: 23,
+        gender: "male",
+        wife: { name: "Vasilina", age: "20", gender: "female" },
+        husband: null
+      },
+      {
+        name: "Andrew",
+        age: 23,
+        gender: "male",
+        wife: { name: "Vasilina", age: 20, gender: "f" },
+        husband: null
+      },
+      {
+        name: "Andrew",
+        age: 23,
+        gender: "male",
+        wife: { name: "Vasilina", age: 20, gender: "female" },
+        husband: {}
+      }
+    ];
+
+    valids.forEach(valid => expect(isPerson(valid)).toBe(true));
+    invalids.forEach(invalid => expect(isPerson(invalid)).toBe(false));
+
     expect(isPerson.toString().trim()).toMatchInlineSnapshot(`
+                  "function validator(value) {
+                      if (!value) return false
+                      validator.explanations = []
+                      if (typeof value.name !== 'string') return false
+                      if (typeof value.age !== 'number') return false
+                      if (!validator['gender-1'](value.gender)) return false
+                      if (!validator['wife-0'](value.wife)) return false
+                      if (!validator['husband-0'](value.husband)) return false
+                      return true
+                    }"
+            `);
+    expect(getDescription(isPerson)).toMatchInlineSnapshot(`
+                  Object {
+                    "__validValues": Object {},
+                    "explanations": Array [],
+                    "gender-1": "function validator(value) {
+                      if (validator.__validValuesDict[value] === true) return true
+                      return false
+                    }",
+                    "gender-1.__validValuesDict": Object {
+                      "female": true,
+                      "male": true,
+                    },
+                    "gender-1.explanations": Array [],
+                    "husband-0": "function validator(value) {
+                      if (value === null) return true
+                      if (validator['variant-1-1'](value)) return true;
+                      validator.explanations.push(...validator['variant-1-1'].explanations)
+                      return false
+                    }",
+                    "husband-0.explanations": Array [],
+                    "husband-0.variant-1-1": "function validator(value) {
+                      if (!value) return false
+                      validator.explanations = []
+                      if (!validator.__validValues.gender[value.gender]) return false
+                      if (typeof value.name !== 'string') return false
+                      if (typeof value.age !== 'number') return false
+                      return true
+                    }",
+                    "husband-0.variant-1-1.__validValues": Object {
+                      "gender": Object {
+                        "male": true,
+                      },
+                    },
+                    "husband-0.variant-1-1.explanations": Array [],
+                    "wife-0": "function validator(value) {
+                      if (value === null) return true
+                      if (validator['variant-1-0'](value)) return true;
+                      validator.explanations.push(...validator['variant-1-0'].explanations)
+                      return false
+                    }",
+                    "wife-0.explanations": Array [],
+                    "wife-0.variant-1-0": "function validator(value) {
+                      if (!value) return false
+                      validator.explanations = []
+                      if (!validator.__validValues.gender[value.gender]) return false
+                      if (typeof value.name !== 'string') return false
+                      if (typeof value.age !== 'number') return false
+                      return true
+                    }",
+                    "wife-0.variant-1-0.__validValues": Object {
+                      "gender": Object {
+                        "female": true,
+                      },
+                    },
+                    "wife-0.variant-1-0.explanations": Array [],
+                  }
+            `);
+  });
+  test("v.rest", () => {
+    const phoneBook = c({
+      [v.rest]: v.string
+    });
+    const valids = [{}, { a: "1" }, { a: "1", b: "2" }];
+    valids.forEach(valid => expect(phoneBook(valid)).toBe(true));
+    expect(phoneBook(false)).toBe(false);
+    expect(phoneBook(null)).toBe(false);
+    expect(phoneBook(0)).toBe(false);
+    expect(phoneBook({ a: "1", b: 2 })).toBe(false);
+    expect(phoneBook({ c: 3 })).toBe(false);
+    expect(phoneBook.toString()).toMatchInlineSnapshot(`
+            "function validator(value) {
+                validator.explanations = []
+                if (!value) return false
+                const keys = Object.keys(value)
+                for (let i = 0; i < keys.length; i++) {
+                  const key = keys[i]
+                  if (!validator['rest-validator-0'](value[key])) {
+                    validator.explanations.push(...validator['rest-validator-0'].explanations)
+                    return false
+                  }
+                }
+                return true
+              }"
+        `);
+    expect(getDescription(phoneBook)).toMatchInlineSnapshot(`
+                  Object {
+                    "__propsWithSchemasDict": Object {},
+                    "defined-0": "function validator(value) {
+                      if (!value) return false
+                      validator.explanations = []
+                      return true
+                    }",
+                    "defined-0.__validValues": Object {},
+                    "defined-0.explanations": Array [],
+                    "explanations": Array [],
+                    "rest-validator-0": "function validator(value) {
+                      validator.explanations = []
+                      return typeof value === 'string'
+                    }",
+                    "rest-validator-0.explanations": Array [],
+                  }
+            `);
+  });
+  test("v.rest", () => {
+    const phoneBook = c({
+      id: [undefined, v.number],
+      [v.rest]: v.string
+    });
+    const valids = [
+      {},
+      { a: "1" },
+      { a: "1", b: "2" },
+      { id: 1, a: "1", b: "2" }
+    ];
+    valids.forEach(valid => expect(phoneBook(valid)).toBe(true));
+    expect(phoneBook(false)).toBe(false);
+    expect(phoneBook(null)).toBe(false);
+    expect(phoneBook(0)).toBe(false);
+    expect(phoneBook({ a: "1", b: 2 })).toBe(false);
+    expect(phoneBook({ c: 3 })).toBe(false);
+    expect(phoneBook.toString()).toMatchInlineSnapshot(`
       "function validator(value) {
-          if (!value) return false
           validator.explanations = []
-          if (typeof value.name !== 'string') return false
-          if (typeof value.age !== 'number') return false
-          if (!validator['gender-1'](value.gender)) return false
-          if (!validator['wife-0'](value.wife)) return false
-          if (!validator['husband-0'](value.husband)) return false
+          if (!validator['defined-1'](value)) {
+            validator.explanations.push(...validator['defined-1'].explanations)
+            return false
+          }
+          const keys = Object.keys(value)
+          for (let i = 0; i < keys.length; i++) {
+            const key = keys[i]
+            if (validator.__propsWithSchemasDict[key] === true) continue
+            if (!validator['rest-validator-1'](value[key])) {
+              validator.explanations.push(...validator['rest-validator-1'].explanations)
+              return false
+            }
+          }
           return true
         }"
     `);
-    const subvalidators = getDescription(isPerson);
-    expect(getDescription(isPerson)).toMatchInlineSnapshot(`
+    expect(getDescription(phoneBook)).toMatchInlineSnapshot(`
       Object {
-        "__validValues": Object {},
+        "__propsWithSchemasDict": Object {
+          "id": true,
+        },
+        "defined-1": "function validator(value) {
+          if (!value) return false
+          validator.explanations = []
+          if (!validator['id-0'](value.id)) return false
+          return true
+        }",
+        "defined-1.__validValues": Object {},
+        "defined-1.explanations": Array [],
+        "defined-1.id-0": "function validator(value) {
+          if (value === undefined) return true
+          if (typeof value === 'number') return true;
+          return false
+        }",
+        "defined-1.id-0.explanations": Array [],
         "explanations": Array [],
-        "gender-1": "function validator(value) {
-          if (validator.__validValuesDict[value] === true) return true
-          return false
-        }",
-        "gender-1__validValuesDict": Object {
-          "female": true,
-          "male": true,
-        },
-        "husband-0": "function validator(value) {
-          if (value === null) return true
-          if (validator['variant-1-1'](value)) return true;
-          validator.explanations.push(...validator['variant-1-1'].explanations)
-          return false
-        }",
-        "husband-0variant-1-1": "function validator(value) {
-          if (!value) return false
+        "rest-validator-1": "function validator(value) {
           validator.explanations = []
-          if (!validator.__validValues.gender[value.gender]) return false
-          if (typeof value.name !== 'string') return false
-          if (typeof value.age !== 'number') return false
-          return true
+          return typeof value === 'string'
         }",
-        "husband-0variant-1-1__validValues": Object {
-          "gender": Object {
-            "male": true,
-          },
-        },
-        "husband-0variant-1-1explanations": Array [],
-        "wife-0": "function validator(value) {
-          if (value === null) return true
-          if (validator['variant-1-0'](value)) return true;
-          validator.explanations.push(...validator['variant-1-0'].explanations)
-          return false
-        }",
-        "wife-0variant-1-0": "function validator(value) {
-          if (!value) return false
-          validator.explanations = []
-          if (!validator.__validValues.gender[value.gender]) return false
-          if (typeof value.name !== 'string') return false
-          if (typeof value.age !== 'number') return false
-          return true
-        }",
-        "wife-0variant-1-0__validValues": Object {
-          "gender": Object {
-            "female": true,
-          },
-        },
-        "wife-0variant-1-0explanations": Array [],
+        "rest-validator-1.explanations": Array [],
       }
     `);
   });

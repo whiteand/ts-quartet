@@ -228,7 +228,7 @@ function compileVariantElementToReturnWay(
 
 function compileVariants(variants: IVariantSchema) {
   if (variants.length === 0) {
-    return () => false;
+    return Object.assign(() => false, { explanations: [] });
   }
   if (variants.length === 1) {
     return c(variants[0]);
@@ -282,6 +282,7 @@ function compileVariants(variants: IVariantSchema) {
   for (const prepare of preparations) {
     prepare(ctx);
   }
+  ctx.explanations = [];
   if (stringNumbersSymbols.length > 0) {
     ctx.__validValuesDict = __validValuesDict;
   }
@@ -419,6 +420,9 @@ function getKeyAccessor(key: string) {
 }
 function compileObjectSchema(s: IObjectSchema) {
   const keys = Object.keys(s);
+  // if (keys.length === 0) {
+  //   return Object.assign((value: any) => value, { explanations: [] });
+  // }
   const bodyCodeLines = [];
   const preparations: Prepare[] = [];
   const ctxId = "validator";
@@ -489,8 +493,55 @@ function compileObjectSchema(s: IObjectSchema) {
   return ctx;
 }
 function compileObjectSchemaWithRest(s: IObjectSchema) {
-  // TODO: handle
-  return Object.assign(() => true, { explanations: [] });
+  const { [v.rest]: restSchema, ...propsSchemas } = s;
+  const [restId, prepareRestId] = toContext("rest-validator", c(restSchema));
+  const propsWithSchemas = Object.keys(propsSchemas);
+  const [definedProps, prepareDefinedProps] = toContext(
+    "defined",
+    c(propsSchemas)
+  );
+  const __propsWithSchemasDict = propsWithSchemas.reduce((dict: any, prop) => {
+    dict[prop] = true;
+    return dict;
+  }, {});
+
+  const ctx = eval(
+    beautify(`
+    (()=>{
+      function validator(value) {
+        validator.explanations = []
+        ${
+          propsWithSchemas.length > 0
+            ? `if (!validator['${definedProps}'](value)) {
+          validator.explanations.push(...validator['${definedProps}'].explanations)
+          return false
+        }`
+            : `if (!value) return false`
+        }
+        const keys = Object.keys(value)
+        for (let i = 0; i < keys.length; i++) {
+          const key = keys[i]
+          ${
+            propsWithSchemas.length > 0
+              ? `if (validator.__propsWithSchemasDict[key] === true) continue`
+              : ``
+          }
+          if (!validator['${restId}'](value[key])) {
+            validator.explanations.push(...validator['${restId}'].explanations)
+            return false
+          }
+        }
+        return true
+      }
+      return validator
+    })()
+  `)
+  );
+  prepareRestId(ctx);
+  prepareDefinedProps(ctx);
+  ctx.explanations = [];
+  ctx.__propsWithSchemasDict = __propsWithSchemasDict;
+  return ctx;
 }
 
 type TypedCompilationResult<T> = ((value: any) => value is T) & Context;
