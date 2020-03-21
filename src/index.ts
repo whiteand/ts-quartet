@@ -72,7 +72,7 @@ function handleSchema<R>(
     if (Array.isArray(schema)) {
       return handlers.variant(schema);
     }
-    if (has(schema, v.rest)) {
+    if (has(schema, methods.rest)) {
       return handlers.objectRest(schema);
     } else {
       return handlers.object(schema);
@@ -295,7 +295,7 @@ interface IMethods {
   safeInteger: FunctionSchema;
   rest: string;
 }
-export const v: IMethods = {
+export const methods: IMethods = {
   string: () => ({
     check: valueId => `typeof ${valueId} === 'string'`,
     not: valueId => `typeof ${valueId} !== 'string'`
@@ -493,7 +493,7 @@ function compileObjectSchema(s: IObjectSchema) {
   return ctx;
 }
 function compileObjectSchemaWithRest(s: IObjectSchema) {
-  const { [v.rest]: restSchema, ...propsSchemas } = s;
+  const { [methods.rest]: restSchema, ...propsSchemas } = s;
   const [restId, prepareRestId] = toContext("rest-validator", c(restSchema));
   const propsWithSchemas = Object.keys(propsSchemas);
   const [definedProps, prepareDefinedProps] = toContext(
@@ -546,15 +546,24 @@ function compileObjectSchemaWithRest(s: IObjectSchema) {
 
 type TypedCompilationResult<T> = ((value: any) => value is T) & Context;
 type CompilationResult = ((value: any) => boolean) & Context;
-export function c<T>(s: Schema): TypedCompilationResult<T>;
-export function c(s: Schema): CompilationResult {
-  const compiled = handleSchema<CompilationResult>({
-    function: s => compileFunctionSchemaResult(s()),
-    constant: s => compileConstant(s),
-    variant: s => compileVariants(s),
-    objectRest: s => compileObjectSchemaWithRest(s),
-    object: s => compileObjectSchema(s)
-  })(s);
+type QuartetInstace = IMethods &
+  (<T>(schema: Schema) => TypedCompilationResult<T>) &
+  ((schema: Schema) => (value: any) => boolean);
+export function quartet(): IMethods &
+  (<T>(s: Schema) => TypedCompilationResult<T>) &
+  ((s: Schema) => boolean) {
+  const v = function v(s: Schema): CompilationResult {
+    const compiled = handleSchema<CompilationResult>({
+      function: s => compileFunctionSchemaResult(s()),
+      constant: s => compileConstant(s),
+      variant: s => compileVariants(s),
+      objectRest: s => compileObjectSchemaWithRest(s),
+      object: s => compileObjectSchema(s)
+    })(s);
 
-  return compiled as any;
+    return compiled as any;
+  };
+  return Object.assign(v, methods) as any;
 }
+
+export const v = quartet();
