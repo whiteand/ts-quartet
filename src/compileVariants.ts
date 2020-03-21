@@ -29,11 +29,16 @@ function compileVariantElementToReturnWay(
       if (constant === undefined) {
         return `if (${valueId} === undefined) return true`;
       }
-      if (
-        typeof constant === "symbol" ||
-        typeof constant === "string" ||
-        typeof constant === "number"
-      ) {
+      if (constant === "false" || constant === "true") {
+        return `if (${valueId} === ${JSON.stringify(constant)}) return true`;
+      }
+      if (typeof constant === "number") {
+        if (Number.isNaN(constant)) {
+          return `if (Number.isNaN(${valueId})) return true`;
+        }
+        return `if (${valueId} === ${constant}) return true`;
+      }
+      if (typeof constant === "symbol" || typeof constant === "string") {
         stringNumbersSymbols.push(constant);
         return "";
       }

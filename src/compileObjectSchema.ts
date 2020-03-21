@@ -21,11 +21,16 @@ function compilePropValidationWithoutRest(
       if (constant === undefined) {
         return `if (${valueId} !== undefined) return false`;
       }
-      if (
-        typeof constant === "symbol" ||
-        typeof constant === "string" ||
-        typeof constant === "number"
-      ) {
+      if (typeof constant === "number") {
+        if (Number.isNaN(constant)) {
+          return `if (!Number.isNaN(${valueId})) return false`;
+        }
+        return `if (${valueId} !== ${constant}) return false`;
+      }
+      if (constant === "true" || constant === "false") {
+        return `if (${valueId} !== '${constant}') return false`;
+      }
+      if (typeof constant === "symbol" || typeof constant === "string") {
         stringNumbersSymbols.push(constant);
         return "";
       }
@@ -168,23 +173,23 @@ export function compileObjectSchema(
     );
   }
   bodyCodeLines.unshift(
-    "if (!value) return false",
-    "validator.explanations = []"
+    "validator.explanations = []",
+    "if (!value) return false"
   );
+  const code = beautify(
+    `
+    (() => {
+      function validator(value) {
+        ${bodyCodeLines.join("\n")}
+        return true
+      }
+      return validator
+    })()
+  `.trim()
+  );
+
   // tslint:disable-next-line
-  const ctx = eval(
-    beautify(
-      `
-      (() => {
-        function validator(value) {
-          ${bodyCodeLines.join("\n")}
-          return true
-        }
-        return validator
-      })()
-    `.trim()
-    )
-  );
+  const ctx = eval(code);
 
   for (const prepare of preparations) {
     prepare(ctx);
