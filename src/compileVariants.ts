@@ -165,7 +165,7 @@ export function compileVariants(
   const ctx = eval(
     beautify(`(() => {
       function validator(value) {
-  
+        validator.explanations = []
         ${bodyCode
           .map(e => e.trim())
           .filter(Boolean)

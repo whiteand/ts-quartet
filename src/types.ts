@@ -40,10 +40,14 @@ export interface IHandleSchemaHandlers<R> {
 }
 
 export interface IMethods {
-  string: FunctionSchema;
+  bigint: FunctionSchema;
+  boolean: FunctionSchema;
+  function: FunctionSchema;
   number: FunctionSchema;
-  safeInteger: FunctionSchema;
   rest: string;
+  safeInteger: FunctionSchema;
+  string: FunctionSchema;
+  symbol: FunctionSchema;
 }
 
 type TypedCompilationResult<T> = ((value: any) => value is T) & IContext;

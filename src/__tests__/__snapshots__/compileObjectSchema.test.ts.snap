@@ -1,0 +1,169 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`compileObjectSchema empty obj 1`] = `
+Object {
+  "_": "function (value) { return value; }",
+  "explanations": Array [],
+}
+`;
+
+exports[`compileObjectSchema obj + obj 2`] = `
+Object {
+  "_": "function validator(value) {
+    validator.explanations = []
+    if (!value) return false
+    if (!validator['deep-1'](value.deep)) {
+      validator.explanations.push(...validator['deep-1'].explanations)
+      return false
+    }
+    return true
+  }",
+  "__validValues": Object {},
+  "deep-1": "function validator(value) {
+    validator.explanations = []
+    if (!value) return false
+    if (!validator['deep-0'](value.deep)) {
+      validator.explanations.push(...validator['deep-0'].explanations)
+      return false
+    }
+    return true
+  }",
+  "deep-1.__validValues": Object {},
+  "deep-1.deep-0": "function validator(value) {
+    validator.explanations = []
+    if (!value) return false
+    if (!(value.space === 'true')) {
+      validator.explanations.push(value.space)
+      return false
+    }
+    return true
+  }",
+  "deep-1.deep-0.__validValues": Object {},
+  "deep-1.deep-0.explanations": Array [
+    "false",
+  ],
+  "deep-1.explanations": Array [
+    "false",
+  ],
+  "explanations": Array [
+    "false",
+  ],
+}
+`;
+
+exports[`compileObjectSchema obj with constant 1`] = `
+Object {
+  "_": "function validator(value) {
+    validator.explanations = []
+    if (!value) return false
+    if (!validator.__validValues.str[value.str]) return false
+    if (!validator.__validValues.symb[value.symb]) return false
+    if (value.id !== 42) return false
+    if (!Number.isNaN(value.nan)) return false
+    if (value.inf !== Infinity) return false
+    if (value.minf !== -Infinity) return false
+    if (value.zero !== 0) return false
+    if (value.f !== false) return false
+    if (value.t !== true) return false
+    return true
+  }",
+  "__validValues": Object {
+    "str": Object {
+      "Andrew": true,
+    },
+    "symb": Object {
+      Symbol(test): true,
+    },
+  },
+  "explanations": Array [],
+}
+`;
+
+exports[`compileObjectSchema obj with func 1`] = `
+Object {
+  "_": "function validator(value) {
+    validator.explanations = []
+    if (!value) return false
+    if (value.id !== 42) {
+      validator.explanations.push(value.id)
+      return false
+    }
+    return true
+  }",
+  "__validValues": Object {},
+  "explanations": Array [
+    43,
+  ],
+}
+`;
+
+exports[`compileObjectSchema obj with variants 1`] = `
+Object {
+  "_": "function validator(value) {
+    validator.explanations = []
+    if (!value) return false
+    if (!validator['gender-0'](value.gender)) {
+      validator.explanations.push(...validator['gender-0'].explanations)
+      return false
+    }
+    if (!validator['grade-0'](value.grade)) {
+      validator.explanations.push(...validator['grade-0'].explanations)
+      return false
+    }
+    return true
+  }",
+  "__validValues": Object {},
+  "explanations": Array [],
+  "gender-0": "function validator(value) {
+    validator.explanations = []
+    if (validator.__validValuesDict[value] === true) return true
+    return false
+  }",
+  "gender-0.__validValuesDict": Object {
+    "female": true,
+    "male": true,
+  },
+  "gender-0.explanations": Array [],
+  "grade-0": "function validator(value) {
+    validator.explanations = []
+    if (value === 1) return true
+    if (value === 2) return true
+    if (value === 3) return true
+    if (value === 4) return true
+    if (value === 5) return true
+    if (value === 6) return true
+    if (value === 7) return true
+    if (value === 8) return true
+    if (value === 9) return true
+    if (value === 10) return true
+    if (value === 11) return true
+    return false
+  }",
+  "grade-0.explanations": Array [],
+}
+`;
+
+exports[`compileObjectSchema obj: variant explanations 3`] = `
+Object {
+  "_": "function validator(value) {
+    validator.explanations = []
+    if (!value) return false
+    if (!validator['var-0'](value.var)) {
+      validator.explanations.push(...validator['var-0'].explanations)
+      return false
+    }
+    return true
+  }",
+  "__validValues": Object {},
+  "explanations": Array [],
+  "var-0": "function validator(value) {
+    validator.explanations = []
+    if (value === \\"A\\") return true;
+    if (value === \\"B\\") return true;
+    validator.explanations.push(\\"Is not A\\")
+    validator.explanations.push(\\"Is not B\\")
+    return false
+  }",
+  "var-0.explanations": Array [],
+}
+`;
