@@ -57,6 +57,81 @@ Object {
 }
 `;
 
+exports[`arrayOf full: without explanations 1`] = `
+Object {
+  "_": "function validator(value) {
+    validator.explanations = []
+    if (!value) return false
+    if (!validator['custom-0'](value.age)) return false
+    if (!validator['gender-0'](value.gender)) {
+      validator.explanations.push(...validator['gender-0'].explanations)
+      return false
+    }
+    if (!validator['custom-1'](value.grades)) return false
+    if (typeof value.name !== 'string') return false
+    if (!validator['custom-2'](value.friends)) return false
+    return true
+  }",
+  "__validValues": Object {},
+  "custom-0": "function validator(value) {
+    validator.explanations = []
+    if (value <= 0) return false
+    if (!Number.isSafeInteger(value)) return false
+    return true
+  }",
+  "custom-0.explanations": Array [],
+  "custom-1": "function validator(value) {
+    if (!value || !Array.isArray(value)) return false
+    for (let i = 0; i < value.length; i++) {
+      const elem = value[i]
+      if (!validator['variant-elem-0'](elem)) {
+        validator.explanations.push(...validator['variant-elem-0'].explanations)
+        return false
+      }
+    }
+    return true
+  }",
+  "custom-1.explanations": Array [],
+  "custom-1.variant-elem-0": "function validator(value) {
+    validator.explanations = []
+    if (value === 1) return true
+    if (value === 2) return true
+    if (value === 3) return true
+    if (value === 4) return true
+    if (value === 5) return true
+    if (value === 6) return true
+    if (value === 7) return true
+    if (value === 8) return true
+    if (value === 9) return true
+    if (value === 10) return true
+    if (value === 11) return true
+    if (value === 12) return true
+    return false
+  }",
+  "custom-1.variant-elem-0.explanations": Array [],
+  "custom-2": "function validator(value) {
+    if (!value || !Array.isArray(value)) return false
+    for (let i = 0; i < value.length; i++) {
+      const elem = value[i]
+      if (typeof elem !== 'string') return false
+    }
+    return true
+  }",
+  "custom-2.explanations": Array [],
+  "explanations": Array [],
+  "gender-0": "function validator(value) {
+    validator.explanations = []
+    if (validator.__validValuesDict[value] === true) return true
+    return false
+  }",
+  "gender-0.__validValuesDict": Object {
+    "female": true,
+    "male": true,
+  },
+  "gender-0.explanations": Array [],
+}
+`;
+
 exports[`arrayOf function 1`] = `
 Object {
   "_": "function validator(value) {

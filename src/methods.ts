@@ -1,13 +1,14 @@
 import { compileAnd } from "./compileAnd";
 import { IMethods, Schema, TypedCompilationResult } from "./types";
 import { arrayOf } from "./compileArrayOf";
+import { toContext } from "./toContext";
 
 export const methods: IMethods = {
-  and<T>(...schemas: Schema[]) {
-    return compileAnd(this as any, schemas) as TypedCompilationResult<T>;
+  and(...schemas: Schema[]) {
+    return this.custom(compileAnd(this as any, schemas));
   },
-  arrayOf<T>(schema: Schema) {
-    return arrayOf(this as any, schema) as TypedCompilationResult<T[]>;
+  arrayOf(schema: Schema) {
+    return this.custom(arrayOf(this as any, schema));
   },
   bigint: () => ({
     check: valueId => `typeof ${valueId} === 'bigint'`,
@@ -17,6 +18,21 @@ export const methods: IMethods = {
     check: valueId => `typeof ${valueId} === 'boolean'`,
     not: valueId => `typeof ${valueId} !== 'boolean'`
   }),
+  compileAnd<T>(...schemas: Schema[]) {
+    return compileAnd(this as any, schemas) as TypedCompilationResult<T>;
+  },
+  compileArrayOf<T>(schema: Schema) {
+    return arrayOf(this as any, schema) as TypedCompilationResult<T[]>;
+  },
+  custom: (check: (value: any, explanation: any) => boolean) => () => {
+    const [checkId, prepare] = toContext("custom", check);
+
+    return {
+      check: (id: any, ctx: any) => `${ctx}['${checkId}'](${id})`,
+      not: (id: any, ctx: any) => `!${ctx}['${checkId}'](${id})`,
+      prepare
+    };
+  },
   function: () => ({
     check: valueId => `typeof ${valueId} === 'function'`,
     not: valueId => `typeof ${valueId} !== 'function'`
