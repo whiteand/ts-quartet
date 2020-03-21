@@ -14,6 +14,26 @@ type FunctionSchemaResult = {
   not?: (valudId: string, ctxId: string) => string;
 };
 
+const beautify = (code: string) => {
+  const lines = code.split("\n");
+  const resLines = [];
+  let tabs = "";
+  for (const line of lines) {
+    const trimmed = line.trim();
+    if (trimmed.length === 0) continue;
+    if (trimmed[trimmed.length - 1] === "}") {
+      tabs = tabs.slice(2);
+    }
+    const tabbed = tabs + trimmed;
+
+    resLines.push(tabbed);
+    if (trimmed[trimmed.length - 1] === "{") {
+      tabs += "  ";
+    }
+  }
+  return resLines.join("\n");
+};
+
 export type FunctionSchema = () => FunctionSchemaResult;
 interface IObjectSchema {
   [key: string]: Schema;
@@ -63,7 +83,7 @@ function compileFunctionSchemaResult(s: FunctionSchemaResult) {
   let code = `() => true`;
 
   if (s.handleError) {
-    code = `(() => {
+    code = beautify(`(() => {
       function validator(value) {
         validator.explanations = []
         if (${s.check("value", "validator")}) {
@@ -73,15 +93,15 @@ function compileFunctionSchemaResult(s: FunctionSchemaResult) {
         return false
       }
       return validator
-    })()`;
+    })()`);
   } else {
-    code = `(() => {
+    code = beautify(`(() => {
         function validator(value) {
           validator.explanations = []
           return ${s.check("value", "validator")}
         }
         return validator
-      })()`;
+      })()`);
   }
   const ctx = eval(code);
   ctx.explanations = [];
@@ -95,8 +115,23 @@ function compileConstant(c: ConstantSchema) {
   return Object.assign((value: any) => value === c, { explanations: [] });
 }
 
-let variantObjectCounter = 0;
-function compileSingleVariantToReturnWay(
+let toContextCounter: Record<string, number> = {};
+let toContext = (prefix: string, value: any) => {
+  if (!toContextCounter[prefix]) {
+    toContextCounter[prefix] = 0;
+  }
+  const id = `${prefix}-${toContextCounter[prefix]++}`;
+  toContextCounter[prefix] %= 1e9;
+  return [
+    id,
+    (ctx: Context) => {
+      ctx[id] = value;
+    }
+  ] as [string, (ctx: Context) => void];
+};
+
+function compileVariantElementToReturnWay(
+  index: number,
   valueId: string,
   ctxId: string,
   schema: Schema,
@@ -137,7 +172,8 @@ function compileSingleVariantToReturnWay(
       const res = [];
       for (let variant of schema) {
         res.push(
-          compileSingleVariantToReturnWay(
+          compileVariantElementToReturnWay(
+            index,
             valueId,
             ctxId,
             variant,
@@ -151,12 +187,10 @@ function compileSingleVariantToReturnWay(
     },
     object: schema => {
       const compiled = compileObjectSchema(schema);
-      const id = `object-in-variant-${variantObjectCounter++}`;
-      preparations.push(ctx => {
-        ctx[id] = compiled;
-        Object.assign(ctx, compiled);
-      });
-      return compileSingleVariantToReturnWay(
+      const [id, prepare] = toContext("variant-" + index, compiled);
+      preparations.push(prepare);
+      return compileVariantElementToReturnWay(
+        index,
         valueId,
         ctxId,
         () => ({
@@ -172,12 +206,10 @@ function compileSingleVariantToReturnWay(
     },
     objectRest: schema => {
       const compiled = compileObjectSchemaWithRest(schema);
-      const id = `object-rest-in-variant-${variantObjectCounter++}`;
-      preparations.push(ctx => {
-        ctx[id] = compiled;
-        Object.assign(ctx, compiled);
-      });
-      return compileSingleVariantToReturnWay(
+      const [id, prepare] = toContext("variant-" + index, compiled);
+      preparations.push(prepare);
+      return compileVariantElementToReturnWay(
+        index,
         valueId,
         ctxId,
         () => ({
@@ -195,13 +227,21 @@ function compileSingleVariantToReturnWay(
 }
 
 function compileVariants(variants: IVariantSchema) {
+  if (variants.length === 0) {
+    return () => false;
+  }
+  if (variants.length === 1) {
+    return c(variants[0]);
+  }
   const preparations: Prepare[] = [];
   const handleErrors: HandleError[] = [];
   const stringNumbersSymbols: (string | number | symbol)[] = [];
   const bodyCode = [];
-  for (const variant of variants) {
+  for (let i = 0; i < variants.length; i++) {
+    const variant = variants[i];
     bodyCode.push(
-      compileSingleVariantToReturnWay(
+      compileVariantElementToReturnWay(
+        i,
         `value`,
         `validator`,
         variant,
@@ -211,14 +251,14 @@ function compileVariants(variants: IVariantSchema) {
       )
     );
   }
-  let validValuesDict = {};
+  let __validValuesDict = {};
   if (stringNumbersSymbols.length > 0) {
-    validValuesDict = stringNumbersSymbols.reduce((dict: any, el) => {
+    __validValuesDict = stringNumbersSymbols.reduce((dict: any, el) => {
       dict[el] = true;
       return dict;
     }, {});
     bodyCode.unshift(
-      `if (validator.validValuesDict[value] === true) return true`
+      `if (validator.__validValuesDict[value] === true) return true`
     );
   }
   if (handleErrors.length > 0) {
@@ -226,22 +266,24 @@ function compileVariants(variants: IVariantSchema) {
       ...handleErrors.map(handleError => handleError("value", "validator"))
     );
   }
-  const ctx = eval(`(() => {
+  const ctx = eval(
+    beautify(`(() => {
     function validator(value) {
 
       ${bodyCode
-        .filter(Boolean)
         .map(e => e.trim())
+        .filter(Boolean)
         .join("\n")}
       return false
     }
     return validator
-  })()`);
+  })()`)
+  );
   for (const prepare of preparations) {
     prepare(ctx);
   }
   if (stringNumbersSymbols.length > 0) {
-    ctx.validValuesDict = validValuesDict;
+    ctx.__validValuesDict = __validValuesDict;
   }
   return ctx;
 }
@@ -267,7 +309,9 @@ export const v: IMethods = {
   }),
   rest: "__quartet/rest__"
 };
-function compileAndReturnWay(
+
+function compilePropValidationWithoutRest(
+  key: string,
   valueId: string,
   ctxId: string,
   schema: Schema,
@@ -284,12 +328,10 @@ function compileAndReturnWay(
         ? s.not(valueId, ctxId)
         : `!(${s.check(valueId, ctxId)})`;
       return s.handleError
-        ? `
-          if (${notCheck}) {
-            ${s.handleError}
+        ? beautify(`if (${notCheck}) {
+            ${s.handleError(valueId, ctxId)}
             return false
-          }
-        `
+          }`)
         : `if (${notCheck}) return false`;
     },
     constant: schema => {
@@ -310,16 +352,65 @@ function compileAndReturnWay(
       return `if (${valueId} !== ${JSON.stringify(schema)}) return false`;
     },
     objectRest: schema => {
-      // TODO: Implement
-      return "";
+      const compiled = c(schema);
+      const [id, prepare] = toContext(key, compiled);
+      preparations.push(prepare);
+      return compilePropValidationWithoutRest(
+        key,
+        valueId,
+        ctxId,
+        () => ({
+          check: (valueId, ctxId) => `${ctxId}['${id}'](${valueId})`,
+          not: (valueId, ctxId) => `!${ctxId}['${id}'](${valueId})`
+        }),
+        preparations,
+        stringNumbersSymbols
+      );
     },
     object: schema => {
-      // TODO: Implement
-      return "";
+      const compiled = c(schema);
+      const [id, prepare] = toContext(key, compiled);
+      preparations.push(prepare);
+      return compilePropValidationWithoutRest(
+        key,
+        valueId,
+        ctxId,
+        () => ({
+          check: (valueId, ctxId) => `${ctxId}['${id}'](${valueId})`,
+          not: (valueId, ctxId) => `!${ctxId}['${id}'](${valueId})`
+        }),
+        preparations,
+        stringNumbersSymbols
+      );
     },
     variant: schema => {
-      // TODO: Implement
-      return "";
+      if (schema.length === 0) {
+        return `return false`;
+      }
+      if (schema.length === 1) {
+        return compilePropValidationWithoutRest(
+          key,
+          valueId,
+          ctxId,
+          schema[0],
+          preparations,
+          stringNumbersSymbols
+        );
+      }
+      const compiled = c(schema);
+      const [id, prepare] = toContext(key, compiled);
+      preparations.push(prepare);
+      return compilePropValidationWithoutRest(
+        key,
+        valueId,
+        ctxId,
+        () => ({
+          check: (valueId, ctxId) => `${ctxId}['${id}'](${valueId})`,
+          not: (valueId, ctxId) => `!${ctxId}['${id}'](${valueId})`
+        }),
+        preparations,
+        stringNumbersSymbols
+      );
     }
   })(schema);
 }
@@ -328,7 +419,7 @@ function getKeyAccessor(key: string) {
 }
 function compileObjectSchema(s: IObjectSchema) {
   const keys = Object.keys(s);
-  const bodyCode = [];
+  const bodyCodeLines = [];
   const preparations: Prepare[] = [];
   const ctxId = "validator";
   const validValues: Record<string, Record<string, true>> = {};
@@ -339,8 +430,15 @@ function compileObjectSchema(s: IObjectSchema) {
     const keyAccessor = getKeyAccessor(key);
     const valueId = `value${keyAccessor}`;
     const keyValidValues: any[] = [];
-    bodyCode.push(
-      compileAndReturnWay(valueId, ctxId, schema, preparations, keyValidValues)
+    bodyCodeLines.push(
+      compilePropValidationWithoutRest(
+        key,
+        valueId,
+        ctxId,
+        schema,
+        preparations,
+        keyValidValues
+      )
     );
     if (keyValidValues.length > 0) {
       withValidValues.push(key);
@@ -357,30 +455,30 @@ function compileObjectSchema(s: IObjectSchema) {
     preparations.push(ctx => {
       ctx.__validValues = validValues;
     });
-    bodyCode.unshift(
+    bodyCodeLines.unshift(
       ...withValidValues.map(key => {
         const keyAccessor = getKeyAccessor(key);
-        return `
-        if (!validator.__validValues${keyAccessor}[value${keyAccessor}]) return false
-      `;
+        return `if (!validator.__validValues${keyAccessor}[value${keyAccessor}]) return false`;
       })
     );
   }
-  bodyCode.unshift("if (!value) return false", "validator.explanations = []");
-
-  const ctx = eval(`
+  bodyCodeLines.unshift(
+    "if (!value) return false",
+    "validator.explanations = []"
+  );
+  const ctx = eval(
+    beautify(
+      `
     (() => {
       function validator(value) {
-        ${bodyCode
-          .map(e => e.trim())
-          .filter(Boolean)
-          .join("\n")}
-
+        ${bodyCodeLines.join("\n")}
         return true
       }
       return validator
     })()
-  `);
+  `.trim()
+    )
+  );
 
   for (const prepare of preparations) {
     prepare(ctx);
