@@ -1,6 +1,7 @@
 import { compile } from "./compile";
 import { ValidatorType } from "./constants";
 import { doExplanations } from "./doExplanation";
+import { has } from "./helpers";
 import {
   Explanation,
   InstanceSettings,
@@ -35,7 +36,7 @@ export const compileVariantSchema = (
   const resValidator: Validator = (value, explanations, parents): boolean => {
     const innerExplanations: any[] = [];
     const isValid =
-      dict[value] ||
+      has(dict, value) ||
       primitives.indexOf(value) >= 0 ||
       validators.some((check: Validator) =>
         check(value, innerExplanations, parents)

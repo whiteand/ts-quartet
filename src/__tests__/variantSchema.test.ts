@@ -10,6 +10,7 @@ test("variant schema: constants", () => {
   expect(isSex("male")).toBe(true);
   expect(isSex("female")).toBe(true);
   expect(isSex("Female")).toBe(false);
+  expect(isSex("toString")).toBe(false);
 });
 
 test("calculation: short", () => {
