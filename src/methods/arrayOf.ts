@@ -18,15 +18,18 @@ export const getArrayOfValidator: GetFromSettings<ArrayOfMethod> = settings => <
     if (!Array.isArray(value)) {
       return false;
     }
-    const getParent = (key: number) => ({
-      key,
-      parent: value,
-      schema: getArrayValidator()
-    });
+
     let isValid = true;
-    for (let i = 0; i < value.length; i += 1) {
+    for (let i = 0; i < value.length; i++) {
       const elem = value[i];
-      const currentParents = [getParent(i), ...parents];
+      const currentParents = [
+        {
+          key: i,
+          parent: value,
+          schema: getArrayValidator()
+        },
+        ...parents
+      ];
       const isValidElem = compiledElementValidator(
         elem,
         explanations,
