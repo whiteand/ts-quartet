@@ -1,7 +1,7 @@
 import { compileAnd } from "./compileAnd";
-import { IMethods, Schema, TypedCompilationResult } from "./types";
 import { arrayOf } from "./compileArrayOf";
 import { toContext } from "./toContext";
+import { IMethods, Schema, TypedCompilationResult } from "./types";
 
 export const methods: IMethods = {
   and(...schemas: Schema[]) {

@@ -1,12 +1,12 @@
-import {
-  Schema,
-  TypedCompilationResult,
-  CompilationResult,
-  Prepare
-} from "./types";
-import { handleSchema } from "./handleSchema";
 import { beautify } from "./beautify";
+import { handleSchema } from "./handleSchema";
 import { toContext } from "./toContext";
+import {
+  CompilationResult,
+  Prepare,
+  Schema,
+  TypedCompilationResult
+} from "./types";
 
 function compileForLoopBody(
   c: (schema: Schema) => CompilationResult,
@@ -128,6 +128,7 @@ export function arrayOf<T = any>(
     })()
   `);
 
+  // tslint:disable-next-line
   const ctx = eval(code);
 
   for (const prepare of preparations) {
