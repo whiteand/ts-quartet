@@ -1,4 +1,5 @@
-import { c, v, FunctionSchema } from "../index";
+import { v } from "../index";
+import { FunctionSchema } from "../types";
 const uniqId = (() => {
   let counter = 0;
   return (prefix: string) => {
@@ -42,16 +43,16 @@ const evenIdSchema = (
 });
 describe("c", () => {
   test("to be function", () => {
-    expect(typeof c).toBe("function");
+    expect(typeof v).toBe("function");
   });
   test("function schema compilation without handle and prepare", () => {
-    const validator = c(v.number);
+    const validator = v(v.number);
     expect(validator.toString()).toMatchInlineSnapshot(`
-                  "function validator(value) {
-                      validator.explanations = []
-                      return typeof value === 'number'
-                    }"
-            `);
+                        "function validator(value) {
+                            validator.explanations = []
+                            return typeof value === 'number'
+                          }"
+                `);
     expect(validator("1")).toBe(false);
     expect(validator(undefined)).toBe(false);
     expect(validator(0)).toBe(true);
@@ -62,7 +63,7 @@ describe("c", () => {
   });
   test("function schema compilation without handle", () => {
     const isEvenNumberMethodName = uniqId("isEvenNumber");
-    const validator = c(() => ({
+    const validator = v(() => ({
       prepare: ctx => {
         ctx[isEvenNumberMethodName] = (n: number) => n % 2 === 0;
       },
@@ -70,11 +71,11 @@ describe("c", () => {
         `${valueId} ? ${ctxId}['${isEvenNumberMethodName}'](${valueId}.id) : false`
     }));
     expect(validator.toString()).toMatchInlineSnapshot(`
-                  "function validator(value) {
-                      validator.explanations = []
-                      return value ? validator['isEvenNumber-0'](value.id) : false
-                    }"
-            `);
+                        "function validator(value) {
+                            validator.explanations = []
+                            return value ? validator['isEvenNumber-0'](value.id) : false
+                          }"
+                `);
     expect(validator({ id: 1 })).toBe(false);
     expect(validator({ id: 2 })).toBe(true);
     expect(validator({})).toBe(false);
@@ -83,33 +84,33 @@ describe("c", () => {
   });
   test("function schema compilation", () => {
     const isEvenNumberMethodName = uniqId("isEvenNumber");
-    const validator = c(evenIdSchema("isEven"));
+    const validator = v(evenIdSchema("isEven"));
     expect(validator.toString()).toMatchInlineSnapshot(`
-                  "function validator(value) {
-                      validator.explanations = []
-                      if (value && validator['isEven'](value.id)) {
-                        return true
-                      }
-                      validator.explanations.push({ type: 'IdIsNotAnEvenNumber', value: value })
-                      return false
-                    }"
-            `);
+                        "function validator(value) {
+                            validator.explanations = []
+                            if (value && validator['isEven'](value.id)) {
+                              return true
+                            }
+                            validator.explanations.push({ type: 'IdIsNotAnEvenNumber', value: value })
+                            return false
+                          }"
+                `);
     expect(validator({ id: 1 })).toBe(false);
     expect(validator({ id: 2 })).toBe(true);
     expect(validator({})).toBe(false);
     expect(validator(null)).toBe(false);
     expect(validator.explanations).toMatchInlineSnapshot(`
-                  Array [
-                    Object {
-                      "type": "IdIsNotAnEvenNumber",
-                      "value": null,
-                    },
-                  ]
-            `);
+                        Array [
+                          Object {
+                            "type": "IdIsNotAnEvenNumber",
+                            "value": null,
+                          },
+                        ]
+                `);
   });
   test("constant symbol", () => {
     const nameSymbol = Symbol.for("name");
-    const validator = c(nameSymbol);
+    const validator = v(nameSymbol);
     expect(validator.toString().trim()).toMatchInlineSnapshot(
       `"function (value) { return value === c; }"`
     );
@@ -119,7 +120,7 @@ describe("c", () => {
   });
   test("constant number", () => {
     const value = 1;
-    const validator = c(value);
+    const validator = v(value);
     expect(validator.toString().trim()).toMatchInlineSnapshot(
       `"function (value) { return value === c; }"`
     );
@@ -128,7 +129,7 @@ describe("c", () => {
   });
   test("constant string", () => {
     const value = "string";
-    const validator = c(value);
+    const validator = v(value);
     expect(validator.toString().trim()).toMatchInlineSnapshot(
       `"function (value) { return value === c; }"`
     );
@@ -137,35 +138,35 @@ describe("c", () => {
   });
   test("constant boolean", () => {
     const value = true;
-    const validator = c(value);
+    const validator = v(value);
     expect(validator.toString().trim()).toMatchInlineSnapshot(
       `"function (value) { return value === c; }"`
     );
   });
   test("variants", () => {
     const schema = [null, v.string, [1, 2, 3], evenIdSchema("isEven")];
-    const validator = c(schema);
+    const validator = v(schema);
     expect(validator.toString().trim()).toMatchInlineSnapshot(`
-                  "function validator(value) {
-                      if (validator.__validValuesDict[value] === true) return true
-                      if (value === null) return true
-                      if (typeof value === 'string') return true;
-                      if (value && validator['isEven'](value.id)) return true;
-                      validator.explanations.push({ type: 'IdIsNotAnEvenNumber', value: value })
-                      return false
-                    }"
-            `);
+                        "function validator(value) {
+                            if (validator.__validValuesDict[value] === true) return true
+                            if (value === null) return true
+                            if (typeof value === 'string') return true;
+                            if (value && validator['isEven'](value.id)) return true;
+                            validator.explanations.push({ type: 'IdIsNotAnEvenNumber', value: value })
+                            return false
+                          }"
+                `);
     expect(getDescription(validator)).toMatchInlineSnapshot(`
-                  Object {
-                    "__validValuesDict": Object {
-                      "1": true,
-                      "2": true,
-                      "3": true,
-                    },
-                    "explanations": Array [],
-                    "isEven": "function (n) { return n % 2 === 0; }",
-                  }
-            `);
+                        Object {
+                          "__validValuesDict": Object {
+                            "1": true,
+                            "2": true,
+                            "3": true,
+                          },
+                          "explanations": Array [],
+                          "isEven": "function (n) { return n % 2 === 0; }",
+                        }
+                `);
   });
   test("object function", () => {
     const isThirteen: FunctionSchema = () => ({
@@ -173,97 +174,97 @@ describe("c", () => {
       not: valueId => `${valueId} !== 13`,
       handleError: valueId => `console.log(${valueId})`
     });
-    const validator = c({
+    const validator = v({
       id: isThirteen
     });
     expect(validator.toString()).toMatchInlineSnapshot(`
-                  "function validator(value) {
-                      if (!value) return false
-                      validator.explanations = []
-                      if (value.id !== 13) {
-                        console.log(value.id)
-                        return false
-                      }
-                      return true
-                    }"
-            `);
+                        "function validator(value) {
+                            if (!value) return false
+                            validator.explanations = []
+                            if (value.id !== 13) {
+                              console.log(value.id)
+                              return false
+                            }
+                            return true
+                          }"
+                `);
     expect(getDescription(validator)).toMatchInlineSnapshot(`
-                  Object {
-                    "__validValues": Object {},
-                    "explanations": Array [],
-                  }
-            `);
+                        Object {
+                          "__validValues": Object {},
+                          "explanations": Array [],
+                        }
+                `);
   });
   test("object function with constant", () => {
     const isThirteen: FunctionSchema = () => ({
       check: valueId => `${valueId} === 13`,
       not: valueId => `${valueId} !== 13`
     });
-    const validator = c({
+    const validator = v({
       id: isThirteen,
       answer: 42
     });
     expect(validator.toString()).toMatchInlineSnapshot(`
-                  "function validator(value) {
-                      if (!value) return false
-                      validator.explanations = []
-                      if (!validator.__validValues.answer[value.answer]) return false
-                      if (value.id !== 13) return false
-                      return true
-                    }"
-            `);
+                        "function validator(value) {
+                            if (!value) return false
+                            validator.explanations = []
+                            if (!validator.__validValues.answer[value.answer]) return false
+                            if (value.id !== 13) return false
+                            return true
+                          }"
+                `);
     expect(getDescription(validator)).toMatchInlineSnapshot(`
-                  Object {
-                    "__validValues": Object {
-                      "answer": Object {
-                        "42": true,
-                      },
-                    },
-                    "explanations": Array [],
-                  }
-            `);
+                        Object {
+                          "__validValues": Object {
+                            "answer": Object {
+                              "42": true,
+                            },
+                          },
+                          "explanations": Array [],
+                        }
+                `);
   });
   test("object function with variants", () => {
-    const validator = c({
+    const validator = v({
       answer: 42,
       gender: ["male", "female"],
       isStudent: [true, false]
     });
     expect(validator.toString()).toMatchInlineSnapshot(`
-                  "function validator(value) {
-                      if (!value) return false
-                      validator.explanations = []
-                      if (!validator.__validValues.answer[value.answer]) return false
-                      if (!validator['gender-0'](value.gender)) return false
-                      if (!validator['isStudent-0'](value.isStudent)) return false
-                      return true
-                    }"
-            `);
+                        "function validator(value) {
+                            if (!value) return false
+                            validator.explanations = []
+                            if (!validator.__validValues.answer[value.answer]) return false
+                            if (!validator['gender-0'](value.gender)) return false
+                            if (!validator['isStudent-0'](value.isStudent)) return false
+                            return true
+                          }"
+                `);
     expect(getDescription(validator)).toMatchInlineSnapshot(`
-                  Object {
-                    "__validValues": Object {
-                      "answer": Object {
-                        "42": true,
-                      },
-                    },
-                    "explanations": Array [],
-                    "gender-0": "function validator(value) {
-                      if (validator.__validValuesDict[value] === true) return true
-                      return false
-                    }",
-                    "gender-0.__validValuesDict": Object {
-                      "female": true,
-                      "male": true,
-                    },
-                    "gender-0.explanations": Array [],
-                    "isStudent-0": "function validator(value) {
-                      if (value === true) return true
-                      if (value === false) return true
-                      return false
-                    }",
-                    "isStudent-0.explanations": Array [],
-                  }
-            `);
+                        Object {
+                          "__validValues": Object {
+                            "answer": Object {
+                              "42": true,
+                            },
+                          },
+                          "explanations": Array [],
+                          "gender-0": "function validator(value) {
+                            if (validator.__validValuesDict[value] === true) return true
+                            return false
+                          }",
+                          "gender-0.__validValuesDict": Object {
+                            "female": true,
+                            "male": true,
+                          },
+                          "gender-0.explanations": Array [],
+                          "isStudent-0": "function validator(value) {
+                            if (value === true) return true
+                            if (value === false) return true
+                            return false
+                          }",
+                          "isStudent-0.explanations": Array [],
+                        }
+                `);
 
     expect(validator({})).toBe(false);
     expect(validator({ id: 1 })).toBe(false);
@@ -275,7 +276,7 @@ describe("c", () => {
   });
 
   test("nested objects", () => {
-    const isPerson = c({
+    const isPerson = v({
       name: v.string,
       age: v.number,
       gender: ["male", "female"],
@@ -355,77 +356,77 @@ describe("c", () => {
     invalids.forEach(invalid => expect(isPerson(invalid)).toBe(false));
 
     expect(isPerson.toString().trim()).toMatchInlineSnapshot(`
-                  "function validator(value) {
-                      if (!value) return false
-                      validator.explanations = []
-                      if (typeof value.name !== 'string') return false
-                      if (typeof value.age !== 'number') return false
-                      if (!validator['gender-1'](value.gender)) return false
-                      if (!validator['wife-0'](value.wife)) return false
-                      if (!validator['husband-0'](value.husband)) return false
-                      return true
-                    }"
-            `);
+                        "function validator(value) {
+                            if (!value) return false
+                            validator.explanations = []
+                            if (typeof value.name !== 'string') return false
+                            if (typeof value.age !== 'number') return false
+                            if (!validator['gender-1'](value.gender)) return false
+                            if (!validator['wife-0'](value.wife)) return false
+                            if (!validator['husband-0'](value.husband)) return false
+                            return true
+                          }"
+                `);
     expect(getDescription(isPerson)).toMatchInlineSnapshot(`
-                  Object {
-                    "__validValues": Object {},
-                    "explanations": Array [],
-                    "gender-1": "function validator(value) {
-                      if (validator.__validValuesDict[value] === true) return true
-                      return false
-                    }",
-                    "gender-1.__validValuesDict": Object {
-                      "female": true,
-                      "male": true,
-                    },
-                    "gender-1.explanations": Array [],
-                    "husband-0": "function validator(value) {
-                      if (value === null) return true
-                      if (validator['variant-1-1'](value)) return true;
-                      validator.explanations.push(...validator['variant-1-1'].explanations)
-                      return false
-                    }",
-                    "husband-0.explanations": Array [],
-                    "husband-0.variant-1-1": "function validator(value) {
-                      if (!value) return false
-                      validator.explanations = []
-                      if (!validator.__validValues.gender[value.gender]) return false
-                      if (typeof value.name !== 'string') return false
-                      if (typeof value.age !== 'number') return false
-                      return true
-                    }",
-                    "husband-0.variant-1-1.__validValues": Object {
-                      "gender": Object {
-                        "male": true,
-                      },
-                    },
-                    "husband-0.variant-1-1.explanations": Array [],
-                    "wife-0": "function validator(value) {
-                      if (value === null) return true
-                      if (validator['variant-1-0'](value)) return true;
-                      validator.explanations.push(...validator['variant-1-0'].explanations)
-                      return false
-                    }",
-                    "wife-0.explanations": Array [],
-                    "wife-0.variant-1-0": "function validator(value) {
-                      if (!value) return false
-                      validator.explanations = []
-                      if (!validator.__validValues.gender[value.gender]) return false
-                      if (typeof value.name !== 'string') return false
-                      if (typeof value.age !== 'number') return false
-                      return true
-                    }",
-                    "wife-0.variant-1-0.__validValues": Object {
-                      "gender": Object {
-                        "female": true,
-                      },
-                    },
-                    "wife-0.variant-1-0.explanations": Array [],
-                  }
-            `);
+                        Object {
+                          "__validValues": Object {},
+                          "explanations": Array [],
+                          "gender-1": "function validator(value) {
+                            if (validator.__validValuesDict[value] === true) return true
+                            return false
+                          }",
+                          "gender-1.__validValuesDict": Object {
+                            "female": true,
+                            "male": true,
+                          },
+                          "gender-1.explanations": Array [],
+                          "husband-0": "function validator(value) {
+                            if (value === null) return true
+                            if (validator['variant-1-1'](value)) return true;
+                            validator.explanations.push(...validator['variant-1-1'].explanations)
+                            return false
+                          }",
+                          "husband-0.explanations": Array [],
+                          "husband-0.variant-1-1": "function validator(value) {
+                            if (!value) return false
+                            validator.explanations = []
+                            if (!validator.__validValues.gender[value.gender]) return false
+                            if (typeof value.name !== 'string') return false
+                            if (typeof value.age !== 'number') return false
+                            return true
+                          }",
+                          "husband-0.variant-1-1.__validValues": Object {
+                            "gender": Object {
+                              "male": true,
+                            },
+                          },
+                          "husband-0.variant-1-1.explanations": Array [],
+                          "wife-0": "function validator(value) {
+                            if (value === null) return true
+                            if (validator['variant-1-0'](value)) return true;
+                            validator.explanations.push(...validator['variant-1-0'].explanations)
+                            return false
+                          }",
+                          "wife-0.explanations": Array [],
+                          "wife-0.variant-1-0": "function validator(value) {
+                            if (!value) return false
+                            validator.explanations = []
+                            if (!validator.__validValues.gender[value.gender]) return false
+                            if (typeof value.name !== 'string') return false
+                            if (typeof value.age !== 'number') return false
+                            return true
+                          }",
+                          "wife-0.variant-1-0.__validValues": Object {
+                            "gender": Object {
+                              "female": true,
+                            },
+                          },
+                          "wife-0.variant-1-0.explanations": Array [],
+                        }
+                `);
   });
   test("v.rest", () => {
-    const phoneBook = c({
+    const phoneBook = v({
       [v.rest]: v.string
     });
     const valids = [{}, { a: "1" }, { a: "1", b: "2" }];
@@ -436,41 +437,36 @@ describe("c", () => {
     expect(phoneBook({ a: "1", b: 2 })).toBe(false);
     expect(phoneBook({ c: 3 })).toBe(false);
     expect(phoneBook.toString()).toMatchInlineSnapshot(`
-            "function validator(value) {
-                validator.explanations = []
-                if (!value) return false
-                const keys = Object.keys(value)
-                for (let i = 0; i < keys.length; i++) {
-                  const key = keys[i]
-                  if (!validator['rest-validator-0'](value[key])) {
-                    validator.explanations.push(...validator['rest-validator-0'].explanations)
-                    return false
-                  }
-                }
-                return true
-              }"
-        `);
-    expect(getDescription(phoneBook)).toMatchInlineSnapshot(`
-                  Object {
-                    "__propsWithSchemasDict": Object {},
-                    "defined-0": "function validator(value) {
+                  "function validator(value) {
+                      validator.explanations = []
                       if (!value) return false
-                      validator.explanations = []
+                      const keys = Object.keys(value)
+                      for (let i = 0; i < keys.length; i++) {
+                        const key = keys[i]
+                        if (!validator['rest-validator-0'](value[key])) {
+                          validator.explanations.push(...validator['rest-validator-0'].explanations)
+                          return false
+                        }
+                      }
                       return true
-                    }",
-                    "defined-0.__validValues": Object {},
-                    "defined-0.explanations": Array [],
-                    "explanations": Array [],
-                    "rest-validator-0": "function validator(value) {
-                      validator.explanations = []
-                      return typeof value === 'string'
-                    }",
-                    "rest-validator-0.explanations": Array [],
-                  }
+                    }"
             `);
+    expect(getDescription(phoneBook)).toMatchInlineSnapshot(`
+      Object {
+        "__propsWithSchemasDict": Object {},
+        "defined-0": "function (value) { return value; }",
+        "defined-0.explanations": Array [],
+        "explanations": Array [],
+        "rest-validator-0": "function validator(value) {
+          validator.explanations = []
+          return typeof value === 'string'
+        }",
+        "rest-validator-0.explanations": Array [],
+      }
+    `);
   });
   test("v.rest", () => {
-    const phoneBook = c({
+    const phoneBook = v({
       id: [undefined, v.number],
       [v.rest]: v.string
     });
@@ -487,50 +483,50 @@ describe("c", () => {
     expect(phoneBook({ a: "1", b: 2 })).toBe(false);
     expect(phoneBook({ c: 3 })).toBe(false);
     expect(phoneBook.toString()).toMatchInlineSnapshot(`
-      "function validator(value) {
-          validator.explanations = []
-          if (!validator['defined-1'](value)) {
-            validator.explanations.push(...validator['defined-1'].explanations)
-            return false
-          }
-          const keys = Object.keys(value)
-          for (let i = 0; i < keys.length; i++) {
-            const key = keys[i]
-            if (validator.__propsWithSchemasDict[key] === true) continue
-            if (!validator['rest-validator-1'](value[key])) {
-              validator.explanations.push(...validator['rest-validator-1'].explanations)
-              return false
-            }
-          }
-          return true
-        }"
-    `);
+            "function validator(value) {
+                validator.explanations = []
+                if (!validator['defined-1'](value)) {
+                  validator.explanations.push(...validator['defined-1'].explanations)
+                  return false
+                }
+                const keys = Object.keys(value)
+                for (let i = 0; i < keys.length; i++) {
+                  const key = keys[i]
+                  if (validator.__propsWithSchemasDict[key] === true) continue
+                  if (!validator['rest-validator-1'](value[key])) {
+                    validator.explanations.push(...validator['rest-validator-1'].explanations)
+                    return false
+                  }
+                }
+                return true
+              }"
+        `);
     expect(getDescription(phoneBook)).toMatchInlineSnapshot(`
-      Object {
-        "__propsWithSchemasDict": Object {
-          "id": true,
-        },
-        "defined-1": "function validator(value) {
-          if (!value) return false
-          validator.explanations = []
-          if (!validator['id-0'](value.id)) return false
-          return true
-        }",
-        "defined-1.__validValues": Object {},
-        "defined-1.explanations": Array [],
-        "defined-1.id-0": "function validator(value) {
-          if (value === undefined) return true
-          if (typeof value === 'number') return true;
-          return false
-        }",
-        "defined-1.id-0.explanations": Array [],
-        "explanations": Array [],
-        "rest-validator-1": "function validator(value) {
-          validator.explanations = []
-          return typeof value === 'string'
-        }",
-        "rest-validator-1.explanations": Array [],
-      }
-    `);
+            Object {
+              "__propsWithSchemasDict": Object {
+                "id": true,
+              },
+              "defined-1": "function validator(value) {
+                if (!value) return false
+                validator.explanations = []
+                if (!validator['id-0'](value.id)) return false
+                return true
+              }",
+              "defined-1.__validValues": Object {},
+              "defined-1.explanations": Array [],
+              "defined-1.id-0": "function validator(value) {
+                if (value === undefined) return true
+                if (typeof value === 'number') return true;
+                return false
+              }",
+              "defined-1.id-0.explanations": Array [],
+              "explanations": Array [],
+              "rest-validator-1": "function validator(value) {
+                validator.explanations = []
+                return typeof value === 'string'
+              }",
+              "rest-validator-1.explanations": Array [],
+            }
+        `);
   });
 });

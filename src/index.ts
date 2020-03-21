@@ -1,18 +1,17 @@
-type QuartetSettings = {
-  allErrors?: boolean;
-};
-type Context = {
-  explanations: any[];
-  [key: string]: any;
-};
-type Prepare = (ctx: Context) => void;
-type HandleError = (valueId: string, ctxId: string) => string;
-type FunctionSchemaResult = {
-  prepare?: Prepare;
-  check: (valueId: string, ctxId: string) => string;
-  handleError?: HandleError;
-  not?: (valudId: string, ctxId: string) => string;
-};
+import {
+  HandleSchemaHandlers,
+  Schema,
+  FunctionSchemaResult,
+  ConstantSchema,
+  Context,
+  Prepare,
+  HandleError,
+  IVariantSchema,
+  IObjectSchema,
+  IMethods,
+  QuartetInstance,
+  CompilationResult
+} from "./types";
 
 const beautify = (code: string) => {
   const lines = code.split("\n");
@@ -33,23 +32,6 @@ const beautify = (code: string) => {
   }
   return resLines.join("\n");
 };
-
-export type FunctionSchema = () => FunctionSchemaResult;
-interface IObjectSchema {
-  [key: string]: Schema;
-}
-interface IVariantSchema extends Array<Schema> {}
-type ConstantSchema = undefined | null | boolean | number | string | symbol;
-type Schema = FunctionSchema | ConstantSchema | IObjectSchema | IVariantSchema;
-
-type HandleSchemaHandler<T extends Schema, R> = (schema: T) => R;
-interface HandleSchemaHandlers<R> {
-  function: HandleSchemaHandler<FunctionSchema, R>;
-  constant: HandleSchemaHandler<ConstantSchema, R>;
-  objectRest: HandleSchemaHandler<IObjectSchema, R>;
-  object: HandleSchemaHandler<IObjectSchema, R>;
-  variant: HandleSchemaHandler<IVariantSchema, R>;
-}
 
 const EMPTY: any = {};
 function has(obj: any, key: any) {
@@ -131,6 +113,7 @@ let toContext = (prefix: string, value: any) => {
 };
 
 function compileVariantElementToReturnWay(
+  c: QuartetInstance,
   index: number,
   valueId: string,
   ctxId: string,
@@ -173,6 +156,7 @@ function compileVariantElementToReturnWay(
       for (let variant of schema) {
         res.push(
           compileVariantElementToReturnWay(
+            c,
             index,
             valueId,
             ctxId,
@@ -186,10 +170,11 @@ function compileVariantElementToReturnWay(
       return res.join("\n");
     },
     object: schema => {
-      const compiled = compileObjectSchema(schema);
+      const compiled = compileObjectSchema(c, schema);
       const [id, prepare] = toContext("variant-" + index, compiled);
       preparations.push(prepare);
       return compileVariantElementToReturnWay(
+        c,
         index,
         valueId,
         ctxId,
@@ -205,10 +190,11 @@ function compileVariantElementToReturnWay(
       );
     },
     objectRest: schema => {
-      const compiled = compileObjectSchemaWithRest(schema);
+      const compiled = compileObjectSchemaWithRest(c, schema);
       const [id, prepare] = toContext("variant-" + index, compiled);
       preparations.push(prepare);
       return compileVariantElementToReturnWay(
+        c,
         index,
         valueId,
         ctxId,
@@ -226,7 +212,7 @@ function compileVariantElementToReturnWay(
   })(schema);
 }
 
-function compileVariants(variants: IVariantSchema) {
+function compileVariants(c: QuartetInstance, variants: IVariantSchema) {
   if (variants.length === 0) {
     return Object.assign(() => false, { explanations: [] });
   }
@@ -241,6 +227,7 @@ function compileVariants(variants: IVariantSchema) {
     const variant = variants[i];
     bodyCode.push(
       compileVariantElementToReturnWay(
+        c,
         i,
         `value`,
         `validator`,
@@ -289,12 +276,6 @@ function compileVariants(variants: IVariantSchema) {
   return ctx;
 }
 
-interface IMethods {
-  string: FunctionSchema;
-  number: FunctionSchema;
-  safeInteger: FunctionSchema;
-  rest: string;
-}
 export const methods: IMethods = {
   string: () => ({
     check: valueId => `typeof ${valueId} === 'string'`,
@@ -312,6 +293,7 @@ export const methods: IMethods = {
 };
 
 function compilePropValidationWithoutRest(
+  c: QuartetInstance,
   key: string,
   valueId: string,
   ctxId: string,
@@ -357,6 +339,7 @@ function compilePropValidationWithoutRest(
       const [id, prepare] = toContext(key, compiled);
       preparations.push(prepare);
       return compilePropValidationWithoutRest(
+        c,
         key,
         valueId,
         ctxId,
@@ -373,6 +356,7 @@ function compilePropValidationWithoutRest(
       const [id, prepare] = toContext(key, compiled);
       preparations.push(prepare);
       return compilePropValidationWithoutRest(
+        c,
         key,
         valueId,
         ctxId,
@@ -390,6 +374,7 @@ function compilePropValidationWithoutRest(
       }
       if (schema.length === 1) {
         return compilePropValidationWithoutRest(
+          c,
           key,
           valueId,
           ctxId,
@@ -402,6 +387,7 @@ function compilePropValidationWithoutRest(
       const [id, prepare] = toContext(key, compiled);
       preparations.push(prepare);
       return compilePropValidationWithoutRest(
+        c,
         key,
         valueId,
         ctxId,
@@ -418,11 +404,11 @@ function compilePropValidationWithoutRest(
 function getKeyAccessor(key: string) {
   return /^[a-zA-Z0-9_]+$/.test(key) ? "." + key : `[${JSON.stringify(key)}]`;
 }
-function compileObjectSchema(s: IObjectSchema) {
+function compileObjectSchema(c: QuartetInstance, s: IObjectSchema) {
   const keys = Object.keys(s);
-  // if (keys.length === 0) {
-  //   return Object.assign((value: any) => value, { explanations: [] });
-  // }
+  if (keys.length === 0) {
+    return Object.assign((value: any) => value, { explanations: [] });
+  }
   const bodyCodeLines = [];
   const preparations: Prepare[] = [];
   const ctxId = "validator";
@@ -436,6 +422,7 @@ function compileObjectSchema(s: IObjectSchema) {
     const keyValidValues: any[] = [];
     bodyCodeLines.push(
       compilePropValidationWithoutRest(
+        c,
         key,
         valueId,
         ctxId,
@@ -492,7 +479,7 @@ function compileObjectSchema(s: IObjectSchema) {
 
   return ctx;
 }
-function compileObjectSchemaWithRest(s: IObjectSchema) {
+function compileObjectSchemaWithRest(c: QuartetInstance, s: IObjectSchema) {
   const { [methods.rest]: restSchema, ...propsSchemas } = s;
   const [restId, prepareRestId] = toContext("rest-validator", c(restSchema));
   const propsWithSchemas = Object.keys(propsSchemas);
@@ -544,26 +531,19 @@ function compileObjectSchemaWithRest(s: IObjectSchema) {
   return ctx;
 }
 
-type TypedCompilationResult<T> = ((value: any) => value is T) & Context;
-type CompilationResult = ((value: any) => boolean) & Context;
-type QuartetInstace = IMethods &
-  (<T>(schema: Schema) => TypedCompilationResult<T>) &
-  ((schema: Schema) => (value: any) => boolean);
-export function quartet(): IMethods &
-  (<T>(s: Schema) => TypedCompilationResult<T>) &
-  ((s: Schema) => boolean) {
+export function quartet(): QuartetInstance {
   const v = function v(s: Schema): CompilationResult {
     const compiled = handleSchema<CompilationResult>({
       function: s => compileFunctionSchemaResult(s()),
       constant: s => compileConstant(s),
-      variant: s => compileVariants(s),
-      objectRest: s => compileObjectSchemaWithRest(s),
-      object: s => compileObjectSchema(s)
+      variant: s => compileVariants(v as any, s),
+      objectRest: s => compileObjectSchemaWithRest(v as any, s),
+      object: s => compileObjectSchema(v as any, s)
     })(s);
 
     return compiled as any;
   };
-  return Object.assign(v, methods) as any;
+  return Object.assign(v, methods) as QuartetInstance;
 }
 
 export const v = quartet();
