@@ -1,7 +1,7 @@
 import { compileAnd } from "./compileAnd";
 import { arrayOf } from "./compileArrayOf";
 import { toContext } from "./toContext";
-import { IMethods, Schema, TypedCompilationResult } from "./types";
+import { IMethods, Schema, TypedCompilationResult, ITest } from "./types";
 
 export const methods: IMethods = {
   and(...schemas: Schema[]) {
@@ -93,5 +93,13 @@ export const methods: IMethods = {
   symbol: () => ({
     check: valueId => `typeof ${valueId} === 'symbol'`,
     not: valueId => `typeof ${valueId} !== 'symbol'`
-  })
+  }),
+  test: (tester: ITest) => () => {
+    const [testId, prepare] = toContext("tester", tester);
+    return {
+      check: (id, ctx) => `${ctx}['${testId}'].test(${id})`,
+      not: (id, ctx) => `!${ctx}['${testId}'].test(${id})`,
+      prepare
+    };
+  }
 };

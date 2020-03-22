@@ -38,7 +38,9 @@ export interface IHandleSchemaHandlers<R> {
   objectRest: HandleSchemaHandler<IObjectSchema, R>;
   variant: HandleSchemaHandler<IVariantSchema, R>;
 }
-
+export interface ITest {
+  test: (value: any) => boolean;
+}
 export interface IMethods {
   and: (...schemas: Schema[]) => FunctionSchema;
   arrayOf: (schema: Schema) => FunctionSchema;
@@ -61,6 +63,7 @@ export interface IMethods {
   safeInteger: FunctionSchema;
   string: FunctionSchema;
   symbol: FunctionSchema;
+  test: (test: ITest) => FunctionSchema;
 }
 
 export type TypedCompilationResult<T> = ((value: any) => value is T) & IContext;
