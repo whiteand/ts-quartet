@@ -35,7 +35,7 @@ Object {
 }
 `;
 
-exports[`compileObjectSchemaWithRest obj + obj 4`] = `
+exports[`compileObjectSchemaWithRest obj + obj 1`] = `
 Object {
   "_": "function validator(value) {
     validator.explanations = []
@@ -128,9 +128,7 @@ Object {
   }",
   "defined-6.deep-1.defined-5.deep-0.defined-4.__validValues": Object {},
   "defined-6.deep-1.defined-5.deep-0.defined-4.explanations": Array [],
-  "defined-6.deep-1.defined-5.deep-0.explanations": Array [
-    "Is not A",
-  ],
+  "defined-6.deep-1.defined-5.deep-0.explanations": Array [],
   "defined-6.deep-1.defined-5.deep-0.rest-validator-6": "function validator(value) {
     validator.explanations = []
     if (value === \\"A\\") {
@@ -139,15 +137,9 @@ Object {
     validator.explanations.push(\\"Is not A\\")
     return false
   }",
-  "defined-6.deep-1.defined-5.deep-0.rest-validator-6.explanations": Array [
-    "Is not A",
-  ],
-  "defined-6.deep-1.defined-5.explanations": Array [
-    "Is not A",
-  ],
-  "defined-6.deep-1.explanations": Array [
-    "Is not A",
-  ],
+  "defined-6.deep-1.defined-5.deep-0.rest-validator-6.explanations": Array [],
+  "defined-6.deep-1.defined-5.explanations": Array [],
+  "defined-6.deep-1.explanations": Array [],
   "defined-6.deep-1.rest-validator-5": "function validator(value) {
     validator.explanations = []
     if (value === \\"B\\") {
@@ -156,15 +148,9 @@ Object {
     validator.explanations.push(\\"Is not B\\")
     return false
   }",
-  "defined-6.deep-1.rest-validator-5.explanations": Array [
-    "Is not B",
-  ],
-  "defined-6.explanations": Array [
-    "Is not A",
-  ],
-  "explanations": Array [
-    "Is not A",
-  ],
+  "defined-6.deep-1.rest-validator-5.explanations": Array [],
+  "defined-6.explanations": Array [],
+  "explanations": Array [],
   "rest-validator-4": "function (value) { return value === c; }",
   "rest-validator-4.explanations": Array [],
 }

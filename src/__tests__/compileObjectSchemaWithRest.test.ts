@@ -250,6 +250,7 @@ describe("compileObjectSchemaWithRest", () => {
         [v.rest]: getExplanatoryFunc("B", "Is not B")
       }
     });
+    snapshot(validator);
     tables(
       validator,
       [
@@ -288,7 +289,6 @@ describe("compileObjectSchemaWithRest", () => {
                     "Is not A",
                   ]
             `);
-    snapshot(validator);
   });
   test("obj: variant explanations", () => {
     const validator = compileObjectSchemaWithRest(v, {

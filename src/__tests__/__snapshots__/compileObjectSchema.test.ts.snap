@@ -7,47 +7,25 @@ Object {
 }
 `;
 
-exports[`compileObjectSchema obj + obj 2`] = `
+exports[`compileObjectSchema obj + obj 1`] = `
 Object {
   "_": "function validator(value) {
     validator.explanations = []
     if (!value) return false
-    if (!validator['deep-1'](value.deep)) {
-      validator.explanations.push(...validator['deep-1'].explanations)
+    if (!value.deep) return false
+    if (value.deep.another !== validator['value.deep.another-0']) return false
+    if (!value.deep.deep) return false
+    if (value.deep.deep.A !== validator['value.deep.deep.A-0']) return false
+    if (!(value.deep.deep.space === 'true')) {
+      validator.explanations.push(value.deep.deep.space)
       return false
     }
     return true
   }",
   "__validValues": Object {},
-  "deep-1": "function validator(value) {
-    validator.explanations = []
-    if (!value) return false
-    if (!validator['deep-0'](value.deep)) {
-      validator.explanations.push(...validator['deep-0'].explanations)
-      return false
-    }
-    return true
-  }",
-  "deep-1.__validValues": Object {},
-  "deep-1.deep-0": "function validator(value) {
-    validator.explanations = []
-    if (!value) return false
-    if (!(value.space === 'true')) {
-      validator.explanations.push(value.space)
-      return false
-    }
-    return true
-  }",
-  "deep-1.deep-0.__validValues": Object {},
-  "deep-1.deep-0.explanations": Array [
-    "false",
-  ],
-  "deep-1.explanations": Array [
-    "false",
-  ],
-  "explanations": Array [
-    "false",
-  ],
+  "explanations": Array [],
+  "value.deep.another-0": "B",
+  "value.deep.deep.A-0": "A",
 }
 `;
 

@@ -189,22 +189,21 @@ describe("compileObjectSchema", () => {
           space: () => ({
             check: v => `${v} === 'true'`,
             handleError: (v, ctx) => `${ctx}.explanations.push(${v})`
-          })
-        }
+          }),
+          A: "A"
+        },
+        another: "B"
       }
     });
+    snapshot(validator);
     tables(
       validator,
-      [{ deep: { deep: { space: "true" } } }],
+      [{ deep: { another: "B", deep: { space: "true", A: "A" } } }],
       [{ deep: { deep: { space: "false" } } }]
     );
-    expect(getExplanation(validator, { deep: { deep: { space: "false" } } }))
-      .toMatchInlineSnapshot(`
-                              Array [
-                                "false",
-                              ]
-                    `);
-    snapshot(validator);
+    expect(
+      getExplanation(validator, { deep: { deep: { space: "false" } } })
+    ).toMatchInlineSnapshot(`Array []`);
   });
   test("obj: variant explanations", () => {
     const validator = compileObjectSchema(v, {
@@ -215,11 +214,11 @@ describe("compileObjectSchema", () => {
     });
     expect(validator({ var: "a" })).toBe(false);
     expect(validator.explanations).toMatchInlineSnapshot(`
-                                        Array [
-                                          "Is not A",
-                                          "Is not B",
-                                        ]
-                            `);
+                                              Array [
+                                                "Is not A",
+                                                "Is not B",
+                                              ]
+                                `);
     expect(validator({ var: "B" })).toBe(true);
     expect(validator.explanations).toMatchInlineSnapshot(`Array []`);
     snapshot(validator);
@@ -232,10 +231,10 @@ describe("compileObjectSchema", () => {
       [false, undefined, 0, { a: "b" }, { a: "a" }, { a: "a" }]
     );
     expect(getExplanation(validator, { a: "b" })).toMatchInlineSnapshot(`
-            Array [
-              "Is not A",
-            ]
-        `);
+                  Array [
+                    "Is not A",
+                  ]
+            `);
     expect(getExplanation(validator, { a: "A" })).toMatchInlineSnapshot(
       `Array []`
     );

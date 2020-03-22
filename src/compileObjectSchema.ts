@@ -52,23 +52,39 @@ function compilePropValidationWithoutRest(
         : `if (${notCheck}) return false`;
     },
     object: objectSchema => {
-      const compiled = c(objectSchema);
-      const [id, prepare] = toContext(key, compiled);
-      preparations.push(prepare);
-      return compilePropValidationWithoutRest(
-        c,
-        key,
-        valueId,
-        ctxId,
-        () => ({
-          check: () => `${ctxId}['${id}'](${valueId})`,
-          handleError: () =>
-            `${ctxId}.explanations.push(...${ctxId}['${id}'].explanations)`,
-          not: () => `!${ctxId}['${id}'](${valueId})`
-        }),
-        preparations,
-        stringNumbersSymbols
-      );
+      const keys = Object.keys(objectSchema);
+      const codeLines = [`if (!${valueId}) return false`];
+      const important: string[] = [];
+      for (let i = 0; i < keys.length; i++) {
+        const key = keys[i];
+        const keyAccessor = getKeyAccessor(key);
+        const keyValidValues: Array<string | symbol> = [];
+        const keyId = valueId + keyAccessor;
+        const code = compilePropValidationWithoutRest(
+          c,
+          key,
+          keyId,
+          ctxId,
+          objectSchema[key],
+          preparations,
+          keyValidValues
+        );
+
+        if (keyValidValues.length > 0) {
+          for (const valid of keyValidValues) {
+            const [keyConstantId, prepare] = toContext(keyId, valid);
+            preparations.push(prepare);
+            important.push(
+              `if (${keyId} !== ${ctxId}['${keyConstantId}']) return false`
+            );
+          }
+        }
+        if (code) {
+          codeLines.push(code);
+        }
+      }
+      codeLines.splice(1, 0, ...important);
+      return codeLines.join("\n");
     },
     objectRest: objectSchema => {
       const compiled = c(objectSchema);
@@ -167,7 +183,7 @@ export function compileObjectSchema(
     }
   }
 
-  if (withValidValues) {
+  if (withValidValues.length > 0) {
     preparations.push(context => {
       context.__validValues = validValues;
     });
