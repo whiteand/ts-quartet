@@ -37,6 +37,38 @@ export const methods: IMethods = {
     check: valueId => `typeof ${valueId} === 'function'`,
     not: valueId => `typeof ${valueId} !== 'function'`
   }),
+  max: (maxValue: number, exclusive: boolean = false) => () => ({
+    check: exclusive
+      ? valueId => `${valueId} < ${maxValue}`
+      : valueId => `${valueId} <= ${maxValue}`,
+    not: exclusive
+      ? valueId => `${valueId} >= ${maxValue}`
+      : valueId => `${valueId} > ${maxValue}`
+  }),
+  maxLength: (maxLength: number, exclusive: boolean = false) => () => ({
+    check: exclusive
+      ? valueId => `${valueId} && ${valueId}.length < ${maxLength}`
+      : valueId => `${valueId} && ${valueId}.length <= ${maxLength}`,
+    not: exclusive
+      ? valueId => `!${valueId} || ${valueId}.length >= ${maxLength}`
+      : valueId => `!${valueId} || ${valueId}.length > ${maxLength}`
+  }),
+  min: (minValue: number, exclusive: boolean = false) => () => ({
+    check: exclusive
+      ? valueId => `${valueId} > ${minValue}`
+      : valueId => `${valueId} >= ${minValue}`,
+    not: exclusive
+      ? valueId => `${valueId} <= ${minValue}`
+      : valueId => `${valueId} < ${minValue}`
+  }),
+  minLength: (maxLength: number, exclusive: boolean = false) => () => ({
+    check: exclusive
+      ? valueId => `${valueId} && ${valueId}.length > ${maxLength}`
+      : valueId => `${valueId} && ${valueId}.length >= ${maxLength}`,
+    not: exclusive
+      ? valueId => `!${valueId} || ${valueId}.length <= ${maxLength}`
+      : valueId => `!${valueId} || ${valueId}.length < ${maxLength}`
+  }),
   negative: () => ({
     check: valueId => `${valueId} < 0`,
     not: valueId => `${valueId} >= 0`

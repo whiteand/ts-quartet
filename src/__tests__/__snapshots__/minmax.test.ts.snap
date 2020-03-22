@@ -1,0 +1,81 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`max exclusive 1`] = `
+Object {
+  "_": "function validator(value) {
+    validator.explanations = []
+    return value < 5
+  }",
+  "explanations": Array [],
+}
+`;
+
+exports[`max inclusive 1`] = `
+Object {
+  "_": "function validator(value) {
+    validator.explanations = []
+    return value <= 5
+  }",
+  "explanations": Array [],
+}
+`;
+
+exports[`maxLength exclusive 1`] = `
+Object {
+  "_": "function validator(value) {
+    validator.explanations = []
+    return value && value.length < 5
+  }",
+  "explanations": Array [],
+}
+`;
+
+exports[`maxLength inclusive 1`] = `
+Object {
+  "_": "function validator(value) {
+    validator.explanations = []
+    return value && value.length <= 5
+  }",
+  "explanations": Array [],
+}
+`;
+
+exports[`min exclusive 1`] = `
+Object {
+  "_": "function validator(value) {
+    validator.explanations = []
+    return value > 5
+  }",
+  "explanations": Array [],
+}
+`;
+
+exports[`min inclusive 1`] = `
+Object {
+  "_": "function validator(value) {
+    validator.explanations = []
+    return value >= 5
+  }",
+  "explanations": Array [],
+}
+`;
+
+exports[`minLength exclusive 1`] = `
+Object {
+  "_": "function validator(value) {
+    validator.explanations = []
+    return value && value.length > 5
+  }",
+  "explanations": Array [],
+}
+`;
+
+exports[`minLength inclusive 1`] = `
+Object {
+  "_": "function validator(value) {
+    validator.explanations = []
+    return value && value.length >= 5
+  }",
+  "explanations": Array [],
+}
+`;

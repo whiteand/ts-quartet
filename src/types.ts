@@ -50,6 +50,10 @@ export interface IMethods {
     ((schema: Schema) => CompilationResult);
   custom: (check: (value: any) => boolean) => FunctionSchema;
   function: FunctionSchema;
+  max: (maxValue: number, exclusive?: boolean) => FunctionSchema;
+  maxLength: (maxLength: number, exclusive?: boolean) => FunctionSchema;
+  min: (minValue: number, exclusive?: boolean) => FunctionSchema;
+  minLength: (minLength: number, exclusive?: boolean) => FunctionSchema;
   negative: FunctionSchema;
   number: FunctionSchema;
   positive: FunctionSchema;
