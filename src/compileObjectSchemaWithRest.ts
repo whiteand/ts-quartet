@@ -55,6 +55,8 @@ export function compileObjectSchemaWithRest(
   prepareRestId(ctx);
   prepareDefinedProps(ctx);
   ctx.explanations = [];
-  ctx.__propsWithSchemasDict = __propsWithSchemasDict;
+  if (propsWithSchemas.length > 0) {
+    ctx.__propsWithSchemasDict = __propsWithSchemasDict;
+  }
   return ctx;
 }
