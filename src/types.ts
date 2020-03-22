@@ -30,7 +30,7 @@ export type Schema =
   | IObjectSchema
   | IVariantSchema;
 
-type HandleSchemaHandler<T extends Schema, R> = (schema: T) => R;
+export type HandleSchemaHandler<T extends Schema, R> = (schema: T) => R;
 export interface IHandleSchemaHandlers<R> {
   constant: HandleSchemaHandler<ConstantSchema, R>;
   function: HandleSchemaHandler<FunctionSchema, R>;
@@ -58,6 +58,7 @@ export interface IMethods {
   minLength: (minLength: number, exclusive?: boolean) => FunctionSchema;
   negative: FunctionSchema;
   number: FunctionSchema;
+  not: (schema: Schema) => FunctionSchema;
   positive: FunctionSchema;
   rest: string;
   safeInteger: FunctionSchema;

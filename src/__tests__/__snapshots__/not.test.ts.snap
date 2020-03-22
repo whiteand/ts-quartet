@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`not constant 1`] = `
+Object {
+  "_": "function validator(value) {
+    validator.explanations = []
+    return !validator['not-0'](value)
+  }",
+  "explanations": Array [],
+  "not-0": "function (value) { return value === c; }",
+  "not-0.explanations": Array [],
+}
+`;

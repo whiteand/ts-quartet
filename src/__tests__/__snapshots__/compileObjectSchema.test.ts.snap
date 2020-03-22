@@ -54,7 +54,6 @@ Object {
 exports[`compileObjectSchema obj with constant 1`] = `
 Object {
   "_": "function validator(value) {
-    validator.explanations = []
     if (!value) return false
     if (!validator.__validValues.str[value.str]) return false
     if (!validator.__validValues.symb[value.symb]) return false
@@ -115,7 +114,6 @@ Object {
   "__validValues": Object {},
   "explanations": Array [],
   "gender-0": "function validator(value) {
-    validator.explanations = []
     if (validator.__validValuesDict[value] === true) return true
     return false
   }",
@@ -125,7 +123,6 @@ Object {
   },
   "gender-0.explanations": Array [],
   "grade-0": "function validator(value) {
-    validator.explanations = []
     if (value === 1) return true
     if (value === 2) return true
     if (value === 3) return true

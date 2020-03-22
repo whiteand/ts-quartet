@@ -93,7 +93,6 @@ Object {
   }",
   "custom-1.explanations": Array [],
   "custom-1.variant-elem-0": "function validator(value) {
-    validator.explanations = []
     if (value === 1) return true
     if (value === 2) return true
     if (value === 3) return true
@@ -120,7 +119,6 @@ Object {
   "custom-2.explanations": Array [],
   "explanations": Array [],
   "gender-0": "function validator(value) {
-    validator.explanations = []
     if (validator.__validValuesDict[value] === true) return true
     return false
   }",

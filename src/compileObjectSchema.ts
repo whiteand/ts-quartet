@@ -178,10 +178,10 @@ export function compileObjectSchema(
       })
     );
   }
-  bodyCodeLines.unshift(
-    "validator.explanations = []",
-    "if (!value) return false"
-  );
+  bodyCodeLines.unshift("if (!value) return false");
+  if (bodyCodeLines.some(line => line.indexOf("explanations") >= 0)) {
+    bodyCodeLines.unshift("validator.explanations = []");
+  }
   const code = beautify(
     `
     (() => {

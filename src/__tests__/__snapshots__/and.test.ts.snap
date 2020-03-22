@@ -10,7 +10,6 @@ Object {
 exports[`v.compileAnd v.compileAnd({ a: v.number }, { b: v.string}) 1`] = `
 Object {
   "0-0": "function validator(value) {
-    validator.explanations = []
     if (!value) return false
     if (typeof value.a !== 'number') return false
     return true
@@ -18,7 +17,6 @@ Object {
   "0-0.__validValues": Object {},
   "0-0.explanations": Array [],
   "1-0": "function validator(value) {
-    validator.explanations = []
     if (!value) return false
     if (typeof value.b !== 'string') return false
     return true

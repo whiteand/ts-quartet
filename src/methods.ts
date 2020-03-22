@@ -10,6 +10,7 @@ import {
   Prepare
 } from "./types";
 import { beautify } from "./beautify";
+import { compileNot } from "./compileNot";
 
 export const methods: IMethods = {
   and(...schemas: Schema[]) {
@@ -110,6 +111,9 @@ export const methods: IMethods = {
     check: valueId => `typeof ${valueId} === 'number'`,
     not: valueId => `typeof ${valueId} !== 'number'`
   }),
+  not(schema) {
+    return compileNot(this as any, schema);
+  },
   positive: () => ({
     check: valueId => `${valueId} > 0`,
     not: valueId => `${valueId} <= 0`

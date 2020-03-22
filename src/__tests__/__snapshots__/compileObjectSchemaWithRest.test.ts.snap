@@ -201,7 +201,6 @@ Object {
     "zero": true,
   },
   "defined-2": "function validator(value) {
-    validator.explanations = []
     if (!value) return false
     if (!validator.__validValues.str[value.str]) return false
     if (!validator.__validValues.symb[value.symb]) return false
@@ -321,7 +320,6 @@ Object {
   "defined-3.__validValues": Object {},
   "defined-3.explanations": Array [],
   "defined-3.gender-0": "function validator(value) {
-    validator.explanations = []
     if (validator.__validValuesDict[value] === true) return true
     return false
   }",
@@ -331,7 +329,6 @@ Object {
   },
   "defined-3.gender-0.explanations": Array [],
   "defined-3.grade-0": "function validator(value) {
-    validator.explanations = []
     if (value === 1) return true
     if (value === 2) return true
     if (value === 3) return true

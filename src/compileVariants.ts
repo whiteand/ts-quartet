@@ -129,10 +129,10 @@ export function compileVariants(
   const preparations: Prepare[] = [];
   const handleErrors: HandleError[] = [];
   const stringNumbersSymbols: Array<string | number | symbol> = [];
-  const bodyCode = [];
+  const bodyCodeLines = [];
   for (let i = 0; i < variants.length; i++) {
     const variant = variants[i];
-    bodyCode.push(
+    bodyCodeLines.push(
       compileVariantElementToReturnWay(
         c,
         i,
@@ -152,24 +152,30 @@ export function compileVariants(
       dict[el] = true;
       return dict;
     }, {});
-    bodyCode.unshift(
+    bodyCodeLines.unshift(
       `if (validator.__validValuesDict[value] === true) return true`
     );
   }
   if (handleErrors.length > 0) {
-    bodyCode.push(
+    bodyCodeLines.push(
       ...handleErrors.map(handleError => handleError("value", "validator"))
     );
   }
+  const bodyCode = bodyCodeLines
+    .map(e => e.trim())
+    .filter(Boolean)
+    .join("\n");
+
   // tslint:disable-next-line
   const ctx = eval(
     beautify(`(() => {
       function validator(value) {
-        validator.explanations = []
-        ${bodyCode
-          .map(e => e.trim())
-          .filter(Boolean)
-          .join("\n")}
+        ${
+          bodyCode.indexOf("explanations") >= 0
+            ? "validator.explanations = []"
+            : ""
+        }
+        ${bodyCode}
         return false
       }
       return validator
