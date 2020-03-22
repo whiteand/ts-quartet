@@ -3,7 +3,6 @@
 exports[`test regular expression 1`] = `
 Object {
   "_": "function validator(value) {
-    validator.explanations = []
     return validator['tester-0'].test(value)
   }",
   "explanations": Array [],

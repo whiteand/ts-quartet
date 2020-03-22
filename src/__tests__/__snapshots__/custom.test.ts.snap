@@ -3,7 +3,6 @@
 exports[`custom works 1`] = `
 Object {
   "_": "function validator(value) {
-    validator.explanations = []
     return validator['custom-0'](value)
   }",
   "custom-0": "function (n) { return n % 2 === 0; }",

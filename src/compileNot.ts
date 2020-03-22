@@ -25,8 +25,8 @@ export function compileNot(
   return handleSchema({
     constant: defaultHandler,
     function: defaultHandler,
-    variant: defaultHandler,
     object: defaultHandler,
-    objectRest: defaultHandler
+    objectRest: defaultHandler,
+    variant: defaultHandler
   })(schema);
 }

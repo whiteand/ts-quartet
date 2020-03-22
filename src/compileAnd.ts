@@ -121,11 +121,11 @@ export function compileAnd(
   }
 
   const preparations: Prepare[] = [];
-  const bodyCode = [];
+  const bodyCodeLines = [];
   const primitives: any[] = [];
   for (let i = 0; i < schemas.length; i++) {
     const schema = schemas[i];
-    bodyCode.push(
+    bodyCodeLines.push(
       compileAndVariantElementToReturnWay(
         c,
         i,
@@ -144,15 +144,21 @@ export function compileAnd(
     return c(primitives[0]);
   }
 
+  const bodyCode = bodyCodeLines
+    .map(e => e.trim())
+    .filter(Boolean)
+    .join("\n");
+
   // tslint:disable-next-line
   const ctx = eval(
     beautify(`(() => {
       function validator(value) {
-        validator.explanations = []
-        ${bodyCode
-          .map(e => e.trim())
-          .filter(Boolean)
-          .join("\n")}
+        ${
+          bodyCode.indexOf("explanations") >= 0
+            ? "validator.explanations = []"
+            : ""
+        }
+        ${bodyCode}
         return true
       }
       return validator

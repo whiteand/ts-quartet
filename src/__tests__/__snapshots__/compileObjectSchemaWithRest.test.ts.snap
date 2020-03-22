@@ -224,7 +224,6 @@ Object {
   "defined-2.explanations": Array [],
   "explanations": Array [],
   "rest-validator-2": "function validator(value) {
-    validator.explanations = []
     return typeof value === 'string'
   }",
   "rest-validator-2.explanations": Array [],

@@ -3,7 +3,6 @@
 exports[`not constant 1`] = `
 Object {
   "_": "function validator(value) {
-    validator.explanations = []
     return !validator['not-0'](value)
   }",
   "explanations": Array [],

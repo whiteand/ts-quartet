@@ -63,7 +63,6 @@ Object {
 exports[`v.compileAnd v.compileAnd(v.positive, v.number) 1`] = `
 Object {
   "_": "function validator(value) {
-    validator.explanations = []
     if (value <= 0) return false
     if (typeof value !== 'number') return false
     return true
