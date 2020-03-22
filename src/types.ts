@@ -50,7 +50,7 @@ export interface IMethods {
     ((...schemas: Schema[]) => CompilationResult);
   compileArrayOf: (<T = any>(schema: Schema) => TypedCompilationResult<T[]>) &
     ((schema: Schema) => CompilationResult);
-  custom: (check: (value: any) => boolean) => FunctionSchema;
+  custom: (check: (value: any) => boolean, explanation?: any) => FunctionSchema;
   function: FunctionSchema;
   max: (maxValue: number, exclusive?: boolean) => FunctionSchema;
   maxLength: (maxLength: number, exclusive?: boolean) => FunctionSchema;

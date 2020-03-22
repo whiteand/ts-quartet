@@ -1,0 +1,51 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`custom works 1`] = `
+Object {
+  "_": "function validator(value) {
+    validator.explanations = []
+    return validator['custom-0'](value)
+  }",
+  "custom-0": "function (n) { return n % 2 === 0; }",
+  "explanations": Array [],
+}
+`;
+
+exports[`custom works with function explanation 1`] = `
+Object {
+  "_": "function validator(value) {
+    validator.explanations = []
+    if (validator['custom-2'](value)) {
+      return true
+    }
+    validator['explanation-2-value'] = validator['explanation-2'](value)
+    if (validator['explanation-2-value'] !== undefined) {
+      validator.explanations.push(validator['explanation-2-value'])
+    }
+    return false
+  }",
+  "custom-2": "function (n) { return n % 2 === 0; }",
+  "explanation-2": "function (value) {
+            return value > 10 ? value + \\" is not Even\\" : undefined;
+        }",
+  "explanations": Array [],
+}
+`;
+
+exports[`custom works with simple explanation 1`] = `
+Object {
+  "_": "function validator(value) {
+    validator.explanations = []
+    if (validator['custom-1'](value)) {
+      return true
+    }
+    validator.explanations.push(validator['explanation-1'])
+    return false
+  }",
+  "custom-1": "function (n) { return n % 2 === 0; }",
+  "explanation-1": "Is not Even",
+  "explanations": Array [
+    "Is not Even",
+  ],
+}
+`;
