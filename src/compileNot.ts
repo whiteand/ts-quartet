@@ -23,8 +23,50 @@ export function compileNot(
     });
   };
   return handleSchema({
-    constant: defaultHandler,
-    function: defaultHandler,
+    constant: constant => {
+      switch (typeof constant) {
+        case "undefined":
+          return () => ({
+            check: id => `${id} !== undefined`,
+            not: id => `${id} === undefined`
+          });
+        case "object":
+          return () => ({
+            check: id => `${id} !== null`,
+            not: id => `${id} === null`
+          });
+        case "number":
+          return Number.isNaN(constant)
+            ? () => ({
+                check: id => `!Number.isNaN(${id})`,
+                not: id => `Number.isNaN(${id})`
+              })
+            : () => ({
+                check: id => `${id} !== ${JSON.stringify(constant)}`,
+                not: id => `${id} === ${JSON.stringify(constant)}`
+              });
+        default:
+          return () => ({
+            check: id => `${id} !== ${JSON.stringify(constant)}`,
+            not: id => `${id} === ${JSON.stringify(constant)}`
+          });
+      }
+    },
+    function: funcSchema => {
+      const s = funcSchema();
+      if (s.not) {
+        return () => ({
+          check: s.not as any,
+          not: s.check,
+          prepare: s.prepare
+        });
+      }
+      return () => ({
+        check: (id, ctx) => `!(${s.check(id, ctx)})`,
+        not: s.check,
+        prepare: s.prepare
+      });
+    },
     object: defaultHandler,
     objectRest: defaultHandler,
     variant: defaultHandler
