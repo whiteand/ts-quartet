@@ -1,4 +1,4 @@
-import { beautify } from "./beautify";
+import { addTabs } from "./beautify";
 import { handleSchema } from "./handleSchema";
 import { toContext } from "./toContext";
 import {
@@ -46,10 +46,9 @@ function compileForLoopBody(
         ? s.not("elem", "validator")
         : `!(${s.check("elem", "validator")})`;
       return s.handleError
-        ? beautify(`if (${notCheck}) {
-                    ${s.handleError("elem", "validator")}
-                    return false
-                  }`)
+        ? `if (${notCheck}) {\n${addTabs(
+            s.handleError("elem", "validator")
+          )}\n  return false\n}`
         : `if (${notCheck}) return false`;
     },
     object: objectSchema => {
@@ -113,25 +112,18 @@ export function arrayOf<T = any>(
   const preparations: Prepare[] = [];
   const forLoopBody = compileForLoopBody(c, schema, preparations);
 
-  const code = beautify(`
-    (() => {
-        function validator(value) {
-            ${
-              forLoopBody.indexOf("explanations") >= 0
-                ? "validator.explanations = []"
-                : ""
-            }
-            if (!value || !Array.isArray(value)) return false
-            
-            for (let i = 0; i < value.length; i++) {
-                const elem = value[i]
-                ${forLoopBody}
-            }
-            return true
-        }
+  const code = `
+    (() => {function validator(value) {${
+      forLoopBody.indexOf("explanations") >= 0
+        ? "\n  validator.explanations = []"
+        : ""
+    }\n  if (!value || !Array.isArray(value)) return false\n  for (let i = 0; i < value.length; i++) {\n    const elem = value[i]\n${addTabs(
+    forLoopBody,
+    2
+  )}\n  }\n  return true\n}
         return validator
     })()
-  `);
+  `.trim();
 
   // tslint:disable-next-line
   const ctx = eval(code);

@@ -1,7 +1,7 @@
-import { beautify } from "./beautify";
 import { handleSchema } from "./handleSchema";
 import { toContext } from "./toContext";
 import { CompilationResult, Prepare, Schema } from "./types";
+import { addTabs } from "./beautify";
 
 function compileAndVariantElementToReturnWay(
   c: (schema: Schema) => CompilationResult,
@@ -29,9 +29,8 @@ function compileAndVariantElementToReturnWay(
         ? s.not(valueId, ctxId)
         : `!(${s.check(valueId, ctxId)})`;
       return s.handleError
-        ? `if (${notCheck}) {\n  ${s.handleError(
-            valueId,
-            ctxId
+        ? `if (${notCheck}) {\n${addTabs(
+            s.handleError(valueId, ctxId)
           )}\n  return false\n}`
         : `if (${notCheck}) return false`;
     },

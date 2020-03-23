@@ -19,3 +19,22 @@ export function beautify(code: string) {
   }
   return resLines.join("\n");
 }
+
+export function addTabs(code: string, n: number = 1) {
+  if (n === 1) {
+    return code
+      .split("\n")
+      .map(e => "  " + e)
+      .join("\n");
+  }
+  if (n === 2) {
+    return code
+      .split("\n")
+      .map(e => "    " + e)
+      .join("\n");
+  }
+  return code
+    .split("\n")
+    .map(e => "  ".repeat(n) + e)
+    .join("\n");
+}
