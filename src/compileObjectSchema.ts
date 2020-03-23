@@ -190,7 +190,7 @@ export function compileObjectSchema(
     bodyCodeLines.unshift(
       ...withValidValues.map(key => {
         const keyAccessor = getKeyAccessor(key);
-        return `if (!validator.__validValues${keyAccessor}[value${keyAccessor}]) return false`;
+        return `if (validator.__validValues${keyAccessor}[value${keyAccessor}] !== true) return false`;
       })
     );
   }

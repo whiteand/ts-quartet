@@ -17,8 +17,9 @@ describe("compileFunctionSchemaResult", () => {
     expect(getDescription(validator)).toMatchInlineSnapshot(`
       Object {
         "_": "function validator(value) {
-          return value === 42
-        }",
+              
+              return value === 42
+            }",
         "explanations": Array [],
       }
     `);
@@ -35,8 +36,9 @@ describe("compileFunctionSchemaResult", () => {
       Object {
         "N": 42,
         "_": "function validator(value) {
-          return value === validator.N
-        }",
+              
+              return value === validator.N
+            }",
         "explanations": Array [],
       }
     `);
@@ -54,25 +56,25 @@ describe("compileFunctionSchemaResult", () => {
     const validator = compileFunctionSchemaResult(funcSchema());
     expect(validator(41)).toBe(false);
     expect(validator.explanations).toMatchInlineSnapshot(`
-                      Array [
-                        "41 is not a 42",
-                      ]
-                `);
+                            Array [
+                              "41 is not a 42",
+                            ]
+                    `);
     expect(validator(42)).toBe(true);
     expect(validator.explanations).toEqual([]);
     expect(getDescription(validator)).toMatchInlineSnapshot(`
-            Object {
-              "N": 42,
-              "_": "function validator(value) {
-                validator.explanations = []
-                if (value === validator.N) {
-                  return true
-                }
-                validator.explanations.push(\`\${JSON.stringify(value)} is not a 42\`)
-                return false
-              }",
-              "explanations": Array [],
+      Object {
+        "N": 42,
+        "_": "function validator(value) {
+            validator.explanations = []
+            if (value === validator.N) {
+              return true
             }
-        `);
+            validator.explanations.push(\`\${JSON.stringify(value)} is not a 42\`)
+            return false
+          }",
+        "explanations": Array [],
+      }
+    `);
   });
 });

@@ -239,4 +239,9 @@ describe("compileObjectSchema", () => {
       `Array []`
     );
   });
+  test("Obj: toString string constant value", () => {
+    const checkA = v({ a: "A" });
+    snapshot(checkA);
+    tables(checkA, [{ a: "A" }], [{}, null, false, { a: "toString" }]);
+  });
 });

@@ -3,13 +3,15 @@
 exports[`arrayOf constant schema 1`] = `
 Object {
   "_": "function validator(value) {
-    if (!value || !Array.isArray(value)) return false
-    for (let i = 0; i < value.length; i++) {
-      const elem = value[i]
-      if (elem !== 1) return false
-    }
-    return true
-  }",
+            
+            if (!value || !Array.isArray(value)) return false
+            
+            for (let i = 0; i < value.length; i++) {
+                const elem = value[i]
+                if (elem !== 1) return false
+            }
+            return true
+        }",
   "explanations": Array [],
 }
 `;
@@ -17,13 +19,15 @@ Object {
 exports[`arrayOf constant schema 2`] = `
 Object {
   "_": "function validator(value) {
-    if (!value || !Array.isArray(value)) return false
-    for (let i = 0; i < value.length; i++) {
-      const elem = value[i]
-      if (elem !== \\"1\\") return false
-    }
-    return true
-  }",
+            
+            if (!value || !Array.isArray(value)) return false
+            
+            for (let i = 0; i < value.length; i++) {
+                const elem = value[i]
+                if (elem !== \\"1\\") return false
+            }
+            return true
+        }",
   "explanations": Array [],
 }
 `;
@@ -31,13 +35,15 @@ Object {
 exports[`arrayOf constant schema 3`] = `
 Object {
   "_": "function validator(value) {
-    if (!value || !Array.isArray(value)) return false
-    for (let i = 0; i < value.length; i++) {
-      const elem = value[i]
-      if (elem !== 'true') return false
-    }
-    return true
-  }",
+            
+            if (!value || !Array.isArray(value)) return false
+            
+            for (let i = 0; i < value.length; i++) {
+                const elem = value[i]
+                if (elem !== 'true') return false
+            }
+            return true
+        }",
   "explanations": Array [],
 }
 `;
@@ -45,13 +51,15 @@ Object {
 exports[`arrayOf constant schema 4`] = `
 Object {
   "_": "function validator(value) {
-    if (!value || !Array.isArray(value)) return false
-    for (let i = 0; i < value.length; i++) {
-      const elem = value[i]
-      if (elem !== validator['symbol-element-0']) return false
-    }
-    return true
-  }",
+            
+            if (!value || !Array.isArray(value)) return false
+            
+            for (let i = 0; i < value.length; i++) {
+                const elem = value[i]
+                if (elem !== validator['symbol-element-0']) return false
+            }
+            return true
+        }",
   "explanations": Array [],
   "symbol-element-0": Symbol(name),
 }
@@ -60,68 +68,73 @@ Object {
 exports[`arrayOf full: without explanations 1`] = `
 Object {
   "_": "function validator(value) {
-    validator.explanations = []
-    if (!value) return false
-    if (!validator['custom-0'](value.age)) return false
-    if (!validator['gender-0'](value.gender)) {
-      validator.explanations.push(...validator['gender-0'].explanations)
-      return false
-    }
-    if (!validator['custom-1'](value.grades)) return false
-    if (typeof value.name !== 'string') return false
-    if (!validator['custom-2'](value.friends)) return false
-    return true
-  }",
-  "__validValues": Object {},
+        validator.explanations = []
+if (!value) return false
+if (!validator['custom-0'](value.age)) return false
+if (!validator['gender-0'](value.gender)) {
+              validator.explanations.push(...validator['gender-0'].explanations)
+              return false
+            }
+if (!validator['custom-1'](value.grades)) return false
+if (typeof value.name !== 'string') return false
+if (!validator['custom-2'](value.friends)) return false
+        return true
+      }",
   "custom-0": "function validator(value) {
-    if (value <= 0) return false
-    if (!Number.isSafeInteger(value)) return false
-    return true
-  }",
+        
+        if (value <= 0) return false
+if (!Number.isSafeInteger(value)) return false
+        return true
+      }",
   "custom-0.explanations": Array [],
   "custom-1": "function validator(value) {
-    validator.explanations = []
-    if (!value || !Array.isArray(value)) return false
-    for (let i = 0; i < value.length; i++) {
-      const elem = value[i]
-      if (!validator['variant-elem-0'](elem)) {
-        validator.explanations.push(...validator['variant-elem-0'].explanations)
-        return false
-      }
-    }
-    return true
-  }",
+            validator.explanations = []
+            if (!value || !Array.isArray(value)) return false
+            
+            for (let i = 0; i < value.length; i++) {
+                const elem = value[i]
+                if (!validator['variant-elem-0'](elem)) {
+                    validator.explanations.push(...validator['variant-elem-0'].explanations)
+                    return false
+                  }
+            }
+            return true
+        }",
   "custom-1.explanations": Array [],
   "custom-1.variant-elem-0": "function validator(value) {
-    if (value === 1) return true
-    if (value === 2) return true
-    if (value === 3) return true
-    if (value === 4) return true
-    if (value === 5) return true
-    if (value === 6) return true
-    if (value === 7) return true
-    if (value === 8) return true
-    if (value === 9) return true
-    if (value === 10) return true
-    if (value === 11) return true
-    if (value === 12) return true
-    return false
-  }",
+        
+        if (value === 1) return true
+if (value === 2) return true
+if (value === 3) return true
+if (value === 4) return true
+if (value === 5) return true
+if (value === 6) return true
+if (value === 7) return true
+if (value === 8) return true
+if (value === 9) return true
+if (value === 10) return true
+if (value === 11) return true
+if (value === 12) return true
+        return false
+      }",
   "custom-1.variant-elem-0.explanations": Array [],
   "custom-2": "function validator(value) {
-    if (!value || !Array.isArray(value)) return false
-    for (let i = 0; i < value.length; i++) {
-      const elem = value[i]
-      if (typeof elem !== 'string') return false
-    }
-    return true
-  }",
+            
+            if (!value || !Array.isArray(value)) return false
+            
+            for (let i = 0; i < value.length; i++) {
+                const elem = value[i]
+                if (typeof elem !== 'string') return false
+            }
+            return true
+        }",
   "custom-2.explanations": Array [],
   "explanations": Array [],
   "gender-0": "function validator(value) {
-    if (validator.__validValuesDict[value] === true) return true
-    return false
-  }",
+        
+        if (validator.__validValuesDict[value] === true) return true
+        return false
+      }",
   "gender-0.__validValuesDict": Object {
     "female": true,
     "male": true,
@@ -133,17 +146,18 @@ Object {
 exports[`arrayOf function 1`] = `
 Object {
   "_": "function validator(value) {
-    validator.explanations = []
-    if (!value || !Array.isArray(value)) return false
-    for (let i = 0; i < value.length; i++) {
-      const elem = value[i]
-      if (elem !== \\"A\\") {
-        validator.explanations.push(\\"Is not A\\")
-        return false
-      }
-    }
-    return true
-  }",
+            validator.explanations = []
+            if (!value || !Array.isArray(value)) return false
+            
+            for (let i = 0; i < value.length; i++) {
+                const elem = value[i]
+                if (elem !== \\"A\\") {
+                    validator.explanations.push(\\"Is not A\\")
+                    return false
+                  }
+            }
+            return true
+        }",
   "explanations": Array [],
 }
 `;
@@ -151,13 +165,15 @@ Object {
 exports[`arrayOf works 1`] = `
 Object {
   "_": "function validator(value) {
-    if (!value || !Array.isArray(value)) return false
-    for (let i = 0; i < value.length; i++) {
-      const elem = value[i]
-      if (typeof elem !== 'number') return false
-    }
-    return true
-  }",
+            
+            if (!value || !Array.isArray(value)) return false
+            
+            for (let i = 0; i < value.length; i++) {
+                const elem = value[i]
+                if (typeof elem !== 'number') return false
+            }
+            return true
+        }",
   "explanations": Array [],
 }
 `;
