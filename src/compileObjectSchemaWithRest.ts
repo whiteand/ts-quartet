@@ -1,4 +1,3 @@
-import { beautify } from "./beautify";
 import { methods } from "./methods";
 import { toContext } from "./toContext";
 import { CompilationResult, IObjectSchema, Schema } from "./types";
@@ -21,36 +20,20 @@ export function compileObjectSchemaWithRest(
   }, {});
   // tslint:disable-next-line
   const ctx = eval(
-    beautify(`
+    `
       (()=>{
-        function validator(value) {
-          validator.explanations = []
-          ${
-            propsWithSchemas.length > 0
-              ? `if (!validator['${definedProps}'](value)) {
-            validator.explanations.push(...validator['${definedProps}'].explanations)
-            return false
-          }`
-              : `if (!value) return false`
-          }
-          const keys = Object.keys(value)
-          for (let i = 0; i < keys.length; i++) {
-            const key = keys[i]
-            ${
-              propsWithSchemas.length > 0
-                ? `if (validator.__propsWithSchemasDict[key] === true) continue`
-                : ``
-            }
-            if (!validator['${restId}'](value[key])) {
-              validator.explanations.push(...validator['${restId}'].explanations)
-              return false
-            }
-          }
-          return true
-        }
+        function validator(value) {\n  validator.explanations = []${
+          propsWithSchemas.length > 0
+            ? `\n  if (!validator['${definedProps}'](value)) {\n    validator.explanations.push(...validator['${definedProps}'].explanations)\n    return false\n  }`
+            : `\n  if (!value) return false`
+        }\n  const keys = Object.keys(value)\n  for (let i = 0; i < keys.length; i++) {\n    const key = keys[i]${
+      propsWithSchemas.length > 0
+        ? `\n    if (validator.__propsWithSchemasDict[key] === true) continue`
+        : ``
+    }\n    if (!validator['${restId}'](value[key])) {\n      validator.explanations.push(...validator['${restId}'].explanations)\n      return false\n    }\n  }\n  return true\n}
         return validator
       })()
-    `)
+    `
   );
   prepareRestId(ctx);
   prepareDefinedProps(ctx);

@@ -3,18 +3,18 @@
 exports[`compileObjectSchemaWithRest empty obj 4`] = `
 Object {
   "_": "function validator(value) {
-    validator.explanations = []
-    if (!value) return false
-    const keys = Object.keys(value)
-    for (let i = 0; i < keys.length; i++) {
-      const key = keys[i]
-      if (!validator['rest-validator-0'](value[key])) {
-        validator.explanations.push(...validator['rest-validator-0'].explanations)
-        return false
-      }
+  validator.explanations = []
+  if (!value) return false
+  const keys = Object.keys(value)
+  for (let i = 0; i < keys.length; i++) {
+    const key = keys[i]
+    if (!validator['rest-validator-0'](value[key])) {
+      validator.explanations.push(...validator['rest-validator-0'].explanations)
+      return false
     }
-    return true
-  }",
+  }
+  return true
+}",
   "defined-0": "function (value) { return value; }",
   "defined-0.explanations": Array [],
   "explanations": Array [
@@ -37,22 +37,22 @@ Object {
 exports[`compileObjectSchemaWithRest obj + obj 1`] = `
 Object {
   "_": "function validator(value) {
-    validator.explanations = []
-    if (!validator['defined-6'](value)) {
-      validator.explanations.push(...validator['defined-6'].explanations)
+  validator.explanations = []
+  if (!validator['defined-6'](value)) {
+    validator.explanations.push(...validator['defined-6'].explanations)
+    return false
+  }
+  const keys = Object.keys(value)
+  for (let i = 0; i < keys.length; i++) {
+    const key = keys[i]
+    if (validator.__propsWithSchemasDict[key] === true) continue
+    if (!validator['rest-validator-4'](value[key])) {
+      validator.explanations.push(...validator['rest-validator-4'].explanations)
       return false
     }
-    const keys = Object.keys(value)
-    for (let i = 0; i < keys.length; i++) {
-      const key = keys[i]
-      if (validator.__propsWithSchemasDict[key] === true) continue
-      if (!validator['rest-validator-4'](value[key])) {
-        validator.explanations.push(...validator['rest-validator-4'].explanations)
-        return false
-      }
-    }
-    return true
-  }",
+  }
+  return true
+}",
   "__propsWithSchemasDict": Object {
     "deep": true,
   },
@@ -66,22 +66,22 @@ Object {
   return true
 }",
   "defined-6.deep-1": "function validator(value) {
-    validator.explanations = []
-    if (!validator['defined-5'](value)) {
-      validator.explanations.push(...validator['defined-5'].explanations)
+  validator.explanations = []
+  if (!validator['defined-5'](value)) {
+    validator.explanations.push(...validator['defined-5'].explanations)
+    return false
+  }
+  const keys = Object.keys(value)
+  for (let i = 0; i < keys.length; i++) {
+    const key = keys[i]
+    if (validator.__propsWithSchemasDict[key] === true) continue
+    if (!validator['rest-validator-5'](value[key])) {
+      validator.explanations.push(...validator['rest-validator-5'].explanations)
       return false
     }
-    const keys = Object.keys(value)
-    for (let i = 0; i < keys.length; i++) {
-      const key = keys[i]
-      if (validator.__propsWithSchemasDict[key] === true) continue
-      if (!validator['rest-validator-5'](value[key])) {
-        validator.explanations.push(...validator['rest-validator-5'].explanations)
-        return false
-      }
-    }
-    return true
-  }",
+  }
+  return true
+}",
   "defined-6.deep-1.__propsWithSchemasDict": Object {
     "deep": true,
   },
@@ -95,22 +95,22 @@ Object {
   return true
 }",
   "defined-6.deep-1.defined-5.deep-0": "function validator(value) {
-    validator.explanations = []
-    if (!validator['defined-4'](value)) {
-      validator.explanations.push(...validator['defined-4'].explanations)
+  validator.explanations = []
+  if (!validator['defined-4'](value)) {
+    validator.explanations.push(...validator['defined-4'].explanations)
+    return false
+  }
+  const keys = Object.keys(value)
+  for (let i = 0; i < keys.length; i++) {
+    const key = keys[i]
+    if (validator.__propsWithSchemasDict[key] === true) continue
+    if (!validator['rest-validator-6'](value[key])) {
+      validator.explanations.push(...validator['rest-validator-6'].explanations)
       return false
     }
-    const keys = Object.keys(value)
-    for (let i = 0; i < keys.length; i++) {
-      const key = keys[i]
-      if (validator.__propsWithSchemasDict[key] === true) continue
-      if (!validator['rest-validator-6'](value[key])) {
-        validator.explanations.push(...validator['rest-validator-6'].explanations)
-        return false
-      }
-    }
-    return true
-  }",
+  }
+  return true
+}",
   "defined-6.deep-1.defined-5.deep-0.__propsWithSchemasDict": Object {
     "space": true,
   },
@@ -155,22 +155,22 @@ Object {
 exports[`compileObjectSchemaWithRest obj with constant 1`] = `
 Object {
   "_": "function validator(value) {
-    validator.explanations = []
-    if (!validator['defined-2'](value)) {
-      validator.explanations.push(...validator['defined-2'].explanations)
+  validator.explanations = []
+  if (!validator['defined-2'](value)) {
+    validator.explanations.push(...validator['defined-2'].explanations)
+    return false
+  }
+  const keys = Object.keys(value)
+  for (let i = 0; i < keys.length; i++) {
+    const key = keys[i]
+    if (validator.__propsWithSchemasDict[key] === true) continue
+    if (!validator['rest-validator-2'](value[key])) {
+      validator.explanations.push(...validator['rest-validator-2'].explanations)
       return false
     }
-    const keys = Object.keys(value)
-    for (let i = 0; i < keys.length; i++) {
-      const key = keys[i]
-      if (validator.__propsWithSchemasDict[key] === true) continue
-      if (!validator['rest-validator-2'](value[key])) {
-        validator.explanations.push(...validator['rest-validator-2'].explanations)
-        return false
-      }
-    }
-    return true
-  }",
+  }
+  return true
+}",
   "__propsWithSchemasDict": Object {
     "f": true,
     "id": true,
@@ -215,22 +215,22 @@ Object {
 exports[`compileObjectSchemaWithRest obj with func 1`] = `
 Object {
   "_": "function validator(value) {
-    validator.explanations = []
-    if (!validator['defined-1'](value)) {
-      validator.explanations.push(...validator['defined-1'].explanations)
+  validator.explanations = []
+  if (!validator['defined-1'](value)) {
+    validator.explanations.push(...validator['defined-1'].explanations)
+    return false
+  }
+  const keys = Object.keys(value)
+  for (let i = 0; i < keys.length; i++) {
+    const key = keys[i]
+    if (validator.__propsWithSchemasDict[key] === true) continue
+    if (!validator['rest-validator-1'](value[key])) {
+      validator.explanations.push(...validator['rest-validator-1'].explanations)
       return false
     }
-    const keys = Object.keys(value)
-    for (let i = 0; i < keys.length; i++) {
-      const key = keys[i]
-      if (validator.__propsWithSchemasDict[key] === true) continue
-      if (!validator['rest-validator-1'](value[key])) {
-        validator.explanations.push(...validator['rest-validator-1'].explanations)
-        return false
-      }
-    }
-    return true
-  }",
+  }
+  return true
+}",
   "__propsWithSchemasDict": Object {
     "id": true,
   },
@@ -264,22 +264,22 @@ Object {
 exports[`compileObjectSchemaWithRest obj with variants 2`] = `
 Object {
   "_": "function validator(value) {
-    validator.explanations = []
-    if (!validator['defined-3'](value)) {
-      validator.explanations.push(...validator['defined-3'].explanations)
+  validator.explanations = []
+  if (!validator['defined-3'](value)) {
+    validator.explanations.push(...validator['defined-3'].explanations)
+    return false
+  }
+  const keys = Object.keys(value)
+  for (let i = 0; i < keys.length; i++) {
+    const key = keys[i]
+    if (validator.__propsWithSchemasDict[key] === true) continue
+    if (!validator['rest-validator-3'](value[key])) {
+      validator.explanations.push(...validator['rest-validator-3'].explanations)
       return false
     }
-    const keys = Object.keys(value)
-    for (let i = 0; i < keys.length; i++) {
-      const key = keys[i]
-      if (validator.__propsWithSchemasDict[key] === true) continue
-      if (!validator['rest-validator-3'](value[key])) {
-        validator.explanations.push(...validator['rest-validator-3'].explanations)
-        return false
-      }
-    }
-    return true
-  }",
+  }
+  return true
+}",
   "__propsWithSchemasDict": Object {
     "gender": true,
     "grade": true,
@@ -344,22 +344,22 @@ Object {
 exports[`compileObjectSchemaWithRest obj: variant explanations 4`] = `
 Object {
   "_": "function validator(value) {
-    validator.explanations = []
-    if (!validator['defined-7'](value)) {
-      validator.explanations.push(...validator['defined-7'].explanations)
+  validator.explanations = []
+  if (!validator['defined-7'](value)) {
+    validator.explanations.push(...validator['defined-7'].explanations)
+    return false
+  }
+  const keys = Object.keys(value)
+  for (let i = 0; i < keys.length; i++) {
+    const key = keys[i]
+    if (validator.__propsWithSchemasDict[key] === true) continue
+    if (!validator['rest-validator-7'](value[key])) {
+      validator.explanations.push(...validator['rest-validator-7'].explanations)
       return false
     }
-    const keys = Object.keys(value)
-    for (let i = 0; i < keys.length; i++) {
-      const key = keys[i]
-      if (validator.__propsWithSchemasDict[key] === true) continue
-      if (!validator['rest-validator-7'](value[key])) {
-        validator.explanations.push(...validator['rest-validator-7'].explanations)
-        return false
-      }
-    }
-    return true
-  }",
+  }
+  return true
+}",
   "__propsWithSchemasDict": Object {
     "var": true,
   },
