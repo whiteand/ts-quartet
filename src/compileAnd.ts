@@ -29,10 +29,10 @@ function compileAndVariantElementToReturnWay(
         ? s.not(valueId, ctxId)
         : `!(${s.check(valueId, ctxId)})`;
       return s.handleError
-        ? beautify(`if (${notCheck}) {
-                  ${s.handleError(valueId, ctxId)}
-                  return false
-                }`)
+        ? `if (${notCheck}) {\n  ${s.handleError(
+            valueId,
+            ctxId
+          )}\n  return false\n}`
         : `if (${notCheck}) return false`;
     },
     object: objectSchema => {
@@ -145,25 +145,23 @@ export function compileAnd(
   }
 
   const bodyCode = bodyCodeLines
-    .map(e => e.trim())
+    .map(e =>
+      e
+        .trim()
+        .split("\n")
+        .map(e => "  " + e)
+        .join("\n")
+    )
     .filter(Boolean)
     .join("\n");
+  const code = `(() => {\nfunction validator(value) {\n${
+    bodyCode.indexOf("explanations") >= 0 ? "  validator.explanations = []" : ""
+  }\n${bodyCode}\n  return true\n}
+    return validator
+  })()`;
 
   // tslint:disable-next-line
-  const ctx = eval(
-    beautify(`(() => {
-      function validator(value) {
-        ${
-          bodyCode.indexOf("explanations") >= 0
-            ? "validator.explanations = []"
-            : ""
-        }
-        ${bodyCode}
-        return true
-      }
-      return validator
-    })()`)
-  );
+  const ctx = eval(code);
   for (const prepare of preparations) {
     prepare(ctx);
   }

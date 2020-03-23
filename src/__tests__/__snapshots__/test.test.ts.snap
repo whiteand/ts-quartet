@@ -3,9 +3,8 @@
 exports[`test regular expression 1`] = `
 Object {
   "_": "function validator(value) {
-        
-        return validator['tester-0'].test(value)
-      }",
+    return validator['tester-0'].test(value)
+  }",
   "explanations": Array [],
   "tester-0": /\\^\\[ \\.,A-Z\\]\\*\\$/,
 }

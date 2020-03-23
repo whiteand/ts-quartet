@@ -1,5 +1,4 @@
 export function beautify(code: string) {
-  return code;
   const lines = code.split("\n");
   const resLines = [];
   let tabs = "";

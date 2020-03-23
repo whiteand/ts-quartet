@@ -13,16 +13,14 @@ describe("beautify", () => {
         }
       `;
     expect(beautify(code)).toMatchInlineSnapshot(`
-      "
-              const a = 1
-              for (let i = 0; i < a; i++) {
-              if (i % 2 === 0) {
-              while (true) {
-              break;
-              }
-              }
-              }
-            "
+      "const a = 1
+      for (let i = 0; i < a; i++) {
+        if (i % 2 === 0) {
+          while (true) {
+            break;
+          }
+        }
+      }"
     `);
   });
 });
