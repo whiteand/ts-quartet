@@ -21,13 +21,13 @@ Object {
     "Is not A",
   ],
   "rest-validator-0": "function validator(value) {
-    validator.explanations = []
-    if (value === \\"A\\") {
-      return true
-    }
-    validator.explanations.push(\\"Is not A\\")
-    return false
-  }",
+  validator.explanations = []
+  if (value === \\"A\\") {
+    return true
+  }
+  validator.explanations.push(\\"Is not A\\")
+  return false
+}",
   "rest-validator-0.explanations": Array [
     "Is not A",
   ],
@@ -126,24 +126,24 @@ Object {
   "defined-6.deep-1.defined-5.deep-0.defined-4.explanations": Array [],
   "defined-6.deep-1.defined-5.deep-0.explanations": Array [],
   "defined-6.deep-1.defined-5.deep-0.rest-validator-6": "function validator(value) {
-    validator.explanations = []
-    if (value === \\"A\\") {
-      return true
-    }
-    validator.explanations.push(\\"Is not A\\")
-    return false
-  }",
+  validator.explanations = []
+  if (value === \\"A\\") {
+    return true
+  }
+  validator.explanations.push(\\"Is not A\\")
+  return false
+}",
   "defined-6.deep-1.defined-5.deep-0.rest-validator-6.explanations": Array [],
   "defined-6.deep-1.defined-5.explanations": Array [],
   "defined-6.deep-1.explanations": Array [],
   "defined-6.deep-1.rest-validator-5": "function validator(value) {
-    validator.explanations = []
-    if (value === \\"B\\") {
-      return true
-    }
-    validator.explanations.push(\\"Is not B\\")
-    return false
-  }",
+  validator.explanations = []
+  if (value === \\"B\\") {
+    return true
+  }
+  validator.explanations.push(\\"Is not B\\")
+  return false
+}",
   "defined-6.deep-1.rest-validator-5.explanations": Array [],
   "defined-6.explanations": Array [],
   "explanations": Array [],
@@ -206,8 +206,8 @@ Object {
   "defined-2.explanations": Array [],
   "explanations": Array [],
   "rest-validator-2": "function validator(value) {
-    return typeof value === 'string'
-  }",
+  return typeof value === 'string'
+}",
   "rest-validator-2.explanations": Array [],
 }
 `;
@@ -248,13 +248,13 @@ Object {
     "Is not A",
   ],
   "rest-validator-1": "function validator(value) {
-    validator.explanations = []
-    if (value === \\"A\\") {
-      return true
-    }
-    validator.explanations.push(\\"Is not A\\")
-    return false
-  }",
+  validator.explanations = []
+  if (value === \\"A\\") {
+    return true
+  }
+  validator.explanations.push(\\"Is not A\\")
+  return false
+}",
   "rest-validator-1.explanations": Array [
     "Is not A",
   ],
@@ -386,13 +386,13 @@ Object {
     "Is not C",
   ],
   "rest-validator-7": "function validator(value) {
-    validator.explanations = []
-    if (value === \\"C\\") {
-      return true
-    }
-    validator.explanations.push(\\"Is not C\\")
-    return false
-  }",
+  validator.explanations = []
+  if (value === \\"C\\") {
+    return true
+  }
+  validator.explanations.push(\\"Is not C\\")
+  return false
+}",
   "rest-validator-7.explanations": Array [
     "Is not C",
   ],

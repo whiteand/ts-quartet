@@ -1,4 +1,4 @@
-import { beautify } from "./beautify";
+import { addTabs } from "./beautify";
 import { IFunctionSchemaResult } from "./types";
 
 export function compileFunctionSchemaResult(s: IFunctionSchemaResult) {
@@ -9,32 +9,22 @@ export function compileFunctionSchemaResult(s: IFunctionSchemaResult) {
     const clearExplanations =
       checkCode.indexOf("explanations") >= 0 ||
       handleCode.indexOf("explanations") >= 0
-        ? "validator.explanations = []"
-        : "validator.explanations = []";
-    code = beautify(`(() => {
-    function validator(value) {
-      ${clearExplanations}
-      if (${checkCode}) {
-        return true
-      }
-      ${handleCode}
-      return false
-    }
+        ? "\n  validator.explanations = []"
+        : "";
+    code = `(() => {function validator(value) {${clearExplanations}\n  if (${checkCode}) {\n    return true\n  }\n${addTabs(
+      handleCode
+    )}\n  return false\n}
     return validator
-  })()`);
+  })()`;
   } else {
     const innerCode = s.check("value", "validator");
-    code = beautify(`(() => {
-      function validator(value) {
-        ${
-          innerCode.indexOf("explanations") >= 0
-            ? "validator.explanations = []"
-            : ""
-        }
-        return ${innerCode}
-      }
+    code = `(() => {function validator(value) {${
+      innerCode.indexOf("explanations") >= 0
+        ? "\n  validator.explanations = []"
+        : ""
+    }\n  return ${innerCode}\n}
       return validator
-    })()`);
+    })()`;
   }
   // tslint:disable-next-line
   const ctx = eval(code);

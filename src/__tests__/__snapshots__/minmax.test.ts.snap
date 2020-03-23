@@ -3,8 +3,8 @@
 exports[`max exclusive 1`] = `
 Object {
   "_": "function validator(value) {
-    return value < 5
-  }",
+  return value < 5
+}",
   "explanations": Array [],
 }
 `;
@@ -12,8 +12,8 @@ Object {
 exports[`max inclusive 1`] = `
 Object {
   "_": "function validator(value) {
-    return value <= 5
-  }",
+  return value <= 5
+}",
   "explanations": Array [],
 }
 `;
@@ -21,8 +21,8 @@ Object {
 exports[`maxLength exclusive 1`] = `
 Object {
   "_": "function validator(value) {
-    return value && value.length < 5
-  }",
+  return value && value.length < 5
+}",
   "explanations": Array [],
 }
 `;
@@ -30,8 +30,8 @@ Object {
 exports[`maxLength inclusive 1`] = `
 Object {
   "_": "function validator(value) {
-    return value && value.length <= 5
-  }",
+  return value && value.length <= 5
+}",
   "explanations": Array [],
 }
 `;
@@ -39,8 +39,8 @@ Object {
 exports[`min exclusive 1`] = `
 Object {
   "_": "function validator(value) {
-    return value > 5
-  }",
+  return value > 5
+}",
   "explanations": Array [],
 }
 `;
@@ -48,8 +48,8 @@ Object {
 exports[`min inclusive 1`] = `
 Object {
   "_": "function validator(value) {
-    return value >= 5
-  }",
+  return value >= 5
+}",
   "explanations": Array [],
 }
 `;
@@ -57,8 +57,8 @@ Object {
 exports[`minLength exclusive 1`] = `
 Object {
   "_": "function validator(value) {
-    return value && value.length > 5
-  }",
+  return value && value.length > 5
+}",
   "explanations": Array [],
 }
 `;
@@ -66,8 +66,8 @@ Object {
 exports[`minLength inclusive 1`] = `
 Object {
   "_": "function validator(value) {
-    return value && value.length >= 5
-  }",
+  return value && value.length >= 5
+}",
   "explanations": Array [],
 }
 `;
