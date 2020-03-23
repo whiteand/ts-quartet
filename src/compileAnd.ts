@@ -1,7 +1,7 @@
+import { addTabs } from "./addTabs";
 import { handleSchema } from "./handleSchema";
 import { toContext } from "./toContext";
 import { CompilationResult, Prepare, Schema } from "./types";
-import { addTabs } from "./addTabs";
 
 function compileAndVariantElementToReturnWay(
   c: (schema: Schema) => CompilationResult,
@@ -144,11 +144,11 @@ export function compileAnd(
   }
 
   const bodyCode = bodyCodeLines
-    .map(e =>
-      e
+    .map(codePart =>
+      codePart
         .trim()
         .split("\n")
-        .map(e => "  " + e)
+        .map(line => "  " + line)
         .join("\n")
     )
     .filter(Boolean)

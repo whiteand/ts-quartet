@@ -1,10 +1,10 @@
 import { handleSchema } from "./handleSchema";
 import { toContext } from "./toContext";
 import {
-  Schema,
   CompilationResult,
+  FunctionSchema,
   HandleSchemaHandler,
-  FunctionSchema
+  Schema
 } from "./types";
 
 export function compileNot(
@@ -12,9 +12,9 @@ export function compileNot(
   schema: Schema
 ) {
   const defaultHandler: HandleSchemaHandler<Schema, FunctionSchema> = (
-    schema: Schema
+    schemaToBeReverted: Schema
   ) => {
-    const compiled = c(schema);
+    const compiled = c(schemaToBeReverted);
     const [notId, prepare] = toContext("not", compiled);
     return () => ({
       check: (valueId, ctxId) => `!${ctxId}['${notId}'](${valueId})`,

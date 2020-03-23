@@ -54,27 +54,28 @@ function compilePropValidationWithoutRest(
       const keys = Object.keys(objectSchema);
       const codeLines = [`if (!${valueId}) return false`];
       const important: string[] = [];
+      // tslint:disable-next-line
       for (let i = 0; i < keys.length; i++) {
-        const key = keys[i];
-        const keyAccessor = getKeyAccessor(key);
+        const innerKey = keys[i];
+        const innerKeyAccessor = getKeyAccessor(innerKey);
         const keyValidValues: Array<string | symbol> = [];
-        const keyId = valueId + keyAccessor;
+        const innerKeyId = valueId + innerKeyAccessor;
         const code = compilePropValidationWithoutRest(
           c,
-          key,
-          keyId,
+          innerKey,
+          innerKeyId,
           ctxId,
-          objectSchema[key],
+          objectSchema[innerKey],
           preparations,
           keyValidValues
         );
 
         if (keyValidValues.length > 0) {
           for (const valid of keyValidValues) {
-            const [keyConstantId, prepare] = toContext(keyId, valid);
+            const [keyConstantId, prepare] = toContext(innerKeyId, valid);
             preparations.push(prepare);
             important.push(
-              `if (${keyId} !== ${ctxId}['${keyConstantId}']) return false`
+              `if (${innerKeyId} !== ${ctxId}['${keyConstantId}']) return false`
             );
           }
         }

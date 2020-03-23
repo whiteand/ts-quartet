@@ -1,15 +1,15 @@
 import { compileAnd } from "./compileAnd";
 import { arrayOf } from "./compileArrayOf";
+import { compileNot } from "./compileNot";
 import { toContext } from "./toContext";
 import {
-  IMethods,
-  Schema,
-  TypedCompilationResult,
-  ITest,
   HandleError,
-  Prepare
+  IMethods,
+  ITest,
+  Prepare,
+  Schema,
+  TypedCompilationResult
 } from "./types";
-import { compileNot } from "./compileNot";
 
 export const methods: IMethods = {
   and(...schemas: Schema[]) {
@@ -36,7 +36,7 @@ export const methods: IMethods = {
     const preparations: Prepare[] = [];
     const [checkId, prepare] = toContext("custom", check);
     preparations.push(prepare);
-    let handleError: HandleError | undefined = undefined;
+    let handleError: HandleError | undefined;
     const [explanationId, prepareExplanation] = toContext(
       "explanation",
       explanation
@@ -47,16 +47,16 @@ export const methods: IMethods = {
         typeof explanation === "function"
           ? (id, ctxId) =>
               `${ctxId}['${explanationId}-value'] = ${ctxId}['${explanationId}'](${id})\nif (${ctxId}['${explanationId}-value'] !== undefined) {\n  ${ctxId}.explanations.push(${ctxId}['${explanationId}-value'])\n}`
-          : (_id, ctxId) =>
+          : (id, ctxId) =>
               `${ctxId}.explanations.push(${ctxId}['${explanationId}'])`;
     }
     return {
       check: (id: any, ctx: any) => `${ctx}['${checkId}'](${id})`,
-      not: (id: any, ctx: any) => `!${ctx}['${checkId}'](${id})`,
       handleError,
+      not: (id: any, ctx: any) => `!${ctx}['${checkId}'](${id})`,
       prepare: ctx => {
-        for (const prepare of preparations) {
-          prepare(ctx);
+        for (const partialPrepare of preparations) {
+          partialPrepare(ctx);
         }
       }
     };
