@@ -8,19 +8,14 @@ Object {
   const keys = Object.keys(value)
   for (let i = 0; i < keys.length; i++) {
     const key = keys[i]
-    if (!validator['rest-validator-0'](value[key])) {
-      validator.explanations.push(...validator['rest-validator-0'].explanations)
+    if (!validator.checkRest(value[key])) {
+      validator.explanations.push(...validator.checkRest.explanations)
       return false
     }
   }
   return true
 }",
-  "defined-0": "function (value) { return value; }",
-  "defined-0.explanations": Array [],
-  "explanations": Array [
-    "Is not A",
-  ],
-  "rest-validator-0": "function validator(value) {
+  "checkRest": "function validator(value) {
   validator.explanations = []
   if (value === \\"A\\") {
     return true
@@ -28,7 +23,12 @@ Object {
   validator.explanations.push(\\"Is not A\\")
   return false
 }",
-  "rest-validator-0.explanations": Array [
+  "checkRest.explanations": Array [
+    "Is not A",
+  ],
+  "defined": "function (v) { return !!v; }",
+  "defined.explanations": Array [],
+  "explanations": Array [
     "Is not A",
   ],
 }
@@ -38,16 +38,16 @@ exports[`compileObjectSchemaWithRest obj + obj 1`] = `
 Object {
   "_": "function validator(value) {
   validator.explanations = []
-  if (!validator['defined-6'](value)) {
-    validator.explanations.push(...validator['defined-6'].explanations)
+  if (!validator.defined(value)) {
+    validator.explanations.push(...validator.defined.explanations)
     return false
   }
   const keys = Object.keys(value)
   for (let i = 0; i < keys.length; i++) {
     const key = keys[i]
     if (validator.__propsWithSchemasDict[key] === true) continue
-    if (!validator['rest-validator-4'](value[key])) {
-      validator.explanations.push(...validator['rest-validator-4'].explanations)
+    if (!validator.checkRest(value[key])) {
+      validator.explanations.push(...validator.checkRest.explanations)
       return false
     }
   }
@@ -56,7 +56,9 @@ Object {
   "__propsWithSchemasDict": Object {
     "deep": true,
   },
-  "defined-6": "function validator(value) {
+  "checkRest": "function (value) { return value === c; }",
+  "checkRest.explanations": Array [],
+  "defined": "function validator(value) {
   validator.explanations = []
   if (!value) return false
   if (!validator['deep-1'](value.deep)) {
@@ -65,27 +67,36 @@ Object {
   }
   return true
 }",
-  "defined-6.deep-1": "function validator(value) {
+  "defined.deep-1": "function validator(value) {
   validator.explanations = []
-  if (!validator['defined-5'](value)) {
-    validator.explanations.push(...validator['defined-5'].explanations)
+  if (!validator.defined(value)) {
+    validator.explanations.push(...validator.defined.explanations)
     return false
   }
   const keys = Object.keys(value)
   for (let i = 0; i < keys.length; i++) {
     const key = keys[i]
     if (validator.__propsWithSchemasDict[key] === true) continue
-    if (!validator['rest-validator-5'](value[key])) {
-      validator.explanations.push(...validator['rest-validator-5'].explanations)
+    if (!validator.checkRest(value[key])) {
+      validator.explanations.push(...validator.checkRest.explanations)
       return false
     }
   }
   return true
 }",
-  "defined-6.deep-1.__propsWithSchemasDict": Object {
+  "defined.deep-1.__propsWithSchemasDict": Object {
     "deep": true,
   },
-  "defined-6.deep-1.defined-5": "function validator(value) {
+  "defined.deep-1.checkRest": "function validator(value) {
+  validator.explanations = []
+  if (value === \\"B\\") {
+    return true
+  }
+  validator.explanations.push(\\"Is not B\\")
+  return false
+}",
+  "defined.deep-1.checkRest.explanations": Array [],
+  "defined.deep-1.defined": "function validator(value) {
   validator.explanations = []
   if (!value) return false
   if (!validator['deep-0'](value.deep)) {
@@ -94,27 +105,36 @@ Object {
   }
   return true
 }",
-  "defined-6.deep-1.defined-5.deep-0": "function validator(value) {
+  "defined.deep-1.defined.deep-0": "function validator(value) {
   validator.explanations = []
-  if (!validator['defined-4'](value)) {
-    validator.explanations.push(...validator['defined-4'].explanations)
+  if (!validator.defined(value)) {
+    validator.explanations.push(...validator.defined.explanations)
     return false
   }
   const keys = Object.keys(value)
   for (let i = 0; i < keys.length; i++) {
     const key = keys[i]
     if (validator.__propsWithSchemasDict[key] === true) continue
-    if (!validator['rest-validator-6'](value[key])) {
-      validator.explanations.push(...validator['rest-validator-6'].explanations)
+    if (!validator.checkRest(value[key])) {
+      validator.explanations.push(...validator.checkRest.explanations)
       return false
     }
   }
   return true
 }",
-  "defined-6.deep-1.defined-5.deep-0.__propsWithSchemasDict": Object {
+  "defined.deep-1.defined.deep-0.__propsWithSchemasDict": Object {
     "space": true,
   },
-  "defined-6.deep-1.defined-5.deep-0.defined-4": "function validator(value) {
+  "defined.deep-1.defined.deep-0.checkRest": "function validator(value) {
+  validator.explanations = []
+  if (value === \\"A\\") {
+    return true
+  }
+  validator.explanations.push(\\"Is not A\\")
+  return false
+}",
+  "defined.deep-1.defined.deep-0.checkRest.explanations": Array [],
+  "defined.deep-1.defined.deep-0.defined": "function validator(value) {
   validator.explanations = []
   if (!value) return false
   if (!(value.space === 'true')) {
@@ -123,32 +143,12 @@ Object {
   }
   return true
 }",
-  "defined-6.deep-1.defined-5.deep-0.defined-4.explanations": Array [],
-  "defined-6.deep-1.defined-5.deep-0.explanations": Array [],
-  "defined-6.deep-1.defined-5.deep-0.rest-validator-6": "function validator(value) {
-  validator.explanations = []
-  if (value === \\"A\\") {
-    return true
-  }
-  validator.explanations.push(\\"Is not A\\")
-  return false
-}",
-  "defined-6.deep-1.defined-5.deep-0.rest-validator-6.explanations": Array [],
-  "defined-6.deep-1.defined-5.explanations": Array [],
-  "defined-6.deep-1.explanations": Array [],
-  "defined-6.deep-1.rest-validator-5": "function validator(value) {
-  validator.explanations = []
-  if (value === \\"B\\") {
-    return true
-  }
-  validator.explanations.push(\\"Is not B\\")
-  return false
-}",
-  "defined-6.deep-1.rest-validator-5.explanations": Array [],
-  "defined-6.explanations": Array [],
+  "defined.deep-1.defined.deep-0.defined.explanations": Array [],
+  "defined.deep-1.defined.deep-0.explanations": Array [],
+  "defined.deep-1.defined.explanations": Array [],
+  "defined.deep-1.explanations": Array [],
+  "defined.explanations": Array [],
   "explanations": Array [],
-  "rest-validator-4": "function (value) { return value === c; }",
-  "rest-validator-4.explanations": Array [],
 }
 `;
 
@@ -156,16 +156,16 @@ exports[`compileObjectSchemaWithRest obj with constant 1`] = `
 Object {
   "_": "function validator(value) {
   validator.explanations = []
-  if (!validator['defined-2'](value)) {
-    validator.explanations.push(...validator['defined-2'].explanations)
+  if (!validator.defined(value)) {
+    validator.explanations.push(...validator.defined.explanations)
     return false
   }
   const keys = Object.keys(value)
   for (let i = 0; i < keys.length; i++) {
     const key = keys[i]
     if (validator.__propsWithSchemasDict[key] === true) continue
-    if (!validator['rest-validator-2'](value[key])) {
-      validator.explanations.push(...validator['rest-validator-2'].explanations)
+    if (!validator.checkRest(value[key])) {
+      validator.explanations.push(...validator.checkRest.explanations)
       return false
     }
   }
@@ -182,7 +182,11 @@ Object {
     "t": true,
     "zero": true,
   },
-  "defined-2": "function validator(value) {
+  "checkRest": "function validator(value) {
+  return typeof value === 'string'
+}",
+  "checkRest.explanations": Array [],
+  "defined": "function validator(value) {
   if (!value) return false
   if (validator.__validValues.str[value.str] !== true) return false
   if (validator.__validValues.symb[value.symb] !== true) return false
@@ -195,7 +199,7 @@ Object {
   if (value.t !== true) return false
   return true
 }",
-  "defined-2.__validValues": Object {
+  "defined.__validValues": Object {
     "str": Object {
       "Andrew": true,
     },
@@ -203,12 +207,8 @@ Object {
       Symbol(test): true,
     },
   },
-  "defined-2.explanations": Array [],
+  "defined.explanations": Array [],
   "explanations": Array [],
-  "rest-validator-2": "function validator(value) {
-  return typeof value === 'string'
-}",
-  "rest-validator-2.explanations": Array [],
 }
 `;
 
@@ -216,16 +216,16 @@ exports[`compileObjectSchemaWithRest obj with func 1`] = `
 Object {
   "_": "function validator(value) {
   validator.explanations = []
-  if (!validator['defined-1'](value)) {
-    validator.explanations.push(...validator['defined-1'].explanations)
+  if (!validator.defined(value)) {
+    validator.explanations.push(...validator.defined.explanations)
     return false
   }
   const keys = Object.keys(value)
   for (let i = 0; i < keys.length; i++) {
     const key = keys[i]
     if (validator.__propsWithSchemasDict[key] === true) continue
-    if (!validator['rest-validator-1'](value[key])) {
-      validator.explanations.push(...validator['rest-validator-1'].explanations)
+    if (!validator.checkRest(value[key])) {
+      validator.explanations.push(...validator.checkRest.explanations)
       return false
     }
   }
@@ -234,7 +234,18 @@ Object {
   "__propsWithSchemasDict": Object {
     "id": true,
   },
-  "defined-1": "function validator(value) {
+  "checkRest": "function validator(value) {
+  validator.explanations = []
+  if (value === \\"A\\") {
+    return true
+  }
+  validator.explanations.push(\\"Is not A\\")
+  return false
+}",
+  "checkRest.explanations": Array [
+    "Is not A",
+  ],
+  "defined": "function validator(value) {
   validator.explanations = []
   if (!value) return false
   if (value.id !== 42) {
@@ -243,19 +254,8 @@ Object {
   }
   return true
 }",
-  "defined-1.explanations": Array [],
+  "defined.explanations": Array [],
   "explanations": Array [
-    "Is not A",
-  ],
-  "rest-validator-1": "function validator(value) {
-  validator.explanations = []
-  if (value === \\"A\\") {
-    return true
-  }
-  validator.explanations.push(\\"Is not A\\")
-  return false
-}",
-  "rest-validator-1.explanations": Array [
     "Is not A",
   ],
 }
@@ -265,16 +265,16 @@ exports[`compileObjectSchemaWithRest obj with variants 2`] = `
 Object {
   "_": "function validator(value) {
   validator.explanations = []
-  if (!validator['defined-3'](value)) {
-    validator.explanations.push(...validator['defined-3'].explanations)
+  if (!validator.defined(value)) {
+    validator.explanations.push(...validator.defined.explanations)
     return false
   }
   const keys = Object.keys(value)
   for (let i = 0; i < keys.length; i++) {
     const key = keys[i]
     if (validator.__propsWithSchemasDict[key] === true) continue
-    if (!validator['rest-validator-3'](value[key])) {
-      validator.explanations.push(...validator['rest-validator-3'].explanations)
+    if (!validator.checkRest(value[key])) {
+      validator.explanations.push(...validator.checkRest.explanations)
       return false
     }
   }
@@ -284,7 +284,19 @@ Object {
     "gender": true,
     "grade": true,
   },
-  "defined-3": "function validator(value) {
+  "checkRest": "function validator(value) {
+  validator.explanations = []
+  if (value === \\"A\\") return true;
+  if (value === \\"B\\") return true;
+  validator.explanations.push(\\"Is not A\\")
+  validator.explanations.push(\\"Is not B\\")
+  return false
+}",
+  "checkRest.explanations": Array [
+    "Is not A",
+    "Is not B",
+  ],
+  "defined": "function validator(value) {
   validator.explanations = []
   if (!value) return false
   if (!validator['gender-0'](value.gender)) {
@@ -297,17 +309,17 @@ Object {
   }
   return true
 }",
-  "defined-3.explanations": Array [],
-  "defined-3.gender-0": "function validator(value) {
+  "defined.explanations": Array [],
+  "defined.gender-0": "function validator(value) {
   if (validator.__validValuesDict[value] === true) return true
   return false
 }",
-  "defined-3.gender-0.__validValuesDict": Object {
+  "defined.gender-0.__validValuesDict": Object {
     "female": true,
     "male": true,
   },
-  "defined-3.gender-0.explanations": Array [],
-  "defined-3.grade-0": "function validator(value) {
+  "defined.gender-0.explanations": Array [],
+  "defined.grade-0": "function validator(value) {
   if (value === 1) return true
   if (value === 2) return true
   if (value === 3) return true
@@ -321,20 +333,8 @@ Object {
   if (value === 11) return true
   return false
 }",
-  "defined-3.grade-0.explanations": Array [],
+  "defined.grade-0.explanations": Array [],
   "explanations": Array [
-    "Is not A",
-    "Is not B",
-  ],
-  "rest-validator-3": "function validator(value) {
-  validator.explanations = []
-  if (value === \\"A\\") return true;
-  if (value === \\"B\\") return true;
-  validator.explanations.push(\\"Is not A\\")
-  validator.explanations.push(\\"Is not B\\")
-  return false
-}",
-  "rest-validator-3.explanations": Array [
     "Is not A",
     "Is not B",
   ],
@@ -345,16 +345,16 @@ exports[`compileObjectSchemaWithRest obj: variant explanations 4`] = `
 Object {
   "_": "function validator(value) {
   validator.explanations = []
-  if (!validator['defined-7'](value)) {
-    validator.explanations.push(...validator['defined-7'].explanations)
+  if (!validator.defined(value)) {
+    validator.explanations.push(...validator.defined.explanations)
     return false
   }
   const keys = Object.keys(value)
   for (let i = 0; i < keys.length; i++) {
     const key = keys[i]
     if (validator.__propsWithSchemasDict[key] === true) continue
-    if (!validator['rest-validator-7'](value[key])) {
-      validator.explanations.push(...validator['rest-validator-7'].explanations)
+    if (!validator.checkRest(value[key])) {
+      validator.explanations.push(...validator.checkRest.explanations)
       return false
     }
   }
@@ -363,7 +363,18 @@ Object {
   "__propsWithSchemasDict": Object {
     "var": true,
   },
-  "defined-7": "function validator(value) {
+  "checkRest": "function validator(value) {
+  validator.explanations = []
+  if (value === \\"C\\") {
+    return true
+  }
+  validator.explanations.push(\\"Is not C\\")
+  return false
+}",
+  "checkRest.explanations": Array [
+    "Is not C",
+  ],
+  "defined": "function validator(value) {
   validator.explanations = []
   if (!value) return false
   if (!validator['var-0'](value.var)) {
@@ -372,8 +383,8 @@ Object {
   }
   return true
 }",
-  "defined-7.explanations": Array [],
-  "defined-7.var-0": "function validator(value) {
+  "defined.explanations": Array [],
+  "defined.var-0": "function validator(value) {
   validator.explanations = []
   if (value === \\"A\\") return true;
   if (value === \\"B\\") return true;
@@ -381,19 +392,8 @@ Object {
   validator.explanations.push(\\"Is not B\\")
   return false
 }",
-  "defined-7.var-0.explanations": Array [],
+  "defined.var-0.explanations": Array [],
   "explanations": Array [
-    "Is not C",
-  ],
-  "rest-validator-7": "function validator(value) {
-  validator.explanations = []
-  if (value === \\"C\\") {
-    return true
-  }
-  validator.explanations.push(\\"Is not C\\")
-  return false
-}",
-  "rest-validator-7.explanations": Array [
     "Is not C",
   ],
 }

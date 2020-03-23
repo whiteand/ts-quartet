@@ -48,12 +48,12 @@ Object {
   if (!value || !Array.isArray(value)) return false
   for (let i = 0; i < value.length; i++) {
     const elem = value[i]
-    if (elem !== validator['symbol-element-0']) return false
+    if (elem !== validator.symbol) return false
   }
   return true
 }",
   "explanations": Array [],
-  "symbol-element-0": Symbol(name),
+  "symbol": Symbol(name),
 }
 `;
 
@@ -83,15 +83,15 @@ Object {
   if (!value || !Array.isArray(value)) return false
   for (let i = 0; i < value.length; i++) {
     const elem = value[i]
-    if (!validator['variant-elem-0'](elem)) {
-      validator.explanations.push(...validator['variant-elem-0'].explanations)
+    if (!validator.variant(elem)) {
+      validator.explanations.push(...validator.variant.explanations)
       return false
     }
   }
   return true
 }",
   "custom-1.explanations": Array [],
-  "custom-1.variant-elem-0": "function validator(value) {
+  "custom-1.variant": "function validator(value) {
   if (value === 1) return true
   if (value === 2) return true
   if (value === 3) return true
@@ -106,7 +106,7 @@ Object {
   if (value === 12) return true
   return false
 }",
-  "custom-1.variant-elem-0.explanations": Array [],
+  "custom-1.variant.explanations": Array [],
   "custom-2": "function validator(value) {
   if (!value || !Array.isArray(value)) return false
   for (let i = 0; i < value.length; i++) {

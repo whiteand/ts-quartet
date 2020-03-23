@@ -147,7 +147,7 @@ export function compileObjectSchema(
 ) {
   const keys = Object.keys(s);
   if (keys.length === 0) {
-    return Object.assign((value: any) => value, { explanations: [] });
+    return Object.assign((v: any) => !!v, { explanations: [] });
   }
   const bodyCodeLines = [];
   const preparations: Prepare[] = [];
@@ -161,17 +161,18 @@ export function compileObjectSchema(
     const keyAccessor = getKeyAccessor(key);
     const valueId = `value${keyAccessor}`;
     const keyValidValues: any[] = [];
-    bodyCodeLines.push(
-      compilePropValidationWithoutRest(
-        c,
-        key,
-        valueId,
-        ctxId,
-        schema,
-        preparations,
-        keyValidValues
-      )
-    );
+    const codeLine = compilePropValidationWithoutRest(
+      c,
+      key,
+      valueId,
+      ctxId,
+      schema,
+      preparations,
+      keyValidValues
+    ).trim();
+    if (codeLine) {
+      bodyCodeLines.push(codeLine);
+    }
     if (keyValidValues.length > 0) {
       withValidValues.push(key);
       if (!validValues[key]) {
@@ -200,10 +201,7 @@ export function compileObjectSchema(
   }
   const code = `
     (() => {\nfunction validator(value) {\n${addTabs(
-      bodyCodeLines
-        .map(e => e.trim())
-        .filter(Boolean)
-        .join("\n")
+      bodyCodeLines.join("\n")
     )}\n  return true\n}
       return validator
     })()

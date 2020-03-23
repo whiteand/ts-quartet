@@ -18,7 +18,7 @@ Object {
 
 exports[`compileObjectSchema empty obj 1`] = `
 Object {
-  "_": "function (value) { return value; }",
+  "_": "function (v) { return !!v; }",
   "explanations": Array [],
 }
 `;

@@ -7,6 +7,7 @@ import {
   Schema,
   TypedCompilationResult
 } from "./types";
+import { getKeyAccessor } from "./getKeyAccessor";
 
 function compileForLoopBody(
   c: (schema: Schema) => CompilationResult,
@@ -31,9 +32,11 @@ function compileForLoopBody(
         return `if (elem !== '${constant}') return false`;
       }
       if (typeof constant === "symbol") {
-        const [symbolId, prepare] = toContext("symbol-element", constant);
+        const [symbolId, prepare] = toContext("symbol", constant, true);
+        const symbolAccessor = getKeyAccessor(symbolId);
+
         preparations.push(prepare);
-        return `if (elem !== validator['${symbolId}']) return false`;
+        return `if (elem !== validator${symbolAccessor}) return false`;
       }
       return `if (elem !== ${JSON.stringify(constant)}) return false`;
     },
@@ -53,30 +56,32 @@ function compileForLoopBody(
     },
     object: objectSchema => {
       const compiled = c(objectSchema);
-      const [id, prepare] = toContext("object-elem", compiled);
+      const [id, prepare] = toContext("object", compiled, true);
+      const objAccesor = getKeyAccessor(id);
       preparations.push(prepare);
       return compileForLoopBody(
         c,
         () => ({
-          check: () => `validator['${id}'](elem)`,
+          check: () => `validator${objAccesor}(elem)`,
           handleError: () =>
-            `validator.explanations.push(...validator['${id}'].explanations)`,
-          not: () => `!validator['${id}'](elem)`
+            `validator.explanations.push(...validator${objAccesor}.explanations)`,
+          not: () => `!validator${objAccesor}(elem)`
         }),
         preparations
       );
     },
     objectRest: objectSchema => {
       const compiled = c(objectSchema);
-      const [id, prepare] = toContext("object-elem", compiled);
+      const [id, prepare] = toContext("object", compiled, true);
+      const idAccessor = getKeyAccessor(id);
       preparations.push(prepare);
       return compileForLoopBody(
         c,
         () => ({
-          check: () => `validator['${id}'](elem)`,
+          check: () => `validator${idAccessor}(elem)`,
           handleError: () =>
-            `validator.explanations.push(...validator['${id}'].explanations)`,
-          not: () => `!validator['${id}'](elem)`
+            `validator.explanations.push(...validator${idAccessor}.explanations)`,
+          not: () => `!validator${idAccessor}(elem)`
         }),
         preparations
       );
@@ -89,15 +94,16 @@ function compileForLoopBody(
         return compileForLoopBody(c, schemas[0], preparations);
       }
       const compiled = c(schemas);
-      const [id, prepare] = toContext("variant-elem", compiled);
+      const [id, prepare] = toContext("variant", compiled, true);
+      const idAccessor = getKeyAccessor(id);
       preparations.push(prepare);
       return compileForLoopBody(
         c,
         () => ({
-          check: () => `validator['${id}'](elem)`,
+          check: () => `validator${idAccessor}(elem)`,
           handleError: () =>
-            `validator.explanations.push(...validator['${id}'].explanations)`,
-          not: () => `!validator['${id}'](elem)`
+            `validator.explanations.push(...validator${idAccessor}.explanations)`,
+          not: () => `!validator${idAccessor}(elem)`
         }),
         preparations
       );

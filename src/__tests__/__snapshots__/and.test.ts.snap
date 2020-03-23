@@ -9,26 +9,26 @@ Object {
 
 exports[`v.compileAnd v.compileAnd({ a: v.number }, { b: v.string}) 1`] = `
 Object {
-  "0-0": "function validator(value) {
+  "0": "function validator(value) {
   if (!value) return false
   if (typeof value.a !== 'number') return false
   return true
 }",
-  "0-0.explanations": Array [],
-  "1-0": "function validator(value) {
+  "0.explanations": Array [],
+  "1": "function validator(value) {
   if (!value) return false
   if (typeof value.b !== 'string') return false
   return true
 }",
-  "1-0.explanations": Array [],
+  "1.explanations": Array [],
   "_": "function validator(value) {
   validator.explanations = []
-  if (!validator['0-0'](value)) {
-    validator.explanations.push(...validator['0-0'].explanations)
+  if (!validator[0](value)) {
+    validator.explanations.push(...validator[0].explanations)
     return false
   }
-  if (!validator['1-0'](value)) {
-    validator.explanations.push(...validator['1-0'].explanations)
+  if (!validator[1](value)) {
+    validator.explanations.push(...validator[1].explanations)
     return false
   }
   return true

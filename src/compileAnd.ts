@@ -2,6 +2,7 @@ import { addTabs } from "./addTabs";
 import { handleSchema } from "./handleSchema";
 import { toContext } from "./toContext";
 import { CompilationResult, Prepare, Schema } from "./types";
+import { getKeyAccessor } from "./getKeyAccessor";
 
 function compileAndVariantElementToReturnWay(
   c: (schema: Schema) => CompilationResult,
@@ -36,7 +37,8 @@ function compileAndVariantElementToReturnWay(
     },
     object: objectSchema => {
       const compiled = c(objectSchema);
-      const [id, prepare] = toContext(index, compiled);
+      const [id, prepare] = toContext(index, compiled, true);
+      const idAccessor = getKeyAccessor(id);
       preparations.push(prepare);
       return compileAndVariantElementToReturnWay(
         c,
@@ -44,10 +46,10 @@ function compileAndVariantElementToReturnWay(
         valueId,
         ctxId,
         () => ({
-          check: () => `${ctxId}['${id}'](${valueId})`,
+          check: () => `${ctxId}${idAccessor}(${valueId})`,
           handleError: () =>
-            `${ctxId}.explanations.push(...${ctxId}['${id}'].explanations)`,
-          not: () => `!${ctxId}['${id}'](${valueId})`
+            `${ctxId}.explanations.push(...${ctxId}${idAccessor}.explanations)`,
+          not: () => `!${ctxId}${idAccessor}(${valueId})`
         }),
         preparations,
         primitives
@@ -55,7 +57,8 @@ function compileAndVariantElementToReturnWay(
     },
     objectRest: objectSchema => {
       const compiled = c(objectSchema);
-      const [id, prepare] = toContext(index, compiled);
+      const [id, prepare] = toContext(index, compiled, true);
+      const idAccessor = getKeyAccessor(id);
       preparations.push(prepare);
       return compileAndVariantElementToReturnWay(
         c,
@@ -63,10 +66,10 @@ function compileAndVariantElementToReturnWay(
         valueId,
         ctxId,
         () => ({
-          check: () => `${ctxId}['${id}'](${valueId})`,
+          check: () => `${ctxId}${idAccessor}(${valueId})`,
           handleError: () =>
-            `${ctxId}.explanations.push(...${ctxId}['${id}'].explanations)`,
-          not: () => `!${ctxId}['${id}'](${valueId})`
+            `${ctxId}.explanations.push(...${ctxId}${idAccessor}.explanations)`,
+          not: () => `!${ctxId}${idAccessor}(${valueId})`
         }),
         preparations,
         primitives
@@ -88,18 +91,19 @@ function compileAndVariantElementToReturnWay(
         );
       }
       const compiled = c(schemas);
-      const [id, prepare] = toContext(index, compiled);
+      const [id, prepare] = toContext(index, compiled, true);
       preparations.push(prepare);
+      const idAccessor = getKeyAccessor(id);
       return compileAndVariantElementToReturnWay(
         c,
         index,
         valueId,
         ctxId,
         () => ({
-          check: () => `${ctxId}['${id}'](${valueId})`,
+          check: () => `${ctxId}${idAccessor}(${valueId})`,
           handleError: () =>
-            `${ctxId}.explanations.push(...${ctxId}['${id}'].explanations)`,
-          not: () => `!${ctxId}['${id}'](${valueId})`
+            `${ctxId}.explanations.push(...${ctxId}${idAccessor}.explanations)`,
+          not: () => `!${ctxId}${idAccessor}(${valueId})`
         }),
         preparations,
         primitives
