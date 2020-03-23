@@ -9,7 +9,6 @@ import {
   HandleError,
   Prepare
 } from "./types";
-import { beautify } from "./beautify";
 import { compileNot } from "./compileNot";
 
 export const methods: IMethods = {
@@ -47,12 +46,7 @@ export const methods: IMethods = {
       handleError =
         typeof explanation === "function"
           ? (id, ctxId) =>
-              beautify(`
-                ${ctxId}['${explanationId}-value'] = ${ctxId}['${explanationId}'](${id})
-                if (${ctxId}['${explanationId}-value'] !== undefined) {
-                  ${ctxId}.explanations.push(${ctxId}['${explanationId}-value'])
-                }
-              `)
+              `${ctxId}['${explanationId}-value'] = ${ctxId}['${explanationId}'](${id})\nif (${ctxId}['${explanationId}-value'] !== undefined) {\n  ${ctxId}.explanations.push(${ctxId}['${explanationId}-value'])\n}`
           : (_id, ctxId) =>
               `${ctxId}.explanations.push(${ctxId}['${explanationId}'])`;
     }
