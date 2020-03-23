@@ -154,8 +154,10 @@ export function compileAnd(
     )
     .filter(Boolean)
     .join("\n");
-  const code = `(() => {\nfunction validator(value) {\n${
-    bodyCode.indexOf("explanations") >= 0 ? "  validator.explanations = []" : ""
+  const code = `(() => {\nfunction validator(value) {${
+    bodyCode.indexOf("explanations") >= 0
+      ? "\n  validator.explanations = []"
+      : ""
   }\n${bodyCode}\n  return true\n}
     return validator
   })()`;
