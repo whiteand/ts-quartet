@@ -124,17 +124,18 @@ export function compileAnd(
   const primitives: any[] = [];
   for (let i = 0; i < schemas.length; i++) {
     const schema = schemas[i];
-    bodyCodeLines.push(
-      compileAndVariantElementToReturnWay(
-        c,
-        i,
-        `value`,
-        `validator`,
-        schema,
-        preparations,
-        primitives
-      )
+    const codeLine = compileAndVariantElementToReturnWay(
+      c,
+      i,
+      `value`,
+      `validator`,
+      schema,
+      preparations,
+      primitives
     );
+    if (codeLine) {
+      bodyCodeLines.push(codeLine);
+    }
     if (primitives.length > 1) {
       return Object.assign(() => false, { explanations: [] });
     }
@@ -142,17 +143,13 @@ export function compileAnd(
   if (primitives.length === 1) {
     return c(primitives[0]);
   }
-
-  const bodyCode = bodyCodeLines
-    .map(codePart =>
-      codePart
-        .trim()
-        .split("\n")
-        .map(line => "  " + line)
-        .join("\n")
-    )
-    .filter(Boolean)
-    .join("\n");
+  let bodyCode = "";
+  if (bodyCodeLines.length > 0) {
+    bodyCode = addTabs(bodyCodeLines[0].trim());
+    for (let i = 1; i < bodyCodeLines.length; i++) {
+      bodyCode += "\n" + addTabs(bodyCodeLines[i]);
+    }
+  }
   const code = `(() => {\nfunction validator(value) {${
     bodyCode.indexOf("explanations") >= 0
       ? "\n  validator.explanations = []"
