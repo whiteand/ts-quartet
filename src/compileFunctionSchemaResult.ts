@@ -1,4 +1,4 @@
-import { addTabs } from "./beautify";
+import { addTabs } from "./addTabs";
 import { IFunctionSchemaResult } from "./types";
 
 export function compileFunctionSchemaResult(s: IFunctionSchemaResult) {

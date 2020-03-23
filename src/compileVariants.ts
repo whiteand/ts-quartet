@@ -1,4 +1,4 @@
-import { addTabs } from "./beautify";
+import { addTabs } from "./addTabs";
 import { compileObjectSchema } from "./compileObjectSchema";
 import { compileObjectSchemaWithRest } from "./compileObjectSchemaWithRest";
 import { handleSchema } from "./handleSchema";

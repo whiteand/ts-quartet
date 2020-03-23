@@ -1,4 +1,4 @@
-import { addTabs } from "./beautify";
+import { addTabs } from "./addTabs";
 import { handleSchema } from "./handleSchema";
 import { toContext } from "./toContext";
 import {

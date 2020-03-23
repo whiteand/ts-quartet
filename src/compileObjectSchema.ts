@@ -1,4 +1,4 @@
-import { addTabs } from "./beautify";
+import { addTabs } from "./addTabs";
 import { getKeyAccessor } from "./getKeyAccessor";
 import { handleSchema } from "./handleSchema";
 import { toContext } from "./toContext";

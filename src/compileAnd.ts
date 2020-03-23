@@ -1,7 +1,7 @@
 import { handleSchema } from "./handleSchema";
 import { toContext } from "./toContext";
 import { CompilationResult, Prepare, Schema } from "./types";
-import { addTabs } from "./beautify";
+import { addTabs } from "./addTabs";
 
 function compileAndVariantElementToReturnWay(
   c: (schema: Schema) => CompilationResult,
