@@ -57,14 +57,14 @@ Object {
     "deep": true,
   },
   "defined-6": "function validator(value) {
-    validator.explanations = []
-    if (!value) return false
-    if (!validator['deep-1'](value.deep)) {
-      validator.explanations.push(...validator['deep-1'].explanations)
-      return false
-    }
-    return true
-  }",
+  validator.explanations = []
+  if (!value) return false
+  if (!validator['deep-1'](value.deep)) {
+    validator.explanations.push(...validator['deep-1'].explanations)
+    return false
+  }
+  return true
+}",
   "defined-6.deep-1": "function validator(value) {
     validator.explanations = []
     if (!validator['defined-5'](value)) {
@@ -86,14 +86,14 @@ Object {
     "deep": true,
   },
   "defined-6.deep-1.defined-5": "function validator(value) {
-    validator.explanations = []
-    if (!value) return false
-    if (!validator['deep-0'](value.deep)) {
-      validator.explanations.push(...validator['deep-0'].explanations)
-      return false
-    }
-    return true
-  }",
+  validator.explanations = []
+  if (!value) return false
+  if (!validator['deep-0'](value.deep)) {
+    validator.explanations.push(...validator['deep-0'].explanations)
+    return false
+  }
+  return true
+}",
   "defined-6.deep-1.defined-5.deep-0": "function validator(value) {
     validator.explanations = []
     if (!validator['defined-4'](value)) {
@@ -115,14 +115,14 @@ Object {
     "space": true,
   },
   "defined-6.deep-1.defined-5.deep-0.defined-4": "function validator(value) {
-    validator.explanations = []
-    if (!value) return false
-    if (!(value.space === 'true')) {
-      validator.explanations.push(value.space)
-      return false
-    }
-    return true
-  }",
+  validator.explanations = []
+  if (!value) return false
+  if (!(value.space === 'true')) {
+    validator.explanations.push(value.space)
+    return false
+  }
+  return true
+}",
   "defined-6.deep-1.defined-5.deep-0.defined-4.explanations": Array [],
   "defined-6.deep-1.defined-5.deep-0.explanations": Array [],
   "defined-6.deep-1.defined-5.deep-0.rest-validator-6": "function validator(value) {
@@ -183,18 +183,18 @@ Object {
     "zero": true,
   },
   "defined-2": "function validator(value) {
-    if (!value) return false
-    if (validator.__validValues.str[value.str] !== true) return false
-    if (validator.__validValues.symb[value.symb] !== true) return false
-    if (value.id !== 42) return false
-    if (!Number.isNaN(value.nan)) return false
-    if (value.inf !== Infinity) return false
-    if (value.minf !== -Infinity) return false
-    if (value.zero !== 0) return false
-    if (value.f !== false) return false
-    if (value.t !== true) return false
-    return true
-  }",
+  if (!value) return false
+  if (validator.__validValues.str[value.str] !== true) return false
+  if (validator.__validValues.symb[value.symb] !== true) return false
+  if (value.id !== 42) return false
+  if (!Number.isNaN(value.nan)) return false
+  if (value.inf !== Infinity) return false
+  if (value.minf !== -Infinity) return false
+  if (value.zero !== 0) return false
+  if (value.f !== false) return false
+  if (value.t !== true) return false
+  return true
+}",
   "defined-2.__validValues": Object {
     "str": Object {
       "Andrew": true,
@@ -235,14 +235,14 @@ Object {
     "id": true,
   },
   "defined-1": "function validator(value) {
-    validator.explanations = []
-    if (!value) return false
-    if (value.id !== 42) {
-      validator.explanations.push(value.id)
-      return false
-    }
-    return true
-  }",
+  validator.explanations = []
+  if (!value) return false
+  if (value.id !== 42) {
+    validator.explanations.push(value.id)
+    return false
+  }
+  return true
+}",
   "defined-1.explanations": Array [],
   "explanations": Array [
     "Is not A",
@@ -285,18 +285,18 @@ Object {
     "grade": true,
   },
   "defined-3": "function validator(value) {
-    validator.explanations = []
-    if (!value) return false
-    if (!validator['gender-0'](value.gender)) {
-      validator.explanations.push(...validator['gender-0'].explanations)
-      return false
-    }
-    if (!validator['grade-0'](value.grade)) {
-      validator.explanations.push(...validator['grade-0'].explanations)
-      return false
-    }
-    return true
-  }",
+  validator.explanations = []
+  if (!value) return false
+  if (!validator['gender-0'](value.gender)) {
+    validator.explanations.push(...validator['gender-0'].explanations)
+    return false
+  }
+  if (!validator['grade-0'](value.grade)) {
+    validator.explanations.push(...validator['grade-0'].explanations)
+    return false
+  }
+  return true
+}",
   "defined-3.explanations": Array [],
   "defined-3.gender-0": "function validator(value) {
     if (validator.__validValuesDict[value] === true) return true
@@ -364,14 +364,14 @@ Object {
     "var": true,
   },
   "defined-7": "function validator(value) {
-    validator.explanations = []
-    if (!value) return false
-    if (!validator['var-0'](value.var)) {
-      validator.explanations.push(...validator['var-0'].explanations)
-      return false
-    }
-    return true
-  }",
+  validator.explanations = []
+  if (!value) return false
+  if (!validator['var-0'](value.var)) {
+    validator.explanations.push(...validator['var-0'].explanations)
+    return false
+  }
+  return true
+}",
   "defined-7.explanations": Array [],
   "defined-7.var-0": "function validator(value) {
     validator.explanations = []

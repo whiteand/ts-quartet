@@ -1,4 +1,4 @@
-import { beautify } from "./beautify";
+import { addTabs } from "./beautify";
 import { getKeyAccessor } from "./getKeyAccessor";
 import { handleSchema } from "./handleSchema";
 import { toContext } from "./toContext";
@@ -45,10 +45,9 @@ function compilePropValidationWithoutRest(
         ? s.not(valueId, ctxId)
         : `!(${s.check(valueId, ctxId)})`;
       return s.handleError
-        ? beautify(`if (${notCheck}) {
-              ${s.handleError(valueId, ctxId)}
-              return false
-            }`)
+        ? `if (${notCheck}) {\n${addTabs(
+            s.handleError(valueId, ctxId)
+          )}\n  return false\n}`
         : `if (${notCheck}) return false`;
     },
     object: objectSchema => {
@@ -198,17 +197,16 @@ export function compileObjectSchema(
   if (bodyCodeLines.some(line => line.indexOf("explanations") >= 0)) {
     bodyCodeLines.unshift("validator.explanations = []");
   }
-  const code = beautify(
-    `
-    (() => {
-      function validator(value) {
-        ${bodyCodeLines.join("\n")}
-        return true
-      }
+  const code = `
+    (() => {\nfunction validator(value) {\n${addTabs(
+      bodyCodeLines
+        .map(e => e.trim())
+        .filter(Boolean)
+        .join("\n")
+    )}\n  return true\n}
       return validator
     })()
-  `.trim()
-  );
+  `.trim();
 
   // tslint:disable-next-line
   const ctx = eval(code);

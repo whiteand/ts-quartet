@@ -60,18 +60,18 @@ Object {
 exports[`arrayOf full: without explanations 1`] = `
 Object {
   "_": "function validator(value) {
-    validator.explanations = []
-    if (!value) return false
-    if (!validator['custom-0'](value.age)) return false
-    if (!validator['gender-0'](value.gender)) {
-      validator.explanations.push(...validator['gender-0'].explanations)
-      return false
-    }
-    if (!validator['custom-1'](value.grades)) return false
-    if (typeof value.name !== 'string') return false
-    if (!validator['custom-2'](value.friends)) return false
-    return true
-  }",
+  validator.explanations = []
+  if (!value) return false
+  if (!validator['custom-0'](value.age)) return false
+  if (!validator['gender-0'](value.gender)) {
+    validator.explanations.push(...validator['gender-0'].explanations)
+    return false
+  }
+  if (!validator['custom-1'](value.grades)) return false
+  if (typeof value.name !== 'string') return false
+  if (!validator['custom-2'](value.friends)) return false
+  return true
+}",
   "custom-0": "function validator(value) {
   if (value <= 0) return false
   if (!Number.isSafeInteger(value)) return false
