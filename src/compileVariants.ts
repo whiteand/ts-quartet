@@ -1,4 +1,4 @@
-import { beautify } from "./beautify";
+import { addTabs } from "./beautify";
 import { compileObjectSchema } from "./compileObjectSchema";
 import { compileObjectSchemaWithRest } from "./compileObjectSchemaWithRest";
 import { handleSchema } from "./handleSchema";
@@ -168,18 +168,13 @@ export function compileVariants(
 
   // tslint:disable-next-line
   const ctx = eval(
-    beautify(`(() => {
-      function validator(value) {
-        ${
-          bodyCode.indexOf("explanations") >= 0
-            ? "validator.explanations = []"
-            : ""
-        }
-        ${bodyCode}
-        return false
-      }
+    `(() => {function validator(value) {${
+      bodyCode.indexOf("explanations") >= 0
+        ? "\n  validator.explanations = []"
+        : ""
+    }\n${addTabs(bodyCode)}\n  return false\n}
       return validator
-    })()`)
+    })()`
   );
   for (const prepare of preparations) {
     prepare(ctx);
