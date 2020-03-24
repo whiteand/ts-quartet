@@ -5,14 +5,12 @@ export function compileFunctionSchemaResult(
   s: IFunctionSchemaResult
 ): CompilationResult {
   let code;
+  let isPure = true;
   if (s.handleError) {
+    isPure = false;
     const checkCode = s.check("value", "validator");
     const handleCode = s.handleError("value", "validator");
-    const clearExplanations =
-      checkCode.indexOf("explanations") >= 0 ||
-      handleCode.indexOf("explanations") >= 0
-        ? "\n  validator.explanations = []"
-        : "";
+    const clearExplanations = isPure ? "" : "\n  validator.explanations = []";
     code = `(() => {function validator(value) {${clearExplanations}\n  if (${checkCode}) {\n    return true\n  }\n${addTabs(
       handleCode
     )}\n  return false\n}
@@ -20,10 +18,11 @@ export function compileFunctionSchemaResult(
   })()`;
   } else {
     const innerCode = s.check("value", "validator");
+    if (innerCode.indexOf("explanations") >= 0) {
+      isPure = false;
+    }
     code = `(() => {function validator(value) {${
-      innerCode.indexOf("explanations") >= 0
-        ? "\n  validator.explanations = []"
-        : ""
+      isPure ? "" : "\n  validator.explanations = []"
     }\n  return ${innerCode}\n}
       return validator
     })()`;
@@ -31,7 +30,7 @@ export function compileFunctionSchemaResult(
   // tslint:disable-next-line
   const ctx = eval(code);
   ctx.explanations = [];
-  ctx.pure = !s.handleError;
+  ctx.pure = isPure;
   if (s.prepare) {
     s.prepare(ctx);
   }

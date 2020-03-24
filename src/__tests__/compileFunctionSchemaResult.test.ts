@@ -20,6 +20,7 @@ describe("compileFunctionSchemaResult", () => {
         return value === 42
       }",
         "explanations": Array [],
+        "pure": true,
       }
     `);
   });
@@ -38,6 +39,7 @@ describe("compileFunctionSchemaResult", () => {
         return value === validator.N
       }",
         "explanations": Array [],
+        "pure": true,
       }
     `);
   });
@@ -54,10 +56,10 @@ describe("compileFunctionSchemaResult", () => {
     const validator = compileFunctionSchemaResult(funcSchema());
     expect(validator(41)).toBe(false);
     expect(validator.explanations).toMatchInlineSnapshot(`
-                                        Array [
-                                          "41 is not a 42",
-                                        ]
-                            `);
+                                              Array [
+                                                "41 is not a 42",
+                                              ]
+                                `);
     expect(validator(42)).toBe(true);
     expect(validator.explanations).toEqual([]);
     expect(getDescription(validator)).toMatchInlineSnapshot(`
@@ -72,6 +74,7 @@ describe("compileFunctionSchemaResult", () => {
         return false
       }",
         "explanations": Array [],
+        "pure": false,
       }
     `);
   });

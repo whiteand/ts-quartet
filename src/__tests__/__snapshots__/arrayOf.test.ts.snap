@@ -11,6 +11,7 @@ Object {
   return true
 }",
   "explanations": Array [],
+  "pure": true,
 }
 `;
 
@@ -25,6 +26,7 @@ Object {
   return true
 }",
   "explanations": Array [],
+  "pure": true,
 }
 `;
 
@@ -34,11 +36,12 @@ Object {
   if (!value || !Array.isArray(value)) return false
   for (let i = 0; i < value.length; i++) {
     const elem = value[i]
-    if (elem !== 'true') return false
+    if (elem !== true) return false
   }
   return true
 }",
   "explanations": Array [],
+  "pure": true,
 }
 `;
 
@@ -53,6 +56,7 @@ Object {
   return true
 }",
   "explanations": Array [],
+  "pure": true,
   "symbol": Symbol(name),
 }
 `;
@@ -60,25 +64,12 @@ Object {
 exports[`arrayOf full: without explanations 1`] = `
 Object {
   "_": "function validator(value) {
-  validator.explanations = []
   if (!value) return false
-  if (!validator[\\"custom-0\\"](value.age)) {
-    validator.explanations.push(...validator[\\"custom-0\\"].explanations)
-    return false
-  }
-  if (!validator['gender-0'](value.gender)) {
-    validator.explanations.push(...validator['gender-0'].explanations)
-    return false
-  }
-  if (!validator[\\"custom-1\\"](value.grades)) {
-    validator.explanations.push(...validator[\\"custom-1\\"].explanations)
-    return false
-  }
+  if (!validator[\\"custom-0\\"](value.age)) return false
+  if (!validator['gender-0'](value.gender)) return false
+  if (!validator[\\"custom-1\\"](value.grades)) return false
   if (typeof value.name !== 'string') return false
-  if (!validator[\\"custom-2\\"](value.friends)) {
-    validator.explanations.push(...validator[\\"custom-2\\"].explanations)
-    return false
-  }
+  if (!validator[\\"custom-2\\"](value.friends)) return false
   return true
 }",
   "custom-0": "function validator(value) {
@@ -87,19 +78,17 @@ Object {
   return true
 }",
   "custom-0.explanations": Array [],
+  "custom-0.pure": true,
   "custom-1": "function validator(value) {
-  validator.explanations = []
   if (!value || !Array.isArray(value)) return false
   for (let i = 0; i < value.length; i++) {
     const elem = value[i]
-    if (!validator.variant(elem)) {
-      validator.explanations.push(...validator.variant.explanations)
-      return false
-    }
+    if (!validator.variant(elem)) return false
   }
   return true
 }",
   "custom-1.explanations": Array [],
+  "custom-1.pure": true,
   "custom-1.variant": "function validator(value) {
   if (value === 1) return true
   if (value === 2) return true
@@ -116,6 +105,7 @@ Object {
   return false
 }",
   "custom-1.variant.explanations": Array [],
+  "custom-1.variant.pure": true,
   "custom-2": "function validator(value) {
   if (!value || !Array.isArray(value)) return false
   for (let i = 0; i < value.length; i++) {
@@ -125,6 +115,7 @@ Object {
   return true
 }",
   "custom-2.explanations": Array [],
+  "custom-2.pure": true,
   "explanations": Array [],
   "gender-0": "function validator(value) {
   if (validator.__validValuesDict[value] === true) return true
@@ -135,6 +126,8 @@ Object {
     "male": true,
   },
   "gender-0.explanations": Array [],
+  "gender-0.pure": true,
+  "pure": true,
 }
 `;
 
@@ -153,6 +146,7 @@ Object {
   return true
 }",
   "explanations": Array [],
+  "pure": false,
 }
 `;
 
@@ -167,5 +161,6 @@ Object {
   return true
 }",
   "explanations": Array [],
+  "pure": true,
 }
 `;

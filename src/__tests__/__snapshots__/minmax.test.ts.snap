@@ -6,6 +6,7 @@ Object {
   return value < 5
 }",
   "explanations": Array [],
+  "pure": true,
 }
 `;
 
@@ -15,6 +16,7 @@ Object {
   return value <= 5
 }",
   "explanations": Array [],
+  "pure": true,
 }
 `;
 
@@ -24,6 +26,7 @@ Object {
   return value && value.length < 5
 }",
   "explanations": Array [],
+  "pure": true,
 }
 `;
 
@@ -33,6 +36,7 @@ Object {
   return value && value.length <= 5
 }",
   "explanations": Array [],
+  "pure": true,
 }
 `;
 
@@ -42,6 +46,7 @@ Object {
   return value > 5
 }",
   "explanations": Array [],
+  "pure": true,
 }
 `;
 
@@ -51,6 +56,7 @@ Object {
   return value >= 5
 }",
   "explanations": Array [],
+  "pure": true,
 }
 `;
 
@@ -60,6 +66,7 @@ Object {
   return value && value.length > 5
 }",
   "explanations": Array [],
+  "pure": true,
 }
 `;
 
@@ -69,5 +76,6 @@ Object {
   return value && value.length >= 5
 }",
   "explanations": Array [],
+  "pure": true,
 }
 `;

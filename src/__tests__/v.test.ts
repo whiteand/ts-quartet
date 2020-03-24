@@ -9,6 +9,7 @@ describe("v", () => {
     const explanations: Array<[Schema, any, any]> = [];
     for (const schema of schemas(maxLevel)) {
       const compiled = v(schema);
+      expect(typeof compiled.pure).toBe("boolean");
       for (const value of values(maxLevel)) {
         try {
           const validationResult = compiled(value);
@@ -49,14 +50,10 @@ describe("v", () => {
       Object {
         "_": "function validator(value) {
         validator.explanations = []
-        if (!validator.defined(value)) {
-          validator.explanations.push(...validator.defined.explanations)
-          return false
-        }
+        if (!value) return false
         const keys = Object.keys(value)
         for (let i = 0; i < keys.length; i++) {
           const key = keys[i]
-          if (validator.__propsWithSchemasDict[key] === true) continue
           if (!validator.checkRest(value[key])) {
             validator.explanations.push(...validator.checkRest.explanations)
             return false
@@ -64,18 +61,26 @@ describe("v", () => {
         }
         return true
       }",
-        "__propsWithSchemasDict": Object {
-          "0": true,
-        },
-        "checkRest": "function (value) { return value === c; }",
-        "checkRest.explanations": Array [],
-        "defined": "function validator(value) {
-        if (!value) return false
-        if (value[\\"0\\"] !== undefined) return false
-        return true
+        "checkRest": "function validator(value) {
+        validator.explanations = []
+        if (typeof value === 'number' && value % validator.divider === 0) {
+          return true
+        }
+        validator.explanations.push(value)
+        return false
       }",
+        "checkRest.divider": 2,
+        "checkRest.explanations": Array [
+          Array [],
+        ],
+        "checkRest.pure": false,
+        "defined": "function (v) { return !!v; }",
         "defined.explanations": Array [],
-        "explanations": Array [],
+        "defined.pure": true,
+        "explanations": Array [
+          Array [],
+        ],
+        "pure": false,
       }
     `);
   });

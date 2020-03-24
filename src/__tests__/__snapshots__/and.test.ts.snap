@@ -4,6 +4,7 @@ exports[`v.compileAnd v.compileAnd() 1`] = `
 Object {
   "_": "function () { return true; }",
   "explanations": Array [],
+  "pure": true,
 }
 `;
 
@@ -15,25 +16,21 @@ Object {
   return true
 }",
   "0.explanations": Array [],
+  "0.pure": true,
   "1": "function validator(value) {
   if (!value) return false
   if (typeof value.b !== 'string') return false
   return true
 }",
   "1.explanations": Array [],
+  "1.pure": true,
   "_": "function validator(value) {
-  validator.explanations = []
-  if (!validator[0](value)) {
-    validator.explanations.push(...validator[0].explanations)
-    return false
-  }
-  if (!validator[1](value)) {
-    validator.explanations.push(...validator[1].explanations)
-    return false
-  }
+  if (!validator[0](value)) return false
+  if (!validator[1](value)) return false
   return true
 }",
   "explanations": Array [],
+  "pure": true,
 }
 `;
 
@@ -41,6 +38,7 @@ exports[`v.compileAnd v.compileAnd(1) 1`] = `
 Object {
   "_": "function (value) { return value === c; }",
   "explanations": Array [],
+  "pure": true,
 }
 `;
 
@@ -48,6 +46,7 @@ exports[`v.compileAnd v.compileAnd(1, 1) 1`] = `
 Object {
   "_": "function (value) { return value === c; }",
   "explanations": Array [],
+  "pure": true,
 }
 `;
 
@@ -55,6 +54,7 @@ exports[`v.compileAnd v.compileAnd(1, 1, 2) 1`] = `
 Object {
   "_": "function () { return false; }",
   "explanations": Array [],
+  "pure": true,
 }
 `;
 
@@ -66,5 +66,6 @@ Object {
   return true
 }",
   "explanations": Array [],
+  "pure": true,
 }
 `;

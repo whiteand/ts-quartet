@@ -7,6 +7,7 @@ Object {
 }",
   "custom-0": "function (n) { return n % 2 === 0; }",
   "explanations": Array [],
+  "pure": true,
 }
 `;
 
@@ -28,6 +29,7 @@ Object {
             return value > 10 ? value + \\" is not Even\\" : undefined;
         }",
   "explanations": Array [],
+  "pure": false,
 }
 `;
 
@@ -46,5 +48,6 @@ Object {
   "explanations": Array [
     "Is not Even",
   ],
+  "pure": false,
 }
 `;

@@ -13,6 +13,7 @@ Object {
     },
   },
   "explanations": Array [],
+  "pure": true,
 }
 `;
 
@@ -20,6 +21,7 @@ exports[`compileObjectSchema empty obj 1`] = `
 Object {
   "_": "function (v) { return !!v; }",
   "explanations": Array [],
+  "pure": true,
 }
 `;
 
@@ -39,6 +41,7 @@ Object {
   return true
 }",
   "explanations": Array [],
+  "pure": false,
   "value.deep.another-0": "B",
   "value.deep.deep.A-0": "A",
 }
@@ -68,6 +71,7 @@ Object {
     },
   },
   "explanations": Array [],
+  "pure": true,
 }
 `;
 
@@ -85,22 +89,16 @@ Object {
   "explanations": Array [
     43,
   ],
+  "pure": false,
 }
 `;
 
 exports[`compileObjectSchema obj with variants 1`] = `
 Object {
   "_": "function validator(value) {
-  validator.explanations = []
   if (!value) return false
-  if (!validator['gender-0'](value.gender)) {
-    validator.explanations.push(...validator['gender-0'].explanations)
-    return false
-  }
-  if (!validator['grade-0'](value.grade)) {
-    validator.explanations.push(...validator['grade-0'].explanations)
-    return false
-  }
+  if (!validator['gender-0'](value.gender)) return false
+  if (!validator['grade-0'](value.grade)) return false
   return true
 }",
   "explanations": Array [],
@@ -113,6 +111,7 @@ Object {
     "male": true,
   },
   "gender-0.explanations": Array [],
+  "gender-0.pure": true,
   "grade-0": "function validator(value) {
   if (value === 1) return true
   if (value === 2) return true
@@ -128,6 +127,8 @@ Object {
   return false
 }",
   "grade-0.explanations": Array [],
+  "grade-0.pure": true,
+  "pure": true,
 }
 `;
 
@@ -143,6 +144,7 @@ Object {
   return true
 }",
   "explanations": Array [],
+  "pure": false,
   "var-0": "function validator(value) {
   validator.explanations = []
   if (value === \\"A\\") return true;
@@ -152,5 +154,6 @@ Object {
   return false
 }",
   "var-0.explanations": Array [],
+  "var-0.pure": false,
 }
 `;

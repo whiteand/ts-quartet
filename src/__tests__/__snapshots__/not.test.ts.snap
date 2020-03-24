@@ -6,6 +6,7 @@ Object {
   return value !== 42
 }",
   "explanations": Array [],
+  "pure": true,
 }
 `;
 
@@ -16,6 +17,7 @@ Object {
 }",
   "custom-0": "function (v) { return v === 42; }",
   "explanations": Array [],
+  "pure": true,
 }
 `;
 
@@ -25,5 +27,6 @@ Object {
   return typeof value !== 'number'
 }",
   "explanations": Array [],
+  "pure": true,
 }
 `;

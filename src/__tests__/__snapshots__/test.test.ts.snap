@@ -6,6 +6,7 @@ Object {
   return validator['tester-0'].test(value)
 }",
   "explanations": Array [],
+  "pure": true,
   "tester-0": /\\^\\[ \\.,A-Z\\]\\*\\$/,
 }
 `;

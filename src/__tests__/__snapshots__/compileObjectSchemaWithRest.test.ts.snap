@@ -26,11 +26,14 @@ Object {
   "checkRest.explanations": Array [
     "Is not A",
   ],
+  "checkRest.pure": false,
   "defined": "function (v) { return !!v; }",
   "defined.explanations": Array [],
+  "defined.pure": true,
   "explanations": Array [
     "Is not A",
   ],
+  "pure": false,
 }
 `;
 
@@ -46,10 +49,7 @@ Object {
   for (let i = 0; i < keys.length; i++) {
     const key = keys[i]
     if (validator.__propsWithSchemasDict[key] === true) continue
-    if (!validator.checkRest(value[key])) {
-      validator.explanations.push(...validator.checkRest.explanations)
-      return false
-    }
+    if (!validator.checkRest(value[key])) return false
   }
   return true
 }",
@@ -58,6 +58,7 @@ Object {
   },
   "checkRest": "function (value) { return value === c; }",
   "checkRest.explanations": Array [],
+  "checkRest.pure": true,
   "defined": "function validator(value) {
   validator.explanations = []
   if (!value) return false
@@ -96,6 +97,7 @@ Object {
   return false
 }",
   "defined.deep-1.checkRest.explanations": Array [],
+  "defined.deep-1.checkRest.pure": false,
   "defined.deep-1.defined": "function validator(value) {
   validator.explanations = []
   if (!value) return false
@@ -134,6 +136,7 @@ Object {
   return false
 }",
   "defined.deep-1.defined.deep-0.checkRest.explanations": Array [],
+  "defined.deep-1.defined.deep-0.checkRest.pure": false,
   "defined.deep-1.defined.deep-0.defined": "function validator(value) {
   validator.explanations = []
   if (!value) return false
@@ -144,30 +147,29 @@ Object {
   return true
 }",
   "defined.deep-1.defined.deep-0.defined.explanations": Array [],
+  "defined.deep-1.defined.deep-0.defined.pure": false,
   "defined.deep-1.defined.deep-0.explanations": Array [],
+  "defined.deep-1.defined.deep-0.pure": false,
   "defined.deep-1.defined.explanations": Array [],
+  "defined.deep-1.defined.pure": false,
   "defined.deep-1.explanations": Array [],
+  "defined.deep-1.pure": false,
   "defined.explanations": Array [],
+  "defined.pure": false,
   "explanations": Array [],
+  "pure": false,
 }
 `;
 
 exports[`compileObjectSchemaWithRest obj with constant 1`] = `
 Object {
   "_": "function validator(value) {
-  validator.explanations = []
-  if (!validator.defined(value)) {
-    validator.explanations.push(...validator.defined.explanations)
-    return false
-  }
+  if (!validator.defined(value)) return false
   const keys = Object.keys(value)
   for (let i = 0; i < keys.length; i++) {
     const key = keys[i]
     if (validator.__propsWithSchemasDict[key] === true) continue
-    if (!validator.checkRest(value[key])) {
-      validator.explanations.push(...validator.checkRest.explanations)
-      return false
-    }
+    if (!validator.checkRest(value[key])) return false
   }
   return true
 }",
@@ -186,6 +188,7 @@ Object {
   return typeof value === 'string'
 }",
   "checkRest.explanations": Array [],
+  "checkRest.pure": true,
   "defined": "function validator(value) {
   if (!value) return false
   if (validator.__validValues.str[value.str] !== true) return false
@@ -208,7 +211,9 @@ Object {
     },
   },
   "defined.explanations": Array [],
+  "defined.pure": true,
   "explanations": Array [],
+  "pure": true,
 }
 `;
 
@@ -245,6 +250,7 @@ Object {
   "checkRest.explanations": Array [
     "Is not A",
   ],
+  "checkRest.pure": false,
   "defined": "function validator(value) {
   validator.explanations = []
   if (!value) return false
@@ -255,9 +261,11 @@ Object {
   return true
 }",
   "defined.explanations": Array [],
+  "defined.pure": false,
   "explanations": Array [
     "Is not A",
   ],
+  "pure": false,
 }
 `;
 
@@ -265,10 +273,7 @@ exports[`compileObjectSchemaWithRest obj with variants 2`] = `
 Object {
   "_": "function validator(value) {
   validator.explanations = []
-  if (!validator.defined(value)) {
-    validator.explanations.push(...validator.defined.explanations)
-    return false
-  }
+  if (!validator.defined(value)) return false
   const keys = Object.keys(value)
   for (let i = 0; i < keys.length; i++) {
     const key = keys[i]
@@ -296,17 +301,11 @@ Object {
     "Is not A",
     "Is not B",
   ],
+  "checkRest.pure": false,
   "defined": "function validator(value) {
-  validator.explanations = []
   if (!value) return false
-  if (!validator['gender-0'](value.gender)) {
-    validator.explanations.push(...validator['gender-0'].explanations)
-    return false
-  }
-  if (!validator['grade-0'](value.grade)) {
-    validator.explanations.push(...validator['grade-0'].explanations)
-    return false
-  }
+  if (!validator['gender-0'](value.gender)) return false
+  if (!validator['grade-0'](value.grade)) return false
   return true
 }",
   "defined.explanations": Array [],
@@ -319,6 +318,7 @@ Object {
     "male": true,
   },
   "defined.gender-0.explanations": Array [],
+  "defined.gender-0.pure": true,
   "defined.grade-0": "function validator(value) {
   if (value === 1) return true
   if (value === 2) return true
@@ -334,10 +334,13 @@ Object {
   return false
 }",
   "defined.grade-0.explanations": Array [],
+  "defined.grade-0.pure": true,
+  "defined.pure": true,
   "explanations": Array [
     "Is not A",
     "Is not B",
   ],
+  "pure": false,
 }
 `;
 
@@ -374,6 +377,7 @@ Object {
   "checkRest.explanations": Array [
     "Is not C",
   ],
+  "checkRest.pure": false,
   "defined": "function validator(value) {
   validator.explanations = []
   if (!value) return false
@@ -384,6 +388,7 @@ Object {
   return true
 }",
   "defined.explanations": Array [],
+  "defined.pure": false,
   "defined.var-0": "function validator(value) {
   validator.explanations = []
   if (value === \\"A\\") return true;
@@ -393,8 +398,10 @@ Object {
   return false
 }",
   "defined.var-0.explanations": Array [],
+  "defined.var-0.pure": false,
   "explanations": Array [
     "Is not C",
   ],
+  "pure": false,
 }
 `;

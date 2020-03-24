@@ -146,6 +146,7 @@ export function arrayOf<T = any>(
   }
 
   ctx.explanations = [];
+  ctx.pure = pure;
 
   return ctx;
 }

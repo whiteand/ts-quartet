@@ -14,10 +14,10 @@ describe("compileObjectSchemaWithRest", () => {
     );
     expect(getExplanation(validator, { a: "A", b: "b" }))
       .toMatchInlineSnapshot(`
-                              Array [
-                                "Is not A",
-                              ]
-                    `);
+      Array [
+        "Is not A",
+      ]
+    `);
     snapshot(validator);
   });
   test("obj with func", () => {
@@ -29,6 +29,7 @@ describe("compileObjectSchemaWithRest", () => {
       }),
       [v.rest]: getExplanatoryFunc("A", "Is not A")
     });
+    expect(validator.pure).toBe(false);
     tables(
       validator,
       [{ id: 42 }, { id: 42, other: "A" }],
@@ -62,6 +63,7 @@ describe("compileObjectSchemaWithRest", () => {
       symb: Symbol.for("test"),
       [v.rest]: v.string
     });
+    expect(validator.pure).toBe(true);
     tables(
       validator,
       [
@@ -205,6 +207,7 @@ describe("compileObjectSchemaWithRest", () => {
         getExplanatoryFunc("B", "Is not B")
       ]
     });
+    expect(validator.pure).toBe(false);
 
     const invalids = [
       {},
@@ -230,11 +233,11 @@ describe("compileObjectSchemaWithRest", () => {
     tables(validator, valids, invalids);
     expect(getExplanation(validator, { grade: 10, gender: "male", other: "a" }))
       .toMatchInlineSnapshot(`
-                        Array [
-                          "Is not A",
-                          "Is not B",
-                        ]
-                `);
+                                    Array [
+                                      "Is not A",
+                                      "Is not B",
+                                    ]
+                        `);
     snapshot(validator);
   });
   test("obj + obj", () => {
@@ -250,6 +253,7 @@ describe("compileObjectSchemaWithRest", () => {
         [v.rest]: getExplanatoryFunc("B", "Is not B")
       }
     });
+    expect(validator.pure).toBe(false);
     snapshot(validator);
     tables(
       validator,
@@ -267,28 +271,28 @@ describe("compileObjectSchemaWithRest", () => {
     );
     expect(getExplanation(validator, { deep: { deep: { space: "false" } } }))
       .toMatchInlineSnapshot(`
-                                                            Array [
-                                                              "false",
-                                                            ]
-                                        `);
+                                                                        Array [
+                                                                          "false",
+                                                                        ]
+                                                `);
     expect(
       getExplanation(validator, {
         deep: { deep: { space: "true" }, other: "b" }
       })
     ).toMatchInlineSnapshot(`
-                  Array [
-                    "Is not B",
-                  ]
-            `);
+      Array [
+        "Is not B",
+      ]
+    `);
     expect(
       getExplanation(validator, {
         deep: { deep: { space: "true", other: "a" } }
       })
     ).toMatchInlineSnapshot(`
-                  Array [
-                    "Is not A",
-                  ]
-            `);
+      Array [
+        "Is not A",
+      ]
+    `);
   });
   test("obj: variant explanations", () => {
     const validator = compileObjectSchemaWithRest(v, {
@@ -298,29 +302,30 @@ describe("compileObjectSchemaWithRest", () => {
       ],
       [v.rest]: getExplanatoryFunc("C", "Is not C")
     });
+    expect(validator.pure).toBe(false);
     tables(
       validator,
       [{ var: "A" }, { var: "B" }, { var: "A", b: "C" }],
       [{ var: "C" }, { var: "A", B: "d" }, { var: "B", b: "d" }]
     );
     expect(getExplanation(validator, { var: "a" })).toMatchInlineSnapshot(`
-            Array [
-              "Is not A",
-              "Is not B",
-            ]
-        `);
+                        Array [
+                          "Is not A",
+                          "Is not B",
+                        ]
+                `);
     expect(getExplanation(validator, { var: "A", b: "d" }))
       .toMatchInlineSnapshot(`
-            Array [
-              "Is not C",
-            ]
-        `);
+      Array [
+        "Is not C",
+      ]
+    `);
     expect(getExplanation(validator, { var: "B", b: "d" }))
       .toMatchInlineSnapshot(`
-            Array [
-              "Is not C",
-            ]
-        `);
+      Array [
+        "Is not C",
+      ]
+    `);
     snapshot(validator);
   });
   test("obj: variants explanations", () => {
@@ -331,6 +336,7 @@ describe("compileObjectSchemaWithRest", () => {
         [v.rest]: getExplanatoryFunc("C", "Is not C")
       }
     ]);
+    expect(validator.pure).toBe(false);
 
     tables(
       validator,
@@ -346,10 +352,10 @@ describe("compileObjectSchemaWithRest", () => {
       ]
     );
     expect(getExplanation(validator, { a: "b" })).toMatchInlineSnapshot(`
-                                          Array [
-                                            "Is not A",
-                                          ]
-                            `);
+                                                      Array [
+                                                        "Is not A",
+                                                      ]
+                                    `);
     expect(getExplanation(validator, { a: "A" })).toMatchInlineSnapshot(
       `Array []`
     );
