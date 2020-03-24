@@ -20,29 +20,35 @@ function compileVariantElementToReturnWay(
   preparations: Prepare[],
   handleErrors: HandleError[],
   stringNumbersSymbols: Array<string | number | symbol>
-): string {
-  return handleSchema({
+): [string, boolean] {
+  return handleSchema<[string, boolean]>({
     constant: constant => {
       if (constant === null) {
-        return `if (${valueId} === null) return true`;
+        return [`if (${valueId} === null) return true`, true];
       }
       if (constant === undefined) {
-        return `if (${valueId} === undefined) return true`;
+        return [`if (${valueId} === undefined) return true`, true];
       }
       if (constant === "false" || constant === "true") {
-        return `if (${valueId} === ${JSON.stringify(constant)}) return true`;
+        return [
+          `if (${valueId} === ${JSON.stringify(constant)}) return true`,
+          true
+        ];
       }
       if (typeof constant === "number") {
         if (Number.isNaN(constant)) {
-          return `if (Number.isNaN(${valueId})) return true`;
+          return [`if (Number.isNaN(${valueId})) return true`, true];
         }
-        return `if (${valueId} === ${constant}) return true`;
+        return [`if (${valueId} === ${constant}) return true`, true];
       }
       if (typeof constant === "symbol" || typeof constant === "string") {
         stringNumbersSymbols.push(constant);
-        return "";
+        return ["", true];
       }
-      return `if (${valueId} === ${JSON.stringify(constant)}) return true`;
+      return [
+        `if (${valueId} === ${JSON.stringify(constant)}) return true`,
+        true
+      ];
     },
     function: funcSchema => {
       const s = funcSchema();
@@ -53,23 +59,29 @@ function compileVariantElementToReturnWay(
       if (s.handleError) {
         handleErrors.push(s.handleError);
       }
-      return `if (${s.check(valueId, ctxId)}) return true;`;
+      return [`if (${s.check(valueId, ctxId)}) return true;`, !s.handleError];
     },
     object: objectSchema => {
       const compiled = compileObjectSchema(c, objectSchema);
       const [id, prepare] = toContext("variant-" + index, compiled);
       preparations.push(prepare);
+      const funcSchema = compiled.pure
+        ? () => ({
+            check: () => `${ctxId}['${id}'](${valueId})`,
+            not: () => `!${ctxId}['${id}'](${valueId})`
+          })
+        : () => ({
+            check: () => `${ctxId}['${id}'](${valueId})`,
+            handleError: () =>
+              `${ctxId}.explanations.push(...${ctxId}['${id}'].explanations)`,
+            not: () => `!${ctxId}['${id}'](${valueId})`
+          });
       return compileVariantElementToReturnWay(
         c,
         index,
         valueId,
         ctxId,
-        () => ({
-          check: () => `${ctxId}['${id}'](${valueId})`,
-          handleError: () =>
-            `${ctxId}.explanations.push(...${ctxId}['${id}'].explanations)`,
-          not: () => `!${ctxId}['${id}'](${valueId})`
-        }),
+        funcSchema,
         preparations,
         handleErrors,
         stringNumbersSymbols
@@ -79,17 +91,23 @@ function compileVariantElementToReturnWay(
       const compiled = compileObjectSchemaWithRest(c, objectSchema);
       const [id, prepare] = toContext("variant-" + index, compiled);
       preparations.push(prepare);
+      const funcSchema = compiled.pure
+        ? () => ({
+            check: () => `${ctxId}['${id}'](${valueId})`,
+            not: () => `!${ctxId}['${id}'](${valueId})`
+          })
+        : () => ({
+            check: () => `${ctxId}['${id}'](${valueId})`,
+            handleError: () =>
+              `${ctxId}.explanations.push(...${ctxId}['${id}'].explanations)`,
+            not: () => `!${ctxId}['${id}'](${valueId})`
+          });
       return compileVariantElementToReturnWay(
         c,
         index,
         valueId,
         ctxId,
-        () => ({
-          check: () => `${ctxId}['${id}'](${valueId})`,
-          handleError: () =>
-            `${ctxId}.explanations.push(...${ctxId}['${id}'].explanations)`,
-          not: () => `!${ctxId}['${id}'](${valueId})`
-        }),
+        funcSchema,
         preparations,
         handleErrors,
         stringNumbersSymbols
@@ -97,21 +115,24 @@ function compileVariantElementToReturnWay(
     },
     variant: schemas => {
       const res = [];
+      let isPure = true;
       for (const variant of schemas) {
-        res.push(
-          compileVariantElementToReturnWay(
-            c,
-            index,
-            valueId,
-            ctxId,
-            variant,
-            preparations,
-            handleErrors,
-            stringNumbersSymbols
-          )
+        const [codePart, isPartPure] = compileVariantElementToReturnWay(
+          c,
+          index,
+          valueId,
+          ctxId,
+          variant,
+          preparations,
+          handleErrors,
+          stringNumbersSymbols
         );
+        if (!isPartPure) {
+          isPure = false;
+        }
+        res.push(codePart);
       }
-      return res.join("\n");
+      return [res.join("\n"), isPure];
     }
   })(schema);
 }
@@ -119,9 +140,9 @@ function compileVariantElementToReturnWay(
 export function compileVariants(
   c: (schema: Schema) => CompilationResult,
   variants: IVariantSchema
-) {
+): CompilationResult {
   if (variants.length === 0) {
-    return Object.assign(() => false, { explanations: [] });
+    return Object.assign(() => false, { explanations: [], pure: true });
   }
   if (variants.length === 1) {
     return c(variants[0]);
@@ -130,20 +151,23 @@ export function compileVariants(
   const handleErrors: HandleError[] = [];
   const stringNumbersSymbols: Array<string | number | symbol> = [];
   const bodyCodeLines = [];
+  let isPure = true;
   for (let i = 0; i < variants.length; i++) {
     const variant = variants[i];
-    bodyCodeLines.push(
-      compileVariantElementToReturnWay(
-        c,
-        i,
-        `value`,
-        `validator`,
-        variant,
-        preparations,
-        handleErrors,
-        stringNumbersSymbols
-      )
+    const [codePart, purePart] = compileVariantElementToReturnWay(
+      c,
+      i,
+      `value`,
+      `validator`,
+      variant,
+      preparations,
+      handleErrors,
+      stringNumbersSymbols
     );
+    if (!purePart) {
+      isPure = false;
+    }
+    bodyCodeLines.push(codePart);
   }
   // tslint:disable-next-line
   let __validValuesDict = {};
@@ -169,9 +193,7 @@ export function compileVariants(
   // tslint:disable-next-line
   const ctx = eval(
     `(() => {function validator(value) {${
-      bodyCode.indexOf("explanations") >= 0
-        ? "\n  validator.explanations = []"
-        : ""
+      isPure ? "" : "\n  validator.explanations = []"
     }\n${addTabs(bodyCode)}\n  return false\n}
       return validator
     })()`
@@ -180,6 +202,7 @@ export function compileVariants(
     prepare(ctx);
   }
   ctx.explanations = [];
+  ctx.pure = isPure;
   if (stringNumbersSymbols.length > 0) {
     ctx.__validValuesDict = __validValuesDict;
   }

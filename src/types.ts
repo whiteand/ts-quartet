@@ -1,5 +1,6 @@
 export interface IContext {
   explanations: any[];
+  pure: boolean;
   [key: string]: any;
 }
 export type Prepare = (ctx: IContext) => void;

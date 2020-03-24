@@ -1,7 +1,9 @@
 import { addTabs } from "./addTabs";
-import { IFunctionSchemaResult } from "./types";
+import { IFunctionSchemaResult, CompilationResult } from "./types";
 
-export function compileFunctionSchemaResult(s: IFunctionSchemaResult) {
+export function compileFunctionSchemaResult(
+  s: IFunctionSchemaResult
+): CompilationResult {
   let code;
   if (s.handleError) {
     const checkCode = s.check("value", "validator");
@@ -29,6 +31,7 @@ export function compileFunctionSchemaResult(s: IFunctionSchemaResult) {
   // tslint:disable-next-line
   const ctx = eval(code);
   ctx.explanations = [];
+  ctx.pure = !s.handleError;
   if (s.prepare) {
     s.prepare(ctx);
   }

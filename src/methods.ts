@@ -34,7 +34,7 @@ export const methods: IMethods = {
     return arrayOf(this as any, schema) as TypedCompilationResult<T[]>;
   },
   custom: (
-    check: ((value: any) => boolean) & { explanations?: any[] },
+    check: ((value: any) => boolean) & { explanations?: any[]; pure?: boolean },
     explanation?: any
   ) => () => {
     const preparations: Prepare[] = [];
@@ -54,7 +54,7 @@ export const methods: IMethods = {
               `${ctxId}['${explanationId}-value'] = ${ctxId}['${explanationId}'](${id})\nif (${ctxId}['${explanationId}-value'] !== undefined) {\n  ${ctxId}.explanations.push(${ctxId}['${explanationId}-value'])\n}`
           : (id, ctxId) =>
               `${ctxId}.explanations.push(${ctxId}['${explanationId}'])`;
-    } else if (Array.isArray(check.explanations)) {
+    } else if (Array.isArray(check.explanations) && !check.pure) {
       handleError = (id, ctxId) =>
         `${ctxId}.explanations.push(...${ctxId}${checkIdAccessor}.explanations)`;
     }

@@ -13,32 +13,32 @@ function compileForLoopBody(
   c: (schema: Schema) => CompilationResult,
   schema: Schema,
   preparations: Prepare[]
-): string {
-  return handleSchema({
+): [string, boolean] {
+  return handleSchema<[string, boolean]>({
     constant: constant => {
       if (constant === null) {
-        return `if (elem !== null) return false`;
+        return [`if (elem !== null) return false`, true];
       }
       if (constant === undefined) {
-        return `if (elem !== undefined) return false`;
+        return [`if (elem !== undefined) return false`, true];
       }
       if (typeof constant === "number") {
         if (Number.isNaN(constant)) {
-          return `if (!Number.isNaN(elem)) return false`;
+          return [`if (!Number.isNaN(elem)) return false`, true];
         }
-        return `if (elem !== ${constant}) return false`;
+        return [`if (elem !== ${constant}) return false`, true];
       }
       if (constant === "true" || constant === "false") {
-        return `if (elem !== '${constant}') return false`;
+        return [`if (elem !== '${constant}') return false`, true];
       }
       if (typeof constant === "symbol") {
         const [symbolId, prepare] = toContext("symbol", constant, true);
         const symbolAccessor = getKeyAccessor(symbolId);
 
         preparations.push(prepare);
-        return `if (elem !== validator${symbolAccessor}) return false`;
+        return [`if (elem !== validator${symbolAccessor}) return false`, true];
       }
-      return `if (elem !== ${JSON.stringify(constant)}) return false`;
+      return [`if (elem !== ${JSON.stringify(constant)}) return false`, true];
     },
     function: funcSchema => {
       const s = funcSchema();
@@ -48,47 +48,54 @@ function compileForLoopBody(
       const notCheck = s.not
         ? s.not("elem", "validator")
         : `!(${s.check("elem", "validator")})`;
-      return s.handleError
-        ? `if (${notCheck}) {\n${addTabs(
-            s.handleError("elem", "validator")
-          )}\n  return false\n}`
-        : `if (${notCheck}) return false`;
+      return [
+        s.handleError
+          ? `if (${notCheck}) {\n${addTabs(
+              s.handleError("elem", "validator")
+            )}\n  return false\n}`
+          : `if (${notCheck}) return false`,
+        !s.handleError
+      ];
     },
     object: objectSchema => {
       const compiled = c(objectSchema);
       const [id, prepare] = toContext("object", compiled, true);
       const objAccesor = getKeyAccessor(id);
       preparations.push(prepare);
-      return compileForLoopBody(
-        c,
-        () => ({
-          check: () => `validator${objAccesor}(elem)`,
-          handleError: () =>
-            `validator.explanations.push(...validator${objAccesor}.explanations)`,
-          not: () => `!validator${objAccesor}(elem)`
-        }),
-        preparations
-      );
+      const funcSchema = compiled.pure
+        ? () => ({
+            check: () => `validator${objAccesor}(elem)`,
+            not: () => `!validator${objAccesor}(elem)`
+          })
+        : () => ({
+            check: () => `validator${objAccesor}(elem)`,
+            handleError: () =>
+              `validator.explanations.push(...validator${objAccesor}.explanations)`,
+            not: () => `!validator${objAccesor}(elem)`
+          });
+      return compileForLoopBody(c, funcSchema, preparations);
     },
     objectRest: objectSchema => {
       const compiled = c(objectSchema);
       const [id, prepare] = toContext("object", compiled, true);
       const idAccessor = getKeyAccessor(id);
       preparations.push(prepare);
-      return compileForLoopBody(
-        c,
-        () => ({
-          check: () => `validator${idAccessor}(elem)`,
-          handleError: () =>
-            `validator.explanations.push(...validator${idAccessor}.explanations)`,
-          not: () => `!validator${idAccessor}(elem)`
-        }),
-        preparations
-      );
+      const funcSchema = compiled.pure
+        ? () => ({
+            check: () => `validator${idAccessor}(elem)`,
+            not: () => `!validator${idAccessor}(elem)`
+          })
+        : () => ({
+            check: () => `validator${idAccessor}(elem)`,
+            handleError: () =>
+              `validator.explanations.push(...validator${idAccessor}.explanations)`,
+            not: () => `!validator${idAccessor}(elem)`
+          });
+      return compileForLoopBody(c, funcSchema, preparations);
     },
     variant: schemas => {
       if (schemas.length === 0) {
-        return `return false`;
+        return [`return false`, true];
       }
       if (schemas.length === 1) {
         return compileForLoopBody(c, schemas[0], preparations);
@@ -97,16 +104,18 @@ function compileForLoopBody(
       const [id, prepare] = toContext("variant", compiled, true);
       const idAccessor = getKeyAccessor(id);
       preparations.push(prepare);
-      return compileForLoopBody(
-        c,
-        () => ({
-          check: () => `validator${idAccessor}(elem)`,
-          handleError: () =>
-            `validator.explanations.push(...validator${idAccessor}.explanations)`,
-          not: () => `!validator${idAccessor}(elem)`
-        }),
-        preparations
-      );
+      const funcSchema = compiled.pure
+        ? () => ({
+            check: () => `validator${idAccessor}(elem)`,
+            not: () => `!validator${idAccessor}(elem)`
+          })
+        : () => ({
+            check: () => `validator${idAccessor}(elem)`,
+            handleError: () =>
+              `validator.explanations.push(...validator${idAccessor}.explanations)`,
+            not: () => `!validator${idAccessor}(elem)`
+          });
+      return compileForLoopBody(c, funcSchema, preparations);
     }
   })(schema);
 }
@@ -116,13 +125,11 @@ export function arrayOf<T = any>(
   schema: Schema
 ): TypedCompilationResult<T> {
   const preparations: Prepare[] = [];
-  const forLoopBody = compileForLoopBody(c, schema, preparations);
+  const [forLoopBody, pure] = compileForLoopBody(c, schema, preparations);
 
   const code = `
     (() => {function validator(value) {${
-      forLoopBody.indexOf("explanations") >= 0
-        ? "\n  validator.explanations = []"
-        : ""
+      pure ? "" : "\n  validator.explanations = []"
     }\n  if (!value || !Array.isArray(value)) return false\n  for (let i = 0; i < value.length; i++) {\n    const elem = value[i]\n${addTabs(
     forLoopBody,
     2

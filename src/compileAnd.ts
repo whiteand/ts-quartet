@@ -12,14 +12,14 @@ function compileAndVariantElementToReturnWay(
   schema: Schema,
   preparations: Prepare[],
   primitives: any[]
-): string {
-  return handleSchema({
+): [string, boolean] {
+  return handleSchema<[string, boolean]>({
     constant: constant => {
       if (primitives.indexOf(constant) < 0) {
         primitives.push(constant);
       }
 
-      return "";
+      return ["", true];
     },
     function: funcSchema => {
       const s = funcSchema();
@@ -29,28 +29,37 @@ function compileAndVariantElementToReturnWay(
       const notCheck = s.not
         ? s.not(valueId, ctxId)
         : `!(${s.check(valueId, ctxId)})`;
-      return s.handleError
-        ? `if (${notCheck}) {\n${addTabs(
-            s.handleError(valueId, ctxId)
-          )}\n  return false\n}`
-        : `if (${notCheck}) return false`;
+      return [
+        s.handleError
+          ? `if (${notCheck}) {\n${addTabs(
+              s.handleError(valueId, ctxId)
+            )}\n  return false\n}`
+          : `if (${notCheck}) return false`,
+        !s.handleError
+      ];
     },
     object: objectSchema => {
       const compiled = c(objectSchema);
       const [id, prepare] = toContext(index, compiled, true);
       const idAccessor = getKeyAccessor(id);
       preparations.push(prepare);
+      const funcSchema = compiled.pure
+        ? () => ({
+            check: () => `${ctxId}${idAccessor}(${valueId})`,
+            not: () => `!${ctxId}${idAccessor}(${valueId})`
+          })
+        : () => ({
+            check: () => `${ctxId}${idAccessor}(${valueId})`,
+            handleError: () =>
+              `${ctxId}.explanations.push(...${ctxId}${idAccessor}.explanations)`,
+            not: () => `!${ctxId}${idAccessor}(${valueId})`
+          });
       return compileAndVariantElementToReturnWay(
         c,
         index,
         valueId,
         ctxId,
-        () => ({
-          check: () => `${ctxId}${idAccessor}(${valueId})`,
-          handleError: () =>
-            `${ctxId}.explanations.push(...${ctxId}${idAccessor}.explanations)`,
-          not: () => `!${ctxId}${idAccessor}(${valueId})`
-        }),
+        funcSchema,
         preparations,
         primitives
       );
@@ -60,24 +69,30 @@ function compileAndVariantElementToReturnWay(
       const [id, prepare] = toContext(index, compiled, true);
       const idAccessor = getKeyAccessor(id);
       preparations.push(prepare);
+      const funcSchema = compiled.pure
+        ? () => ({
+            check: () => `${ctxId}${idAccessor}(${valueId})`,
+            not: () => `!${ctxId}${idAccessor}(${valueId})`
+          })
+        : () => ({
+            check: () => `${ctxId}${idAccessor}(${valueId})`,
+            handleError: () =>
+              `${ctxId}.explanations.push(...${ctxId}${idAccessor}.explanations)`,
+            not: () => `!${ctxId}${idAccessor}(${valueId})`
+          });
       return compileAndVariantElementToReturnWay(
         c,
         index,
         valueId,
         ctxId,
-        () => ({
-          check: () => `${ctxId}${idAccessor}(${valueId})`,
-          handleError: () =>
-            `${ctxId}.explanations.push(...${ctxId}${idAccessor}.explanations)`,
-          not: () => `!${ctxId}${idAccessor}(${valueId})`
-        }),
+        funcSchema,
         preparations,
         primitives
       );
     },
     variant: schemas => {
       if (schemas.length === 0) {
-        return `return false`;
+        return [`return false`, true];
       }
       if (schemas.length === 1) {
         return compileAndVariantElementToReturnWay(
@@ -93,18 +108,24 @@ function compileAndVariantElementToReturnWay(
       const compiled = c(schemas);
       const [id, prepare] = toContext(index, compiled, true);
       preparations.push(prepare);
+      const funcSchema = compiled.pure
+        ? () => ({
+            check: () => `${ctxId}${idAccessor}(${valueId})`,
+            not: () => `!${ctxId}${idAccessor}(${valueId})`
+          })
+        : () => ({
+            check: () => `${ctxId}${idAccessor}(${valueId})`,
+            handleError: () =>
+              `${ctxId}.explanations.push(...${ctxId}${idAccessor}.explanations)`,
+            not: () => `!${ctxId}${idAccessor}(${valueId})`
+          });
       const idAccessor = getKeyAccessor(id);
       return compileAndVariantElementToReturnWay(
         c,
         index,
         valueId,
         ctxId,
-        () => ({
-          check: () => `${ctxId}${idAccessor}(${valueId})`,
-          handleError: () =>
-            `${ctxId}.explanations.push(...${ctxId}${idAccessor}.explanations)`,
-          not: () => `!${ctxId}${idAccessor}(${valueId})`
-        }),
+        funcSchema,
         preparations,
         primitives
       );
@@ -117,7 +138,7 @@ export function compileAnd(
   schemas: Schema[]
 ): CompilationResult {
   if (schemas.length === 0) {
-    return Object.assign(() => true, { explanations: [] });
+    return Object.assign(() => true, { explanations: [], pure: true });
   }
   if (schemas.length === 1) {
     return c(schemas[0]);
@@ -126,9 +147,10 @@ export function compileAnd(
   const preparations: Prepare[] = [];
   const bodyCodeLines = [];
   const primitives: any[] = [];
+  let isPure = true;
   for (let i = 0; i < schemas.length; i++) {
     const schema = schemas[i];
-    const codeLine = compileAndVariantElementToReturnWay(
+    const [codeLine, pureLine] = compileAndVariantElementToReturnWay(
       c,
       i,
       `value`,
@@ -137,11 +159,14 @@ export function compileAnd(
       preparations,
       primitives
     );
+    if (!pureLine) {
+      isPure = false;
+    }
     if (codeLine) {
       bodyCodeLines.push(codeLine);
     }
     if (primitives.length > 1) {
-      return Object.assign(() => false, { explanations: [] });
+      return Object.assign(() => false, { explanations: [], pure: true });
     }
   }
   if (primitives.length === 1) {
@@ -155,9 +180,7 @@ export function compileAnd(
     }
   }
   const code = `(() => {\nfunction validator(value) {${
-    bodyCode.indexOf("explanations") >= 0
-      ? "\n  validator.explanations = []"
-      : ""
+    isPure ? "" : "\n  validator.explanations = []"
   }\n${bodyCode}\n  return true\n}
     return validator
   })()`;
@@ -168,5 +191,6 @@ export function compileAnd(
     prepare(ctx);
   }
   ctx.explanations = [];
+  ctx.pure = isPure;
   return ctx as any;
 }
