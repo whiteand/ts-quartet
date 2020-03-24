@@ -12,7 +12,7 @@ Object {
 exports[`not custom 1`] = `
 Object {
   "_": "function validator(value) {
-  return !validator['custom-0'](value)
+  return !validator[\\"custom-0\\"](value)
 }",
   "custom-0": "function (v) { return v === 42; }",
   "explanations": Array [],

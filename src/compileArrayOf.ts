@@ -1,4 +1,5 @@
 import { addTabs } from "./addTabs";
+import { getKeyAccessor } from "./getKeyAccessor";
 import { handleSchema } from "./handleSchema";
 import { toContext } from "./toContext";
 import {
@@ -7,7 +8,6 @@ import {
   Schema,
   TypedCompilationResult
 } from "./types";
-import { getKeyAccessor } from "./getKeyAccessor";
 
 function compileForLoopBody(
   c: (schema: Schema) => CompilationResult,

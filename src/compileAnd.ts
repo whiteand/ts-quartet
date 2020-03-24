@@ -1,8 +1,8 @@
 import { addTabs } from "./addTabs";
+import { getKeyAccessor } from "./getKeyAccessor";
 import { handleSchema } from "./handleSchema";
 import { toContext } from "./toContext";
 import { CompilationResult, Prepare, Schema } from "./types";
-import { getKeyAccessor } from "./getKeyAccessor";
 
 function compileAndVariantElementToReturnWay(
   c: (schema: Schema) => CompilationResult,

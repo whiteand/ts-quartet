@@ -1,7 +1,7 @@
+import { getKeyAccessor } from "./getKeyAccessor";
 import { methods } from "./methods";
 import { toContext } from "./toContext";
 import { CompilationResult, IObjectSchema, Schema } from "./types";
-import { getKeyAccessor } from "./getKeyAccessor";
 
 export function compileObjectSchemaWithRest(
   c: (schema: Schema) => CompilationResult,

@@ -62,14 +62,23 @@ Object {
   "_": "function validator(value) {
   validator.explanations = []
   if (!value) return false
-  if (!validator['custom-0'](value.age)) return false
+  if (!validator[\\"custom-0\\"](value.age)) {
+    validator.explanations.push(...validator[\\"custom-0\\"].explanations)
+    return false
+  }
   if (!validator['gender-0'](value.gender)) {
     validator.explanations.push(...validator['gender-0'].explanations)
     return false
   }
-  if (!validator['custom-1'](value.grades)) return false
+  if (!validator[\\"custom-1\\"](value.grades)) {
+    validator.explanations.push(...validator[\\"custom-1\\"].explanations)
+    return false
+  }
   if (typeof value.name !== 'string') return false
-  if (!validator['custom-2'](value.friends)) return false
+  if (!validator[\\"custom-2\\"](value.friends)) {
+    validator.explanations.push(...validator[\\"custom-2\\"].explanations)
+    return false
+  }
   return true
 }",
   "custom-0": "function validator(value) {

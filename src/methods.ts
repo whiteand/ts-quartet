@@ -1,6 +1,7 @@
 import { compileAnd } from "./compileAnd";
 import { arrayOf } from "./compileArrayOf";
 import { compileNot } from "./compileNot";
+import { getKeyAccessor } from "./getKeyAccessor";
 import { toContext } from "./toContext";
 import {
   HandleError,
@@ -32,9 +33,13 @@ export const methods: IMethods = {
   compileArrayOf<T>(schema: Schema) {
     return arrayOf(this as any, schema) as TypedCompilationResult<T[]>;
   },
-  custom: (check: (value: any) => boolean, explanation?: any) => () => {
+  custom: (
+    check: ((value: any) => boolean) & { explanations?: any[] },
+    explanation?: any
+  ) => () => {
     const preparations: Prepare[] = [];
     const [checkId, prepare] = toContext("custom", check);
+    const checkIdAccessor = getKeyAccessor(checkId);
     preparations.push(prepare);
     let handleError: HandleError | undefined;
     const [explanationId, prepareExplanation] = toContext(
@@ -49,11 +54,14 @@ export const methods: IMethods = {
               `${ctxId}['${explanationId}-value'] = ${ctxId}['${explanationId}'](${id})\nif (${ctxId}['${explanationId}-value'] !== undefined) {\n  ${ctxId}.explanations.push(${ctxId}['${explanationId}-value'])\n}`
           : (id, ctxId) =>
               `${ctxId}.explanations.push(${ctxId}['${explanationId}'])`;
+    } else if (Array.isArray(check.explanations)) {
+      handleError = (id, ctxId) =>
+        `${ctxId}.explanations.push(...${ctxId}${checkIdAccessor}.explanations)`;
     }
     return {
-      check: (id: any, ctx: any) => `${ctx}['${checkId}'](${id})`,
+      check: (id: any, ctx: any) => `${ctx}${checkIdAccessor}(${id})`,
       handleError,
-      not: (id: any, ctx: any) => `!${ctx}['${checkId}'](${id})`,
+      not: (id: any, ctx: any) => `!${ctx}${checkIdAccessor}(${id})`,
       prepare: ctx => {
         for (const partialPrepare of preparations) {
           partialPrepare(ctx);
