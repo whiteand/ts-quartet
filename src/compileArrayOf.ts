@@ -120,7 +120,15 @@ function compileForLoopBody(
 export function arrayOf<T = any>(
   c: (schema: Schema) => CompilationResult,
   schema: Schema
-): TypedCompilationResult<T> {
+): TypedCompilationResult<T[]> {
+  // arrayOf([])
+  if (Array.isArray(schema) && schema.length === 0) {
+    return Object.assign(
+      (value: any): value is T[] =>
+        value && Array.isArray(value) && value.length === 0,
+      { explanations: [], pure: true }
+    );
+  }
   const preparations: Prepare[] = [];
   const [forLoopBody, pure] = compileForLoopBody(c, schema, preparations);
 

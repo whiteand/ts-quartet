@@ -1,0 +1,448 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`arrayOf 00. v.compileArrayOf(null) 1`] = `
+Object {
+  "_": "function validator(value) {
+  if (!value || !Array.isArray(value)) return false
+  for (let i = 0; i < value.length; i++) {
+    const elem = value[i]
+    if (elem !== null) return false
+  }
+  return true
+}",
+  "explanations": Array [],
+  "pure": true,
+}
+`;
+
+exports[`arrayOf 01. v.compileArrayOf(undefined) 1`] = `
+Object {
+  "_": "function validator(value) {
+  if (!value || !Array.isArray(value)) return false
+  for (let i = 0; i < value.length; i++) {
+    const elem = value[i]
+    if (elem !== undefined) return false
+  }
+  return true
+}",
+  "explanations": Array [],
+  "pure": true,
+}
+`;
+
+exports[`arrayOf 02. v.compileArrayOf(42) 1`] = `
+Object {
+  "_": "function validator(value) {
+  if (!value || !Array.isArray(value)) return false
+  for (let i = 0; i < value.length; i++) {
+    const elem = value[i]
+    if (elem !== 42) return false
+  }
+  return true
+}",
+  "explanations": Array [],
+  "pure": true,
+}
+`;
+
+exports[`arrayOf 03. v.compileArrayOf(NaN) 1`] = `
+Object {
+  "_": "function validator(value) {
+  if (!value || !Array.isArray(value)) return false
+  for (let i = 0; i < value.length; i++) {
+    const elem = value[i]
+    if (!Number.isNaN(elem)) return false
+  }
+  return true
+}",
+  "explanations": Array [],
+  "pure": true,
+}
+`;
+
+exports[`arrayOf 04. v.compileArrayOf("true") 1`] = `
+Object {
+  "_": "function validator(value) {
+  if (!value || !Array.isArray(value)) return false
+  for (let i = 0; i < value.length; i++) {
+    const elem = value[i]
+    if (elem !== \\"true\\") return false
+  }
+  return true
+}",
+  "explanations": Array [],
+  "pure": true,
+}
+`;
+
+exports[`arrayOf 05. v.compileArrayOf("false") 1`] = `
+Object {
+  "_": "function validator(value) {
+  if (!value || !Array.isArray(value)) return false
+  for (let i = 0; i < value.length; i++) {
+    const elem = value[i]
+    if (elem !== \\"false\\") return false
+  }
+  return true
+}",
+  "explanations": Array [],
+  "pure": true,
+}
+`;
+
+exports[`arrayOf 06. v.compileArrayOf(true) 1`] = `
+Object {
+  "_": "function validator(value) {
+  if (!value || !Array.isArray(value)) return false
+  for (let i = 0; i < value.length; i++) {
+    const elem = value[i]
+    if (elem !== true) return false
+  }
+  return true
+}",
+  "explanations": Array [],
+  "pure": true,
+}
+`;
+
+exports[`arrayOf 07. v.compileArrayOf(false) 1`] = `
+Object {
+  "_": "function validator(value) {
+  if (!value || !Array.isArray(value)) return false
+  for (let i = 0; i < value.length; i++) {
+    const elem = value[i]
+    if (elem !== false) return false
+  }
+  return true
+}",
+  "explanations": Array [],
+  "pure": true,
+}
+`;
+
+exports[`arrayOf 08. v.compileArrayOf(Symbol.for("test")) 1`] = `
+Object {
+  "_": "function validator(value) {
+  if (!value || !Array.isArray(value)) return false
+  for (let i = 0; i < value.length; i++) {
+    const elem = value[i]
+    if (elem !== validator.symbol) return false
+  }
+  return true
+}",
+  "explanations": Array [],
+  "pure": true,
+  "symbol": Symbol(test),
+}
+`;
+
+exports[`arrayOf 09. v.compileArrayOf(funcWithPrepare) 1`] = `
+Object {
+  "_": "function validator(value) {
+  if (!value || !Array.isArray(value)) return false
+  for (let i = 0; i < value.length; i++) {
+    const elem = value[i]
+    if (!(typeof elem === 'number' && elem % validator.divider === 0)) return false
+  }
+  return true
+}",
+  "divider": 2,
+  "explanations": Array [],
+  "pure": true,
+}
+`;
+
+exports[`arrayOf 10. v.compileArrayOf(funcWithoutPrepare) 1`] = `
+Object {
+  "_": "function validator(value) {
+  if (!value || !Array.isArray(value)) return false
+  for (let i = 0; i < value.length; i++) {
+    const elem = value[i]
+    if (!(typeof elem === 'number' && elem % 2 === 0)) return false
+  }
+  return true
+}",
+  "explanations": Array [],
+  "pure": true,
+}
+`;
+
+exports[`arrayOf 11. v.compileArrayOf(funcWithNot) 1`] = `
+Object {
+  "_": "function validator(value) {
+  if (!value || !Array.isArray(value)) return false
+  for (let i = 0; i < value.length; i++) {
+    const elem = value[i]
+    if ((typeof elem !== 'number' || elem % 2 !== 0)) return false
+  }
+  return true
+}",
+  "explanations": Array [],
+  "pure": true,
+}
+`;
+
+exports[`arrayOf 12. v.compileArrayOf([funcSchemaWithHandle, 13]) 1`] = `
+Object {
+  "_": "function validator(value) {
+  validator.explanations = []
+  if (!value || !Array.isArray(value)) return false
+  for (let i = 0; i < value.length; i++) {
+    const elem = value[i]
+    if (!validator.variant(elem)) {
+      validator.explanations.push(...validator.variant.explanations)
+      return false
+    }
+  }
+  return true
+}",
+  "explanations": Array [],
+  "pure": false,
+  "variant": "function validator(value) {
+  validator.explanations = []
+  if (typeof value === 'number' && value % 2 === 0) return true;
+  if (value === 13) return true
+  validator.explanations.push(value)
+  return false
+}",
+  "variant.explanations": Array [],
+  "variant.pure": false,
+}
+`;
+
+exports[`arrayOf 13. v.compileArrayOf(funcWithHandle) 1`] = `
+Object {
+  "_": "function validator(value) {
+  validator.explanations = []
+  if (!value || !Array.isArray(value)) return false
+  for (let i = 0; i < value.length; i++) {
+    const elem = value[i]
+    if ((typeof elem !== 'number' || elem % 2 !== 0)) {
+      validator.explanations.push(elem)
+      return false
+    }
+  }
+  return true
+}",
+  "explanations": Array [],
+  "pure": false,
+}
+`;
+
+exports[`arrayOf 14. v.compileArrayOf([funcSchema, 13]) 1`] = `
+Object {
+  "_": "function validator(value) {
+  if (!value || !Array.isArray(value)) return false
+  for (let i = 0; i < value.length; i++) {
+    const elem = value[i]
+    if (!validator.variant(elem)) return false
+  }
+  return true
+}",
+  "explanations": Array [],
+  "pure": true,
+  "variant": "function validator(value) {
+  if (typeof value === 'number' && value % 2 === 0) return true;
+  if (value === 13) return true
+  return false
+}",
+  "variant.explanations": Array [],
+  "variant.pure": true,
+}
+`;
+
+exports[`arrayOf 15. v.compileArrayOf({ a: 13 }) 1`] = `
+Object {
+  "_": "function validator(value) {
+  if (!value || !Array.isArray(value)) return false
+  for (let i = 0; i < value.length; i++) {
+    const elem = value[i]
+    if (!validator.object(elem)) return false
+  }
+  return true
+}",
+  "explanations": Array [],
+  "object": "function validator(value) {
+  if (!value) return false
+  if (value.a !== 13) return false
+  return true
+}",
+  "object.explanations": Array [],
+  "object.pure": true,
+  "pure": true,
+}
+`;
+
+exports[`arrayOf 16. v.compileArrayOf({ a: funcWithHandle }) 1`] = `
+Object {
+  "_": "function validator(value) {
+  validator.explanations = []
+  if (!value || !Array.isArray(value)) return false
+  for (let i = 0; i < value.length; i++) {
+    const elem = value[i]
+    if (!validator.object(elem)) {
+      validator.explanations.push(...validator.object.explanations)
+      return false
+    }
+  }
+  return true
+}",
+  "explanations": Array [],
+  "object": "function validator(value) {
+  validator.explanations = []
+  if (!value) return false
+  if ((typeof value.a !== 'number' || value.a % 2 !== 0)) {
+    validator.explanations.push(value.a)
+    return false
+  }
+  return true
+}",
+  "object.explanations": Array [],
+  "object.pure": false,
+  "pure": false,
+}
+`;
+
+exports[`arrayOf 17. v.compileArrayOf({ a: 41, [v.rest]: funcWithHandle }) 1`] = `
+Object {
+  "_": "function validator(value) {
+  validator.explanations = []
+  if (!value || !Array.isArray(value)) return false
+  for (let i = 0; i < value.length; i++) {
+    const elem = value[i]
+    if (!validator.object(elem)) {
+      validator.explanations.push(...validator.object.explanations)
+      return false
+    }
+  }
+  return true
+}",
+  "explanations": Array [],
+  "object": "function validator(value) {
+  validator.explanations = []
+  if (!validator.defined(value)) return false
+  const keys = Object.keys(value)
+  for (let i = 0; i < keys.length; i++) {
+    const key = keys[i]
+    if (validator.__propsWithSchemasDict[key] === true) continue
+    if (!validator.checkRest(value[key])) {
+      validator.explanations.push(...validator.checkRest.explanations)
+      return false
+    }
+  }
+  return true
+}",
+  "object.__propsWithSchemasDict": Object {
+    "a": true,
+  },
+  "object.checkRest": "function validator(value) {
+  validator.explanations = []
+  if (typeof value === 'number' && value % 2 === 0) {
+    return true
+  }
+  validator.explanations.push(value)
+  return false
+}",
+  "object.checkRest.explanations": Array [],
+  "object.checkRest.pure": false,
+  "object.defined": "function validator(value) {
+  if (!value) return false
+  if (value.a !== 41) return false
+  return true
+}",
+  "object.defined.explanations": Array [],
+  "object.defined.pure": true,
+  "object.explanations": Array [],
+  "object.pure": false,
+  "pure": false,
+}
+`;
+
+exports[`arrayOf 18. v.compileArrayOf({ a: 41, [v.rest]: funcWithoutHandle }) 1`] = `
+Object {
+  "_": "function validator(value) {
+  if (!value || !Array.isArray(value)) return false
+  for (let i = 0; i < value.length; i++) {
+    const elem = value[i]
+    if (!validator.object(elem)) return false
+  }
+  return true
+}",
+  "explanations": Array [],
+  "object": "function validator(value) {
+  if (!validator.defined(value)) return false
+  const keys = Object.keys(value)
+  for (let i = 0; i < keys.length; i++) {
+    const key = keys[i]
+    if (validator.__propsWithSchemasDict[key] === true) continue
+    if (!validator.checkRest(value[key])) return false
+  }
+  return true
+}",
+  "object.__propsWithSchemasDict": Object {
+    "a": true,
+  },
+  "object.checkRest": "function validator(value) {
+  return typeof value === 'number' && value % 2 === 0
+}",
+  "object.checkRest.explanations": Array [],
+  "object.checkRest.pure": true,
+  "object.defined": "function validator(value) {
+  if (!value) return false
+  if (value.a !== 41) return false
+  return true
+}",
+  "object.defined.explanations": Array [],
+  "object.defined.pure": true,
+  "object.explanations": Array [],
+  "object.pure": true,
+  "pure": true,
+}
+`;
+
+exports[`arrayOf 19. v.compileArrayOf([]) 1`] = `
+Object {
+  "_": "function (value) {
+            return value && Array.isArray(value) && value.length === 0;
+        }",
+  "explanations": Array [],
+  "pure": true,
+}
+`;
+
+exports[`arrayOf 20. v.compileArrayOf([42]) 1`] = `
+Object {
+  "_": "function validator(value) {
+  if (!value || !Array.isArray(value)) return false
+  for (let i = 0; i < value.length; i++) {
+    const elem = value[i]
+    if (elem !== 42) return false
+  }
+  return true
+}",
+  "explanations": Array [],
+  "pure": true,
+}
+`;
+
+exports[`arrayOf 21. v.compileArrayOf([funcSchema, 13]) 1`] = `
+Object {
+  "_": "function validator(value) {
+  if (!value || !Array.isArray(value)) return false
+  for (let i = 0; i < value.length; i++) {
+    const elem = value[i]
+    if (!validator.variant(elem)) return false
+  }
+  return true
+}",
+  "explanations": Array [],
+  "pure": true,
+  "variant": "function validator(value) {
+  if (typeof value === 'number' && value % 2 === 0) return true;
+  if (value === 13) return true
+  return false
+}",
+  "variant.explanations": Array [],
+  "variant.pure": true,
+}
+`;
