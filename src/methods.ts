@@ -42,11 +42,11 @@ export const methods: IMethods = {
     const checkIdAccessor = getKeyAccessor(checkId);
     preparations.push(prepare);
     let handleError: HandleError | undefined;
-    const [explanationId, prepareExplanation] = toContext(
-      "explanation",
-      explanation
-    );
     if (explanation !== undefined) {
+      const [explanationId, prepareExplanation] = toContext(
+        "explanation",
+        explanation
+      );
       preparations.push(prepareExplanation);
       handleError =
         typeof explanation === "function"

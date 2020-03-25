@@ -169,16 +169,38 @@ export function compileAnd(
       return Object.assign(() => false, { explanations: [], pure: true });
     }
   }
+
+  // If there is one primitive
+  // v.and(C, S1, ...)
+  // It will have only two options
+  // C is valid by S1, S2, S3, ...
+  //   So the result will be the same as v => v === C
+  // S(C) => false, for some S from S1, S2, ...
+  //   So the result will be the same as v => false,
+  // Because value cannot be simultaneously be equal to C and be valid by S
   if (primitives.length === 1) {
+    const primitive = primitives[0];
+    for (let i = 0; i < schemas.length; i++) {
+      if (schemas[i] === primitive) continue;
+
+      const compiled = c(schemas[i]);
+
+      if (compiled(primitive)) continue;
+
+      return Object.assign(() => false, {
+        explanations: compiled.pure ? [] : compiled.explanations,
+        pure: compiled.pure
+      });
+    }
     return c(primitives[0]);
   }
-  let bodyCode = "";
-  if (bodyCodeLines.length > 0) {
-    bodyCode = addTabs(bodyCodeLines[0].trim());
-    for (let i = 1; i < bodyCodeLines.length; i++) {
-      bodyCode += "\n" + addTabs(bodyCodeLines[i]);
-    }
+
+  let bodyCode = addTabs(bodyCodeLines[0].trim());
+
+  for (let i = 1; i < bodyCodeLines.length; i++) {
+    bodyCode += "\n" + addTabs(bodyCodeLines[i]);
   }
+
   const code = `(() => {\nfunction validator(value) {${
     isPure ? "" : "\n  validator.explanations = []"
   }\n${bodyCode}\n  return true\n}

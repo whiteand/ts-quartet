@@ -45,6 +45,13 @@ export function compileNot(
                 check: id => `${id} !== ${JSON.stringify(constant)}`,
                 not: id => `${id} === ${JSON.stringify(constant)}`
               });
+        case "symbol":
+          const [symbolId, prepare] = toContext("not-symbol", constant);
+          return () => ({
+            check: (id, ctx) => `${id} !== ${ctx}['${symbolId}']`,
+            not: (id, ctx) => `${id} === ${ctx}['${symbolId}']`,
+            prepare
+          });
         default:
           return () => ({
             check: id => `${id} !== ${JSON.stringify(constant)}`,

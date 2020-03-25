@@ -19,7 +19,7 @@ function compileVariantElementToReturnWay(
   schema: Schema,
   preparations: Prepare[],
   handleErrors: HandleError[],
-  stringNumbersSymbols: Array<string | number | symbol>
+  stringsSymbols: Array<string | number | symbol>
 ): [string, boolean] {
   return handleSchema<[string, boolean]>({
     constant: constant => {
@@ -42,7 +42,7 @@ function compileVariantElementToReturnWay(
         return [`if (${valueId} === ${constant}) return true`, true];
       }
       if (typeof constant === "symbol" || typeof constant === "string") {
-        stringNumbersSymbols.push(constant);
+        stringsSymbols.push(constant);
         return ["", true];
       }
       return [
@@ -84,7 +84,7 @@ function compileVariantElementToReturnWay(
         funcSchema,
         preparations,
         handleErrors,
-        stringNumbersSymbols
+        stringsSymbols
       );
     },
     objectRest: objectSchema => {
@@ -110,7 +110,7 @@ function compileVariantElementToReturnWay(
         funcSchema,
         preparations,
         handleErrors,
-        stringNumbersSymbols
+        stringsSymbols
       );
     },
     variant: schemas => {
@@ -125,7 +125,7 @@ function compileVariantElementToReturnWay(
           variant,
           preparations,
           handleErrors,
-          stringNumbersSymbols
+          stringsSymbols
         );
         if (!isPartPure) {
           isPure = false;
@@ -149,7 +149,7 @@ export function compileVariants(
   }
   const preparations: Prepare[] = [];
   const handleErrors: HandleError[] = [];
-  const stringNumbersSymbols: Array<string | number | symbol> = [];
+  const stringsSymbols: Array<string | number | symbol> = [];
   const bodyCodeLines = [];
   let isPure = true;
   for (let i = 0; i < variants.length; i++) {
@@ -162,7 +162,7 @@ export function compileVariants(
       variant,
       preparations,
       handleErrors,
-      stringNumbersSymbols
+      stringsSymbols
     );
     if (!purePart) {
       isPure = false;
@@ -171,8 +171,8 @@ export function compileVariants(
   }
   // tslint:disable-next-line
   let __validValuesDict = {};
-  if (stringNumbersSymbols.length > 0) {
-    __validValuesDict = stringNumbersSymbols.reduce((dict: any, el) => {
+  if (stringsSymbols.length > 0) {
+    __validValuesDict = stringsSymbols.reduce((dict: any, el) => {
       dict[el] = true;
       return dict;
     }, {});
@@ -203,7 +203,7 @@ export function compileVariants(
   }
   ctx.explanations = [];
   ctx.pure = isPure;
-  if (stringNumbersSymbols.length > 0) {
+  if (stringsSymbols.length > 0) {
     ctx.__validValuesDict = __validValuesDict;
   }
   return ctx;

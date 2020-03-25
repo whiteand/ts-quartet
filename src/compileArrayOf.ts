@@ -28,9 +28,6 @@ function compileForLoopBody(
         }
         return [`if (elem !== ${constant}) return false`, true];
       }
-      if (constant === "true" || constant === "false") {
-        return [`if (elem !== '${constant}') return false`, true];
-      }
       if (typeof constant === "symbol") {
         const [symbolId, prepare] = toContext("symbol", constant, true);
         const symbolAccessor = getKeyAccessor(symbolId);

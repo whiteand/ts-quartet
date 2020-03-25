@@ -1,4 +1,4 @@
-import { ConstantSchema, CompilationResult } from "./types";
+import { CompilationResult, ConstantSchema } from "./types";
 
 export function compileConstant(c: ConstantSchema): CompilationResult {
   const isValid = Number.isNaN(c as any)

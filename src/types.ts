@@ -39,9 +39,19 @@ export interface IHandleSchemaHandlers<R> {
   objectRest: HandleSchemaHandler<IObjectSchema, R>;
   variant: HandleSchemaHandler<IVariantSchema, R>;
 }
+
 export interface ITest {
   test: (value: any) => boolean;
 }
+
+export type CustomFunction = ((value: any) => boolean) & {
+  explanations?: any[];
+  pure?: boolean;
+};
+
+export type CompilationResult = ((value: any) => boolean) & IContext;
+export type TypedCompilationResult<T> = ((value: any) => value is T) & IContext;
+
 export interface IMethods {
   and: (...schemas: Schema[]) => FunctionSchema;
   arrayOf: (schema: Schema) => FunctionSchema;
@@ -51,7 +61,7 @@ export interface IMethods {
     ((...schemas: Schema[]) => CompilationResult);
   compileArrayOf: (<T = any>(schema: Schema) => TypedCompilationResult<T[]>) &
     ((schema: Schema) => CompilationResult);
-  custom: (check: (value: any) => boolean, explanation?: any) => FunctionSchema;
+  custom: (check: CustomFunction, explanation?: any) => FunctionSchema;
   function: FunctionSchema;
   max: (maxValue: number, exclusive?: boolean) => FunctionSchema;
   maxLength: (maxLength: number, exclusive?: boolean) => FunctionSchema;
@@ -68,8 +78,6 @@ export interface IMethods {
   test: (test: ITest) => FunctionSchema;
 }
 
-export type TypedCompilationResult<T> = ((value: any) => value is T) & IContext;
-export type CompilationResult = ((value: any) => boolean) & IContext;
 export type QuartetInstance = IMethods &
   (<T>(schema: Schema) => TypedCompilationResult<T>) &
   ((schema: Schema) => CompilationResult);
