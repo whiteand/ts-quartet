@@ -190,6 +190,62 @@ Object {
 }
 `;
 
+exports[`v.and v.compileAnd(func, [func]) 1`] = `
+Object {
+  "_": "function validator(value) {
+  if ((typeof value !== 'number' || value % 2 !== 0)) return false
+  if ((typeof value !== 'number' || value % 2 !== 0)) return false
+  return true
+}",
+  "explanations": Array [],
+  "pure": true,
+}
+`;
+
+exports[`v.and v.compileAnd(func, [funcWithHandle, funcWithoutHandle]) 1`] = `
+Object {
+  "1": "function validator(value) {
+  validator.explanations = []
+  if (typeof value === 'number' && value % 4 === 0) return true;
+  if (typeof value === 'number' && value % 5 === 0) return true;
+  validator.explanations.push(value + ' is not 4k')
+  return false
+}",
+  "1.explanations": Array [],
+  "1.pure": false,
+  "_": "function validator(value) {
+  validator.explanations = []
+  if (!(typeof value === 'number' && value % 2 === 0)) return false
+  if (!validator[1](value)) {
+    validator.explanations.push(...validator[1].explanations)
+    return false
+  }
+  return true
+}",
+  "explanations": Array [],
+  "pure": false,
+}
+`;
+
+exports[`v.and v.compileAnd(func, [funcWithoutHandle, funcWithoutHandle]) 1`] = `
+Object {
+  "1": "function validator(value) {
+  if (typeof value === 'number' && value % 2 === 0) return true;
+  if (typeof value === 'number' && value % 2 === 0) return true;
+  return false
+}",
+  "1.explanations": Array [],
+  "1.pure": true,
+  "_": "function validator(value) {
+  if ((typeof value !== 'number' || value % 2 !== 0)) return false
+  if (!validator[1](value)) return false
+  return true
+}",
+  "explanations": Array [],
+  "pure": true,
+}
+`;
+
 exports[`v.and v.compileAnd(funcSchemaWithPrepare, funcWithoutPrepare) 1`] = `
 Object {
   "_": "function validator(value) {
