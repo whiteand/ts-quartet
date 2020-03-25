@@ -1,6 +1,13 @@
 import { v } from "../index";
 import { snapshot, tables, puretables } from "./utils";
-import { funcSchema, funcSchemaWithHandleError, funcSchemaWithPrepare, funcSchemaWithNot } from "./mocks";
+import {
+  funcSchema,
+  funcSchemaWithHandleError,
+  funcSchemaWithPrepare,
+  funcSchemaWithNot,
+  primitives
+} from "./mocks";
+import { FunctionSchema } from "../types";
 
 describe("v.and", () => {
   test("v.compileAnd()", () => {
@@ -45,50 +52,70 @@ describe("v.and", () => {
     snapshot(validatorWithExplanations);
   });
   test("v.compileAnd(funcSchemaWithPrepare, funcWithoutPrepare)", () => {
-    const validator = v.compileAnd(funcSchemaWithPrepare, funcSchema)
-    snapshot(validator)
-    puretables(validator, [2,4,6,8], [1,3,5,7])
+    const validator = v.compileAnd(funcSchemaWithPrepare, funcSchema);
+    snapshot(validator);
+    puretables(validator, [2, 4, 6, 8], [1, 3, 5, 7]);
   });
   test("v.compileAnd(funcWithNot, funcWithoutNot)", () => {
-    const validator = v.compileAnd(funcSchemaWithNot, funcSchema)
-    snapshot(validator)
-    puretables(validator, [2,4,6,8], [1,3,5,7])
+    const validator = v.compileAnd(funcSchemaWithNot, funcSchema);
+    snapshot(validator);
+    puretables(validator, [2, 4, 6, 8], [1, 3, 5, 7]);
   });
   test("v.compileAnd(funcWithHandle, funcWithoutHandle)", () => {
-    const validator = v.compileAnd(funcSchemaWithHandleError, funcSchema)
-    snapshot(validator)
-    expect(validator.pure).toBe(false)
-    tables(validator, [2,4,6,8], [[1, [1]],[3, [3]],[5, [5]],[7, [7]]])
+    const validator = v.compileAnd(funcSchemaWithHandleError, funcSchema);
+    snapshot(validator);
+    expect(validator.pure).toBe(false);
+    tables(validator, [2, 4, 6, 8], [[1, [1]], [3, [3]], [5, [5]], [7, [7]]]);
   });
   test("v.compileAnd({ a: funcWithoutHandle }, { b: funcWithHandle })", () => {
-    const validator = v.compileAnd({ a: funcSchema }, { b: funcSchemaWithHandleError })
-    snapshot(validator)
-    expect(validator.pure).toBe(false)
+    const validator = v.compileAnd(
+      { a: funcSchema },
+      { b: funcSchemaWithHandleError }
+    );
+    snapshot(validator);
+    expect(validator.pure).toBe(false);
     tables(
-        validator,
-        [
-            { a: 2, b: 4}, { a: 4, b: 2}
-        ],
-        [
-            [null, []],
-            [{}, []],
-            [{ a: 2 }, [undefined]],
-            [{ b: 2 }, []],
-            [
-                { a: 1, b: 4},
-                []
-            ],
-            [
-                { a: 2, b: 3},
-                [3]
-            ],
-        ])
+      validator,
+      [{ a: 2, b: 4 }, { a: 4, b: 2 }],
+      [
+        [null, []],
+        [{}, []],
+        [{ a: 2 }, [undefined]],
+        [{ b: 2 }, []],
+        [{ a: 1, b: 4 }, []],
+        [{ a: 2, b: 3 }, [3]]
+      ]
+    );
   });
   test("v.compileAnd({ a: funcWithoutHandle, [v.rest]: funcWithoutHandle }, { b: funcWithHandle, [v.rest]: funcWithHandle })", () => {
-    // TODO: Write this
+    const funcSchemaWithHandleError: FunctionSchema = () => ({
+      check: id => `typeof ${id} === 'number' && ${id} % 4 === 0`,
+      not: id => `typeof ${id} !== 'number' || ${id} % 4 !== 0`,
+      handleError: (id, ctx) => `${ctx}.explanations.push(${id} + ' is not 4k')`
+    });
+    const validator = v.compileAnd(
+      { a: funcSchema, [v.rest]: funcSchema },
+      { b: funcSchemaWithHandleError, [v.rest]: funcSchemaWithHandleError }
+    );
+    expect(validator.pure).toBe(false);
+    snapshot(validator);
+    tables(
+      validator,
+      [{ a: 4, b: 4 }, { a: 4, b: 4, c: 4 }],
+      [
+        ...primitives.map(v => [v, []] as [any, any[]]),
+        [{}, []],
+        [{ a: 2 }, ["undefined is not 4k"]],
+        [{ a: 2, b: 4 }, ["2 is not 4k"]],
+        [{ a: 4, b: 4, c: 2 }, ["2 is not 4k"]],
+        [{ a: 4, b: 4, c: 1 }, []],
+      ]
+    );
   });
   test("v.compileAnd(func, [])", () => {
-    // TODO: Write this
+    const validator = v.compileAnd(funcSchema, [])
+    expect(validator.pure).toBe(true)
+    snapshot(validator)
   });
   test("v.compileAnd(func, [func])", () => {
     // TODO: Write this

@@ -60,6 +60,92 @@ Object {
 }
 `;
 
+exports[`v.and v.compileAnd({ a: funcWithoutHandle, [v.rest]: funcWithoutHandle }, { b: funcWithHandle, [v.rest]: funcWithHandle }) 1`] = `
+Object {
+  "0": "function validator(value) {
+  if (!validator.defined(value)) return false
+  const keys = Object.keys(value)
+  for (let i = 0; i < keys.length; i++) {
+    const key = keys[i]
+    if (validator.__propsWithSchemasDict[key] === true) continue
+    if (!validator.checkRest(value[key])) return false
+  }
+  return true
+}",
+  "0.__propsWithSchemasDict": Object {
+    "a": true,
+  },
+  "0.checkRest": "function validator(value) {
+  return typeof value === 'number' && value % 2 === 0
+}",
+  "0.checkRest.explanations": Array [],
+  "0.checkRest.pure": true,
+  "0.defined": "function validator(value) {
+  if (!value) return false
+  if (!(typeof value.a === 'number' && value.a % 2 === 0)) return false
+  return true
+}",
+  "0.defined.explanations": Array [],
+  "0.defined.pure": true,
+  "0.explanations": Array [],
+  "0.pure": true,
+  "1": "function validator(value) {
+  validator.explanations = []
+  if (!validator.defined(value)) {
+    validator.explanations.push(...validator.defined.explanations)
+    return false
+  }
+  const keys = Object.keys(value)
+  for (let i = 0; i < keys.length; i++) {
+    const key = keys[i]
+    if (validator.__propsWithSchemasDict[key] === true) continue
+    if (!validator.checkRest(value[key])) {
+      validator.explanations.push(...validator.checkRest.explanations)
+      return false
+    }
+  }
+  return true
+}",
+  "1.__propsWithSchemasDict": Object {
+    "b": true,
+  },
+  "1.checkRest": "function validator(value) {
+  validator.explanations = []
+  if (typeof value === 'number' && value % 4 === 0) {
+    return true
+  }
+  validator.explanations.push(value + ' is not 4k')
+  return false
+}",
+  "1.checkRest.explanations": Array [],
+  "1.checkRest.pure": false,
+  "1.defined": "function validator(value) {
+  validator.explanations = []
+  if (!value) return false
+  if (typeof value.b !== 'number' || value.b % 4 !== 0) {
+    validator.explanations.push(value.b + ' is not 4k')
+    return false
+  }
+  return true
+}",
+  "1.defined.explanations": Array [],
+  "1.defined.pure": false,
+  "1.explanations": Array [],
+  "1.pure": false,
+  "_": "function validator(value) {
+  validator.explanations = []
+  if (!validator[0](value)) return false
+  if (!validator[1](value)) {
+    validator.explanations.push(...validator[1].explanations)
+    return false
+  }
+  return true
+}",
+  "explanations": Array [],
+  "pure": false,
+}
+`;
+
 exports[`v.and v.compileAnd(1) 1`] = `
 Object {
   "_": "function (value) { return value === c; }",
@@ -87,6 +173,18 @@ Object {
 exports[`v.and v.compileAnd(1, 2) 1`] = `
 Object {
   "_": "function () { return false; }",
+  "explanations": Array [],
+  "pure": true,
+}
+`;
+
+exports[`v.and v.compileAnd(func, []) 1`] = `
+Object {
+  "_": "function validator(value) {
+  if (!(typeof value === 'number' && value % 2 === 0)) return false
+  return false
+  return true
+}",
   "explanations": Array [],
   "pure": true,
 }
