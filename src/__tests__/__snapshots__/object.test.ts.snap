@@ -7,3 +7,146 @@ Object {
   "pure": true,
 }
 `;
+
+exports[`v(object) 01. v({ a: null }) 1`] = `
+Object {
+  "_": "function validator(value) {
+  if (value == null) return false
+  if (value.a !== null) return false
+  return true
+}",
+  "explanations": Array [],
+  "pure": true,
+}
+`;
+
+exports[`v(object) 02. v({ a: undefined }) 1`] = `
+Object {
+  "_": "function validator(value) {
+  if (value == null) return false
+  if (value.a !== undefined) return false
+  return true
+}",
+  "explanations": Array [],
+  "pure": true,
+}
+`;
+
+exports[`v(object) 03. v({ a: NaN }) 1`] = `
+Object {
+  "_": "function validator(value) {
+  if (value == null) return false
+  if (!Number.isNaN(value.a)) return false
+  return true
+}",
+  "explanations": Array [],
+  "pure": true,
+}
+`;
+
+exports[`v(object) 04. v({ a: 42 }) 1`] = `
+Object {
+  "_": "function validator(value) {
+  if (value == null) return false
+  if (value.a !== 42) return false
+  return true
+}",
+  "explanations": Array [],
+  "pure": true,
+}
+`;
+
+exports[`v(object) 05. v({ a: "true" }) 1`] = `
+Object {
+  "_": "function validator(value) {
+  if (value == null) return false
+  if (value.a !== 'true') return false
+  return true
+}",
+  "explanations": Array [],
+  "pure": true,
+}
+`;
+
+exports[`v(object) 06. v({ a: "false" }) 1`] = `
+Object {
+  "_": "function validator(value) {
+  if (value == null) return false
+  if (value.a !== 'false') return false
+  return true
+}",
+  "explanations": Array [],
+  "pure": true,
+}
+`;
+
+exports[`v(object) 07. v({ a: "test" }) 1`] = `
+Object {
+  "_": "function validator(value) {
+  if (value == null) return false
+  if (validator.__validValues.a[value.a] !== true) return false
+  return true
+}",
+  "__validValues": Object {
+    "a": Object {
+      "test": true,
+    },
+  },
+  "explanations": Array [],
+  "pure": true,
+}
+`;
+
+exports[`v(object) 08. v({ a: Symbol.for("test") }) 1`] = `
+Object {
+  "_": "function validator(value) {
+  if (value == null) return false
+  if (validator.__validValues.a[value.a] !== true) return false
+  return true
+}",
+  "__validValues": Object {
+    "a": Object {
+      Symbol(test): true,
+    },
+  },
+  "explanations": Array [],
+  "pure": true,
+}
+`;
+
+exports[`v(object) 09. v({ a: true }) 1`] = `
+Object {
+  "_": "function validator(value) {
+  if (value == null) return false
+  if (value.a !== true) return false
+  return true
+}",
+  "explanations": Array [],
+  "pure": true,
+}
+`;
+
+exports[`v(object) 10. v({ a: false }) 1`] = `
+Object {
+  "_": "function validator(value) {
+  if (value == null) return false
+  if (value.a !== false) return false
+  return true
+}",
+  "explanations": Array [],
+  "pure": true,
+}
+`;
+
+exports[`v(object) 11. v({ a: funcWithPrepare }) 1`] = `
+Object {
+  "_": "function validator(value) {
+  if (value == null) return false
+  if (!(typeof value.a === 'number' && value.a % validator.divider === 0)) return false
+  return true
+}",
+  "divider": 2,
+  "explanations": Array [],
+  "pure": true,
+}
+`;
