@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`constant 42 1`] = `
+Object {
+  "_": "function (value) { return value === c; }",
+  "explanations": Array [],
+  "pure": true,
+}
+`;
+
+exports[`constant NaN 1`] = `
+Object {
+  "_": "function (value) { return Number.isNaN(value); }",
+  "explanations": Array [],
+  "pure": true,
+}
+`;
