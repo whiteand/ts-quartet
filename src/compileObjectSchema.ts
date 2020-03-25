@@ -169,7 +169,10 @@ export function compileObjectSchema(
 ): CompilationResult {
   const keys = Object.keys(s);
   if (keys.length === 0) {
-    return Object.assign((v: any) => !!v, { explanations: [], pure: true });
+    return Object.assign((v: any) => v != null, {
+      explanations: [],
+      pure: true
+    });
   }
   const bodyCodeLines = [];
   const preparations: Prepare[] = [];
@@ -184,7 +187,7 @@ export function compileObjectSchema(
     const keyAccessor = getKeyAccessor(key);
     const valueId = `value${keyAccessor}`;
     const keyValidValues: any[] = [];
-    let [codeLine, pureLine] = compilePropValidationWithoutRest(
+    const lineAndPurity = compilePropValidationWithoutRest(
       c,
       key,
       valueId,
@@ -192,8 +195,9 @@ export function compileObjectSchema(
       schema,
       preparations,
       keyValidValues
-    );
-    codeLine = codeLine.trim();
+    )
+    const codeLine = lineAndPurity[0].trim()
+    const pureLine = lineAndPurity[1]
     if (!pureLine) {
       isPure = false;
     }
@@ -222,7 +226,7 @@ export function compileObjectSchema(
       })
     );
   }
-  bodyCodeLines.unshift("if (!value) return false");
+  bodyCodeLines.unshift("if (value == null) return false");
   if (!isPure) {
     bodyCodeLines.unshift("validator.explanations = []");
   }

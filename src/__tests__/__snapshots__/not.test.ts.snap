@@ -108,7 +108,7 @@ Object {
 }",
   "explanations": Array [],
   "not-0": "function validator(value) {
-  if (!value) return false
+  if (value == null) return false
   if (value.a !== 42) return false
   return true
 }",

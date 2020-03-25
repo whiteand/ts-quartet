@@ -1,5 +1,5 @@
 import { addTabs } from "./addTabs";
-import { IFunctionSchemaResult, CompilationResult } from "./types";
+import { CompilationResult, IFunctionSchemaResult } from "./types";
 
 export function compileFunctionSchemaResult(
   s: IFunctionSchemaResult

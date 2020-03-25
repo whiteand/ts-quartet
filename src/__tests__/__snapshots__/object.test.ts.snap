@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`v(object) 00. v({}) 1`] = `
+Object {
+  "_": "function (v) { return v != null; }",
+  "explanations": Array [],
+  "pure": true,
+}
+`;

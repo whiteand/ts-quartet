@@ -180,12 +180,17 @@ export function compileAnd(
   // Because value cannot be simultaneously be equal to C and be valid by S
   if (primitives.length === 1) {
     const primitive = primitives[0];
+    // tslint:disable-next-line
     for (let i = 0; i < schemas.length; i++) {
-      if (schemas[i] === primitive) continue;
+      if (schemas[i] === primitive) {
+        continue;
+      }
 
       const compiled = c(schemas[i]);
 
-      if (compiled(primitive)) continue;
+      if (compiled(primitive)) {
+        continue;
+      }
 
       return Object.assign(() => false, {
         explanations: compiled.pure ? [] : compiled.explanations,

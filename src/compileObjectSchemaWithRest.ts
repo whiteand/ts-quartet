@@ -29,7 +29,7 @@ export function compileObjectSchemaWithRest(
       ? definedCompiled.pure
         ? `if (!validator${definedAccessor}(value)) return false`
         : `if (!validator${definedAccessor}(value)) {\n    validator.explanations.push(...validator${definedAccessor}.explanations)\n    return false\n  }`
-      : `if (!value) return false`;
+      : `if (value != null) return false`;
   const checkRestValues = restCompiled.pure
     ? `if (!validator${restIdAccessor}(value[key])) return false`
     : `if (!validator${restIdAccessor}(value[key])) {\n      validator.explanations.push(...validator${restIdAccessor}.explanations)\n      return false\n    }`;

@@ -29,7 +29,7 @@ Object {
 exports[`v.and v.compileAnd({ a: funcWithoutHandle }, { b: funcWithHandle }) 1`] = `
 Object {
   "0": "function validator(value) {
-  if (!value) return false
+  if (value == null) return false
   if (!(typeof value.a === 'number' && value.a % 2 === 0)) return false
   return true
 }",
@@ -37,7 +37,7 @@ Object {
   "0.pure": true,
   "1": "function validator(value) {
   validator.explanations = []
-  if (!value) return false
+  if (value == null) return false
   if (!(typeof value.b === 'number' && value.b % 2 === 0)) {
     validator.explanations.push(value.b)
     return false
@@ -81,7 +81,7 @@ Object {
   "0.checkRest.explanations": Array [],
   "0.checkRest.pure": true,
   "0.defined": "function validator(value) {
-  if (!value) return false
+  if (value == null) return false
   if (!(typeof value.a === 'number' && value.a % 2 === 0)) return false
   return true
 }",
@@ -121,7 +121,7 @@ Object {
   "1.checkRest.pure": false,
   "1.defined": "function validator(value) {
   validator.explanations = []
-  if (!value) return false
+  if (value == null) return false
   if (typeof value.b !== 'number' || value.b % 4 !== 0) {
     validator.explanations.push(value.b + ' is not 4k')
     return false
