@@ -1,11 +1,5 @@
 # Test Cases
 
-## Add Tabs
-
-- addTabs('1')
-- addTabs('1', 1)
-- addTabs('1', 2)
-
 ## Compile And
 
 - v.compileAnd()

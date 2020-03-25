@@ -1,0 +1,134 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`v.and Conflict with primitive 1`] = `
+Object {
+  "_": "function () { return false; }",
+  "explanations": Array [],
+  "pure": true,
+}
+`;
+
+exports[`v.and Conflict with primitive 3`] = `
+Object {
+  "_": "function () { return false; }",
+  "explanations": Array [
+    1,
+  ],
+  "pure": false,
+}
+`;
+
+exports[`v.and v.compileAnd() 1`] = `
+Object {
+  "_": "function () { return true; }",
+  "explanations": Array [],
+  "pure": true,
+}
+`;
+
+exports[`v.and v.compileAnd({ a: funcWithoutHandle }, { b: funcWithHandle }) 1`] = `
+Object {
+  "0": "function validator(value) {
+  if (!value) return false
+  if (!(typeof value.a === 'number' && value.a % 2 === 0)) return false
+  return true
+}",
+  "0.explanations": Array [],
+  "0.pure": true,
+  "1": "function validator(value) {
+  validator.explanations = []
+  if (!value) return false
+  if (!(typeof value.b === 'number' && value.b % 2 === 0)) {
+    validator.explanations.push(value.b)
+    return false
+  }
+  return true
+}",
+  "1.explanations": Array [],
+  "1.pure": false,
+  "_": "function validator(value) {
+  validator.explanations = []
+  if (!validator[0](value)) return false
+  if (!validator[1](value)) {
+    validator.explanations.push(...validator[1].explanations)
+    return false
+  }
+  return true
+}",
+  "explanations": Array [],
+  "pure": false,
+}
+`;
+
+exports[`v.and v.compileAnd(1) 1`] = `
+Object {
+  "_": "function (value) { return value === c; }",
+  "explanations": Array [],
+  "pure": true,
+}
+`;
+
+exports[`v.and v.compileAnd(1, 1) 1`] = `
+Object {
+  "_": "function (value) { return value === c; }",
+  "explanations": Array [],
+  "pure": true,
+}
+`;
+
+exports[`v.and v.compileAnd(1, 1, 2) 1`] = `
+Object {
+  "_": "function () { return false; }",
+  "explanations": Array [],
+  "pure": true,
+}
+`;
+
+exports[`v.and v.compileAnd(1, 2) 1`] = `
+Object {
+  "_": "function () { return false; }",
+  "explanations": Array [],
+  "pure": true,
+}
+`;
+
+exports[`v.and v.compileAnd(funcSchemaWithPrepare, funcWithoutPrepare) 1`] = `
+Object {
+  "_": "function validator(value) {
+  if (!(typeof value === 'number' && value % validator.divider === 0)) return false
+  if (!(typeof value === 'number' && value % 2 === 0)) return false
+  return true
+}",
+  "divider": 2,
+  "explanations": Array [],
+  "pure": true,
+}
+`;
+
+exports[`v.and v.compileAnd(funcWithHandle, funcWithoutHandle) 1`] = `
+Object {
+  "_": "function validator(value) {
+  validator.explanations = []
+  if (!(typeof value === 'number' && value % 2 === 0)) {
+    validator.explanations.push(value)
+    return false
+  }
+  if (!(typeof value === 'number' && value % 2 === 0)) return false
+  return true
+}",
+  "explanations": Array [],
+  "pure": false,
+}
+`;
+
+exports[`v.and v.compileAnd(funcWithNot, funcWithoutNot) 1`] = `
+Object {
+  "_": "function validator(value) {
+  if ((typeof value !== 'number' || value % 2 !== 0)) return false
+  if (!(typeof value === 'number' && value % 2 === 0)) return false
+  return true
+}",
+  "explanations": Array [],
+  "pure": true,
+}
+`;
