@@ -18,6 +18,10 @@ export function handleSchema<R>(
     if (has(schema, methods.rest)) {
       return handlers.objectRest(schema);
     } else {
+      if (has(schema, methods.restOmit)) {
+        const { [methods.restOmit]: keys, ...objectSchema } = schema;
+        return handlers.object(objectSchema);
+      }
       return handlers.object(schema);
     }
   };
