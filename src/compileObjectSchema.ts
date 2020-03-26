@@ -1,156 +1,6 @@
 import { addTabs } from "./addTabs";
-import { getKeyAccessor } from "./getKeyAccessor";
-import { handleSchema } from "./handleSchema";
-import { toContext } from "./toContext";
 import { CompilationResult, IObjectSchema, Prepare, Schema } from "./types";
-import { constantToFunc } from "./constantToFunc";
-
-function compilePropValidationWithoutRest(
-  c: (schema: Schema) => CompilationResult,
-  key: string,
-  valueId: string,
-  ctxId: string,
-  schema: Schema,
-  preparations: Prepare[],
-  stringNumbersSymbols: Array<string | number | symbol>
-): [string, boolean] {
-  return handleSchema<[string, boolean]>({
-    constant: constant => {
-      if (constant === "true" || constant === "false") {
-        return [`if (${valueId} !== '${constant}') return false`, true];
-      }
-      if (typeof constant === "symbol" || typeof constant === "string") {
-        stringNumbersSymbols.push(constant);
-        return ["", true];
-      }
-
-      const funcSchema = constantToFunc(constant)
-
-      return compilePropValidationWithoutRest(c, key, valueId, ctxId, funcSchema, preparations, stringNumbersSymbols)
-    },
-    function: funcSchema => {
-      const s = funcSchema();
-      if (s.prepare) {
-        preparations.push(s.prepare);
-      }
-      const notCheck = s.not
-        ? s.not(valueId, ctxId)
-        : `!(${s.check(valueId, ctxId)})`;
-      return [
-        s.handleError
-          ? `if (${notCheck}) {\n${addTabs(
-              s.handleError(valueId, ctxId)
-            )}\n  return false\n}`
-          : `if (${notCheck}) return false`,
-        !s.handleError
-      ];
-    },
-    object: objectSchema => {
-      const keys = Object.keys(objectSchema);
-      const codeLines = [`if (${valueId} == null) return false`];
-      const important: string[] = [];
-      let isPure = true;
-      // tslint:disable-next-line
-      for (let i = 0; i < keys.length; i++) {
-        const innerKey = keys[i];
-        const innerKeyAccessor = getKeyAccessor(innerKey);
-        const keyValidValues: Array<string | symbol> = [];
-        const innerKeyId = valueId + innerKeyAccessor;
-        const [code, isPurePart] = compilePropValidationWithoutRest(
-          c,
-          innerKey,
-          innerKeyId,
-          ctxId,
-          objectSchema[innerKey],
-          preparations,
-          keyValidValues
-        );
-        if (!isPurePart) {
-          isPure = false;
-        }
-
-        if (keyValidValues.length > 0) {
-          for (const valid of keyValidValues) {
-            const [keyConstantId, prepare] = toContext(innerKeyId, valid);
-            preparations.push(prepare);
-            important.push(
-              `if (${innerKeyId} !== ${ctxId}['${keyConstantId}']) return false`
-            );
-          }
-        }
-        if (code) {
-          codeLines.push(code);
-        }
-      }
-      codeLines.splice(1, 0, ...important);
-      return [codeLines.join("\n"), isPure];
-    },
-    objectRest: objectSchema => {
-      const compiled = c(objectSchema);
-      const [id, prepare] = toContext(key, compiled);
-      preparations.push(prepare);
-      const funcSchema = compiled.pure
-        ? () => ({
-            check: () => `${ctxId}['${id}'](${valueId})`,
-            not: () => `!${ctxId}['${id}'](${valueId})`
-          })
-        : () => ({
-            check: () => `${ctxId}['${id}'](${valueId})`,
-            handleError: () =>
-              `${ctxId}.explanations.push(...${ctxId}['${id}'].explanations)`,
-            not: () => `!${ctxId}['${id}'](${valueId})`
-          });
-      return compilePropValidationWithoutRest(
-        c,
-        key,
-        valueId,
-        ctxId,
-        funcSchema,
-        preparations,
-        stringNumbersSymbols
-      );
-    },
-    variant: schemas => {
-      if (schemas.length === 0) {
-        return [`return false`, true];
-      }
-      if (schemas.length === 1) {
-        return compilePropValidationWithoutRest(
-          c,
-          key,
-          valueId,
-          ctxId,
-          schemas[0],
-          preparations,
-          stringNumbersSymbols
-        );
-      }
-      const compiled = c(schemas);
-      const [id, prepare] = toContext(key, compiled);
-      preparations.push(prepare);
-      const funcSchema = compiled.pure
-        ? () => ({
-            check: () => `${ctxId}['${id}'](${valueId})`,
-            not: () => `!${ctxId}['${id}'](${valueId})`
-          })
-        : () => ({
-            check: () => `${ctxId}['${id}'](${valueId})`,
-            handleError: () =>
-              `${ctxId}.explanations.push(...${ctxId}['${id}'].explanations)`,
-            not: () => `!${ctxId}['${id}'](${valueId})`
-          });
-      return compilePropValidationWithoutRest(
-        c,
-        key,
-        valueId,
-        ctxId,
-        funcSchema,
-        preparations,
-        stringNumbersSymbols
-      );
-    }
-  })(schema);
-}
+import { compileIfNotValidReturnFalse } from "./compileIfNotValidReturnFalse";
 
 export function compileObjectSchema(
   c: (schema: Schema) => CompilationResult,
@@ -166,59 +16,17 @@ export function compileObjectSchema(
   const bodyCodeLines = [];
   const preparations: Prepare[] = [];
   const ctxId = "validator";
-  const validValues: Record<string, Record<string, true>> = {};
-  const withValidValues: string[] = [];
-  let isPure = true;
-  // tslint:disable-next-line
-  for (let i = 0; i < keys.length; i++) {
-    const key = keys[i];
-    const schema = s[key];
-    const keyAccessor = getKeyAccessor(key);
-    const valueId = `value${keyAccessor}`;
-    const keyValidValues: any[] = [];
-    const lineAndPurity = compilePropValidationWithoutRest(
-      c,
-      key,
-      valueId,
-      ctxId,
-      schema,
-      preparations,
-      keyValidValues
-    );
-    const codeLine = lineAndPurity[0].trim();
-    const pureLine = lineAndPurity[1];
-    if (!pureLine) {
-      isPure = false;
-    }
-    if (codeLine) {
-      bodyCodeLines.push(codeLine);
-    }
-    if (keyValidValues.length > 0) {
-      withValidValues.push(key);
-      if (!validValues[key]) {
-        validValues[key] = {};
-      }
-      for (const valid of keyValidValues) {
-        validValues[key][valid] = true;
-      }
-    }
-  }
-
-  if (withValidValues.length > 0) {
-    preparations.push(context => {
-      context.__validValues = validValues;
-    });
-    bodyCodeLines.unshift(
-      ...withValidValues.map(key => {
-        const keyAccessor = getKeyAccessor(key);
-        return `if (validator.__validValues${keyAccessor}[value${keyAccessor}] !== true) return false`;
-      })
-    );
-  }
-  bodyCodeLines.unshift("if (value == null) return false");
+  const [bodyCode, isPure] = compileIfNotValidReturnFalse(
+    c,
+    "value",
+    ctxId,
+    s,
+    preparations
+  );
   if (!isPure) {
-    bodyCodeLines.unshift("validator.explanations = []");
+    bodyCodeLines.push("validator.explanations = []");
   }
+  bodyCodeLines.push(bodyCode);
   const code = `
     (() => {\nfunction validator(value) {\n${addTabs(
       bodyCodeLines.join("\n")

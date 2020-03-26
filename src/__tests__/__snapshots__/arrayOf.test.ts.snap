@@ -126,13 +126,13 @@ Object {
   if (!value || !Array.isArray(value)) return false
   for (let i = 0; i < value.length; i++) {
     const elem = value[i]
-    if (elem !== validator.symbol) return false
+    if (elem !== validator['constant-0']) return false
   }
   return true
 }",
+  "constant-0": Symbol(test),
   "explanations": Array [],
   "pure": true,
-  "symbol": Symbol(test),
 }
 `;
 
@@ -189,24 +189,24 @@ Object {
   if (!value || !Array.isArray(value)) return false
   for (let i = 0; i < value.length; i++) {
     const elem = value[i]
-    if (!validator.variant(elem)) {
-      validator.explanations.push(...validator.variant.explanations)
+    if (!validator['elem-0'](elem)) {
+      validator.explanations.push(...validator['elem-0'].explanations)
       return false
     }
   }
   return true
 }",
-  "explanations": Array [],
-  "pure": false,
-  "variant": "function validator(value) {
+  "elem-0": "function validator(value) {
   validator.explanations = []
   if (typeof value === 'number' && value % 2 === 0) return true;
   if (value === 13) return true
   validator.explanations.push(value)
   return false
 }",
-  "variant.explanations": Array [],
-  "variant.pure": false,
+  "elem-0.explanations": Array [],
+  "elem-0.pure": false,
+  "explanations": Array [],
+  "pure": false,
 }
 `;
 
@@ -235,19 +235,19 @@ Object {
   if (!value || !Array.isArray(value)) return false
   for (let i = 0; i < value.length; i++) {
     const elem = value[i]
-    if (!validator.variant(elem)) return false
+    if (!validator['elem-1'](elem)) return false
   }
   return true
 }",
-  "explanations": Array [],
-  "pure": true,
-  "variant": "function validator(value) {
+  "elem-1": "function validator(value) {
   if (typeof value === 'number' && value % 2 === 0) return true;
   if (value === 13) return true
   return false
 }",
-  "variant.explanations": Array [],
-  "variant.pure": true,
+  "elem-1.explanations": Array [],
+  "elem-1.pure": true,
+  "explanations": Array [],
+  "pure": true,
 }
 `;
 
@@ -257,18 +257,12 @@ Object {
   if (!value || !Array.isArray(value)) return false
   for (let i = 0; i < value.length; i++) {
     const elem = value[i]
-    if (!validator.object(elem)) return false
+    if (elem == null) return false
+    if (elem.a !== 13) return false
   }
   return true
 }",
   "explanations": Array [],
-  "object": "function validator(value) {
-  if (value == null) return false
-  if (value.a !== 13) return false
-  return true
-}",
-  "object.explanations": Array [],
-  "object.pure": true,
   "pure": true,
 }
 `;
@@ -280,25 +274,15 @@ Object {
   if (!value || !Array.isArray(value)) return false
   for (let i = 0; i < value.length; i++) {
     const elem = value[i]
-    if (!validator.object(elem)) {
-      validator.explanations.push(...validator.object.explanations)
+    if (elem == null) return false
+    if ((typeof elem.a !== 'number' || elem.a % 2 !== 0)) {
+      validator.explanations.push(elem.a)
       return false
     }
   }
   return true
 }",
   "explanations": Array [],
-  "object": "function validator(value) {
-  validator.explanations = []
-  if (value == null) return false
-  if ((typeof value.a !== 'number' || value.a % 2 !== 0)) {
-    validator.explanations.push(value.a)
-    return false
-  }
-  return true
-}",
-  "object.explanations": Array [],
-  "object.pure": false,
   "pure": false,
 }
 `;
@@ -310,15 +294,14 @@ Object {
   if (!value || !Array.isArray(value)) return false
   for (let i = 0; i < value.length; i++) {
     const elem = value[i]
-    if (!validator.object(elem)) {
-      validator.explanations.push(...validator.object.explanations)
+    if (!validator['elem-2'](elem)) {
+      validator.explanations.push(...validator['elem-2'].explanations)
       return false
     }
   }
   return true
 }",
-  "explanations": Array [],
-  "object": "function validator(value) {
+  "elem-2": "function validator(value) {
   validator.explanations = []
   if (!validator.defined(value)) return false
   const keys = Object.keys(value)
@@ -332,10 +315,10 @@ Object {
   }
   return true
 }",
-  "object.__propsWithSchemasDict": Object {
+  "elem-2.__propsWithSchemasDict": Object {
     "a": true,
   },
-  "object.checkRest": "function validator(value) {
+  "elem-2.checkRest": "function validator(value) {
   validator.explanations = []
   if (typeof value === 'number' && value % 2 === 0) {
     return true
@@ -343,17 +326,18 @@ Object {
   validator.explanations.push(value)
   return false
 }",
-  "object.checkRest.explanations": Array [],
-  "object.checkRest.pure": false,
-  "object.defined": "function validator(value) {
+  "elem-2.checkRest.explanations": Array [],
+  "elem-2.checkRest.pure": false,
+  "elem-2.defined": "function validator(value) {
   if (value == null) return false
   if (value.a !== 41) return false
   return true
 }",
-  "object.defined.explanations": Array [],
-  "object.defined.pure": true,
-  "object.explanations": Array [],
-  "object.pure": false,
+  "elem-2.defined.explanations": Array [],
+  "elem-2.defined.pure": true,
+  "elem-2.explanations": Array [],
+  "elem-2.pure": false,
+  "explanations": Array [],
   "pure": false,
 }
 `;
@@ -364,12 +348,11 @@ Object {
   if (!value || !Array.isArray(value)) return false
   for (let i = 0; i < value.length; i++) {
     const elem = value[i]
-    if (!validator.object(elem)) return false
+    if (!validator['elem-3'](elem)) return false
   }
   return true
 }",
-  "explanations": Array [],
-  "object": "function validator(value) {
+  "elem-3": "function validator(value) {
   if (!validator.defined(value)) return false
   const keys = Object.keys(value)
   for (let i = 0; i < keys.length; i++) {
@@ -379,23 +362,24 @@ Object {
   }
   return true
 }",
-  "object.__propsWithSchemasDict": Object {
+  "elem-3.__propsWithSchemasDict": Object {
     "a": true,
   },
-  "object.checkRest": "function validator(value) {
+  "elem-3.checkRest": "function validator(value) {
   return typeof value === 'number' && value % 2 === 0
 }",
-  "object.checkRest.explanations": Array [],
-  "object.checkRest.pure": true,
-  "object.defined": "function validator(value) {
+  "elem-3.checkRest.explanations": Array [],
+  "elem-3.checkRest.pure": true,
+  "elem-3.defined": "function validator(value) {
   if (value == null) return false
   if (value.a !== 41) return false
   return true
 }",
-  "object.defined.explanations": Array [],
-  "object.defined.pure": true,
-  "object.explanations": Array [],
-  "object.pure": true,
+  "elem-3.defined.explanations": Array [],
+  "elem-3.defined.pure": true,
+  "elem-3.explanations": Array [],
+  "elem-3.pure": true,
+  "explanations": Array [],
   "pure": true,
 }
 `;
@@ -431,18 +415,18 @@ Object {
   if (!value || !Array.isArray(value)) return false
   for (let i = 0; i < value.length; i++) {
     const elem = value[i]
-    if (!validator.variant(elem)) return false
+    if (!validator['elem-4'](elem)) return false
   }
   return true
 }",
-  "explanations": Array [],
-  "pure": true,
-  "variant": "function validator(value) {
+  "elem-4": "function validator(value) {
   if (typeof value === 'number' && value % 2 === 0) return true;
   if (value === 13) return true
   return false
 }",
-  "variant.explanations": Array [],
-  "variant.pure": true,
+  "elem-4.explanations": Array [],
+  "elem-4.pure": true,
+  "explanations": Array [],
+  "pure": true,
 }
 `;
