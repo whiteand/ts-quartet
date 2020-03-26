@@ -222,3 +222,277 @@ Object {
   "pure": true,
 }
 `;
+
+exports[`v(object) 18. v({ a: { b: impureFunc }, c: pureFunc }) 1`] = `
+Object {
+  "_": "function validator(value) {
+  validator.explanations = []
+  if (value == null) return false
+  if (value.a == null) return false
+  if ((typeof value.a.b !== 'number' || value.a.b % 2 !== 0)) {
+    validator.explanations.push(value.a.b)
+    return false
+  }
+  if (!(typeof value.c === 'number' && value.c % 2 === 0)) return false
+  return true
+}",
+  "explanations": Array [],
+  "pure": false,
+}
+`;
+
+exports[`v(object) 19. v({ a: { b: pureFunc }, c: impureFunc }) 1`] = `
+Object {
+  "_": "function validator(value) {
+  validator.explanations = []
+  if (value == null) return false
+  if (value.a == null) return false
+  if (!(typeof value.a.b === 'number' && value.a.b % 2 === 0)) return false
+  if ((typeof value.c !== 'number' || value.c % 2 !== 0)) {
+    validator.explanations.push(value.c)
+    return false
+  }
+  return true
+}",
+  "explanations": Array [],
+  "pure": false,
+}
+`;
+
+exports[`v(object) 20. v({ a: { b: impureFunc }, c: impureFunc }) 1`] = `
+Object {
+  "_": "function validator(value) {
+  validator.explanations = []
+  if (value == null) return false
+  if (value.a == null) return false
+  if ((typeof value.a.b !== 'number' || value.a.b % 2 !== 0)) {
+    validator.explanations.push(value.a.b)
+    return false
+  }
+  if ((typeof value.c !== 'number' || value.c % 2 !== 0)) {
+    validator.explanations.push(value.c)
+    return false
+  }
+  return true
+}",
+  "explanations": Array [],
+  "pure": false,
+}
+`;
+
+exports[`v(object) 21. v({ a: { b: 42 }}) 1`] = `
+Object {
+  "_": "function validator(value) {
+  if (value == null) return false
+  if (value.a == null) return false
+  if (value.a.b !== 42) return false
+  return true
+}",
+  "explanations": Array [],
+  "pure": true,
+}
+`;
+
+exports[`v(object) 22. v({ a: { b: 42, c: pureFunc }}) 1`] = `
+Object {
+  "_": "function validator(value) {
+  if (value == null) return false
+  if (value.a == null) return false
+  if (value.a.b !== 42) return false
+  if ((typeof value.a.c !== 'number' || value.a.c % 2 !== 0)) return false
+  return true
+}",
+  "explanations": Array [],
+  "pure": true,
+}
+`;
+
+exports[`v(object) 23. v({ a: { b: 42, c: impureFunc }}) 1`] = `
+Object {
+  "_": "function validator(value) {
+  validator.explanations = []
+  if (value == null) return false
+  if (value.a == null) return false
+  if (value.a.b !== 42) return false
+  if ((typeof value.a.c !== 'number' || value.a.c % 2 !== 0)) {
+    validator.explanations.push(value.a.c)
+    return false
+  }
+  return true
+}",
+  "explanations": Array [],
+  "pure": false,
+}
+`;
+
+exports[`v(object) 24. v({ a: { b: 42, [v.rest]: pureFunc }}) 1`] = `
+Object {
+  "_": "function validator(value) {
+  if (value == null) return false
+  if (!validator['a-0'](value.a)) return false
+  return true
+}",
+  "a-0": "function validator(value) {
+  if (!validator.defined(value)) return false
+  const keys = Object.keys(value)
+  for (let i = 0; i < keys.length; i++) {
+    const key = keys[i]
+    if (validator.__propsWithSchemasDict[key] === true) continue
+    if (!validator.checkRest(value[key])) return false
+  }
+  return true
+}",
+  "a-0.__propsWithSchemasDict": Object {
+    "b": true,
+  },
+  "a-0.checkRest": "function validator(value) {
+  return typeof value === 'number' && value % 2 === 0
+}",
+  "a-0.checkRest.explanations": Array [],
+  "a-0.checkRest.pure": true,
+  "a-0.defined": "function validator(value) {
+  if (value == null) return false
+  if (value.b !== 42) return false
+  return true
+}",
+  "a-0.defined.explanations": Array [],
+  "a-0.defined.pure": true,
+  "a-0.explanations": Array [],
+  "a-0.pure": true,
+  "explanations": Array [],
+  "pure": true,
+}
+`;
+
+exports[`v(object) 25. v({ a: { b: 42, [v.rest]: impureFunc }}) 1`] = `
+Object {
+  "_": "function validator(value) {
+  validator.explanations = []
+  if (value == null) return false
+  if (!validator['a-1'](value.a)) {
+    validator.explanations.push(...validator['a-1'].explanations)
+    return false
+  }
+  return true
+}",
+  "a-1": "function validator(value) {
+  validator.explanations = []
+  if (!validator.defined(value)) return false
+  const keys = Object.keys(value)
+  for (let i = 0; i < keys.length; i++) {
+    const key = keys[i]
+    if (validator.__propsWithSchemasDict[key] === true) continue
+    if (!validator.checkRest(value[key])) {
+      validator.explanations.push(...validator.checkRest.explanations)
+      return false
+    }
+  }
+  return true
+}",
+  "a-1.__propsWithSchemasDict": Object {
+    "b": true,
+  },
+  "a-1.checkRest": "function validator(value) {
+  validator.explanations = []
+  if (typeof value === 'number' && value % 2 === 0) {
+    return true
+  }
+  validator.explanations.push(value)
+  return false
+}",
+  "a-1.checkRest.explanations": Array [],
+  "a-1.checkRest.pure": false,
+  "a-1.defined": "function validator(value) {
+  if (value == null) return false
+  if (value.b !== 42) return false
+  return true
+}",
+  "a-1.defined.explanations": Array [],
+  "a-1.defined.pure": true,
+  "a-1.explanations": Array [],
+  "a-1.pure": false,
+  "explanations": Array [],
+  "pure": false,
+}
+`;
+
+exports[`v(object) 26. v({ a: [] }) 1`] = `
+Object {
+  "_": "function validator(value) {
+  if (value == null) return false
+  return false
+  return true
+}",
+  "explanations": Array [],
+  "pure": true,
+}
+`;
+
+exports[`v(object) 27. v({ a: [42] }) 1`] = `
+Object {
+  "_": "function validator(value) {
+  if (value == null) return false
+  if (value.a !== 42) return false
+  return true
+}",
+  "explanations": Array [],
+  "pure": true,
+}
+`;
+
+exports[`v(object) 28. v({ a: [pureFunc, pureFunc] }) 1`] = `
+Object {
+  "_": "function validator(value) {
+  if (value == null) return false
+  if (!validator['a-2'](value.a)) return false
+  return true
+}",
+  "a-2": "function validator(value) {
+  if (typeof value === 'string') return true;
+  if (typeof value === 'number' && value % 2 === 0) return true;
+  return false
+}",
+  "a-2.explanations": Array [],
+  "a-2.pure": true,
+  "explanations": Array [],
+  "pure": true,
+}
+`;
+
+exports[`v(object) 29. v({ a: [impureFunc, pureFunc] }) 1`] = `
+Object {
+  "_": "function validator(value) {
+  validator.explanations = []
+  if (value == null) return false
+  if (!validator['a-3'](value.a)) {
+    validator.explanations.push(...validator['a-3'].explanations)
+    return false
+  }
+  return true
+}",
+  "a-3": "function validator(value) {
+  validator.explanations = []
+  if (typeof value === 'number' && value % 2 === 0) return true;
+  if (typeof value === 'string') return true;
+  validator.explanations.push(value)
+  return false
+}",
+  "a-3.explanations": Array [],
+  "a-3.pure": false,
+  "explanations": Array [],
+  "pure": false,
+}
+`;
+
+exports[`v(object) 30. v({ a: 41, b: 42 }) 1`] = `
+Object {
+  "_": "function validator(value) {
+  if (value == null) return false
+  if (value.a !== 41) return false
+  if (value.b !== 42) return false
+  return true
+}",
+  "explanations": Array [],
+  "pure": true,
+}
+`;

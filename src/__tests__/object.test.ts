@@ -3,6 +3,7 @@ import { snapshot, puretables, tables } from "./utils";
 import {
   primitives,
   funcSchemaWithPrepare,
+  funcSchemaWithNot,
   funcSchema,
   funcSchemaWithNotHandleError
 } from "./mocks";
@@ -186,55 +187,239 @@ describe("v(object)", () => {
         [{ a: { b: undefined } }, [undefined]],
         [{ a: { b: 1 } }, [1]]
       ]
-      );
-    });
-    test("17. v({ a: { b: pureFunc }, c: pureFunc })", () => {
-      const validator = v({ a: { b: funcSchema }, c: funcSchema });
-      expect(validator.pure).toBe(true);
-      snapshot(validator);
-      puretables(
-        validator,
-        [{ a: { b: 2 }, c: 2 }, { a: { b: 4, d: 3 }, c: 4 }],
-        [...primitives, {}, { a: null }, { a: { b: 4 } }, { a: { b: 4 }, c: 1 }, { a: { b: 1 }, c: 4 }]
-      );
-    });
+    );
+  });
+  test("17. v({ a: { b: pureFunc }, c: pureFunc })", () => {
+    const validator = v({ a: { b: funcSchema }, c: funcSchema });
+    expect(validator.pure).toBe(true);
+    snapshot(validator);
+    puretables(
+      validator,
+      [{ a: { b: 2 }, c: 2 }, { a: { b: 4, d: 3 }, c: 4 }],
+      [
+        ...primitives,
+        {},
+        { a: null },
+        { a: { b: 4 } },
+        { a: { b: 4 }, c: 1 },
+        { a: { b: 1 }, c: 4 }
+      ]
+    );
+  });
   test("18. v({ a: { b: impureFunc }, c: pureFunc })", () => {
-    // TODO: Add it!
+    const validator = v({
+      a: { b: funcSchemaWithNotHandleError },
+      c: funcSchema
+    });
+    expect(validator.pure).toBe(false);
+    snapshot(validator);
+    tables(
+      validator,
+      [{ a: { b: 2 }, c: 2 }, { a: { b: 4, d: 3 }, c: 4 }],
+      [
+        ...primitives.map(p => [p, []] as [any, any[]]),
+        [{}, []],
+        [{ a: null }, []],
+        [{ a: { b: 4 } }, []],
+        [{ a: { b: 4 }, c: 1 }, []],
+        [{ a: { b: 1 }, c: 4 }, [1]]
+      ]
+    );
   });
   test("19. v({ a: { b: pureFunc }, c: impureFunc })", () => {
-    // TODO: Add it!
+    const validator = v({
+      a: { b: funcSchema },
+      c: funcSchemaWithNotHandleError
+    });
+    expect(validator.pure).toBe(false);
+    snapshot(validator);
+    tables(
+      validator,
+      [{ a: { b: 2 }, c: 2 }, { a: { b: 4, d: 3 }, c: 4 }],
+      [
+        ...primitives.map(p => [p, []] as [any, any[]]),
+        [{}, []],
+        [{ a: null }, []],
+        [{ a: { b: 4 } }, [undefined]],
+        [{ a: { b: 4 }, c: 1 }, [1]],
+        [{ a: { b: 1 }, c: 4 }, []]
+      ]
+    );
   });
   test("20. v({ a: { b: impureFunc }, c: impureFunc })", () => {
-    // TODO: Add it!
+    const validator = v({
+      a: { b: funcSchemaWithNotHandleError },
+      c: funcSchemaWithNotHandleError
+    });
+    expect(validator.pure).toBe(false);
+    snapshot(validator);
+    tables(
+      validator,
+      [{ a: { b: 2 }, c: 2 }, { a: { b: 4, d: 3 }, c: 4 }],
+      [
+        ...primitives.map(p => [p, []] as [any, any[]]),
+        [{}, []],
+        [{ a: null }, []],
+        [{ a: { b: 4 } }, [undefined]],
+        [{ a: { b: 4 }, c: 1 }, [1]],
+        [{ a: { b: 1 }, c: 4 }, [1]]
+      ]
+    );
   });
   test("21. v({ a: { b: 42 }})", () => {
-    // TODO: Add it!
+    const validator = v({ a: { b: 42 } });
+    expect(validator.pure).toBe(true);
+    snapshot(validator);
+    puretables(
+      validator,
+      [
+        { a: { b: 42 } },
+        { a: { b: 42 }, c: 1 },
+        { a: { b: 42, c: 2 } },
+        { a: { b: 42, d: 4 }, c: 3 }
+      ],
+      [{ a: { b: 41 } }, { a: {} }, { a: null }, {}, ...primitives]
+    );
   });
   test("22. v({ a: { b: 42, c: pureFunc }})", () => {
-    // TODO: Add it!
+    const validator = v({ a: { b: 42, c: funcSchemaWithNot } });
+    snapshot(validator);
+    expect(validator.pure).toBe(true);
+    puretables(
+      validator,
+      [
+        { a: { b: 42, c: 2 } },
+        { a: { b: 42, c: 4 }, c: 1 },
+        { a: { b: 42, c: 2 } },
+        { a: { b: 42, d: 4, c: 8 }, c: 3 }
+      ],
+      [{ a: { b: 41 } }, { a: {} }, { a: null }, {}, ...primitives]
+    );
   });
   test("23. v({ a: { b: 42, c: impureFunc }})", () => {
-    // TODO: Add it!
+    const validator = v({ a: { b: 42, c: funcSchemaWithNotHandleError } });
+    snapshot(validator);
+    expect(validator.pure).toBe(false);
+    tables(
+      validator,
+      [
+        { a: { b: 42, c: 2 } },
+        { a: { b: 42, c: 4 }, c: 1 },
+        { a: { b: 42, c: 2 } },
+        { a: { b: 42, d: 4, c: 8 }, c: 3 }
+      ],
+      [
+        [{ a: { b: 41, c: 1 } }, []],
+        [{ a: { b: 42, c: 1 } }, [1]],
+        [{ a: { b: 41 } }, []],
+        [{ a: { b: 42 } }, [undefined]],
+        [{ a: {} }, []],
+        [{ a: null }, []],
+        [{}, []],
+        ...primitives.map(p => [p, []] as [any, any[]])
+      ]
+    );
   });
   test("24. v({ a: { b: 42, [v.rest]: pureFunc }})", () => {
-    // TODO: Add it!
+    const validator = v({ a: { b: 42, [v.rest]: funcSchemaWithNot } });
+    snapshot(validator);
+    expect(validator.pure).toBe(true);
+    puretables(
+      validator,
+      [
+        { a: { b: 42, c: 2 } },
+        { a: { b: 42, c: 4 }, c: 1 },
+        { a: { b: 42, c: 2 } },
+        { a: { b: 42, d: 4, c: 8 }, c: 3 }
+      ],
+      [
+        { a: { b: 41, c: 1 } },
+        { a: { b: 42, c: 1 } },
+        { a: { b: 41 } },
+        { a: {} },
+        { a: null },
+        {},
+        ...primitives
+      ]
+    );
   });
   test("25. v({ a: { b: 42, [v.rest]: impureFunc }})", () => {
-    // TODO: Add it!
+    const validator = v({
+      a: { b: 42, [v.rest]: funcSchemaWithNotHandleError }
+    });
+    snapshot(validator);
+    expect(validator.pure).toBe(false);
+    tables(
+      validator,
+      [
+        { a: { b: 42, c: 2 } },
+        { a: { b: 42, c: 4 }, c: 1 },
+        { a: { b: 42, c: 2 } },
+        { a: { b: 42, d: 4, c: 8 }, c: 3 }
+      ],
+      [
+        [{ a: { b: 41, c: 1 } }, []],
+        [{ a: { b: 42, c: 1 } }, [1]],
+        [{ a: { b: 42, c: 2, d: 3 } }, [3]],
+        [{ a: { b: 41 } }, []],
+        [{ a: {} }, []],
+        [{ a: null }, []],
+        [{}, []],
+        ...primitives.map(p => [p, []] as [any, any[]])
+      ]
+    );
   });
   test("26. v({ a: [] })", () => {
-    // TODO: Add it!
+    const validator = v({ a: [] });
+    expect(validator.pure).toBe(true);
+    snapshot(validator);
+    puretables(validator, [], [{ a: 1 }, {}, ...primitives]);
   });
   test("27. v({ a: [42] })", () => {
-    // TODO: Add it!
+    const validator = v({ a: [42] });
+    expect(validator.pure).toBe(true);
+    snapshot(validator);
+    puretables(
+      validator,
+      [{ a: 42 }, { a: 42, b: 42 }, Object.assign([], { a: 42 })],
+      [...primitives, {}, { a: null }, { a: "null" }]
+    );
   });
   test("28. v({ a: [pureFunc, pureFunc] })", () => {
-    // TODO: Add it!
+    const validator = v({ a: [v.string, funcSchemaWithNot] });
+    expect(validator.pure).toBe(true);
+    snapshot(validator);
+    puretables(
+      validator,
+      [{ a: 42 }, { a: "9" }, { a: 42, b: 42 }, Object.assign([], { a: 42 })],
+      [...primitives, {}, { a: null }, { a: 41 }]
+    );
   });
   test("29. v({ a: [impureFunc, pureFunc] })", () => {
-    // TODO: Add it!
+    const validator = v({ a: [funcSchemaWithNotHandleError, v.string] });
+    expect(validator.pure).toBe(false);
+    snapshot(validator);
+    tables(
+      validator,
+      [{ a: 42 }, { a: "9" }, { a: 42, b: 42 }, Object.assign([], { a: 42 })],
+      [
+        ...primitives.map(
+          e => [e, e == null ? [] : [undefined]] as [any, any[]]
+        ),
+        [{}, [undefined]],
+        [{ a: null }, [null]],
+        [{ a: 41 }, [41]]
+      ]
+    );
   });
   test("30. v({ a: 41, b: 42 })", () => {
-    // TODO: Add it!
+    const validator = v({ a: 41, b: 42 });
+    expect(validator.pure).toBe(true);
+    snapshot(validator);
+    puretables(
+      validator,
+      [{ a: 41, b: 42 }, { a: 41, b: 42, c: 10 }],
+      [...primitives, {}, { a: 41, b: 43 }, { a: 40, b: 42 }]
+    );
   });
 });
