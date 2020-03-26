@@ -296,7 +296,6 @@ Object {
     const elem = value[i]
     if (elem == null) return false
     if (elem.a !== 41) return false
-    if (elem == null) return false
     validator['keys-0'] = Object.keys(elem)
     for (let i = 0; i < validator['keys-0'].length; i++) {
       validator['key-0'] = validator['keys-0'][i]
@@ -330,7 +329,6 @@ Object {
     const elem = value[i]
     if (elem == null) return false
     if (elem.a !== 41) return false
-    if (elem == null) return false
     validator['keys-1'] = Object.keys(elem)
     for (let i = 0; i < validator['keys-1'].length; i++) {
       validator['key-1'] = validator['keys-1'][i]

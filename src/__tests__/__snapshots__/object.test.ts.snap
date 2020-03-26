@@ -322,7 +322,6 @@ Object {
   if (value == null) return false
   if (value.a == null) return false
   if (value.a.b !== 42) return false
-  if (value.a == null) return false
   validator['keys-0'] = Object.keys(value.a)
   for (let i = 0; i < validator['keys-0'].length; i++) {
     validator['key-0'] = validator['keys-0'][i]
@@ -351,7 +350,6 @@ Object {
   if (value == null) return false
   if (value.a == null) return false
   if (value.a.b !== 42) return false
-  if (value.a == null) return false
   validator['keys-1'] = Object.keys(value.a)
   for (let i = 0; i < validator['keys-1'].length; i++) {
     validator['key-1'] = validator['keys-1'][i]

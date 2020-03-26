@@ -115,66 +115,55 @@ export function compileIfNotValidReturnFalse(
         ...objectSchema
       } = objectSchemaWithRest;
       const objectSchemaKeys = Object.keys(objectSchema);
-      if (objectSchemaKeys.length === 0) {
-        const [elemId, prepareElem] = toContext("elem", undefined);
-        const getElem = `${ctxId}['${elemId}']`;
-        const [forLoopBody, forLoopBodyIsPure] = compileIfNotValidReturnFalse(
-          c,
-          getElem,
-          ctxId,
-          restValidator,
-          preparations
+
+      const [checkIsObject, isCheckObjectPure] =
+        objectSchemaKeys.length > 0
+          ? compileIfNotValidReturnFalse(
+              c,
+              valueId,
+              ctxId,
+              objectSchema,
+              preparations
+            )
+          : [`if (${valueId} == null) return false`, true];
+      const [elemId, prepareElem] = toContext("elem", undefined);
+      const [keysId, prepareKeysId] = toContext("keys", []);
+      const getElem = `${ctxId}['${elemId}']`;
+      const getKeys = `${ctxId}['${keysId}']`;
+      preparations.push(prepareElem, prepareKeysId);
+      const [forLoopBody, forLoopBodyIsPure] = compileIfNotValidReturnFalse(
+        c,
+        getElem,
+        ctxId,
+        restValidator,
+        preparations
+      );
+      const keysToBeOmmited = [...(omitKeys || []), ...objectSchemaKeys]
+      if (keysToBeOmmited && keysToBeOmmited.length > 0) {
+        const [omitKeysId, prepareOmitKeys] = toContext(
+          "omit-keys",
+          toDict(keysToBeOmmited)
         );
-        if (omitKeys && omitKeys.length > 0) {
-          const [keysId, prepareKeysId] = toContext("keys", []);
-          const [omitKeysId, prepareOmitKeys] = toContext(
-            "omit-keys",
-            toDict(omitKeys)
-          );
-          const [keyId, prepareKey] = toContext("key", undefined);
-          preparations.push(
-            prepareKeysId,
-            prepareOmitKeys,
-            prepareKey,
-            prepareElem
-          );
-          const getKeys = `${ctxId}['${keysId}']`;
-          const getOmitKeysId = `${ctxId}['${omitKeysId}']`;
-          const getKey = `${ctxId}['${keyId}']`;
-          return [
-            `if (${valueId} == null) return false\n${getKeys} = Object.keys(${valueId})\nfor (let i = 0; i < ${getKeys}.length; i++) {\n  ${getKey} = ${getKeys}[i]\n  if (${getOmitKeysId}[${getKey}] === true) continue\n  ${getElem} = ${valueId}[${getKey}]\n${addTabs(
-              forLoopBody
-            )}\n}
+        const [keyId, prepareKey] = toContext("key", undefined);
+        preparations.push(prepareOmitKeys, prepareKey);
+        const getOmitKeysId = `${ctxId}['${omitKeysId}']`;
+        const getKey = `${ctxId}['${keyId}']`;
+        return [
+          `${checkIsObject}\n${getKeys} = Object.keys(${valueId})\nfor (let i = 0; i < ${getKeys}.length; i++) {\n  ${getKey} = ${getKeys}[i]\n  if (${getOmitKeysId}[${getKey}] === true) continue\n  ${getElem} = ${valueId}[${getKey}]\n${addTabs(
+            forLoopBody
+          )}\n}
             `,
-            forLoopBodyIsPure
-          ];
-        }
-        return defaultHandler(
-          c,
-          valueId,
-          ctxId,
-          { [methods.rest]: restValidator, [methods.restOmit]: omitKeys },
-          preparations
-        );
+          isCheckObjectPure && forLoopBodyIsPure
+        ];
+      } else {
+        return [
+          `${checkIsObject}\n${getKeys} = Object.keys(${valueId})\nfor (let i = 0; i < ${getKeys}.length; i++) {\n  ${getElem} = ${valueId}[${getKeys}[i]]\n${addTabs(
+            forLoopBody
+          )}\n}
+              `,
+          isCheckObjectPure && forLoopBodyIsPure
+        ];
       }
-      const [definedBody, definedIsPure] = compileIfNotValidReturnFalse(
-        c,
-        valueId,
-        ctxId,
-        objectSchema,
-        preparations
-      );
-      const [restBody, restIsPure] = compileIfNotValidReturnFalse(
-        c,
-        valueId,
-        ctxId,
-        {
-          [methods.rest]: restValidator,
-          [methods.restOmit]: [...(omitKeys || []), ...objectSchemaKeys]
-        },
-        preparations
-      );
-      return [definedBody + "\n" + restBody, definedIsPure && restIsPure];
     },
     variant: schemas => {
       if (schemas.length === 0) {

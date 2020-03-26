@@ -60,7 +60,6 @@ Object {
   validator.explanations = []
   if (value == null) return false
   if (!(typeof value.a === 'number' && value.a % 2 === 0)) return false
-  if (value == null) return false
   validator['keys-0'] = Object.keys(value)
   for (let i = 0; i < validator['keys-0'].length; i++) {
     validator['key-0'] = validator['keys-0'][i]
@@ -74,7 +73,6 @@ Object {
     validator.explanations.push(value.b + ' is not 4k')
     return false
   }
-  if (value == null) return false
   validator['keys-1'] = Object.keys(value)
   for (let i = 0; i < validator['keys-1'].length; i++) {
     validator['key-1'] = validator['keys-1'][i]
