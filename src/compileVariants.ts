@@ -10,6 +10,7 @@ import {
   Prepare,
   Schema
 } from "./types";
+import { constantToFunc } from "./constantToFunc";
 
 function compileVariantElementToReturnWay(
   c: (schema: Schema) => CompilationResult,
@@ -23,32 +24,32 @@ function compileVariantElementToReturnWay(
 ): [string, boolean] {
   return handleSchema<[string, boolean]>({
     constant: constant => {
-      if (constant === null) {
-        return [`if (${valueId} === null) return true`, true];
-      }
-      if (constant === undefined) {
-        return [`if (${valueId} === undefined) return true`, true];
-      }
       if (constant === "false" || constant === "true") {
-        return [
-          `if (${valueId} === ${JSON.stringify(constant)}) return true`,
-          true
-        ];
-      }
-      if (typeof constant === "number") {
-        if (Number.isNaN(constant)) {
-          return [`if (Number.isNaN(${valueId})) return true`, true];
-        }
-        return [`if (${valueId} === ${constant}) return true`, true];
+        return compileVariantElementToReturnWay(
+          c,
+          index,
+          valueId,
+          ctxId,
+          constantToFunc(constant),
+          preparations,
+          handleErrors,
+          stringsSymbols
+        );
       }
       if (typeof constant === "symbol" || typeof constant === "string") {
         stringsSymbols.push(constant);
         return ["", true];
       }
-      return [
-        `if (${valueId} === ${JSON.stringify(constant)}) return true`,
-        true
-      ];
+      return compileVariantElementToReturnWay(
+        c,
+        index,
+        valueId,
+        ctxId,
+        constantToFunc(constant),
+        preparations,
+        handleErrors,
+        stringsSymbols
+      );
     },
     function: funcSchema => {
       const s = funcSchema();

@@ -199,7 +199,7 @@ Object {
   "elem-0": "function validator(value) {
   validator.explanations = []
   if (typeof value === 'number' && value % 2 === 0) return true;
-  if (value === 13) return true
+  if (value === 13) return true;
   validator.explanations.push(value)
   return false
 }",
@@ -241,7 +241,7 @@ Object {
 }",
   "elem-1": "function validator(value) {
   if (typeof value === 'number' && value % 2 === 0) return true;
-  if (value === 13) return true
+  if (value === 13) return true;
   return false
 }",
   "elem-1.explanations": Array [],
@@ -421,7 +421,7 @@ Object {
 }",
   "elem-4": "function validator(value) {
   if (typeof value === 'number' && value % 2 === 0) return true;
-  if (value === 13) return true
+  if (value === 13) return true;
   return false
 }",
   "elem-4.explanations": Array [],

@@ -43,17 +43,14 @@ export function compileIfNotValidReturnFalse(
   preparations: Prepare[]
 ): [string, boolean] {
   return handleSchema<[string, boolean]>({
-    constant: constant => {
-      const funcSchema = constantToFunc(constant);
-
-      return compileIfNotValidReturnFalse(
+    constant: constant =>
+      compileIfNotValidReturnFalse(
         c,
         valueId,
         ctxId,
-        funcSchema,
+        constantToFunc(constant),
         preparations
-      );
-    },
+      ),
     function: funcSchema => {
       const s = funcSchema();
       if (s.prepare) {
@@ -109,7 +106,8 @@ export function compileIfNotValidReturnFalse(
       codeLines.splice(1, 0, ...important);
       return [codeLines.join("\n"), isPure];
     },
-    objectRest: objectSchema => defaultHandler(c, valueId, ctxId, objectSchema, preparations),
+    objectRest: objectSchema =>
+      defaultHandler(c, valueId, ctxId, objectSchema, preparations),
     variant: schemas => {
       if (schemas.length === 0) {
         return [`return false`, true];
@@ -123,7 +121,7 @@ export function compileIfNotValidReturnFalse(
           preparations
         );
       }
-      return defaultHandler(c, valueId, ctxId, schemas, preparations)
+      return defaultHandler(c, valueId, ctxId, schemas, preparations);
     }
   })(schema);
 }
