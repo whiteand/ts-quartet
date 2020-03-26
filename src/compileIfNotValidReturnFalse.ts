@@ -5,6 +5,36 @@ import { toContext } from "./toContext";
 import { CompilationResult, Prepare, Schema } from "./types";
 import { constantToFunc } from "./constantToFunc";
 
+function defaultHandler(
+  c: (schema: Schema) => CompilationResult,
+  valueId: string,
+  ctxId: string,
+  schema: Schema,
+  preparations: Prepare[]
+): [string, boolean] {
+  const compiled = c(schema);
+  const [id, prepare] = toContext(valueId, compiled);
+  preparations.push(prepare);
+  const funcSchema = compiled.pure
+    ? () => ({
+        check: () => `${ctxId}['${id}'](${valueId})`,
+        not: () => `!${ctxId}['${id}'](${valueId})`
+      })
+    : () => ({
+        check: () => `${ctxId}['${id}'](${valueId})`,
+        handleError: () =>
+          `${ctxId}.explanations.push(...${ctxId}['${id}'].explanations)`,
+        not: () => `!${ctxId}['${id}'](${valueId})`
+      });
+  return compileIfNotValidReturnFalse(
+    c,
+    valueId,
+    ctxId,
+    funcSchema,
+    preparations
+  );
+}
+
 export function compileIfNotValidReturnFalse(
   c: (schema: Schema) => CompilationResult,
   valueId: string,
@@ -79,29 +109,7 @@ export function compileIfNotValidReturnFalse(
       codeLines.splice(1, 0, ...important);
       return [codeLines.join("\n"), isPure];
     },
-    objectRest: objectSchema => {
-      const compiled = c(objectSchema);
-      const [id, prepare] = toContext(valueId, compiled);
-      preparations.push(prepare);
-      const funcSchema = compiled.pure
-        ? () => ({
-            check: () => `${ctxId}['${id}'](${valueId})`,
-            not: () => `!${ctxId}['${id}'](${valueId})`
-          })
-        : () => ({
-            check: () => `${ctxId}['${id}'](${valueId})`,
-            handleError: () =>
-              `${ctxId}.explanations.push(...${ctxId}['${id}'].explanations)`,
-            not: () => `!${ctxId}['${id}'](${valueId})`
-          });
-      return compileIfNotValidReturnFalse(
-        c,
-        valueId,
-        ctxId,
-        funcSchema,
-        preparations
-      );
-    },
+    objectRest: objectSchema => defaultHandler(c, valueId, ctxId, objectSchema, preparations),
     variant: schemas => {
       if (schemas.length === 0) {
         return [`return false`, true];
@@ -115,27 +123,7 @@ export function compileIfNotValidReturnFalse(
           preparations
         );
       }
-      const compiled = c(schemas);
-      const [id, prepare] = toContext(valueId, compiled);
-      preparations.push(prepare);
-      const funcSchema = compiled.pure
-        ? () => ({
-            check: () => `${ctxId}['${id}'](${valueId})`,
-            not: () => `!${ctxId}['${id}'](${valueId})`
-          })
-        : () => ({
-            check: () => `${ctxId}['${id}'](${valueId})`,
-            handleError: () =>
-              `${ctxId}.explanations.push(...${ctxId}['${id}'].explanations)`,
-            not: () => `!${ctxId}['${id}'](${valueId})`
-          });
-      return compileIfNotValidReturnFalse(
-        c,
-        valueId,
-        ctxId,
-        funcSchema,
-        preparations
-      );
+      return defaultHandler(c, valueId, ctxId, schemas, preparations)
     }
   })(schema);
 }

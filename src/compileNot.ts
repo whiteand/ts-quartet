@@ -6,14 +6,15 @@ import {
   HandleSchemaHandler,
   Schema
 } from "./types";
+import { constantToFunc } from "./constantToFunc";
 
 export function compileNot(
   c: (schema: Schema) => CompilationResult,
   schema: Schema
-) {
+): FunctionSchema {
   const defaultHandler: HandleSchemaHandler<Schema, FunctionSchema> = (
     schemaToBeReverted: Schema
-  ) => {
+  ): FunctionSchema => {
     const compiled = c(schemaToBeReverted);
     const [notId, prepare] = toContext("not", compiled);
     return () => ({
@@ -23,42 +24,7 @@ export function compileNot(
     });
   };
   return handleSchema({
-    constant: constant => {
-      switch (typeof constant) {
-        case "undefined":
-          return () => ({
-            check: id => `${id} !== undefined`,
-            not: id => `${id} === undefined`
-          });
-        case "object":
-          return () => ({
-            check: id => `${id} !== null`,
-            not: id => `${id} === null`
-          });
-        case "number":
-          return Number.isNaN(constant)
-            ? () => ({
-                check: id => `!Number.isNaN(${id})`,
-                not: id => `Number.isNaN(${id})`
-              })
-            : () => ({
-                check: id => `${id} !== ${JSON.stringify(constant)}`,
-                not: id => `${id} === ${JSON.stringify(constant)}`
-              });
-        case "symbol":
-          const [symbolId, prepare] = toContext("not-symbol", constant);
-          return () => ({
-            check: (id, ctx) => `${id} !== ${ctx}['${symbolId}']`,
-            not: (id, ctx) => `${id} === ${ctx}['${symbolId}']`,
-            prepare
-          });
-        default:
-          return () => ({
-            check: id => `${id} !== ${JSON.stringify(constant)}`,
-            not: id => `${id} === ${JSON.stringify(constant)}`
-          });
-      }
-    },
+    constant: constant => compileNot(c, constantToFunc(constant)),
     function: funcSchema => {
       const s = funcSchema();
       if (s.not) {

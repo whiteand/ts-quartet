@@ -63,10 +63,10 @@ Object {
 exports[`v.not 06. v.not(Symbol.for("test")) 1`] = `
 Object {
   "_": "function validator(value) {
-  return value !== validator['not-symbol-0']
+  return value !== validator['constant-0']
 }",
+  "constant-0": Symbol(test),
   "explanations": Array [],
-  "not-symbol-0": Symbol(test),
   "pure": true,
 }
 `;
