@@ -4,6 +4,7 @@ import { handleSchema } from "./handleSchema";
 import { toContext } from "./toContext";
 import { CompilationResult, Prepare, Schema } from "./types";
 import { constantToFunc } from "./constantToFunc";
+import { methods } from "./methods";
 
 function defaultHandler(
   c: (schema: Schema) => CompilationResult,
@@ -106,8 +107,41 @@ export function compileIfNotValidReturnFalse(
       codeLines.splice(1, 0, ...important);
       return [codeLines.join("\n"), isPure];
     },
-    objectRest: objectSchema =>
-      defaultHandler(c, valueId, ctxId, objectSchema, preparations),
+    objectRest: objectSchemaWithRest => {
+      const {
+        [methods.rest]: restValidator,
+        [methods.restOmit]: omitKeys,
+        ...objectSchema
+      } = objectSchemaWithRest;
+      const objectSchemaKeys = Object.keys(objectSchema);
+      if (objectSchemaKeys.length === 0) {
+        return defaultHandler(
+          c,
+          valueId,
+          ctxId,
+          { [methods.rest]: restValidator, [methods.restOmit]: omitKeys },
+          preparations
+        );
+      }
+      const [definedBody, definedIsPure] = compileIfNotValidReturnFalse(
+        c,
+        valueId,
+        ctxId,
+        objectSchema,
+        preparations
+      );
+      const [restBody, restIsPure] = compileIfNotValidReturnFalse(
+        c,
+        valueId,
+        ctxId,
+        {
+          [methods.rest]: restValidator,
+          [methods.restOmit]: [...(omitKeys || []), ...objectSchemaKeys]
+        },
+        preparations
+      );
+      return [definedBody + "\n" + restBody, definedIsPure && restIsPure];
+    },
     variant: schemas => {
       if (schemas.length === 0) {
         return [`return false`, true];

@@ -294,6 +294,8 @@ Object {
   if (!value || !Array.isArray(value)) return false
   for (let i = 0; i < value.length; i++) {
     const elem = value[i]
+    if (elem == null) return false
+    if (elem.a !== 41) return false
     if (!validator['elem-2'](elem)) {
       validator.explanations.push(...validator['elem-2'].explanations)
       return false
@@ -303,11 +305,11 @@ Object {
 }",
   "elem-2": "function validator(value) {
   validator.explanations = []
-  if (!validator.defined(value)) return false
+  if (value == null) return false
   const keys = Object.keys(value)
   for (let i = 0; i < keys.length; i++) {
     const key = keys[i]
-    if (validator.__propsWithSchemasDict[key] === true) continue
+    if (validator.__keysToBeOmitted[key] === true) continue
     if (!validator.checkRest(value[key])) {
       validator.explanations.push(...validator.checkRest.explanations)
       return false
@@ -315,7 +317,7 @@ Object {
   }
   return true
 }",
-  "elem-2.__propsWithSchemasDict": Object {
+  "elem-2.__keysToBeOmitted": Object {
     "a": true,
   },
   "elem-2.checkRest": "function validator(value) {
@@ -328,11 +330,7 @@ Object {
 }",
   "elem-2.checkRest.explanations": Array [],
   "elem-2.checkRest.pure": false,
-  "elem-2.defined": "function validator(value) {
-  if (value == null) return false
-  if (value.a !== 41) return false
-  return true
-}",
+  "elem-2.defined": "function (v) { return v != null; }",
   "elem-2.defined.explanations": Array [],
   "elem-2.defined.pure": true,
   "elem-2.explanations": Array [],
@@ -348,21 +346,23 @@ Object {
   if (!value || !Array.isArray(value)) return false
   for (let i = 0; i < value.length; i++) {
     const elem = value[i]
+    if (elem == null) return false
+    if (elem.a !== 41) return false
     if (!validator['elem-3'](elem)) return false
   }
   return true
 }",
   "elem-3": "function validator(value) {
-  if (!validator.defined(value)) return false
+  if (value == null) return false
   const keys = Object.keys(value)
   for (let i = 0; i < keys.length; i++) {
     const key = keys[i]
-    if (validator.__propsWithSchemasDict[key] === true) continue
+    if (validator.__keysToBeOmitted[key] === true) continue
     if (!validator.checkRest(value[key])) return false
   }
   return true
 }",
-  "elem-3.__propsWithSchemasDict": Object {
+  "elem-3.__keysToBeOmitted": Object {
     "a": true,
   },
   "elem-3.checkRest": "function validator(value) {
@@ -370,11 +370,7 @@ Object {
 }",
   "elem-3.checkRest.explanations": Array [],
   "elem-3.checkRest.pure": true,
-  "elem-3.defined": "function validator(value) {
-  if (value == null) return false
-  if (value.a !== 41) return false
-  return true
-}",
+  "elem-3.defined": "function (v) { return v != null; }",
   "elem-3.defined.explanations": Array [],
   "elem-3.defined.pure": true,
   "elem-3.explanations": Array [],

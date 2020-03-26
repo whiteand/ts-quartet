@@ -320,22 +320,24 @@ exports[`v(object) 24. v({ a: { b: 42, [v.rest]: pureFunc }}) 1`] = `
 Object {
   "_": "function validator(value) {
   if (value == null) return false
+  if (value.a == null) return false
+  if (value.a.b !== 42) return false
   if (!validator['value.a-0'](value.a)) return false
   return true
 }",
   "explanations": Array [],
   "pure": true,
   "value.a-0": "function validator(value) {
-  if (!validator.defined(value)) return false
+  if (value == null) return false
   const keys = Object.keys(value)
   for (let i = 0; i < keys.length; i++) {
     const key = keys[i]
-    if (validator.__propsWithSchemasDict[key] === true) continue
+    if (validator.__keysToBeOmitted[key] === true) continue
     if (!validator.checkRest(value[key])) return false
   }
   return true
 }",
-  "value.a-0.__propsWithSchemasDict": Object {
+  "value.a-0.__keysToBeOmitted": Object {
     "b": true,
   },
   "value.a-0.checkRest": "function validator(value) {
@@ -343,11 +345,7 @@ Object {
 }",
   "value.a-0.checkRest.explanations": Array [],
   "value.a-0.checkRest.pure": true,
-  "value.a-0.defined": "function validator(value) {
-  if (value == null) return false
-  if (value.b !== 42) return false
-  return true
-}",
+  "value.a-0.defined": "function (v) { return v != null; }",
   "value.a-0.defined.explanations": Array [],
   "value.a-0.defined.pure": true,
   "value.a-0.explanations": Array [],
@@ -360,6 +358,8 @@ Object {
   "_": "function validator(value) {
   validator.explanations = []
   if (value == null) return false
+  if (value.a == null) return false
+  if (value.a.b !== 42) return false
   if (!validator['value.a-1'](value.a)) {
     validator.explanations.push(...validator['value.a-1'].explanations)
     return false
@@ -370,11 +370,11 @@ Object {
   "pure": false,
   "value.a-1": "function validator(value) {
   validator.explanations = []
-  if (!validator.defined(value)) return false
+  if (value == null) return false
   const keys = Object.keys(value)
   for (let i = 0; i < keys.length; i++) {
     const key = keys[i]
-    if (validator.__propsWithSchemasDict[key] === true) continue
+    if (validator.__keysToBeOmitted[key] === true) continue
     if (!validator.checkRest(value[key])) {
       validator.explanations.push(...validator.checkRest.explanations)
       return false
@@ -382,7 +382,7 @@ Object {
   }
   return true
 }",
-  "value.a-1.__propsWithSchemasDict": Object {
+  "value.a-1.__keysToBeOmitted": Object {
     "b": true,
   },
   "value.a-1.checkRest": "function validator(value) {
@@ -395,11 +395,7 @@ Object {
 }",
   "value.a-1.checkRest.explanations": Array [],
   "value.a-1.checkRest.pure": false,
-  "value.a-1.defined": "function validator(value) {
-  if (value == null) return false
-  if (value.b !== 42) return false
-  return true
-}",
+  "value.a-1.defined": "function (v) { return v != null; }",
   "value.a-1.defined.explanations": Array [],
   "value.a-1.defined.pure": true,
   "value.a-1.explanations": Array [],

@@ -15,7 +15,12 @@ export function getExplanation(
 
 export function tables(validator: any, valids: any[], invalids: [any, any][]) {
   for (const valid of valids) {
-    expect(validator(valid)).toBe(true)
+    try {
+      expect(validator(valid)).toBe(true)
+    } catch (error) {
+      console.log(valid)
+      console.log(getDescription(validator))
+    }
     expect(validator.explanations).toEqual([])
   }
   for (const [invalid, explanations] of invalids) {

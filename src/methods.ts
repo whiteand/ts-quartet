@@ -121,6 +121,7 @@ export const methods: IMethods = {
     not: valueId => `${valueId} <= 0`
   }),
   rest: "__quartet/rest__",
+  restOmit: "__quartet/rest-omit__",
   safeInteger: () => ({
     check: valueId => `Number.isSafeInteger(${valueId})`,
     not: valueId => `!Number.isSafeInteger(${valueId})`
