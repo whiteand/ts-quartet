@@ -150,3 +150,75 @@ Object {
   "pure": true,
 }
 `;
+
+exports[`v(object) 12. v({ a: funcWithoutPrepare }) 1`] = `
+Object {
+  "_": "function validator(value) {
+  if (value == null) return false
+  if (!(typeof value.a === 'number' && value.a % 2 === 0)) return false
+  return true
+}",
+  "explanations": Array [],
+  "pure": true,
+}
+`;
+
+exports[`v(object) 13. v({ a: funcWithHandle }) 1`] = `
+Object {
+  "_": "function validator(value) {
+  validator.explanations = []
+  if (value == null) return false
+  if ((typeof value.a !== 'number' || value.a % 2 !== 0)) {
+    validator.explanations.push(value.a)
+    return false
+  }
+  return true
+}",
+  "explanations": Array [],
+  "pure": false,
+}
+`;
+
+exports[`v(object) 15. v({ a: { b: pureFunc } }) 1`] = `
+Object {
+  "_": "function validator(value) {
+  if (value == null) return false
+  if (value.a == null) return false
+  if (!(typeof value.a.b === 'number' && value.a.b % 2 === 0)) return false
+  return true
+}",
+  "explanations": Array [],
+  "pure": true,
+}
+`;
+
+exports[`v(object) 16. v({ a: { b: impureFunc } }) 1`] = `
+Object {
+  "_": "function validator(value) {
+  validator.explanations = []
+  if (value == null) return false
+  if (value.a == null) return false
+  if ((typeof value.a.b !== 'number' || value.a.b % 2 !== 0)) {
+    validator.explanations.push(value.a.b)
+    return false
+  }
+  return true
+}",
+  "explanations": Array [],
+  "pure": false,
+}
+`;
+
+exports[`v(object) 17. v({ a: { b: pureFunc }, c: pureFunc }) 1`] = `
+Object {
+  "_": "function validator(value) {
+  if (value == null) return false
+  if (value.a == null) return false
+  if (!(typeof value.a.b === 'number' && value.a.b % 2 === 0)) return false
+  if (!(typeof value.c === 'number' && value.c % 2 === 0)) return false
+  return true
+}",
+  "explanations": Array [],
+  "pure": true,
+}
+`;

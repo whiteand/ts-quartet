@@ -58,7 +58,7 @@ function compilePropValidationWithoutRest(
     },
     object: objectSchema => {
       const keys = Object.keys(objectSchema);
-      const codeLines = [`if (!${valueId}) return false`];
+      const codeLines = [`if (${valueId} == null) return false`];
       const important: string[] = [];
       let isPure = true;
       // tslint:disable-next-line
