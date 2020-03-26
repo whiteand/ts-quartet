@@ -3,6 +3,7 @@ import { getKeyAccessor } from "./getKeyAccessor";
 import { handleSchema } from "./handleSchema";
 import { toContext } from "./toContext";
 import { CompilationResult, IObjectSchema, Prepare, Schema } from "./types";
+import { constantToFunc } from "./constantToFunc";
 
 function compilePropValidationWithoutRest(
   c: (schema: Schema) => CompilationResult,
@@ -15,18 +16,6 @@ function compilePropValidationWithoutRest(
 ): [string, boolean] {
   return handleSchema<[string, boolean]>({
     constant: constant => {
-      if (constant === null) {
-        return [`if (${valueId} !== null) return false`, true];
-      }
-      if (constant === undefined) {
-        return [`if (${valueId} !== undefined) return false`, true];
-      }
-      if (typeof constant === "number") {
-        if (Number.isNaN(constant)) {
-          return [`if (!Number.isNaN(${valueId})) return false`, true];
-        }
-        return [`if (${valueId} !== ${constant}) return false`, true];
-      }
       if (constant === "true" || constant === "false") {
         return [`if (${valueId} !== '${constant}') return false`, true];
       }
@@ -34,10 +23,10 @@ function compilePropValidationWithoutRest(
         stringNumbersSymbols.push(constant);
         return ["", true];
       }
-      return [
-        `if (${valueId} !== ${JSON.stringify(constant)}) return false`,
-        true
-      ];
+
+      const funcSchema = constantToFunc(constant)
+
+      return compilePropValidationWithoutRest(c, key, valueId, ctxId, funcSchema, preparations, stringNumbersSymbols)
     },
     function: funcSchema => {
       const s = funcSchema();
@@ -195,9 +184,9 @@ export function compileObjectSchema(
       schema,
       preparations,
       keyValidValues
-    )
-    const codeLine = lineAndPurity[0].trim()
-    const pureLine = lineAndPurity[1]
+    );
+    const codeLine = lineAndPurity[0].trim();
+    const pureLine = lineAndPurity[1];
     if (!pureLine) {
       isPure = false;
     }
