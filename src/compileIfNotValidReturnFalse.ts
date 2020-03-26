@@ -125,7 +125,7 @@ export function compileIfNotValidReturnFalse(
           restValidator,
           preparations
         );
-        if (omitKeys && omitKeys.length > 0 && forLoopBodyIsPure) {
+        if (omitKeys && omitKeys.length > 0) {
           const [keysId, prepareKeysId] = toContext("keys", []);
           const [omitKeysId, prepareOmitKeys] = toContext(
             "omit-keys",
@@ -146,7 +146,7 @@ export function compileIfNotValidReturnFalse(
               forLoopBody
             )}\n}
             `,
-            true
+            forLoopBodyIsPure
           ];
         }
         return defaultHandler(

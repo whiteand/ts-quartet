@@ -351,46 +351,28 @@ Object {
   if (value == null) return false
   if (value.a == null) return false
   if (value.a.b !== 42) return false
-  if (!validator['value.a-0'](value.a)) {
-    validator.explanations.push(...validator['value.a-0'].explanations)
-    return false
-  }
-  return true
-}",
-  "explanations": Array [],
-  "pure": false,
-  "value.a-0": "function validator(value) {
-  validator.explanations = []
-  if (value == null) return false
-  const keys = Object.keys(value)
-  for (let i = 0; i < keys.length; i++) {
-    const key = keys[i]
-    if (validator.__keysToBeOmitted[key] === true) continue
-    if (!validator.checkRest(value[key])) {
-      validator.explanations.push(...validator.checkRest.explanations)
+  if (value.a == null) return false
+  validator['keys-1'] = Object.keys(value.a)
+  for (let i = 0; i < validator['keys-1'].length; i++) {
+    validator['key-1'] = validator['keys-1'][i]
+    if (validator['omit-keys-1'][validator['key-1']] === true) continue
+    validator['elem-1'] = value.a[validator['key-1']]
+    if ((typeof validator['elem-1'] !== 'number' || validator['elem-1'] % 2 !== 0)) {
+      validator.explanations.push(validator['elem-1'])
       return false
     }
   }
+              
   return true
 }",
-  "value.a-0.__keysToBeOmitted": Object {
+  "elem-1": undefined,
+  "explanations": Array [],
+  "key-1": undefined,
+  "keys-1": Array [],
+  "omit-keys-1": Object {
     "b": true,
   },
-  "value.a-0.checkRest": "function validator(value) {
-  validator.explanations = []
-  if (typeof value === 'number' && value % 2 === 0) {
-    return true
-  }
-  validator.explanations.push(value)
-  return false
-}",
-  "value.a-0.checkRest.explanations": Array [],
-  "value.a-0.checkRest.pure": false,
-  "value.a-0.defined": "function (v) { return v != null; }",
-  "value.a-0.defined.explanations": Array [],
-  "value.a-0.defined.pure": true,
-  "value.a-0.explanations": Array [],
-  "value.a-0.pure": false,
+  "pure": false,
 }
 `;
 
@@ -422,18 +404,18 @@ exports[`v(object) 28. v({ a: [pureFunc, pureFunc] }) 1`] = `
 Object {
   "_": "function validator(value) {
   if (value == null) return false
-  if (!validator['value.a-1'](value.a)) return false
+  if (!validator['value.a-0'](value.a)) return false
   return true
 }",
   "explanations": Array [],
   "pure": true,
-  "value.a-1": "function validator(value) {
+  "value.a-0": "function validator(value) {
   if (typeof value === 'string') return true;
   if (typeof value === 'number' && value % 2 === 0) return true;
   return false
 }",
-  "value.a-1.explanations": Array [],
-  "value.a-1.pure": true,
+  "value.a-0.explanations": Array [],
+  "value.a-0.pure": true,
 }
 `;
 
@@ -442,23 +424,23 @@ Object {
   "_": "function validator(value) {
   validator.explanations = []
   if (value == null) return false
-  if (!validator['value.a-2'](value.a)) {
-    validator.explanations.push(...validator['value.a-2'].explanations)
+  if (!validator['value.a-1'](value.a)) {
+    validator.explanations.push(...validator['value.a-1'].explanations)
     return false
   }
   return true
 }",
   "explanations": Array [],
   "pure": false,
-  "value.a-2": "function validator(value) {
+  "value.a-1": "function validator(value) {
   validator.explanations = []
   if (typeof value === 'number' && value % 2 === 0) return true;
   if (typeof value === 'string') return true;
   validator.explanations.push(value)
   return false
 }",
-  "value.a-2.explanations": Array [],
-  "value.a-2.pure": false,
+  "value.a-1.explanations": Array [],
+  "value.a-1.pure": false,
 }
 `;
 

@@ -296,46 +296,28 @@ Object {
     const elem = value[i]
     if (elem == null) return false
     if (elem.a !== 41) return false
-    if (!validator['elem-3'](elem)) {
-      validator.explanations.push(...validator['elem-3'].explanations)
-      return false
+    if (elem == null) return false
+    validator['keys-0'] = Object.keys(elem)
+    for (let i = 0; i < validator['keys-0'].length; i++) {
+      validator['key-0'] = validator['keys-0'][i]
+      if (validator['omit-keys-0'][validator['key-0']] === true) continue
+      validator['elem-2'] = elem[validator['key-0']]
+      if ((typeof validator['elem-2'] !== 'number' || validator['elem-2'] % 2 !== 0)) {
+        validator.explanations.push(validator['elem-2'])
+        return false
+      }
     }
+                
   }
   return true
 }",
-  "elem-3": "function validator(value) {
-  validator.explanations = []
-  if (value == null) return false
-  const keys = Object.keys(value)
-  for (let i = 0; i < keys.length; i++) {
-    const key = keys[i]
-    if (validator.__keysToBeOmitted[key] === true) continue
-    if (!validator.checkRest(value[key])) {
-      validator.explanations.push(...validator.checkRest.explanations)
-      return false
-    }
-  }
-  return true
-}",
-  "elem-3.__keysToBeOmitted": Object {
+  "elem-2": undefined,
+  "explanations": Array [],
+  "key-0": undefined,
+  "keys-0": Array [],
+  "omit-keys-0": Object {
     "a": true,
   },
-  "elem-3.checkRest": "function validator(value) {
-  validator.explanations = []
-  if (typeof value === 'number' && value % 2 === 0) {
-    return true
-  }
-  validator.explanations.push(value)
-  return false
-}",
-  "elem-3.checkRest.explanations": Array [],
-  "elem-3.checkRest.pure": false,
-  "elem-3.defined": "function (v) { return v != null; }",
-  "elem-3.defined.explanations": Array [],
-  "elem-3.defined.pure": true,
-  "elem-3.explanations": Array [],
-  "elem-3.pure": false,
-  "explanations": Array [],
   "pure": false,
 }
 `;
@@ -349,22 +331,22 @@ Object {
     if (elem == null) return false
     if (elem.a !== 41) return false
     if (elem == null) return false
-    validator['keys-0'] = Object.keys(elem)
-    for (let i = 0; i < validator['keys-0'].length; i++) {
-      validator['key-0'] = validator['keys-0'][i]
-      if (validator['omit-keys-0'][validator['key-0']] === true) continue
-      validator['elem-4'] = elem[validator['key-0']]
-      if ((typeof validator['elem-4'] !== 'number' || validator['elem-4'] % 2 !== 0)) return false
+    validator['keys-1'] = Object.keys(elem)
+    for (let i = 0; i < validator['keys-1'].length; i++) {
+      validator['key-1'] = validator['keys-1'][i]
+      if (validator['omit-keys-1'][validator['key-1']] === true) continue
+      validator['elem-3'] = elem[validator['key-1']]
+      if ((typeof validator['elem-3'] !== 'number' || validator['elem-3'] % 2 !== 0)) return false
     }
                 
   }
   return true
 }",
-  "elem-4": undefined,
+  "elem-3": undefined,
   "explanations": Array [],
-  "key-0": undefined,
-  "keys-0": Array [],
-  "omit-keys-0": Object {
+  "key-1": undefined,
+  "keys-1": Array [],
+  "omit-keys-1": Object {
     "a": true,
   },
   "pure": true,
@@ -402,17 +384,17 @@ Object {
   if (!value || !Array.isArray(value)) return false
   for (let i = 0; i < value.length; i++) {
     const elem = value[i]
-    if (!validator['elem-5'](elem)) return false
+    if (!validator['elem-4'](elem)) return false
   }
   return true
 }",
-  "elem-5": "function validator(value) {
+  "elem-4": "function validator(value) {
   if (typeof value === 'number' && value % 2 === 0) return true;
   if (value === 13) return true;
   return false
 }",
-  "elem-5.explanations": Array [],
-  "elem-5.pure": true,
+  "elem-4.explanations": Array [],
+  "elem-4.pure": true,
   "explanations": Array [],
   "pure": true,
 }
