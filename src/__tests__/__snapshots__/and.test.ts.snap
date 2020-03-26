@@ -2,7 +2,11 @@
 
 exports[`v.and Conflict with primitive 1`] = `
 Object {
-  "_": "function () { return false; }",
+  "_": "function validator(value) {
+  if (value !== 1) return false
+  if (!(typeof value === 'number' && value % 2 === 0)) return false
+  return true
+}",
   "explanations": Array [],
   "pure": true,
 }
@@ -10,10 +14,16 @@ Object {
 
 exports[`v.and Conflict with primitive 3`] = `
 Object {
-  "_": "function () { return false; }",
-  "explanations": Array [
-    1,
-  ],
+  "_": "function validator(value) {
+  validator.explanations = []
+  if (value !== 1) return false
+  if (!(typeof value === 'number' && value % 2 === 0)) {
+    validator.explanations.push(value)
+    return false
+  }
+  return true
+}",
+  "explanations": Array [],
   "pure": false,
 }
 `;
@@ -28,29 +38,13 @@ Object {
 
 exports[`v.and v.compileAnd({ a: funcWithoutHandle }, { b: funcWithHandle }) 1`] = `
 Object {
-  "0": "function validator(value) {
+  "_": "function validator(value) {
+  validator.explanations = []
   if (value == null) return false
   if (!(typeof value.a === 'number' && value.a % 2 === 0)) return false
-  return true
-}",
-  "0.explanations": Array [],
-  "0.pure": true,
-  "1": "function validator(value) {
-  validator.explanations = []
   if (value == null) return false
   if (!(typeof value.b === 'number' && value.b % 2 === 0)) {
     validator.explanations.push(value.b)
-    return false
-  }
-  return true
-}",
-  "1.explanations": Array [],
-  "1.pure": false,
-  "_": "function validator(value) {
-  validator.explanations = []
-  if (!validator[0](value)) return false
-  if (!validator[1](value)) {
-    validator.explanations.push(...validator[1].explanations)
     return false
   }
   return true
@@ -62,7 +56,18 @@ Object {
 
 exports[`v.and v.compileAnd({ a: funcWithoutHandle, [v.rest]: funcWithoutHandle }, { b: funcWithHandle, [v.rest]: funcWithHandle }) 1`] = `
 Object {
-  "0": "function validator(value) {
+  "_": "function validator(value) {
+  validator.explanations = []
+  if (!validator['value-0'](value)) return false
+  if (!validator['value-1'](value)) {
+    validator.explanations.push(...validator['value-1'].explanations)
+    return false
+  }
+  return true
+}",
+  "explanations": Array [],
+  "pure": false,
+  "value-0": "function validator(value) {
   if (!validator.defined(value)) return false
   const keys = Object.keys(value)
   for (let i = 0; i < keys.length; i++) {
@@ -72,24 +77,24 @@ Object {
   }
   return true
 }",
-  "0.__propsWithSchemasDict": Object {
+  "value-0.__propsWithSchemasDict": Object {
     "a": true,
   },
-  "0.checkRest": "function validator(value) {
+  "value-0.checkRest": "function validator(value) {
   return typeof value === 'number' && value % 2 === 0
 }",
-  "0.checkRest.explanations": Array [],
-  "0.checkRest.pure": true,
-  "0.defined": "function validator(value) {
+  "value-0.checkRest.explanations": Array [],
+  "value-0.checkRest.pure": true,
+  "value-0.defined": "function validator(value) {
   if (value == null) return false
   if (!(typeof value.a === 'number' && value.a % 2 === 0)) return false
   return true
 }",
-  "0.defined.explanations": Array [],
-  "0.defined.pure": true,
-  "0.explanations": Array [],
-  "0.pure": true,
-  "1": "function validator(value) {
+  "value-0.defined.explanations": Array [],
+  "value-0.defined.pure": true,
+  "value-0.explanations": Array [],
+  "value-0.pure": true,
+  "value-1": "function validator(value) {
   validator.explanations = []
   if (!validator.defined(value)) {
     validator.explanations.push(...validator.defined.explanations)
@@ -106,10 +111,10 @@ Object {
   }
   return true
 }",
-  "1.__propsWithSchemasDict": Object {
+  "value-1.__propsWithSchemasDict": Object {
     "b": true,
   },
-  "1.checkRest": "function validator(value) {
+  "value-1.checkRest": "function validator(value) {
   validator.explanations = []
   if (typeof value === 'number' && value % 4 === 0) {
     return true
@@ -117,9 +122,9 @@ Object {
   validator.explanations.push(value + ' is not 4k')
   return false
 }",
-  "1.checkRest.explanations": Array [],
-  "1.checkRest.pure": false,
-  "1.defined": "function validator(value) {
+  "value-1.checkRest.explanations": Array [],
+  "value-1.checkRest.pure": false,
+  "value-1.defined": "function validator(value) {
   validator.explanations = []
   if (value == null) return false
   if (typeof value.b !== 'number' || value.b % 4 !== 0) {
@@ -128,21 +133,10 @@ Object {
   }
   return true
 }",
-  "1.defined.explanations": Array [],
-  "1.defined.pure": false,
-  "1.explanations": Array [],
-  "1.pure": false,
-  "_": "function validator(value) {
-  validator.explanations = []
-  if (!validator[0](value)) return false
-  if (!validator[1](value)) {
-    validator.explanations.push(...validator[1].explanations)
-    return false
-  }
-  return true
-}",
-  "explanations": Array [],
-  "pure": false,
+  "value-1.defined.explanations": Array [],
+  "value-1.defined.pure": false,
+  "value-1.explanations": Array [],
+  "value-1.pure": false,
 }
 `;
 
@@ -156,7 +150,11 @@ Object {
 
 exports[`v.and v.compileAnd(1, 1) 1`] = `
 Object {
-  "_": "function (value) { return value === c; }",
+  "_": "function validator(value) {
+  if (value !== 1) return false
+  if (value !== 1) return false
+  return true
+}",
   "explanations": Array [],
   "pure": true,
 }
@@ -164,7 +162,12 @@ Object {
 
 exports[`v.and v.compileAnd(1, 1, 2) 1`] = `
 Object {
-  "_": "function () { return false; }",
+  "_": "function validator(value) {
+  if (value !== 1) return false
+  if (value !== 1) return false
+  if (value !== 2) return false
+  return true
+}",
   "explanations": Array [],
   "pure": true,
 }
@@ -172,7 +175,11 @@ Object {
 
 exports[`v.and v.compileAnd(1, 2) 1`] = `
 Object {
-  "_": "function () { return false; }",
+  "_": "function validator(value) {
+  if (value !== 1) return false
+  if (value !== 2) return false
+  return true
+}",
   "explanations": Array [],
   "pure": true,
 }
@@ -204,45 +211,45 @@ Object {
 
 exports[`v.and v.compileAnd(func, [funcWithHandle, funcWithoutHandle]) 1`] = `
 Object {
-  "1": "function validator(value) {
-  validator.explanations = []
-  if (typeof value === 'number' && value % 4 === 0) return true;
-  if (typeof value === 'number' && value % 5 === 0) return true;
-  validator.explanations.push(value + ' is not 4k')
-  return false
-}",
-  "1.explanations": Array [],
-  "1.pure": false,
   "_": "function validator(value) {
   validator.explanations = []
   if (!(typeof value === 'number' && value % 2 === 0)) return false
-  if (!validator[1](value)) {
-    validator.explanations.push(...validator[1].explanations)
+  if (!validator['value-2'](value)) {
+    validator.explanations.push(...validator['value-2'].explanations)
     return false
   }
   return true
 }",
   "explanations": Array [],
   "pure": false,
+  "value-2": "function validator(value) {
+  validator.explanations = []
+  if (typeof value === 'number' && value % 4 === 0) return true;
+  if (typeof value === 'number' && value % 5 === 0) return true;
+  validator.explanations.push(value + ' is not 4k')
+  return false
+}",
+  "value-2.explanations": Array [],
+  "value-2.pure": false,
 }
 `;
 
 exports[`v.and v.compileAnd(func, [funcWithoutHandle, funcWithoutHandle]) 1`] = `
 Object {
-  "1": "function validator(value) {
-  if (typeof value === 'number' && value % 2 === 0) return true;
-  if (typeof value === 'number' && value % 2 === 0) return true;
-  return false
-}",
-  "1.explanations": Array [],
-  "1.pure": true,
   "_": "function validator(value) {
   if ((typeof value !== 'number' || value % 2 !== 0)) return false
-  if (!validator[1](value)) return false
+  if (!validator['value-3'](value)) return false
   return true
 }",
   "explanations": Array [],
   "pure": true,
+  "value-3": "function validator(value) {
+  if (typeof value === 'number' && value % 2 === 0) return true;
+  if (typeof value === 'number' && value % 2 === 0) return true;
+  return false
+}",
+  "value-3.explanations": Array [],
+  "value-3.pure": true,
 }
 `;
 

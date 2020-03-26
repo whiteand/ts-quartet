@@ -44,11 +44,9 @@ describe("v.and", () => {
       funcSchemaWithHandleError
     );
     expect(validatorWithExplanations.pure).toBe(false);
-    expect(validatorWithExplanations.explanations).toMatchInlineSnapshot(`
-      Array [
-        1,
-      ]
-    `);
+    expect(validatorWithExplanations.explanations).toMatchInlineSnapshot(
+      `Array []`
+    );
     snapshot(validatorWithExplanations);
   });
   test("v.compileAnd(funcSchemaWithPrepare, funcWithoutPrepare)", () => {

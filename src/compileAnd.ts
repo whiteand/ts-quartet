@@ -3,6 +3,7 @@ import { getKeyAccessor } from "./getKeyAccessor";
 import { handleSchema } from "./handleSchema";
 import { toContext } from "./toContext";
 import { CompilationResult, Prepare, Schema } from "./types";
+import { compileIfNotValidReturnFalse } from "./compileIfNotValidReturnFalse";
 
 function compileAndVariantElementToReturnWay(
   c: (schema: Schema) => CompilationResult,
@@ -145,70 +146,28 @@ export function compileAnd(
   }
 
   const preparations: Prepare[] = [];
-  const bodyCodeLines = [];
-  const primitives: any[] = [];
-  let isPure = true;
-  for (let i = 0; i < schemas.length; i++) {
-    const schema = schemas[i];
-    const [codeLine, pureLine] = compileAndVariantElementToReturnWay(
+  let [bodyCode, isPure] = compileIfNotValidReturnFalse(
+    c,
+    "value",
+    "validator",
+    schemas[0],
+    preparations
+  )
+  for (let i = 1; i < schemas.length; i++) {
+    const [anotherBodyCode, anotherIsPure] = compileIfNotValidReturnFalse(
       c,
-      i,
-      `value`,
-      `validator`,
-      schema,
-      preparations,
-      primitives
-    );
-    if (!pureLine) {
-      isPure = false;
-    }
-    if (codeLine) {
-      bodyCodeLines.push(codeLine);
-    }
-    if (primitives.length > 1) {
-      return Object.assign(() => false, { explanations: [], pure: true });
-    }
-  }
-
-  // If there is one primitive
-  // v.and(C, S1, ...)
-  // It will have only two options
-  // C is valid by S1, S2, S3, ...
-  //   So the result will be the same as v => v === C
-  // S(C) => false, for some S from S1, S2, ...
-  //   So the result will be the same as v => false,
-  // Because value cannot be simultaneously be equal to C and be valid by S
-  if (primitives.length === 1) {
-    const primitive = primitives[0];
-    // tslint:disable-next-line
-    for (let i = 0; i < schemas.length; i++) {
-      if (schemas[i] === primitive) {
-        continue;
-      }
-
-      const compiled = c(schemas[i]);
-
-      if (compiled(primitive)) {
-        continue;
-      }
-
-      return Object.assign(() => false, {
-        explanations: compiled.pure ? [] : compiled.explanations,
-        pure: compiled.pure
-      });
-    }
-    return c(primitives[0]);
-  }
-
-  let bodyCode = addTabs(bodyCodeLines[0].trim());
-
-  for (let i = 1; i < bodyCodeLines.length; i++) {
-    bodyCode += "\n" + addTabs(bodyCodeLines[i]);
+      "value",
+      "validator",
+      schemas[i],
+      preparations
+    )
+    bodyCode += '\n' + anotherBodyCode
+    isPure = isPure && anotherIsPure
   }
 
   const code = `(() => {\nfunction validator(value) {${
     isPure ? "" : "\n  validator.explanations = []"
-  }\n${bodyCode}\n  return true\n}
+  }\n${addTabs(bodyCode)}\n  return true\n}
     return validator
   })()`;
 
