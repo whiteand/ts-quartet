@@ -7,7 +7,7 @@ export function compileObjectSchemaWithRest(
   c: (schema: Schema) => CompilationResult,
   s: IObjectSchema
 ): CompilationResult {
-  const { [methods.rest]: restSchema, ...propsSchemas } = s;
+  const { [methods.rest]: restSchema, [methods.restOmit]: omitKeys, ...propsSchemas } = s;
   const restCompiled = c(restSchema);
   const [restId, prepareRestId] = toContext("checkRest", restCompiled, true);
   const restIdAccessor = getKeyAccessor(restId);
@@ -20,7 +20,7 @@ export function compileObjectSchemaWithRest(
   );
   const definedAccessor = getKeyAccessor(definedProps);
   // tslint:disable-next-line
-  const __propsWithSchemasDict = propsWithSchemas.reduce((dict: any, prop) => {
+  const __propsWithSchemasDict = [...(methods.restOmit || []), ...propsWithSchemas].reduce((dict: any, prop) => {
     dict[prop] = true;
     return dict;
   }, {});

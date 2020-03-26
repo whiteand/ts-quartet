@@ -15,6 +15,7 @@ export interface IFunctionSchemaResult {
 export type FunctionSchema = () => IFunctionSchemaResult;
 
 export interface IObjectSchema {
+  "__quartet/rest-omit__"?: string[]
   [key: string]: Schema;
 }
 export interface IVariantSchema extends Array<Schema> {}
@@ -71,7 +72,8 @@ export interface IMethods {
   number: FunctionSchema;
   not: (schema: Schema) => FunctionSchema;
   positive: FunctionSchema;
-  rest: string;
+  rest: "__quartet/rest__";
+  restOmit: "__quartet/rest-omit__";
   safeInteger: FunctionSchema;
   string: FunctionSchema;
   symbol: FunctionSchema;
