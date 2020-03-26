@@ -5,6 +5,7 @@ import { toContext } from "./toContext";
 import { CompilationResult, Prepare, Schema } from "./types";
 import { constantToFunc } from "./constantToFunc";
 import { methods } from "./methods";
+import { toDict } from "./toDict";
 
 function defaultHandler(
   c: (schema: Schema) => CompilationResult,
@@ -115,6 +116,39 @@ export function compileIfNotValidReturnFalse(
       } = objectSchemaWithRest;
       const objectSchemaKeys = Object.keys(objectSchema);
       if (objectSchemaKeys.length === 0) {
+        const [elemId, prepareElem] = toContext("elem", undefined);
+        const getElem = `${ctxId}['${elemId}']`;
+        const [forLoopBody, forLoopBodyIsPure] = compileIfNotValidReturnFalse(
+          c,
+          getElem,
+          ctxId,
+          restValidator,
+          preparations
+        );
+        if (omitKeys && omitKeys.length > 0 && forLoopBodyIsPure) {
+          const [keysId, prepareKeysId] = toContext("keys", []);
+          const [omitKeysId, prepareOmitKeys] = toContext(
+            "omit-keys",
+            toDict(omitKeys)
+          );
+          const [keyId, prepareKey] = toContext("key", undefined);
+          preparations.push(
+            prepareKeysId,
+            prepareOmitKeys,
+            prepareKey,
+            prepareElem
+          );
+          const getKeys = `${ctxId}['${keysId}']`;
+          const getOmitKeysId = `${ctxId}['${omitKeysId}']`;
+          const getKey = `${ctxId}['${keyId}']`;
+          return [
+            `if (${valueId} == null) return false\n${getKeys} = Object.keys(${valueId})\nfor (let i = 0; i < ${getKeys}.length; i++) {\n  ${getKey} = ${getKeys}[i]\n  if (${getOmitKeysId}[${getKey}] === true) continue\n  ${getElem} = ${valueId}[${getKey}]\n${addTabs(
+              forLoopBody
+            )}\n}
+            `,
+            true
+          ];
+        }
         return defaultHandler(
           c,
           valueId,
