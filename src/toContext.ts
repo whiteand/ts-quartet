@@ -17,7 +17,6 @@ export const toContext = (
     id = `${prefix}-${toContextCounter[prefix]}`
   }
   toContextCounter[prefix]++;
-  toContextCounter[prefix] %= 1e9;
   return [
     id,
     (ctx: IContext) => {
