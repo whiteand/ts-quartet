@@ -6,7 +6,6 @@ import {
   TypedCompilationResult
 } from "./types";
 import { compileIfNotValidReturnFalse } from "./compileIfNotValidReturnFalse";
-import { clearContextCounters } from "./toContext";
 
 export function arrayOf<T = any>(
   c: (schema: Schema) => CompilationResult,
@@ -20,7 +19,6 @@ export function arrayOf<T = any>(
       { explanations: [], pure: true }
     );
   }
-  clearContextCounters()
   const preparations: Prepare[] = [];
   const [forLoopBody, pure] = compileIfNotValidReturnFalse(c, 'elem', 'validator', schema, preparations);
 

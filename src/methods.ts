@@ -2,7 +2,7 @@ import { compileAnd } from "./compileAnd";
 import { arrayOf } from "./compileArrayOf";
 import { compileNot } from "./compileNot";
 import { getKeyAccessor } from "./getKeyAccessor";
-import { toContext } from "./toContext";
+import { toContext, clearContextCounters } from "./toContext";
 import {
   HandleError,
   IMethods,
@@ -28,9 +28,11 @@ export const methods: IMethods = {
     not: valueId => `typeof ${valueId} !== 'boolean'`
   }),
   compileAnd<T>(...schemas: Schema[]) {
+    clearContextCounters();
     return compileAnd(this as any, schemas) as TypedCompilationResult<T>;
   },
   compileArrayOf<T>(schema: Schema) {
+    clearContextCounters();
     return arrayOf(this as any, schema) as TypedCompilationResult<T[]>;
   },
   custom: (
@@ -47,10 +49,13 @@ export const methods: IMethods = {
         "explanation",
         explanation
       );
-      const [explanationValue, prepareExplanationValue] = toContext('explvalue', undefined)
+      const [explanationValue, prepareExplanationValue] = toContext(
+        "explvalue",
+        undefined
+      );
       preparations.push(prepareExplanation, prepareExplanationValue);
-      const explanationAcc = getKeyAccessor(explanationId)
-      const explanationValueAcc = getKeyAccessor(explanationValue)
+      const explanationAcc = getKeyAccessor(explanationId);
+      const explanationValueAcc = getKeyAccessor(explanationValue);
       handleError =
         typeof explanation === "function"
           ? (id, ctxId) =>
@@ -139,7 +144,7 @@ export const methods: IMethods = {
   }),
   test: (tester: ITest) => () => {
     const [testId, prepare] = toContext("tester", tester);
-    const testerAcc = getKeyAccessor(testId)
+    const testerAcc = getKeyAccessor(testId);
     return {
       check: (id, ctx) => `${ctx}${testerAcc}.test(${id})`,
       not: (id, ctx) => `!${ctx}${testerAcc}.test(${id})`,
