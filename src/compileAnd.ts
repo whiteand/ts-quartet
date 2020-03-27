@@ -1,7 +1,6 @@
 import { addTabs } from "./addTabs";
 import { CompilationResult, Prepare, Schema } from "./types";
 import { compileIfNotValidReturnFalse } from "./compileIfNotValidReturnFalse";
-import { clearContextCounters } from "./toContext";
 
 export function compileAnd(
   c: (schema: Schema) => CompilationResult,
@@ -13,7 +12,6 @@ export function compileAnd(
   if (schemas.length === 1) {
     return c(schemas[0]);
   }
-  clearContextCounters()
 
   const preparations: Prepare[] = [];
   let [bodyCode, isPure] = compileIfNotValidReturnFalse(
