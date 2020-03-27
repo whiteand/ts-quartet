@@ -12,7 +12,7 @@ export function compileObjectSchemaWithRest(
   const ctx = eval(
     `
       (()=>{
-        function validator(value) {\n${addTabs(funcBodyCode)}\n  return true\n}
+        function validator(value) {${isPure ? '' : '\n  validator.explanations = []'}\n${addTabs(funcBodyCode)}\n  return true\n}
         return validator
       })()
     `

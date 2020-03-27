@@ -96,10 +96,10 @@ exports[`v(object) 08. v({ a: Symbol.for("test") }) 1`] = `
 Object {
   "_": "function validator(value) {
   if (value == null) return false
-  if (value.a !== validator['constant-0']) return false
+  if (value.a !== validator.constant) return false
   return true
 }",
-  "constant-0": Symbol(test),
+  "constant": Symbol(test),
   "explanations": Array [],
   "pure": true,
 }
@@ -322,21 +322,21 @@ Object {
   if (value == null) return false
   if (value.a == null) return false
   if (value.a.b !== 42) return false
-  validator['keys-0'] = Object.keys(value.a)
-  for (let i = 0; i < validator['keys-0'].length; i++) {
-    validator['key-0'] = validator['keys-0'][i]
-    if (validator['omit-keys-0'][validator['key-0']] === true) continue
-    validator['elem-0'] = value.a[validator['key-0']]
-    if ((typeof validator['elem-0'] !== 'number' || validator['elem-0'] % 2 !== 0)) return false
+  validator.keys = Object.keys(value.a)
+  for (let i = 0; i < validator.keys.length; i++) {
+    validator.key = validator.keys[i]
+    if (validator.omitkeys[validator.key] === true) continue
+    validator.elem = value.a[validator.key]
+    if ((typeof validator.elem !== 'number' || validator.elem % 2 !== 0)) return false
   }
               
   return true
 }",
-  "elem-0": undefined,
+  "elem": undefined,
   "explanations": Array [],
-  "key-0": undefined,
-  "keys-0": Array [],
-  "omit-keys-0": Object {
+  "key": undefined,
+  "keys": Array [],
+  "omitkeys": Object {
     "b": true,
   },
   "pure": true,
@@ -350,24 +350,24 @@ Object {
   if (value == null) return false
   if (value.a == null) return false
   if (value.a.b !== 42) return false
-  validator['keys-1'] = Object.keys(value.a)
-  for (let i = 0; i < validator['keys-1'].length; i++) {
-    validator['key-1'] = validator['keys-1'][i]
-    if (validator['omit-keys-1'][validator['key-1']] === true) continue
-    validator['elem-1'] = value.a[validator['key-1']]
-    if ((typeof validator['elem-1'] !== 'number' || validator['elem-1'] % 2 !== 0)) {
-      validator.explanations.push(validator['elem-1'])
+  validator.keys = Object.keys(value.a)
+  for (let i = 0; i < validator.keys.length; i++) {
+    validator.key = validator.keys[i]
+    if (validator.omitkeys[validator.key] === true) continue
+    validator.elem = value.a[validator.key]
+    if ((typeof validator.elem !== 'number' || validator.elem % 2 !== 0)) {
+      validator.explanations.push(validator.elem)
       return false
     }
   }
               
   return true
 }",
-  "elem-1": undefined,
+  "elem": undefined,
   "explanations": Array [],
-  "key-1": undefined,
-  "keys-1": Array [],
-  "omit-keys-1": Object {
+  "key": undefined,
+  "keys": Array [],
+  "omitkeys": Object {
     "b": true,
   },
   "pure": false,
@@ -402,18 +402,18 @@ exports[`v(object) 28. v({ a: [pureFunc, pureFunc] }) 1`] = `
 Object {
   "_": "function validator(value) {
   if (value == null) return false
-  if (!validator['value.a-0'](value.a)) return false
+  if (!validator[\\"value.a\\"](value.a)) return false
   return true
 }",
   "explanations": Array [],
   "pure": true,
-  "value.a-0": "function validator(value) {
+  "value.a": "function validator(value) {
   if (typeof value === 'string') return true;
   if (typeof value === 'number' && value % 2 === 0) return true;
   return false
 }",
-  "value.a-0.explanations": Array [],
-  "value.a-0.pure": true,
+  "value.a.explanations": Array [],
+  "value.a.pure": true,
 }
 `;
 
@@ -422,23 +422,23 @@ Object {
   "_": "function validator(value) {
   validator.explanations = []
   if (value == null) return false
-  if (!validator['value.a-1'](value.a)) {
-    validator.explanations.push(...validator['value.a-1'].explanations)
+  if (!validator[\\"value.a\\"](value.a)) {
+    validator.explanations.push(...validator[\\"value.a\\"].explanations)
     return false
   }
   return true
 }",
   "explanations": Array [],
   "pure": false,
-  "value.a-1": "function validator(value) {
+  "value.a": "function validator(value) {
   validator.explanations = []
   if (typeof value === 'number' && value % 2 === 0) return true;
   if (typeof value === 'string') return true;
   validator.explanations.push(value)
   return false
 }",
-  "value.a-1.explanations": Array [],
-  "value.a-1.pure": false,
+  "value.a.explanations": Array [],
+  "value.a.pure": false,
 }
 `;
 

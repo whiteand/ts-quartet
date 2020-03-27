@@ -1,0 +1,162 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`v.rest 00. v({ [v.rest]: funcSchemaWithNot }) 1`] = `
+Object {
+  "_": "function validator(value) {
+  if (value == null) return false
+  validator.keys = Object.keys(value)
+  for (let i = 0; i < validator.keys.length; i++) {
+    validator.elem = value[validator.keys[i]]
+    if ((typeof validator.elem !== 'number' || validator.elem % 2 !== 0)) return false
+  }
+                
+  return true
+}",
+  "elem": undefined,
+  "explanations": Array [],
+  "keys": Array [],
+  "pure": true,
+}
+`;
+
+exports[`v.rest 01. v({ [v.rest]: funcSchemaWithNotHandleError }) 1`] = `
+Object {
+  "_": "function validator(value) {
+  validator.explanations = []
+  if (value == null) return false
+  validator.keys = Object.keys(value)
+  for (let i = 0; i < validator.keys.length; i++) {
+    validator.elem = value[validator.keys[i]]
+    if ((typeof validator.elem !== 'number' || validator.elem % 2 !== 0)) {
+      validator.explanations.push(validator.elem)
+      return false
+    }
+  }
+                
+  return true
+}",
+  "elem": undefined,
+  "explanations": Array [],
+  "keys": Array [],
+  "pure": false,
+}
+`;
+
+exports[`v.rest 02. v({ a: 42, [v.rest]: funcSchemaWithNot }) 1`] = `
+Object {
+  "_": "function validator(value) {
+  if (value == null) return false
+  if (value.a !== 42) return false
+  validator.keys = Object.keys(value)
+  for (let i = 0; i < validator.keys.length; i++) {
+    validator.key = validator.keys[i]
+    if (validator.omitkeys[validator.key] === true) continue
+    validator.elem = value[validator.key]
+    if ((typeof validator.elem !== 'number' || validator.elem % 2 !== 0)) return false
+  }
+              
+  return true
+}",
+  "elem": undefined,
+  "explanations": Array [],
+  "key": undefined,
+  "keys": Array [],
+  "omitkeys": Object {
+    "a": true,
+  },
+  "pure": true,
+}
+`;
+
+exports[`v.rest 03. v({ a: 42 [v.rest]: funcSchemaWithNotHandleError }) 1`] = `
+Object {
+  "_": "function validator(value) {
+  validator.explanations = []
+  if (value == null) return false
+  if (value.a !== 42) return false
+  validator.keys = Object.keys(value)
+  for (let i = 0; i < validator.keys.length; i++) {
+    validator.key = validator.keys[i]
+    if (validator.omitkeys[validator.key] === true) continue
+    validator.elem = value[validator.key]
+    if ((typeof validator.elem !== 'number' || validator.elem % 2 !== 0)) {
+      validator.explanations.push(validator.elem)
+      return false
+    }
+  }
+              
+  return true
+}",
+  "elem": undefined,
+  "explanations": Array [],
+  "key": undefined,
+  "keys": Array [],
+  "omitkeys": Object {
+    "a": true,
+  },
+  "pure": false,
+}
+`;
+
+exports[`v.rest 04. v({ a: funcSchemaWithNotHandleError, [v.rest]: funcSchemaWithNot }) 1`] = `
+Object {
+  "_": "function validator(value) {
+  validator.explanations = []
+  if (value == null) return false
+  if ((typeof value.a !== 'number' || value.a % 2 !== 0)) {
+    validator.explanations.push(value.a)
+    return false
+  }
+  validator.keys = Object.keys(value)
+  for (let i = 0; i < validator.keys.length; i++) {
+    validator.key = validator.keys[i]
+    if (validator.omitkeys[validator.key] === true) continue
+    validator.elem = value[validator.key]
+    if ((typeof validator.elem !== 'number' || validator.elem % 2 !== 0)) return false
+  }
+              
+  return true
+}",
+  "elem": undefined,
+  "explanations": Array [],
+  "key": undefined,
+  "keys": Array [],
+  "omitkeys": Object {
+    "a": true,
+  },
+  "pure": false,
+}
+`;
+
+exports[`v.rest 05. v({ a: funcSchemaWithNotHandleError, [v.rest]: funcSchemaWithNotHandleError }) 1`] = `
+Object {
+  "_": "function validator(value) {
+  validator.explanations = []
+  if (value == null) return false
+  if ((typeof value.a !== 'number' || value.a % 2 !== 0)) {
+    validator.explanations.push(value.a)
+    return false
+  }
+  validator.keys = Object.keys(value)
+  for (let i = 0; i < validator.keys.length; i++) {
+    validator.key = validator.keys[i]
+    if (validator.omitkeys[validator.key] === true) continue
+    validator.elem = value[validator.key]
+    if ((typeof validator.elem !== 'number' || validator.elem % 2 !== 0)) {
+      validator.explanations.push(validator.elem)
+      return false
+    }
+  }
+              
+  return true
+}",
+  "elem": undefined,
+  "explanations": Array [],
+  "key": undefined,
+  "keys": Array [],
+  "omitkeys": Object {
+    "a": true,
+  },
+  "pure": false,
+}
+`;

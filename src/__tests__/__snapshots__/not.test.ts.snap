@@ -63,9 +63,9 @@ Object {
 exports[`v.not 06. v.not(Symbol.for("test")) 1`] = `
 Object {
   "_": "function validator(value) {
-  return value !== validator['constant-0']
+  return value !== validator.constant
 }",
-  "constant-0": Symbol(test),
+  "constant": Symbol(test),
   "explanations": Array [],
   "pure": true,
 }
@@ -104,16 +104,16 @@ Object {
 exports[`v.not 10. v.not({ a: 42 }) 1`] = `
 Object {
   "_": "function validator(value) {
-  return !validator['not-0'](value)
+  return !validator.not(value)
 }",
   "explanations": Array [],
-  "not-0": "function validator(value) {
+  "not": "function validator(value) {
   if (value == null) return false
   if (value.a !== 42) return false
   return true
 }",
-  "not-0.explanations": Array [],
-  "not-0.pure": true,
+  "not.explanations": Array [],
+  "not.pure": true,
   "pure": true,
 }
 `;

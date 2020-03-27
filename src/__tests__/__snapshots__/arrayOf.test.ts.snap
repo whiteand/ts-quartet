@@ -126,11 +126,11 @@ Object {
   if (!value || !Array.isArray(value)) return false
   for (let i = 0; i < value.length; i++) {
     const elem = value[i]
-    if (elem !== validator['constant-0']) return false
+    if (elem !== validator.constant) return false
   }
   return true
 }",
-  "constant-0": Symbol(test),
+  "constant": Symbol(test),
   "explanations": Array [],
   "pure": true,
 }
@@ -189,22 +189,22 @@ Object {
   if (!value || !Array.isArray(value)) return false
   for (let i = 0; i < value.length; i++) {
     const elem = value[i]
-    if (!validator['elem-0'](elem)) {
-      validator.explanations.push(...validator['elem-0'].explanations)
+    if (!validator.elem(elem)) {
+      validator.explanations.push(...validator.elem.explanations)
       return false
     }
   }
   return true
 }",
-  "elem-0": "function validator(value) {
+  "elem": "function validator(value) {
   validator.explanations = []
   if (typeof value === 'number' && value % 2 === 0) return true;
   if (value === 13) return true;
   validator.explanations.push(value)
   return false
 }",
-  "elem-0.explanations": Array [],
-  "elem-0.pure": false,
+  "elem.explanations": Array [],
+  "elem.pure": false,
   "explanations": Array [],
   "pure": false,
 }
@@ -235,17 +235,17 @@ Object {
   if (!value || !Array.isArray(value)) return false
   for (let i = 0; i < value.length; i++) {
     const elem = value[i]
-    if (!validator['elem-1'](elem)) return false
+    if (!validator.elem(elem)) return false
   }
   return true
 }",
-  "elem-1": "function validator(value) {
+  "elem": "function validator(value) {
   if (typeof value === 'number' && value % 2 === 0) return true;
   if (value === 13) return true;
   return false
 }",
-  "elem-1.explanations": Array [],
-  "elem-1.pure": true,
+  "elem.explanations": Array [],
+  "elem.pure": true,
   "explanations": Array [],
   "pure": true,
 }
@@ -296,13 +296,13 @@ Object {
     const elem = value[i]
     if (elem == null) return false
     if (elem.a !== 41) return false
-    validator['keys-0'] = Object.keys(elem)
-    for (let i = 0; i < validator['keys-0'].length; i++) {
-      validator['key-0'] = validator['keys-0'][i]
-      if (validator['omit-keys-0'][validator['key-0']] === true) continue
-      validator['elem-2'] = elem[validator['key-0']]
-      if ((typeof validator['elem-2'] !== 'number' || validator['elem-2'] % 2 !== 0)) {
-        validator.explanations.push(validator['elem-2'])
+    validator.keys = Object.keys(elem)
+    for (let i = 0; i < validator.keys.length; i++) {
+      validator.key = validator.keys[i]
+      if (validator.omitkeys[validator.key] === true) continue
+      validator.elem = elem[validator.key]
+      if ((typeof validator.elem !== 'number' || validator.elem % 2 !== 0)) {
+        validator.explanations.push(validator.elem)
         return false
       }
     }
@@ -310,11 +310,11 @@ Object {
   }
   return true
 }",
-  "elem-2": undefined,
+  "elem": undefined,
   "explanations": Array [],
-  "key-0": undefined,
-  "keys-0": Array [],
-  "omit-keys-0": Object {
+  "key": undefined,
+  "keys": Array [],
+  "omitkeys": Object {
     "a": true,
   },
   "pure": false,
@@ -329,22 +329,22 @@ Object {
     const elem = value[i]
     if (elem == null) return false
     if (elem.a !== 41) return false
-    validator['keys-1'] = Object.keys(elem)
-    for (let i = 0; i < validator['keys-1'].length; i++) {
-      validator['key-1'] = validator['keys-1'][i]
-      if (validator['omit-keys-1'][validator['key-1']] === true) continue
-      validator['elem-3'] = elem[validator['key-1']]
-      if ((typeof validator['elem-3'] !== 'number' || validator['elem-3'] % 2 !== 0)) return false
+    validator.keys = Object.keys(elem)
+    for (let i = 0; i < validator.keys.length; i++) {
+      validator.key = validator.keys[i]
+      if (validator.omitkeys[validator.key] === true) continue
+      validator.elem = elem[validator.key]
+      if ((typeof validator.elem !== 'number' || validator.elem % 2 !== 0)) return false
     }
                 
   }
   return true
 }",
-  "elem-3": undefined,
+  "elem": undefined,
   "explanations": Array [],
-  "key-1": undefined,
-  "keys-1": Array [],
-  "omit-keys-1": Object {
+  "key": undefined,
+  "keys": Array [],
+  "omitkeys": Object {
     "a": true,
   },
   "pure": true,
@@ -382,17 +382,17 @@ Object {
   if (!value || !Array.isArray(value)) return false
   for (let i = 0; i < value.length; i++) {
     const elem = value[i]
-    if (!validator['elem-4'](elem)) return false
+    if (!validator.elem(elem)) return false
   }
   return true
 }",
-  "elem-4": "function validator(value) {
+  "elem": "function validator(value) {
   if (typeof value === 'number' && value % 2 === 0) return true;
   if (value === 13) return true;
   return false
 }",
-  "elem-4.explanations": Array [],
-  "elem-4.pure": true,
+  "elem.explanations": Array [],
+  "elem.pure": true,
   "explanations": Array [],
   "pure": true,
 }

@@ -7,6 +7,7 @@ import {
   Schema
 } from "./types";
 import { constantToFunc } from "./constantToFunc";
+import { getKeyAccessor } from "./getKeyAccessor";
 
 export function compileNot(
   c: (schema: Schema) => CompilationResult,
@@ -17,9 +18,10 @@ export function compileNot(
   ): FunctionSchema => {
     const compiled = c(schemaToBeReverted);
     const [notId, prepare] = toContext("not", compiled);
+    const notAcc = getKeyAccessor(notId)
     return () => ({
-      check: (valueId, ctxId) => `!${ctxId}['${notId}'](${valueId})`,
-      not: (valueId, ctxId) => `${ctxId}['${notId}'](${valueId})`,
+      check: (valueId, ctxId) => `!${ctxId}${notAcc}(${valueId})`,
+      not: (valueId, ctxId) => `${ctxId}${notAcc}(${valueId})`,
       prepare
     });
   };

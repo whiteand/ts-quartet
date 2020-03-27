@@ -47,13 +47,16 @@ export const methods: IMethods = {
         "explanation",
         explanation
       );
-      preparations.push(prepareExplanation);
+      const [explanationValue, prepareExplanationValue] = toContext('explvalue', undefined)
+      preparations.push(prepareExplanation, prepareExplanationValue);
+      const explanationAcc = getKeyAccessor(explanationId)
+      const explanationValueAcc = getKeyAccessor(explanationValue)
       handleError =
         typeof explanation === "function"
           ? (id, ctxId) =>
-              `${ctxId}['${explanationId}-value'] = ${ctxId}['${explanationId}'](${id})\nif (${ctxId}['${explanationId}-value'] !== undefined) {\n  ${ctxId}.explanations.push(${ctxId}['${explanationId}-value'])\n}`
+              `${ctxId}${explanationValueAcc} = ${ctxId}${explanationAcc}(${id})\nif (${ctxId}${explanationValueAcc} !== undefined) {\n  ${ctxId}.explanations.push(${ctxId}${explanationValueAcc})\n}`
           : (id, ctxId) =>
-              `${ctxId}.explanations.push(${ctxId}['${explanationId}'])`;
+              `${ctxId}.explanations.push(${ctxId}${explanationAcc})`;
     } else if (Array.isArray(check.explanations) && !check.pure) {
       handleError = (id, ctxId) =>
         `${ctxId}.explanations.push(...${ctxId}${checkIdAccessor}.explanations)`;
@@ -136,9 +139,10 @@ export const methods: IMethods = {
   }),
   test: (tester: ITest) => () => {
     const [testId, prepare] = toContext("tester", tester);
+    const testerAcc = getKeyAccessor(testId)
     return {
-      check: (id, ctx) => `${ctx}['${testId}'].test(${id})`,
-      not: (id, ctx) => `!${ctx}['${testId}'].test(${id})`,
+      check: (id, ctx) => `${ctx}${testerAcc}.test(${id})`,
+      not: (id, ctx) => `!${ctx}${testerAcc}.test(${id})`,
       prepare
     };
   }

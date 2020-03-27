@@ -11,7 +11,43 @@ import {
   Schema
 } from "./types";
 import { constantToFunc } from "./constantToFunc";
-
+import { getKeyAccessor } from "./getKeyAccessor";
+function defaultHandler(
+  c: (schema: Schema) => CompilationResult,
+  index: number,
+  valueId: string,
+  ctxId: string,
+  schema: Schema,
+  preparations: Prepare[],
+  handleErrors: HandleError[],
+  stringsSymbols: Array<string | number | symbol>
+): [string, boolean] {
+  const compiled = c(schema);
+  const [id, prepare] = toContext("variant-" + index, compiled);
+  preparations.push(prepare);
+  const idAcc = getKeyAccessor(id);
+  const funcSchema = compiled.pure
+    ? () => ({
+        check: () => `${ctxId}${idAcc}(${valueId})`,
+        not: () => `!${ctxId}${idAcc}(${valueId})`
+      })
+    : () => ({
+        check: () => `${ctxId}${idAcc}(${valueId})`,
+        handleError: () =>
+          `${ctxId}.explanations.push(...${ctxId}${idAcc}.explanations)`,
+        not: () => `!${ctxId}${idAcc}(${valueId})`
+      });
+  return compileVariantElementToReturnWay(
+    c,
+    index,
+    valueId,
+    ctxId,
+    funcSchema,
+    preparations,
+    handleErrors,
+    stringsSymbols
+  );
+}
 function compileVariantElementToReturnWay(
   c: (schema: Schema) => CompilationResult,
   index: number,
@@ -62,58 +98,8 @@ function compileVariantElementToReturnWay(
       }
       return [`if (${s.check(valueId, ctxId)}) return true;`, !s.handleError];
     },
-    object: objectSchema => {
-      const compiled = compileObjectSchema(c, objectSchema);
-      const [id, prepare] = toContext("variant-" + index, compiled);
-      preparations.push(prepare);
-      const funcSchema = compiled.pure
-        ? () => ({
-            check: () => `${ctxId}['${id}'](${valueId})`,
-            not: () => `!${ctxId}['${id}'](${valueId})`
-          })
-        : () => ({
-            check: () => `${ctxId}['${id}'](${valueId})`,
-            handleError: () =>
-              `${ctxId}.explanations.push(...${ctxId}['${id}'].explanations)`,
-            not: () => `!${ctxId}['${id}'](${valueId})`
-          });
-      return compileVariantElementToReturnWay(
-        c,
-        index,
-        valueId,
-        ctxId,
-        funcSchema,
-        preparations,
-        handleErrors,
-        stringsSymbols
-      );
-    },
-    objectRest: objectSchema => {
-      const compiled = compileObjectSchemaWithRest(c, objectSchema);
-      const [id, prepare] = toContext("variant-" + index, compiled);
-      preparations.push(prepare);
-      const funcSchema = compiled.pure
-        ? () => ({
-            check: () => `${ctxId}['${id}'](${valueId})`,
-            not: () => `!${ctxId}['${id}'](${valueId})`
-          })
-        : () => ({
-            check: () => `${ctxId}['${id}'](${valueId})`,
-            handleError: () =>
-              `${ctxId}.explanations.push(...${ctxId}['${id}'].explanations)`,
-            not: () => `!${ctxId}['${id}'](${valueId})`
-          });
-      return compileVariantElementToReturnWay(
-        c,
-        index,
-        valueId,
-        ctxId,
-        funcSchema,
-        preparations,
-        handleErrors,
-        stringsSymbols
-      );
-    },
+    object: objectSchema => defaultHandler(c, index, valueId, ctxId, objectSchema, preparations, handleErrors, stringsSymbols),
+    objectRest: objectSchema => defaultHandler(c, index, valueId, ctxId, objectSchema, preparations, handleErrors, stringsSymbols),
     variant: schemas => {
       const res = [];
       let isPure = true;

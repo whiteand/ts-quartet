@@ -1,6 +1,6 @@
 import { IContext } from "./types";
 
-const toContextCounter: Record<string, number> = {};
+let toContextCounter: Record<string, number> = {};
 export const toContext = (
   prefix: string | number,
   value: any,
@@ -9,10 +9,14 @@ export const toContext = (
   if (!toContextCounter[prefix]) {
     toContextCounter[prefix] = 0;
   }
-  const id = withoutPostfix
-    ? prefix
-    : `${prefix}-${toContextCounter[prefix]++}`;
-
+  let id =
+    withoutPostfix || toContextCounter[prefix] === 0
+      ? prefix
+      : `${prefix}-${toContextCounter[prefix]}`;
+  if (id === 'explanations' || id === 'pure') {
+    id = `${prefix}-${toContextCounter[prefix]}`
+  }
+  toContextCounter[prefix]++;
   toContextCounter[prefix] %= 1e9;
   return [
     id,
@@ -20,4 +24,8 @@ export const toContext = (
       ctx[id] = value;
     }
   ] as [string, (ctx: IContext) => void];
+};
+
+export const clearContextCounters = () => {
+  toContextCounter = {};
 };

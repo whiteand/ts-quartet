@@ -1,5 +1,6 @@
 import { ConstantSchema, FunctionSchema } from "./types";
 import { toContext } from "./toContext";
+import { getKeyAccessor } from "./getKeyAccessor";
 
 export function constantToFunc(c: ConstantSchema): FunctionSchema {
   if (c === undefined) {
@@ -38,9 +39,10 @@ export function constantToFunc(c: ConstantSchema): FunctionSchema {
         });
   }
   const [cId, prepare] = toContext("constant", c);
+  const constantAccessor = getKeyAccessor(cId)
   return () => ({
-    check: (id, ctx) => `${id} === ${ctx}['${cId}']`,
-    not: (id, ctx) => `${id} !== ${ctx}['${cId}']`,
+    check: (id, ctx) => `${id} === ${ctx}${constantAccessor}`,
+    not: (id, ctx) => `${id} !== ${ctx}${constantAccessor}`,
     prepare,
   });
 }

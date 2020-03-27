@@ -60,12 +60,12 @@ Object {
   validator.explanations = []
   if (value == null) return false
   if (!(typeof value.a === 'number' && value.a % 2 === 0)) return false
-  validator['keys-0'] = Object.keys(value)
-  for (let i = 0; i < validator['keys-0'].length; i++) {
-    validator['key-0'] = validator['keys-0'][i]
-    if (validator['omit-keys-0'][validator['key-0']] === true) continue
-    validator['elem-0'] = value[validator['key-0']]
-    if (!(typeof validator['elem-0'] === 'number' && validator['elem-0'] % 2 === 0)) return false
+  validator.keys = Object.keys(value)
+  for (let i = 0; i < validator.keys.length; i++) {
+    validator.key = validator.keys[i]
+    if (validator.omitkeys[validator.key] === true) continue
+    validator.elem = value[validator.key]
+    if (!(typeof validator.elem === 'number' && validator.elem % 2 === 0)) return false
   }
               
   if (value == null) return false
@@ -73,30 +73,30 @@ Object {
     validator.explanations.push(value.b + ' is not 4k')
     return false
   }
-  validator['keys-1'] = Object.keys(value)
-  for (let i = 0; i < validator['keys-1'].length; i++) {
-    validator['key-1'] = validator['keys-1'][i]
-    if (validator['omit-keys-1'][validator['key-1']] === true) continue
-    validator['elem-1'] = value[validator['key-1']]
-    if (typeof validator['elem-1'] !== 'number' || validator['elem-1'] % 4 !== 0) {
-      validator.explanations.push(validator['elem-1'] + ' is not 4k')
+  validator[\\"keys-1\\"] = Object.keys(value)
+  for (let i = 0; i < validator[\\"keys-1\\"].length; i++) {
+    validator[\\"key-1\\"] = validator[\\"keys-1\\"][i]
+    if (validator[\\"omitkeys-1\\"][validator[\\"key-1\\"]] === true) continue
+    validator[\\"elem-1\\"] = value[validator[\\"key-1\\"]]
+    if (typeof validator[\\"elem-1\\"] !== 'number' || validator[\\"elem-1\\"] % 4 !== 0) {
+      validator.explanations.push(validator[\\"elem-1\\"] + ' is not 4k')
       return false
     }
   }
               
   return true
 }",
-  "elem-0": undefined,
+  "elem": undefined,
   "elem-1": undefined,
   "explanations": Array [],
-  "key-0": undefined,
+  "key": undefined,
   "key-1": undefined,
-  "keys-0": Array [],
+  "keys": Array [],
   "keys-1": Array [],
-  "omit-keys-0": Object {
+  "omitkeys": Object {
     "a": true,
   },
-  "omit-keys-1": Object {
+  "omitkeys-1": Object {
     "b": true,
   },
   "pure": false,
@@ -177,23 +177,23 @@ Object {
   "_": "function validator(value) {
   validator.explanations = []
   if (!(typeof value === 'number' && value % 2 === 0)) return false
-  if (!validator['value-0'](value)) {
-    validator.explanations.push(...validator['value-0'].explanations)
+  if (!validator.value(value)) {
+    validator.explanations.push(...validator.value.explanations)
     return false
   }
   return true
 }",
   "explanations": Array [],
   "pure": false,
-  "value-0": "function validator(value) {
+  "value": "function validator(value) {
   validator.explanations = []
   if (typeof value === 'number' && value % 4 === 0) return true;
   if (typeof value === 'number' && value % 5 === 0) return true;
   validator.explanations.push(value + ' is not 4k')
   return false
 }",
-  "value-0.explanations": Array [],
-  "value-0.pure": false,
+  "value.explanations": Array [],
+  "value.pure": false,
 }
 `;
 
@@ -201,18 +201,18 @@ exports[`v.and v.compileAnd(func, [funcWithoutHandle, funcWithoutHandle]) 1`] = 
 Object {
   "_": "function validator(value) {
   if ((typeof value !== 'number' || value % 2 !== 0)) return false
-  if (!validator['value-1'](value)) return false
+  if (!validator.value(value)) return false
   return true
 }",
   "explanations": Array [],
   "pure": true,
-  "value-1": "function validator(value) {
+  "value": "function validator(value) {
   if (typeof value === 'number' && value % 2 === 0) return true;
   if (typeof value === 'number' && value % 2 === 0) return true;
   return false
 }",
-  "value-1.explanations": Array [],
-  "value-1.pure": true,
+  "value.explanations": Array [],
+  "value.pure": true,
 }
 `;
 
