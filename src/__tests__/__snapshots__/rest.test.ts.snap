@@ -42,11 +42,11 @@ Object {
 }
 `;
 
-exports[`v.rest 02. v({ a: 42, [v.rest]: funcSchemaWithNot }) 1`] = `
+exports[`v.rest 02. v({ a: 41, [v.rest]: funcSchemaWithNot }) 1`] = `
 Object {
   "_": "function validator(value) {
   if (value == null) return false
-  if (value.a !== 42) return false
+  if (value.a !== 41) return false
   validator.keys = Object.keys(value)
   for (let i = 0; i < validator.keys.length; i++) {
     validator.key = validator.keys[i]
@@ -68,12 +68,12 @@ Object {
 }
 `;
 
-exports[`v.rest 03. v({ a: 42 [v.rest]: funcSchemaWithNotHandleError }) 1`] = `
+exports[`v.rest 03. v({ a: 41 [v.rest]: funcSchemaWithNotHandleError }) 1`] = `
 Object {
   "_": "function validator(value) {
   validator.explanations = []
   if (value == null) return false
-  if (value.a !== 42) return false
+  if (value.a !== 41) return false
   validator.keys = Object.keys(value)
   for (let i = 0; i < validator.keys.length; i++) {
     validator.key = validator.keys[i]
