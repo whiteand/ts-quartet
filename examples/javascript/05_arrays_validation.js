@@ -8,7 +8,7 @@
 
 const { v } = require('quartet') // import { v } from 'quartet'
 
-const checkArrayOfNumber = v.arrayOf(v.number)
+const checkArrayOfNumber = v(v.arrayOf(v.number)) // same as v.compileArrayOf(v.number)
 
 checkArrayOfNumber(1)         // false, because 1 is not an array
 checkArrayOfNumber('1')       // false, because '1' is not an array
@@ -16,7 +16,8 @@ checkArrayOfNumber([])        // true
 checkArrayOfNumber([1,2,3])   // true
 checkArrayOfNumber([1,2,'3']) // false, because '3' is not a number
 
-const checkArrayOfPersons = v.arrayOf({
+// same as v(v.arrayOf({...}))
+const checkArrayOfPersons = v.compileArrayOf({
   id: v.string,
   age: v.and(v.positive, v.safeInteger),
   isMale: v.boolean

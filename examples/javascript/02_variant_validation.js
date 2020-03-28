@@ -1,10 +1,7 @@
 /**
  * 02_variant_validation.js
  * 
- * Contains examples of idea of variant validators.
- * 
- * All validators - are valid validation schema.
- * Because the best explanation of how to check value is a function that checks value.
+ * Contains examples of idea of variant validations.
  * 
  * VariantSchema = [schema1, schema2, schema3, ...]
  * 
