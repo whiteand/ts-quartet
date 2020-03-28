@@ -7,11 +7,11 @@ import {
   TypedCompilationResult
 } from "./types";
 
-export function arrayOf<T = any>(
+export function compileArrayOf<T = any>(
   c: (schema: Schema) => CompilationResult,
   schema: Schema
 ): TypedCompilationResult<T[]> {
-  // arrayOf([])
+  // compileArrayOf([])
   if (Array.isArray(schema) && schema.length === 0) {
     return Object.assign(
       (value: any): value is T[] =>

@@ -56,12 +56,9 @@ export type TypedCompilationResult<T> = ((value: any) => value is T) & IContext;
 export interface IMethods {
   and: (...schemas: Schema[]) => FunctionSchema;
   arrayOf: (schema: Schema) => FunctionSchema;
-  bigint: FunctionSchema;
   boolean: FunctionSchema;
-  compileAnd: (<T = any>(...schemas: Schema[]) => TypedCompilationResult<T>) &
-    ((...schemas: Schema[]) => CompilationResult);
-  compileArrayOf: (<T = any>(schema: Schema) => TypedCompilationResult<T[]>) &
-    ((schema: Schema) => CompilationResult);
+  compileAnd: (<T = any>(...schemas: Schema[]) => TypedCompilationResult<T>) &    ((...schemas: Schema[]) => CompilationResult);
+  compileArrayOf: (<T = any>(schema: Schema) => TypedCompilationResult<T[]>) &    ((schema: Schema) => CompilationResult);
   custom: (check: CustomFunction, explanation?: any) => FunctionSchema;
   function: FunctionSchema;
   max: (maxValue: number, exclusive?: boolean) => FunctionSchema;

@@ -5,7 +5,6 @@ import {
   funcSchemaWithPrepare,
   funcSchema,
   funcSchemaWithNot,
-  funcSchemaWithNotHandleErrorWithPrepare,
   funcSchemaWithNotHandleError
 } from "./mocks";
 

@@ -1,5 +1,5 @@
 import { compileAnd } from "./compileAnd";
-import { arrayOf } from "./compileArrayOf";
+import { compileArrayOf } from "./compileArrayOf";
 import { compileNot } from "./compileNot";
 import { getKeyAccessor } from "./getKeyAccessor";
 import { clearContextCounters, toContext } from "./toContext";
@@ -14,15 +14,42 @@ import {
 
 export const methods: IMethods = {
   and(...schemas: Schema[]) {
-    return this.custom(compileAnd(this as any, schemas));
+    const compiledAnd = compileAnd(this as any, schemas);
+
+    const [checkAndId, prepare] = toContext("and", compiledAnd);
+    const checkAnd = getKeyAccessor(checkAndId);
+    return compiledAnd.pure
+      ? () => ({
+          check: (id, ctx) => `${ctx}${checkAnd}(${id})`,
+          not: (id, ctx) => `!${ctx}${checkAnd}(${id})`,
+          prepare
+        })
+      : () => ({
+          check: (id, ctx) => `${ctx}${checkAnd}(${id})`,
+          handleError: (id, ctx) =>
+            `${ctx}.explanations.push(...${ctx}${checkAnd}.explanations)`,
+          not: (id, ctx) => `!${ctx}${checkAnd}(${id})`,
+          prepare
+        });
   },
   arrayOf(schema: Schema) {
-    return this.custom(arrayOf(this as any, schema));
+    const compiledArr = compileArrayOf(this as any, schema);
+    const [checkArrayId, prepare] = toContext("arr", compiledArr);
+    const checkArray = getKeyAccessor(checkArrayId);
+    return compiledArr.pure
+      ? () => ({
+          check: (id, ctx) => `${ctx}${checkArray}(${id})`,
+          not: (id, ctx) => `!${ctx}${checkArray}(${id})`,
+          prepare
+        })
+      : () => ({
+          check: (id, ctx) => `${ctx}${checkArray}(${id})`,
+          handleError: (id, ctx) =>
+            `${ctx}.explanations.push(...${ctx}${checkArray}.explanations)`,
+          not: (id, ctx) => `!${ctx}${checkArray}(${id})`,
+          prepare
+        });
   },
-  bigint: () => ({
-    check: valueId => `typeof ${valueId} === 'bigint'`,
-    not: valueId => `typeof ${valueId} !== 'bigint'`
-  }),
   boolean: () => ({
     check: valueId => `typeof ${valueId} === 'boolean'`,
     not: valueId => `typeof ${valueId} !== 'boolean'`
@@ -33,7 +60,7 @@ export const methods: IMethods = {
   },
   compileArrayOf<T>(schema: Schema) {
     clearContextCounters();
-    return arrayOf(this as any, schema) as TypedCompilationResult<T[]>;
+    return compileArrayOf(this as any, schema) as TypedCompilationResult<T[]>;
   },
   custom: (
     check: ((value: any) => boolean) & { explanations?: any[]; pure?: boolean },
