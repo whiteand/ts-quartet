@@ -42,9 +42,12 @@ describe("methods", () => {
     );
     tables(
       v({
-        arr: v.custom(v(v.arrayOf(v.custom(v(v.number), "NaN"))), (v: any, errs?: any[]) => {
-          return (errs && errs[0]) || 'Arr'
-        })
+        arr: v.custom(
+          v(v.arrayOf(v.custom(v(v.number), "NaN"))),
+          (v: any, errs?: any[]) => {
+            return (errs && errs[0]) || "Arr";
+          }
+        )
       }),
       valids.map(arr => ({ arr })),
       invalids.map(arr => [{ arr }, Array.isArray(arr) ? ["NaN"] : ["Arr"]])
@@ -106,6 +109,19 @@ describe("methods", () => {
       ["1", "2", undefined, false, null, {}, []].map(
         e => [e, [{ v: e }]] as [any, any[]]
       )
+    );
+  });
+  test("finite", () => {
+    expect(typeof v.finite).toBe("function");
+    puretables(
+      v(v.finite),
+      [1, Math.PI, -3, 0],
+      [NaN, Infinity, -Infinity, "1"]
+    );
+    puretables(
+      v(v.and(v.finite, v.finite)),
+      [1, Math.PI, -3, 0],
+      [NaN, Infinity, -Infinity, "1"]
     );
   });
   test("function", () => {

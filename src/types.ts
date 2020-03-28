@@ -62,14 +62,15 @@ export interface IMethods {
   compileArrayOf: (<T = any>(schema: Schema) => TypedCompilationResult<T[]>) &
     ((schema: Schema) => CompilationResult);
   custom: (check: CustomFunction, explanation?: any) => FunctionSchema;
+  finite: FunctionSchema;
   function: FunctionSchema;
   max: (maxValue: number, exclusive?: boolean) => FunctionSchema;
   maxLength: (maxLength: number, exclusive?: boolean) => FunctionSchema;
   min: (minValue: number, exclusive?: boolean) => FunctionSchema;
   minLength: (minLength: number, exclusive?: boolean) => FunctionSchema;
   negative: FunctionSchema;
-  number: FunctionSchema;
   not: (schema: Schema) => FunctionSchema;
+  number: FunctionSchema;
   positive: FunctionSchema;
   rest: "__quartet/rest__";
   restOmit: "__quartet/rest-omit__";

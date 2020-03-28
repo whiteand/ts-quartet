@@ -5,7 +5,8 @@ import {
   funcSchemaWithHandleError,
   funcSchemaWithPrepare,
   funcSchemaWithNot,
-  primitives
+  primitives,
+  funcSchemaWithNotHandleError
 } from "./mocks";
 import { FunctionSchema } from "../types";
 
@@ -158,5 +159,37 @@ describe("v.and", () => {
     const validator = v.compileAnd(funcSchemaWithNot, [funcSchema, funcSchema]);
     expect(validator.pure).toBe(true);
     snapshot(validator);
+  });
+  test("v.and(v.number, v.and(v.positive, v.safeInteger))", () => {
+    const validator = v.compileAnd(v.number, v.and(v.positive, v.safeInteger));
+    puretables(
+      validator,
+      [1, 2, 3, 4, 5, 6],
+      [NaN, Infinity, -Infinity, Math.PI, null, undefined, false, true]
+    );
+  });
+  test("v.and(v.number, v.and(isEven, v.safeInteger))", () => {
+    const validator = v.compileAnd(
+      v.number,
+      v.and(funcSchemaWithNotHandleError, v.safeInteger)
+    );
+    tables(
+      validator,
+      [2, 4, 6],
+      [
+        NaN,
+        Infinity,
+        1,
+        3,
+        5,
+        7,
+        -Infinity,
+        Math.PI,
+        null,
+        undefined,
+        false,
+        true
+      ].map(e => [e, typeof e === 'number' ? [e] : []] as [any, any[]])
+    );
   });
 });

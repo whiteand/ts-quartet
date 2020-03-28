@@ -105,6 +105,10 @@ export const methods: IMethods = {
       }
     };
   },
+  finite: () => ({
+    check: valueId => `Number.isFinite(${valueId})`,
+    not: valueId => `!Number.isFinite(${valueId})`
+  }),
   function: () => ({
     check: valueId => `typeof ${valueId} === 'function'`,
     not: valueId => `typeof ${valueId} !== 'function'`
