@@ -18,6 +18,7 @@
     - [The schema for an object is an object](#the-schema-for-an-object-is-an-object)
   - [Conclusions](#conclusions)
   - [Advanced Quartet](#advanced-quartet)
+  - [Ajv vs Quartet 9: Allegro](#ajv-vs-quartet-9-allegro)
 
 ## Examples
 
@@ -25,7 +26,7 @@
 
 ## Benchmarks
 
-`// TODO: Write it!`
+[`Ajv` vs `quartet` 9: Allegro](#ajv-vs-quartet-9-allegro)
 
 
 ## Find an extra word in the list
@@ -523,3 +524,154 @@ const checkPhoneBookWithAuthorId = v({
 ## Advanced Quartet
 
 `// TODO: Write it!`
+
+## Ajv vs Quartet 9: Allegro
+
+Я написал бенчмарк для того, чтобы сравнить одну из самых быстрых библиотек валидации `ajv` с моей на примере из вступления.
+
+```javascript
+
+const Benchmark = require("benchmark");
+
+const { v } = require("quartet");
+const validator = v({
+  user: {
+    id: v.number,
+    name: v.string,
+    age: v.number,
+    gender: ['Male', 'Female'],
+    friendsIds: v.arrayOf(v.number)
+  }
+})
+
+const Ajv = require("ajv");
+const ajv = new Ajv();
+
+const ajvValidator = ajv.compile({
+  type: "object",
+  required: ["user"],
+  properties: {
+    user: {
+      type: "object",
+      required: ["id", "name", "age", "gender", "friendsIds"],
+      properties: {
+        id: { type: "number" },
+        name: { type: "string" },
+        age: { type: "number" },
+        gender: { type: "string", enum: ["Male", "Female"] },
+        friendsIds: { type: "array", items: { type: "number" } }
+      }
+    }
+  }
+});
+
+const positive = [
+  {
+    user: { id: 1, name: "Andrew", age: 23, gender: "Male", friendsIds: [2, 3] }
+  },
+  {
+    user: {
+      id: 2,
+      name: "Vasilina",
+      age: 20,
+      gender: "Female",
+      friendsIds: [1]
+    }
+  },
+  { user: { id: 3, name: "Bohdan", age: 23, gender: "Male", friendsIds: [1] } },
+  { user: { id: 4, name: "Siroja", age: 99, gender: "Male", friendsIds: [] } }
+];
+const negative = [
+  null,
+  false,
+  undefined,
+  {},
+  { user: null },
+  { user: false },
+  { user: undefined },
+  {
+    user: {
+      id: "1",
+      name: "Andrew",
+      age: 23,
+      gender: "Male",
+      friendsIds: [2, 3]
+    }
+  },
+  {
+    user: {
+      id: 1,
+      name: undefined,
+      age: 23,
+      gender: "Male",
+      friendsIds: [2, 3]
+    }
+  },
+  {
+    user: {
+      id: 1,
+      name: "Andrew",
+      age: undefined,
+      gender: "Male",
+      friendsIds: [2, 3]
+    }
+  },
+  {
+    user: {
+      id: 1,
+      name: "Andrew",
+      age: 23,
+      gender: undefined,
+      friendsIds: [2, 3]
+    }
+  },
+  {
+    user: { id: 1, name: "Andrew", age: 23, gender: "male", friendsIds: [2, 3] }
+  },
+  {
+    user: {
+      id: 1,
+      name: "Andrew",
+      age: 23,
+      gender: "Male",
+      friendsIds: undefined
+    }
+  }
+];
+const suite = new Benchmark.Suite();
+suite
+  .add("ajv", function() {
+    for (let i = 0; i < positive.length; i++) {
+      ajvValidator(positive[i]);
+    }
+    for (let i = 0; i < negative.length; i++) {
+      ajvValidator(negative[i]);
+    }
+  })
+  .add("Quartet 9: Allegro", function() {
+    for (let i = 0; i < positive.length; i++) {
+      validator(positive[i]);
+    }
+    for (let i = 0; i < negative.length; i++) {
+      validator(negative[i]);
+    }
+  })
+  .on("cycle", function(event) {
+    console.log(String(event.target));
+  })
+  .on("complete", function() {
+    console.log(
+      this.filter("fastest")
+        .map("name")
+        .toString()
+    );
+  })
+  .run();
+```
+
+И результат такой:
+
+```
+ajv                x 1,670,584 ops/sec ±0.79% (90 runs sampled)
+Quartet 9: Allegro x 3,587,787 ops/sec ±9.26% (66 runs sampled)
+```
