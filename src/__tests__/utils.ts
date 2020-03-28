@@ -15,20 +15,17 @@ export function getExplanation(
 
 export function tables(validator: any, valids: any[], invalids: [any, any][]) {
   for (const valid of valids) {
-    try {
-      expect(validator(valid)).toBe(true)
-    } catch (error) {
-      console.log(valid)
-      console.log(getDescription(validator))
-    }
-    expect(validator.explanations).toEqual([])
+    const isValid = validator(valid);
+    expect(isValid ? valid : [valid]).toBe(valid);
+    expect(validator.explanations).toEqual([]);
   }
   for (const [invalid, explanations] of invalids) {
-    expect(validator(invalid)).toBe(false)
-    expect(validator.explanations).toEqual(explanations)
+    const isValid = validator(invalid);
+    expect(isValid ? [invalid] : invalid).toBe(invalid);
+    expect(validator.explanations).toEqual(explanations);
   }
 }
 export function puretables(validator: any, valids: any[], invalids: any[]) {
-  expect(validator.pure).toBe(true)
-  tables(validator, valids, invalids.map(invalid => [invalid, []]))
+  expect(validator.pure).toBe(true);
+  tables(validator, valids, invalids.map(invalid => [invalid, []]));
 }
