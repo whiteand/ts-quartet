@@ -14,12 +14,18 @@
     "preversion": "npm run lint",
     "version": "npm run format && git add -A src",
     "postversion": "git push && git push --tags",
-    "coveralls": "jest --coverage --config jestconfig.json && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
+    "coveralls": "jest --coverage --config jestconfig.json && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
+    "size": "size-limit"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/whiteand/ts-quartet.git"
   },
+  "size-limit": [
+    {
+      "path": "lib/index.js"
+    }
+  ],
   "keywords": [
     "validation",
     "library",
@@ -33,10 +39,12 @@
   },
   "homepage": "https://github.com/whiteand/ts-quartet#readme",
   "devDependencies": {
+    "@size-limit/preset-small-lib": "^4.4.2",
     "@types/jest": "^24.0.13",
     "coveralls": "^3.0.3",
     "jest": "^24.8.0",
     "prettier": "^1.17.1",
+    "size-limit": "^4.4.2",
     "ts-jest": "^24.0.2",
     "ts-node": "^8.1.0",
     "tslint": "^5.16.0",

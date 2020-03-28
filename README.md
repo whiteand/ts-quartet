@@ -3,6 +3,8 @@
 [![Build Status](https://travis-ci.com/whiteand/ts-quartet.svg?branch=master)](https://travis-ci.com/whiteand/ts-quartet)
 [![Coverage Status](https://coveralls.io/repos/github/whiteand/ts-quartet/badge.svg?branch=master)](https://coveralls.io/github/whiteand/ts-quartet?branch=master)
 
+**Size: 4.6 KB** (minified and gzipped). No dependencies. [Size Limit](https://github.com/ai/size-limit) controls the size.
+
 Это декларативный и быстрый инструмент для валидации данных.
 
 - [Quartet 9: Allegro](#quartet-9-allegro)
