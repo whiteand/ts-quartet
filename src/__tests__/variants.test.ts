@@ -134,4 +134,8 @@ describe("variants", () => {
       ]
     );
   });
+  test("11. v([custom,constant]", () => {
+    const validator = v([v.custom(e => e === 43), 42]);
+    puretables(validator, [42, 43], [...primitives]);
+  });
 });

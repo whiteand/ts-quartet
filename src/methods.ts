@@ -87,7 +87,7 @@ export const methods: IMethods = {
       handleError =
         typeof explanation === "function"
           ? (id, ctxId) =>
-              `${ctxId}${explanationValueAcc} = ${ctxId}${explanationAcc}(${id})\nif (${ctxId}${explanationValueAcc} !== undefined) {\n  ${ctxId}.explanations.push(${ctxId}${explanationValueAcc})\n}`
+              `${ctxId}${explanationValueAcc} = ${ctxId}${explanationAcc}(${id},${ctxId}${checkIdAccessor}.explanations)\nif (${ctxId}${explanationValueAcc} !== undefined) {\n  ${ctxId}.explanations.push(${ctxId}${explanationValueAcc})\n}`
           : (id, ctxId) =>
               `${ctxId}.explanations.push(${ctxId}${explanationAcc})`;
     } else if (Array.isArray(check.explanations) && !check.pure) {
