@@ -6,7 +6,7 @@
 - [Quartet 9: Allegro](#quartet-9-allegro)
   - [Examples](#examples)
   - [Benchmarks](#benchmarks)
-  - [Find an extra word in the list](#find-an-extra-word-in-the-list)
+  - [Is there extra word in this list?](#is-there-extra-word-in-this-list)
   - [Objections](#objections)
   - [Confession](#confession)
   - [How to use it?](#how-to-use-it)
@@ -47,7 +47,7 @@
 [`Ajv` vs `quartet` 9: Allegro](#ajv-vs-quartet-9-allegro)
 
 
-## Find an extra word in the list
+## Is there extra word in this list?
 
 - Чужое API
 - Typescript
