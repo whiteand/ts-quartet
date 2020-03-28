@@ -422,4 +422,8 @@ describe("v(object)", () => {
       [...primitives, {}, { a: 41, b: 43 }, { a: 40, b: 42 }]
     );
   });
+  test("31. v({ explanations: 42 })", () => {
+      const validator = v({ explanations: 42 })
+      expect(validator.pure).toBe(true)
+    });
 });

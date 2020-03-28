@@ -18,9 +18,6 @@ export function compileFunctionSchemaResult(
   })()`;
   } else {
     const innerCode = s.check("value", "validator");
-    if (innerCode.indexOf("explanations") >= 0) {
-      isPure = false;
-    }
     code = `(() => {function validator(value) {${
       isPure ? "" : "\n  validator.explanations = []"
     }\n  return ${innerCode}\n}

@@ -28,13 +28,11 @@ function defaultHandler(
   const funcSchema = compiled.pure
     ? () => ({
         check: () => `${ctxId}${idAcc}(${valueId})`,
-        not: () => `!${ctxId}${idAcc}(${valueId})`
       })
     : () => ({
         check: () => `${ctxId}${idAcc}(${valueId})`,
         handleError: () =>
-          `${ctxId}.explanations.push(...${ctxId}${idAcc}.explanations)`,
-        not: () => `!${ctxId}${idAcc}(${valueId})`
+          `${ctxId}.explanations.push(...${ctxId}${idAcc}.explanations)`
       });
   return compileVariantElementToReturnWay(
     c,
