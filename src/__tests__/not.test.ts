@@ -111,4 +111,13 @@ describe("v.not", () => {
       [{ a: 42 }, { a: 42, b: 2 }]
     );
   });
+  test("11. v.and(v.not(1), v.not(2))", () => {
+    const validator = v(v.and(v.not({ a: 41 }), v.not({ a: 43 })));
+    snapshot(validator)
+    puretables(
+      validator,
+      [...primitives, [1, 2, "1"].map(a => ({ a }))],
+      [41, 43].map(a => ({ a }))
+    );
+  });
 });

@@ -2,6 +2,7 @@ import { compileAnd } from "./compileAnd";
 import { compileArrayOf } from "./compileArrayOf";
 import { compileNot } from "./compileNot";
 import { getKeyAccessor } from "./getKeyAccessor";
+import { pureCompile } from "./pureCompile";
 import { clearContextCounters, toContext } from "./toContext";
 import {
   HandleError,
@@ -14,7 +15,7 @@ import {
 
 export const methods: IMethods = {
   and(...schemas: Schema[]) {
-    const compiledAnd = compileAnd(this as any, schemas);
+    const compiledAnd = compileAnd(pureCompile, schemas);
 
     const [checkAndId, prepare] = toContext("and", compiledAnd);
     const checkAnd = getKeyAccessor(checkAndId);
@@ -33,7 +34,7 @@ export const methods: IMethods = {
         });
   },
   arrayOf(schema: Schema) {
-    const compiledArr = compileArrayOf(this as any, schema);
+    const compiledArr = compileArrayOf(pureCompile, schema);
     const [checkArrayId, prepare] = toContext("arr", compiledArr);
     const checkArray = getKeyAccessor(checkArrayId);
     return compiledArr.pure
@@ -56,11 +57,11 @@ export const methods: IMethods = {
   }),
   compileAnd<T>(...schemas: Schema[]) {
     clearContextCounters();
-    return compileAnd(this as any, schemas) as TypedCompilationResult<T>;
+    return compileAnd(pureCompile, schemas) as TypedCompilationResult<T>;
   },
   compileArrayOf<T>(schema: Schema) {
     clearContextCounters();
-    return compileArrayOf(this as any, schema) as TypedCompilationResult<T[]>;
+    return compileArrayOf(pureCompile, schema) as TypedCompilationResult<T[]>;
   },
   custom: (
     check: ((value: any) => boolean) & { explanations?: any[]; pure?: boolean },
@@ -149,7 +150,7 @@ export const methods: IMethods = {
     not: valueId => `typeof ${valueId} !== 'number'`
   }),
   not(schema) {
-    return compileNot(this as any, schema);
+    return compileNot(pureCompile, schema);
   },
   positive: () => ({
     check: valueId => `${valueId} > 0`,

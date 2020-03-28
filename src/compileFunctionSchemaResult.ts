@@ -10,17 +10,14 @@ export function compileFunctionSchemaResult(
     isPure = false;
     const checkCode = s.check("value", "validator");
     const handleCode = s.handleError("value", "validator");
-    const clearExplanations = isPure ? "" : "\n  validator.explanations = []";
-    code = `(() => {function validator(value) {${clearExplanations}\n  if (${checkCode}) {\n    return true\n  }\n${addTabs(
+    code = `(() => {function validator(value) {\n  validator.explanations = []\n  if (${checkCode}) {\n    return true\n  }\n${addTabs(
       handleCode
     )}\n  return false\n}
     return validator
   })()`;
   } else {
     const innerCode = s.check("value", "validator");
-    code = `(() => {function validator(value) {${
-      isPure ? "" : "\n  validator.explanations = []"
-    }\n  return ${innerCode}\n}
+    code = `(() => {function validator(value) {\n  return ${innerCode}\n}
       return validator
     })()`;
   }

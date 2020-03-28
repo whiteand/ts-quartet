@@ -95,4 +95,8 @@ describe("variants", () => {
       [5, ...primitives.filter(e => typeof e !== "number")]
     );
   });
+  test("0.8 v([{ a: impure }, { a: pure }])", () => {
+    const validator = v([funcSchemaWithNotHandleError, funcSchemaWithNot]);
+    tables(validator, [2, 4, 6, 8, 10], [["2", ["2"]]]);
+  });
 });
