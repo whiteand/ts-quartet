@@ -20,7 +20,13 @@ export function compileArrayOf<T = any>(
     );
   }
   const preparations: Prepare[] = [];
-  const [forLoopBody, pure] = compileIfNotValidReturnFalse(c, 'elem', 'validator', schema, preparations);
+  const [forLoopBody, pure] = compileIfNotValidReturnFalse(
+    c,
+    "elem",
+    "validator",
+    schema,
+    preparations
+  );
 
   const code = `
     (() => {function validator(value) {${

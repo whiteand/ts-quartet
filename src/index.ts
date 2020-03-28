@@ -20,10 +20,10 @@ export function quartet(): QuartetInstance {
     })(s);
 
     return compiled as any;
-  }
+  };
   const compilator = function compile(s: Schema): CompilationResult {
-    clearContextCounters()
-    return pureCompile(s)
+    clearContextCounters();
+    return pureCompile(s);
   };
   return Object.assign(compilator, methods) as QuartetInstance;
 }

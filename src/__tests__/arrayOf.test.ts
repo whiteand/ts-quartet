@@ -265,7 +265,6 @@ describe("arrayOf", () => {
     const validator = v.compileArrayOf([42]);
     expect(validator.pure).toBe(true);
     snapshot(validator);
-
   });
   test("21. v.compileArrayOf([funcSchema, 13])", () => {
     const validator = v.compileArrayOf([funcSchema, 13]);

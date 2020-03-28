@@ -17,7 +17,7 @@ function defaultHandler(
   const compiled = c(schema);
   const [id, prepare] = toContext(valueId, compiled);
   preparations.push(prepare);
-  const idAcc = getKeyAccessor(id)
+  const idAcc = getKeyAccessor(id);
   const funcSchema = compiled.pure
     ? () => ({
         check: () => `${ctxId}${idAcc}(${valueId})`,
@@ -92,11 +92,11 @@ export function compileIfNotValidReturnFalse(
         if (!isPurePart) {
           isPure = false;
         }
-        
+
         if (keyValidValues.length > 0) {
           for (const valid of keyValidValues) {
             const [keyConstantId, prepare] = toContext(innerKeyId, valid);
-            const keyConstantAcc = getKeyAccessor(keyConstantId)
+            const keyConstantAcc = getKeyAccessor(keyConstantId);
             preparations.push(prepare);
             important.push(
               `if (${innerKeyId} !== ${ctxId}${keyConstantAcc}) return false`
@@ -130,7 +130,7 @@ export function compileIfNotValidReturnFalse(
           : [`if (${valueId} == null) return false`, true];
       const [elemId, prepareElem] = toContext("elem", undefined);
       const [keysId, prepareKeysId] = toContext("keys", []);
-      const getElem = `${ctxId}${getKeyAccessor(elemId)}`
+      const getElem = `${ctxId}${getKeyAccessor(elemId)}`;
       const getKeys = `${ctxId}${getKeyAccessor(keysId)}`;
       preparations.push(prepareElem, prepareKeysId);
       const [forLoopBody, forLoopBodyIsPure] = compileIfNotValidReturnFalse(
@@ -140,7 +140,7 @@ export function compileIfNotValidReturnFalse(
         restValidator,
         preparations
       );
-      const keysToBeOmmited = [...(omitKeys || []), ...objectSchemaKeys]
+      const keysToBeOmmited = [...(omitKeys || []), ...objectSchemaKeys];
       if (keysToBeOmmited && keysToBeOmmited.length > 0) {
         const [omitKeysId, prepareOmitKeys] = toContext(
           "omitkeys",

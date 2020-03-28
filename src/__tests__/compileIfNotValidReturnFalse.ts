@@ -1,4 +1,4 @@
-import { v } from '../index'
+import { v } from "../index";
 import { compileIfNotValidReturnFalse } from "../compileIfNotValidReturnFalse";
 import { funcSchemaWithNot } from "./mocks";
 
@@ -13,5 +13,5 @@ describe("compileIfNotValidReturnFalse", () => {
       preparations
     )
   ).toMatchInlineSnapshot();
-  expect(preparations.map(e => e.toString())).toMatchInlineSnapshot()
+  expect(preparations.map(e => e.toString())).toMatchInlineSnapshot();
 });

@@ -13,8 +13,8 @@ export const toContext = (
     withoutPostfix || toContextCounter[prefix] === 0
       ? prefix
       : `${prefix}-${toContextCounter[prefix]}`;
-  if (id === 'explanations' || id === 'pure') {
-    id = `${prefix}-${toContextCounter[prefix]}`
+  if (id === "explanations" || id === "pure") {
+    id = `${prefix}-${toContextCounter[prefix]}`;
   }
   toContextCounter[prefix]++;
   return [

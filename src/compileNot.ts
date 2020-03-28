@@ -18,7 +18,7 @@ export function compileNot(
   ): FunctionSchema => {
     const compiled = c(schemaToBeReverted);
     const [notId, prepare] = toContext("not", compiled);
-    const notAcc = getKeyAccessor(notId)
+    const notAcc = getKeyAccessor(notId);
     return () => ({
       check: (valueId, ctxId) => `!${ctxId}${notAcc}(${valueId})`,
       not: (valueId, ctxId) => `${ctxId}${notAcc}(${valueId})`,

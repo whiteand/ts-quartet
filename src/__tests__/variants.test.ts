@@ -91,8 +91,8 @@ describe("variants", () => {
     snapshot(validator);
     puretables(
       validator,
-      ["A", "B", 1,2,3,4,6,8,10],
-      [5, ...primitives.filter(e => typeof e !== 'number')]
+      ["A", "B", 1, 2, 3, 4, 6, 8, 10],
+      [5, ...primitives.filter(e => typeof e !== "number")]
     );
   });
 });

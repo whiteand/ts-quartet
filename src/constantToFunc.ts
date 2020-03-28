@@ -39,10 +39,10 @@ export function constantToFunc(c: ConstantSchema): FunctionSchema {
         });
   }
   const [cId, prepare] = toContext("constant", c);
-  const constantAccessor = getKeyAccessor(cId)
+  const constantAccessor = getKeyAccessor(cId);
   return () => ({
     check: (id, ctx) => `${id} === ${ctx}${constantAccessor}`,
     not: (id, ctx) => `${id} !== ${ctx}${constantAccessor}`,
-    prepare,
+    prepare
   });
 }

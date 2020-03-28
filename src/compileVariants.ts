@@ -97,8 +97,28 @@ function compileVariantElementToReturnWay(
       }
       return [`if (${s.check(valueId, ctxId)}) return true;`, !s.handleError];
     },
-    object: objectSchema => defaultHandler(c, index, valueId, ctxId, objectSchema, preparations, handleErrors, stringsSymbols),
-    objectRest: objectSchema => defaultHandler(c, index, valueId, ctxId, objectSchema, preparations, handleErrors, stringsSymbols),
+    object: objectSchema =>
+      defaultHandler(
+        c,
+        index,
+        valueId,
+        ctxId,
+        objectSchema,
+        preparations,
+        handleErrors,
+        stringsSymbols
+      ),
+    objectRest: objectSchema =>
+      defaultHandler(
+        c,
+        index,
+        valueId,
+        ctxId,
+        objectSchema,
+        preparations,
+        handleErrors,
+        stringsSymbols
+      ),
     variant: schemas => {
       const res = [];
       let isPure = true;

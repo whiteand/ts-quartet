@@ -15,7 +15,7 @@ export interface IFunctionSchemaResult {
 export type FunctionSchema = () => IFunctionSchemaResult;
 
 export interface IObjectSchema {
-  "__quartet/rest-omit__"?: string[]
+  "__quartet/rest-omit__"?: string[];
   [key: string]: Schema;
 }
 export interface IVariantSchema extends Array<Schema> {}
@@ -57,8 +57,10 @@ export interface IMethods {
   and: (...schemas: Schema[]) => FunctionSchema;
   arrayOf: (schema: Schema) => FunctionSchema;
   boolean: FunctionSchema;
-  compileAnd: (<T = any>(...schemas: Schema[]) => TypedCompilationResult<T>) &    ((...schemas: Schema[]) => CompilationResult);
-  compileArrayOf: (<T = any>(schema: Schema) => TypedCompilationResult<T[]>) &    ((schema: Schema) => CompilationResult);
+  compileAnd: (<T = any>(...schemas: Schema[]) => TypedCompilationResult<T>) &
+    ((...schemas: Schema[]) => CompilationResult);
+  compileArrayOf: (<T = any>(schema: Schema) => TypedCompilationResult<T[]>) &
+    ((schema: Schema) => CompilationResult);
   custom: (check: CustomFunction, explanation?: any) => FunctionSchema;
   function: FunctionSchema;
   max: (maxValue: number, exclusive?: boolean) => FunctionSchema;
