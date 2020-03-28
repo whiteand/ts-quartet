@@ -80,7 +80,6 @@ export function compileIfNotValidReturnFalse(
       for (let i = 0; i < keys.length; i++) {
         const innerKey = keys[i];
         const innerKeyAccessor = getKeyAccessor(innerKey);
-        const keyValidValues: Array<string | symbol> = [];
         const innerKeyId = valueId + innerKeyAccessor;
         const [code, isPurePart] = compileIfNotValidReturnFalse(
           c,
@@ -91,17 +90,6 @@ export function compileIfNotValidReturnFalse(
         );
         if (!isPurePart) {
           isPure = false;
-        }
-
-        if (keyValidValues.length > 0) {
-          for (const valid of keyValidValues) {
-            const [keyConstantId, prepare] = toContext(innerKeyId, valid);
-            const keyConstantAcc = getKeyAccessor(keyConstantId);
-            preparations.push(prepare);
-            important.push(
-              `if (${innerKeyId} !== ${ctxId}${keyConstantAcc}) return false`
-            );
-          }
         }
         if (code) {
           codeLines.push(code);
