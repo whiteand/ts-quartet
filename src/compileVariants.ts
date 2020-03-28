@@ -22,7 +22,7 @@ function defaultHandler(
   stringsSymbols: Array<string | number | symbol>
 ): [string, boolean] {
   const compiled = c(schema);
-  const [id, prepare] = toContext("variant-" + index, compiled);
+  const [id, prepare] = toContext(index, compiled);
   preparations.push(prepare);
   const idAcc = getKeyAccessor(id);
   const funcSchema = compiled.pure

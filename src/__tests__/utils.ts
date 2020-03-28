@@ -1,9 +1,10 @@
-// import { getDescription } from "./getDescription";
+import { getDescription } from "./getDescription";
 
-export function snapshot(validator: any) {
-  // const description = getDescription(validator);
+export function snapshot(validator: any, makeSnapshot = false) {
+  if (!makeSnapshot) return false
+  const description = getDescription(validator);
 
-  // expect(description).toMatchSnapshot();
+  expect(description).toMatchSnapshot();
 }
 export function getExplanation(
   validator: { (arg0: any): void; explanations: any },
