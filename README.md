@@ -13,7 +13,25 @@
   - [What could be a validation scheme?](#what-could-be-a-validation-scheme)
     - [Primitives](#primitives)
     - [Schemes out of the box](#schemes-out-of-the-box)
+      - [`v.boolean: Schema`](#vboolean-schema)
+      - [`v.finite: Schema`](#vfinite-schema)
+      - [`v.function: Schema`](#vfunction-schema)
+      - [`v.negative: Schema`](#vnegative-schema)
+      - [`v.number: Schema`](#vnumber-schema)
+      - [`v.positive: Schema`](#vpositive-schema)
+      - [`v.safeInteger: Schema`](#vsafeinteger-schema)
+      - [`v.string: Schema`](#vstring-schema)
+      - [`v.symbol: Schema`](#vsymbol-schema)
     - [Schemes created using quartet methods](#schemes-created-using-quartet-methods)
+      - [`v.and(...schemes: Schema[]): Schema`](#vandschemes-schema-schema)
+      - [`v.arrayOf(elemSchema: Schema): Schema`](#varrayofelemschema-schema-schema)
+      - [`v.custom(checkFunction: (x: any) => boolean): Schema`](#vcustomcheckfunction-x-any--boolean-schema)
+      - [`v.max(maxValue: number, isExclusive?: boolean): Schema`](#vmaxmaxvalue-number-isexclusive-boolean-schema)
+      - [`v.maxLength(maxLength: number, isExclusive?: boolean): Schema`](#vmaxlengthmaxlength-number-isexclusive-boolean-schema)
+      - [`v.min(minValue: number, isExclusive?: boolean): Schema`](#vminminvalue-number-isexclusive-boolean-schema)
+      - [`v.minLength(minLength: number, isExclusive?: number): Schema`](#vminlengthminlength-number-isexclusive-number-schema)
+      - [`v.not(schema: Schema): Schema`](#vnotschema-schema-schema)
+      - [`v.test(tester: { test(x: any) => boolean }): Schema`](#vtesttester--testx-any--boolean--schema)
     - [Variant schemes](#variant-schemes)
     - [The schema for an object is an object](#the-schema-for-an-object-is-an-object)
   - [Conclusions](#conclusions)
@@ -133,19 +151,19 @@ const checkResponse = v<Response>({
 
 Первое что нужно усвоить это основной порядок действий:
 
-1) Установка
+- Установка
 
 ```
 npm i -S quartet
 ```
 
-2) Импортируйте "компилятор" схем:
+- Импортируйте "компилятор" схем:
 
 ```typescript
 import { v } from 'quartet'
 ```
 
-3) Опишите тип значения, который вы хотите проверить.
+- Опишите тип значения, который вы хотите проверить.
    
 Этот шаг не обязательный, и если вы не пользуетесь TypeScript - можете его смело пропускать. Просто он вам поможет написать схему валидации.
 
@@ -153,13 +171,13 @@ import { v } from 'quartet'
 type MyType = // ...
 ```
 
-4) Создайте схему валидации
+- Создайте схему валидации
 
 ```typescript
 const myTypeSchema = // ...
 ```
 
-5) "Скомпилируйте" эту схему в функцию валидации
+- "Скомпилируйте" эту схему в функцию валидации
 
 ```typescript
 const checkMyType = v<MyType>(myTypeSchema)
@@ -171,7 +189,7 @@ const checkMyType = v<MyType>(myTypeSchema)
 const checkMyType = v(myTypeSchema)
 ```
 
-6) Используйте `checkMyType` на тех данных, в которых вы не уверены. Она вернёт `true`, если данные валидны. Она вернёт `false` если данные не валидны.
+- Используйте `checkMyType` на тех данных, в которых вы не уверены. Она вернёт `true`, если данные валидны. Она вернёт `false` если данные не валидны.
 
 (Смотрите пункт "Advanced Quartet" если хотите большего)
 
@@ -203,7 +221,7 @@ const is42 = x => x === 42
 
 В `quartet` предусмотрены заготовленные схемы для определённых проверок. Они находятся в свойствах функции-компилятора `v`.
 
-1) `v.boolean: Schema`
+#### `v.boolean: Schema`
 
 ```typescript
 const checkBoolean = v(v.boolean)
@@ -211,7 +229,7 @@ const checkBoolean = v(v.boolean)
 const checkBoolean = x => typeof x === 'boolean'
 ```
 
-2) `v.finite: Schema`
+#### `v.finite: Schema`
 
 ```typescript
 const checkFinite = v(v.finite)
@@ -219,7 +237,7 @@ const checkFinite = v(v.finite)
 const checkFinite = x => Number.isFinite(x)
 ```
 
-3) `v.function: Schema`
+#### `v.function: Schema`
 
 ```typescript
 const checkFunction = v(v.function)
@@ -227,7 +245,7 @@ const checkFunction = v(v.function)
 const checkFunction = x => typeof x === 'function'
 ```
 
-4) `v.negative: Schema`
+#### `v.negative: Schema`
 
 ```typescript
 const checkNegative = v(v.negative)
@@ -235,7 +253,7 @@ const checkNegative = v(v.negative)
 const checkNegative = x => x < 0
 ```
 
-5) `v.number: Schema`
+#### `v.number: Schema`
 
 ```typescript
 const checkNumber = v(v.number)
@@ -243,7 +261,7 @@ const checkNumber = v(v.number)
 const checkNumber = x => typeof x === 'number'
 ```
 
-6) `v.positive: Schema`
+#### `v.positive: Schema`
 
 ```typescript
 const checkPositive = v(v.positive)
@@ -251,7 +269,7 @@ const checkPositive = v(v.positive)
 const checkPositive = x => x > 0
 ```
 
-7) `v.safeInteger: Schema`
+#### `v.safeInteger: Schema`
 
 ```typescript
 const checkSafeInteger = v(v.safeInteger)
@@ -259,7 +277,7 @@ const checkSafeInteger = v(v.safeInteger)
 const checkSafeInteger = x => Number.isSafeInteger(x)
 ```
 
-8) `v.string: Schema`
+#### `v.string: Schema`
 
 ```typescript
 const checkString = v(v.string)
@@ -267,7 +285,7 @@ const checkString = v(v.string)
 const checkString = x => typeof x === 'string'
 ```
 
-9) `v.symbol: Schema`
+#### `v.symbol: Schema`
 
 ```typescript
 const checkSymbol = v(v.symbol)
@@ -279,7 +297,7 @@ const checkSymbol = x => typeof x === 'symbol'
 
 У функции-компилятора также есть методы
 
-1) `v.and(...schemes: Schema[]): Schema`
+#### `v.and(...schemes: Schema[]): Schema`
 
 Создаёт как бы соединение схем с помощью логического И (как оператор `&&`)
 
@@ -296,7 +314,7 @@ const isPositiveNumber = x => {
 }
 ```
 
-2) `v.arrayOf(elemSchema: Schema): Schema`
+#### `v.arrayOf(elemSchema: Schema): Schema`
 
 По схеме елемента создаёт схему валидации массива этих елементов:
 
@@ -318,7 +336,7 @@ const checkPositiveNumbersArray = x => {
 }
 ```
 
-3) `v.custom(checkFunction: (x: any) => boolean): Schema`
+#### `v.custom(checkFunction: (x: any) => boolean): Schema`
 
 По функции валидации создаёт схему.
 
@@ -343,7 +361,7 @@ const checkPositiveEvenNumber = x => {
 
 (Смотрите пункт "Advanced Quartet" если хотите большего)
 
-4) `v.max(maxValue: number, isExclusive?: boolean): Schema`
+#### `v.max(maxValue: number, isExclusive?: boolean): Schema`
 
 По максимальному(или граничному) числу возвращает соответствующую схему валидации
 
@@ -359,7 +377,7 @@ const checkLessThanFive = v(v.max(5, true))
 const checkLessThanFive = x => x < 5
 ```
 
-5) `v.maxLength(maxLength: number, isExclusive?: boolean): Schema`
+#### `v.maxLength(maxLength: number, isExclusive?: boolean): Schema`
 
 По максимальному(или граничному) значению длинны возвращает соответствующую cхему
 
@@ -376,7 +394,7 @@ const checkSmallArray = x => x != null && x.length < 140
 const checkTwitterText = v({ length: v.max(20, true) })
 ```
 
-6) `v.min(minValue: number, isExclusive?: boolean): Schema`
+#### `v.min(minValue: number, isExclusive?: boolean): Schema`
 
 По минимальному(или граничному) числу возвращает соответствующую схему валидации
 
@@ -392,7 +410,7 @@ const checkPositive = x => x > 0
 const checkPositive = v(v.positive)
 ```
 
-7) `v.minLength(minLength: number, isExclusive?: number): Schema`
+#### `v.minLength(minLength: number, isExclusive?: number): Schema`
 
 По максимальному(или граничному) значению длинны возвращает соответствующую cхему.
 
@@ -410,7 +428,7 @@ const checkNotEmptyStringOrArray = v({ length: v.min(0, true) })
 
 ```
 
-8) `v.not(schema: Schema): Schema`
+#### `v.not(schema: Schema): Schema`
    
 Как бы применяет логическое отрицание(оператор `!`) к переданной схеме. Возвращает схему "обратную" к переданной
 
@@ -422,7 +440,7 @@ const checkIsNotNullOrUndefined = v(
 )
 ```
 
-9) `v.test(tester: { test(x: any) => boolean }): Schema`
+#### `v.test(tester: { test(x: any) => boolean }): Schema`
 
 По объекту с методом `test` возвращает схему, которая проверяет возвращает ли данные метод на проверяемом значении `true`.
 
