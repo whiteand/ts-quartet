@@ -40,7 +40,7 @@
 
 ## Examples
 
-Примеры смотрите [здесь](https://github.com/whiteand/ts-quartet/tree/master/examples).
+Примеры смотрите [здесь](https://github.com/whiteand/ts-quartet/tree/master/examples/javascript).
 
 ## Benchmarks
 
