@@ -9,7 +9,7 @@
  *  prop: propSchema,
  *  prop2: propSchema2,
  *  ...,
- *  [v.rest]: otherPropsSchema
+ *  [v.rest]?: otherPropsSchema
  * }
  */
 

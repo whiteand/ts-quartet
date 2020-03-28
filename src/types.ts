@@ -1,72 +1,85 @@
-import { IMethods } from "./methods";
-
-export interface IKeyParentSchema {
-  key: any;
-  parent: any;
-  schema: any;
+export interface IContext {
+  explanations: any[];
+  pure: boolean;
+  [key: string]: any;
+}
+export type Prepare = (ctx: IContext) => void;
+export type HandleError = (valueId: string, ctxId: string) => string;
+export interface IFunctionSchemaResult {
+  prepare?: Prepare;
+  check: (valueId: string, ctxId: string) => string;
+  handleError?: HandleError;
+  not?: (valudId: string, ctxId: string) => string;
 }
 
-export type Validator = (
-  value?: any,
-  explanations?: any[],
-  parents?: IKeyParentSchema[]
-) => boolean;
+export type FunctionSchema = () => IFunctionSchemaResult;
 
-export type ValidatorWithSchema<T = Schema> = Validator & { schema: T };
+export interface IObjectSchema {
+  "__quartet/rest-omit__"?: string[];
+  [key: string]: Schema;
+}
+export interface IVariantSchema extends Array<Schema> {}
+export type ConstantSchema =
+  | undefined
+  | null
+  | boolean
+  | number
+  | string
+  | symbol;
+export type Schema =
+  | FunctionSchema
+  | ConstantSchema
+  | IObjectSchema
+  | IVariantSchema;
+
+export type HandleSchemaHandler<T extends Schema, R> = (schema: T) => R;
+export interface IHandleSchemaHandlers<R> {
+  constant: HandleSchemaHandler<ConstantSchema, R>;
+  function: HandleSchemaHandler<FunctionSchema, R>;
+  object: HandleSchemaHandler<IObjectSchema, R>;
+  objectRest: HandleSchemaHandler<IObjectSchema, R>;
+  variant: HandleSchemaHandler<IVariantSchema, R>;
+}
 
 export interface ITest {
   test: (value: any) => boolean;
 }
 
-export interface IObjectSchema {
-  [key: string]: Schema;
+export type CustomFunction = ((value: any) => boolean) & {
+  explanations?: any[];
+  pure?: boolean;
+};
+
+export type CompilationResult = ((value: any) => boolean) & IContext;
+export type TypedCompilationResult<T> = ((value: any) => value is T) & IContext;
+
+export interface IMethods {
+  and: (...schemas: Schema[]) => FunctionSchema;
+  arrayOf: (schema: Schema) => FunctionSchema;
+  boolean: FunctionSchema;
+  compileAnd: (<T = any>(...schemas: Schema[]) => TypedCompilationResult<T>) &
+    ((...schemas: Schema[]) => CompilationResult);
+  compileArrayOf: (<T = any>(schema: Schema) => TypedCompilationResult<T[]>) &
+    ((schema: Schema) => CompilationResult);
+  custom: (check: CustomFunction, explanation?: any) => FunctionSchema;
+  finite: FunctionSchema;
+  function: FunctionSchema;
+  max: (maxValue: number, exclusive?: boolean) => FunctionSchema;
+  maxLength: (maxLength: number, exclusive?: boolean) => FunctionSchema;
+  min: (minValue: number, exclusive?: boolean) => FunctionSchema;
+  minLength: (minLength: number, exclusive?: boolean) => FunctionSchema;
+  negative: FunctionSchema;
+  not: (schema: Schema) => FunctionSchema;
+  number: FunctionSchema;
+  positive: FunctionSchema;
+  rest: "__quartet/rest__";
+  restOmit: "__quartet/rest-omit__";
+  safeInteger: FunctionSchema;
+  string: FunctionSchema;
+  symbol: FunctionSchema;
+  test: (test: ITest) => FunctionSchema;
 }
 
-export type TypeGuardValidator<T = any> = (
-  value?: any,
-  explanations?: any[],
-  parents?: IKeyParentSchema[]
-) => value is T;
-
-export type Schema =
-  | boolean
-  | null
-  | number
-  | string
-  | symbol
-  | undefined
-  | IObjectSchema
-  | IVariantSchema
-  | Validator;
-
-export interface IVariantSchema extends Array<Schema> {}
-
-export type FromValidationParams<T = any> = (
-  value: any,
-  schema: Schema,
-  settings: InstanceSettings,
-  parents?: IKeyParentSchema[]
-) => T;
-export type Explanation<T = any> = T | FromValidationParams<T>;
-
-export interface IDictionary<T = any> {
-  [key: string]: T;
-}
-
-export type InstanceSettings = Partial<{
-  defaultExplanation: Explanation;
-  allErrors: boolean;
-}>;
-
-export type CompilerFunction = <T = any>(
-  schema?: Schema,
-  explanation?: Explanation,
-  innerSettings?: InstanceSettings
-) => TypeGuardValidator<T>;
-
-export type GetFromSettings<T = Validator> = (settings: InstanceSettings) => T;
-
-export type Quartet = (settings?: InstanceSettings) => QuartetInstance;
-
-export type QuartetInstance = CompilerFunction &
-  IMethods & { rest: string; settings: InstanceSettings };
+export type QuartetInstance = IMethods &
+  (<T>(schema: Schema) => TypedCompilationResult<T>) &
+  ((schema: Schema) => CompilationResult);

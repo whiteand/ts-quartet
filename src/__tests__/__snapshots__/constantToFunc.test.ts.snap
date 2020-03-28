@@ -1,0 +1,101 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`constantToFunc works 1`] = `"value === undefined"`;
+
+exports[`constantToFunc works 2`] = `undefined`;
+
+exports[`constantToFunc works 3`] = `"value !== undefined"`;
+
+exports[`constantToFunc works 4`] = `undefined`;
+
+exports[`constantToFunc works 5`] = `"value === null"`;
+
+exports[`constantToFunc works 6`] = `undefined`;
+
+exports[`constantToFunc works 7`] = `"value !== null"`;
+
+exports[`constantToFunc works 8`] = `undefined`;
+
+exports[`constantToFunc works 9`] = `"value === true"`;
+
+exports[`constantToFunc works 10`] = `undefined`;
+
+exports[`constantToFunc works 11`] = `"value !== true"`;
+
+exports[`constantToFunc works 12`] = `undefined`;
+
+exports[`constantToFunc works 13`] = `"value === false"`;
+
+exports[`constantToFunc works 14`] = `undefined`;
+
+exports[`constantToFunc works 15`] = `"value !== false"`;
+
+exports[`constantToFunc works 16`] = `undefined`;
+
+exports[`constantToFunc works 17`] = `"value === 0"`;
+
+exports[`constantToFunc works 18`] = `undefined`;
+
+exports[`constantToFunc works 19`] = `"value !== 0"`;
+
+exports[`constantToFunc works 20`] = `undefined`;
+
+exports[`constantToFunc works 21`] = `"value === 1"`;
+
+exports[`constantToFunc works 22`] = `undefined`;
+
+exports[`constantToFunc works 23`] = `"value !== 1"`;
+
+exports[`constantToFunc works 24`] = `undefined`;
+
+exports[`constantToFunc works 25`] = `"Number.isNaN(value)"`;
+
+exports[`constantToFunc works 26`] = `undefined`;
+
+exports[`constantToFunc works 27`] = `"!Number.isNaN(value)"`;
+
+exports[`constantToFunc works 28`] = `undefined`;
+
+exports[`constantToFunc works 29`] = `"value === Infinity"`;
+
+exports[`constantToFunc works 30`] = `undefined`;
+
+exports[`constantToFunc works 31`] = `"value !== Infinity"`;
+
+exports[`constantToFunc works 32`] = `undefined`;
+
+exports[`constantToFunc works 33`] = `"value === -Infinity"`;
+
+exports[`constantToFunc works 34`] = `undefined`;
+
+exports[`constantToFunc works 35`] = `"value !== -Infinity"`;
+
+exports[`constantToFunc works 36`] = `undefined`;
+
+exports[`constantToFunc works 37`] = `"value === \\"\\""`;
+
+exports[`constantToFunc works 38`] = `undefined`;
+
+exports[`constantToFunc works 39`] = `"value !== \\"\\""`;
+
+exports[`constantToFunc works 40`] = `undefined`;
+
+exports[`constantToFunc works 41`] = `"value === \\"Andrew\\""`;
+
+exports[`constantToFunc works 42`] = `undefined`;
+
+exports[`constantToFunc works 43`] = `"value !== \\"Andrew\\""`;
+
+exports[`constantToFunc works 44`] = `undefined`;
+
+exports[`constantToFunc works 45`] = `"value === validator.constant"`;
+
+exports[`constantToFunc works 46`] = `undefined`;
+
+exports[`constantToFunc works 47`] = `"value !== validator.constant"`;
+
+exports[`constantToFunc works 48`] = `
+Object {
+  "constant": Symbol(test),
+}
+`;

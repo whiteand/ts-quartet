@@ -2,10 +2,8 @@
   "transform": {
     "^.+\\.(t|j)sx?$": "ts-jest"
   },
-  "testPathIgnorePatterns": [
-    "/node_modules/",
-    "/examples/"
-  ],
-  "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
-  "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json", "node"]
+  "testPathIgnorePatterns": ["/node_modules/", "/examples/"],
+  "testRegex": "(/__tests__/.*.test.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+  "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json", "node"],
+  "collectCoverageFrom": ["src/*.ts"]
 }

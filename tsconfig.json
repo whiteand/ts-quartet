@@ -5,10 +5,8 @@
     "declaration": true,
     "outDir": "./lib",
     "strict": true,
-    "lib": [
-        "es2017",
-        "dom"
-    ]
+    "lib": ["es2017", "dom"],
+    "downlevelIteration": true
   },
   "include": ["src", "src/index.d.ts"],
   "exclude": ["node_modules", "**/__tests__/*", "examples"]
