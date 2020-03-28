@@ -2,13 +2,6 @@ import { v } from "../index";
 import { handleSchema } from "../handleSchema";
 import { funcSchema } from "./mocks";
 
-// 01. handleSchema(pureFunc)
-// 02. handleSchema(all primitives)
-// 03. handleSchema([])
-// 04. handleSchema({ a: 1 })
-// 05. handleSchema({ a: 1, [v.rest]: 2, [v.restOmit]: ['a'] })
-// 06. handleSchema({ a: 1, [v.restOmit]: ['a'] })
-
 describe("handleSchema", () => {
   test("switches in appropriate way", () => {
     const handle = handleSchema<any>({
