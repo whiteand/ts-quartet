@@ -260,6 +260,11 @@ describe("arrayOf", () => {
     const validator = v.compileArrayOf([]);
     expect(validator.pure).toBe(true);
     snapshot(validator);
+    puretables(
+      validator,
+      [[]],
+      [...primitives, { length: 0 }, [1]]
+    );
   });
   test("20. v.compileArrayOf([42])", () => {
     const validator = v.compileArrayOf([42]);
