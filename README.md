@@ -4,22 +4,22 @@
 [![Coverage Status](https://coveralls.io/repos/github/whiteand/ts-quartet/badge.svg?branch=master)](https://coveralls.io/github/whiteand/ts-quartet?branch=master)
 
 - [Quartet 9: Allegro](#quartet-9-allegro)
-  - [Примеры](#%d0%9f%d1%80%d0%b8%d0%bc%d0%b5%d1%80%d1%8b)
+  - [Examples](#examples)
   - [Benchmarks](#benchmarks)
-  - [Найди лишнее слово в списке](#%d0%9d%d0%b0%d0%b9%d0%b4%d0%b8-%d0%bb%d0%b8%d1%88%d0%bd%d0%b5%d0%b5-%d1%81%d0%bb%d0%be%d0%b2%d0%be-%d0%b2-%d1%81%d0%bf%d0%b8%d1%81%d0%ba%d0%b5)
-  - [Возражения](#%d0%92%d0%be%d0%b7%d1%80%d0%b0%d0%b6%d0%b5%d0%bd%d0%b8%d1%8f)
-  - [Признание](#%d0%9f%d1%80%d0%b8%d0%b7%d0%bd%d0%b0%d0%bd%d0%b8%d0%b5)
-  - [Как этим пользоваться?](#%d0%9a%d0%b0%d0%ba-%d1%8d%d1%82%d0%b8%d0%bc-%d0%bf%d0%be%d0%bb%d1%8c%d0%b7%d0%be%d0%b2%d0%b0%d1%82%d1%8c%d1%81%d1%8f)
-  - [Какие бывают схемы?](#%d0%9a%d0%b0%d0%ba%d0%b8%d0%b5-%d0%b1%d1%8b%d0%b2%d0%b0%d1%8e%d1%82-%d1%81%d1%85%d0%b5%d0%bc%d1%8b)
-    - [Примитивы](#%d0%9f%d1%80%d0%b8%d0%bc%d0%b8%d1%82%d0%b8%d0%b2%d1%8b)
-    - [Готовые схемы из коробки](#%d0%93%d0%be%d1%82%d0%be%d0%b2%d1%8b%d0%b5-%d1%81%d1%85%d0%b5%d0%bc%d1%8b-%d0%b8%d0%b7-%d0%ba%d0%be%d1%80%d0%be%d0%b1%d0%ba%d0%b8)
-    - [Схемы созданные с помощью методов quartet](#%d0%a1%d1%85%d0%b5%d0%bc%d1%8b-%d1%81%d0%be%d0%b7%d0%b4%d0%b0%d0%bd%d0%bd%d1%8b%d0%b5-%d1%81-%d0%bf%d0%be%d0%bc%d0%be%d1%89%d1%8c%d1%8e-%d0%bc%d0%b5%d1%82%d0%be%d0%b4%d0%be%d0%b2-quartet)
-    - [Вариантные схемы](#%d0%92%d0%b0%d1%80%d0%b8%d0%b0%d0%bd%d1%82%d0%bd%d1%8b%d0%b5-%d1%81%d1%85%d0%b5%d0%bc%d1%8b)
-    - [Cхема Валидации Объекта](#c%d1%85%d0%b5%d0%bc%d0%b0-%d0%92%d0%b0%d0%bb%d0%b8%d0%b4%d0%b0%d1%86%d0%b8%d0%b8-%d0%9e%d0%b1%d1%8a%d0%b5%d0%ba%d1%82%d0%b0)
-  - [Выводы](#%d0%92%d1%8b%d0%b2%d0%be%d0%b4%d1%8b)
+  - [Find an extra word in the list](#find-an-extra-word-in-the-list)
+  - [Objections](#objections)
+  - [Confession](#confession)
+  - [How to use it?](#how-to-use-it)
+  - [What could be a validation scheme?](#what-could-be-a-validation-scheme)
+    - [Primitives](#primitives)
+    - [Schemes out of the box](#schemes-out-of-the-box)
+    - [Schemes created using quartet methods](#schemes-created-using-quartet-methods)
+    - [Variant schemes](#variant-schemes)
+    - [The schema for an object is an object](#the-schema-for-an-object-is-an-object)
+  - [Conclusions](#conclusions)
   - [Advanced Quartet](#advanced-quartet)
 
-## Примеры
+## Examples
 
 Примеры смотрите [здесь](https://github.com/whiteand/ts-quartet/tree/master/examples).
 
@@ -28,7 +28,7 @@
 `// TODO: Write it!`
 
 
-## Найди лишнее слово в списке
+## Find an extra word in the list
 
 - Чужое API
 - Typescript
@@ -105,7 +105,7 @@ const { user } = userResponse; // имеет тип Response
 
 Мы получили всё то, что хотели!
 
-## Возражения
+## Objections
 
 Вы можете сказать: Как же вы можете называть функцию `checkResponse` простой?
 Мы бы согласились, если бы она была такой же декларативной как сам тип `Response`. Что то на подобие:
@@ -124,27 +124,27 @@ const checkResponse = v<Response>({
 
 Да! Любой бы с этим согласился. Такой подход был бы крайне удобным. Но только при условии, что производительность останется на том же уровне, что и у императивной версии.
 
-## Признание
+## Confession
 
 Это именно то, что предоставляет вам эта библиотека. Надеюсь этот пример вас воодушевит читать дальше и в последствии начать пользоваться данной библиотекой.
 
-## Как этим пользоваться?
+## How to use it?
 
 Первое что нужно усвоить это основной порядок действий:
 
-1. Установка
+1) Установка
 
 ```
 npm i -S quartet
 ```
 
-2. Импортируйте "компилятор" схем:
+2) Импортируйте "компилятор" схем:
 
 ```typescript
 import { v } from 'quartet'
 ```
 
-3. Опишите тип значения, который вы хотите проверить.
+3) Опишите тип значения, который вы хотите проверить.
    
 Этот шаг не обязательный, и если вы не пользуетесь TypeScript - можете его смело пропускать. Просто он вам поможет написать схему валидации.
 
@@ -152,13 +152,13 @@ import { v } from 'quartet'
 type MyType = // ...
 ```
 
-4. Создайте схему валидации
+4) Создайте схему валидации
 
 ```typescript
 const myTypeSchema = // ...
 ```
 
-5. "Скомпилируйте" эту схему в функцию валидации
+5) "Скомпилируйте" эту схему в функцию валидации
 
 ```typescript
 const checkMyType = v<MyType>(myTypeSchema)
@@ -170,13 +170,13 @@ const checkMyType = v<MyType>(myTypeSchema)
 const checkMyType = v(myTypeSchema)
 ```
 
-6. Используйте `checkMyType` на тех данных, в которых вы не уверены. Она вернёт `true`, если данные валидны. Она вернёт `false` если данные не валидны.
+6) Используйте `checkMyType` на тех данных, в которых вы не уверены. Она вернёт `true`, если данные валидны. Она вернёт `false` если данные не валидны.
 
 (Смотрите пункт "Advanced Quartet" если хотите большего)
 
-## Какие бывают схемы?
+## What could be a validation scheme?
 
-### Примитивы
+### Primitives
 
 Каждое примитивное значение Javascript является собственной схемой валидации.
 
@@ -198,11 +198,11 @@ const is42 = x => x === 42
 
 Примитивами считаются все значения Javascript, за исключением объектов(массивов в том числе) и функций. То есть: `undefined`, `null`, `false`, `true`, числа(`NaN`, `Infinity`, `-Infinity` в том числе) и строки.
 
-### Готовые схемы из коробки
+### Schemes out of the box
 
 В `quartet` предусмотрены заготовленные схемы для определённых проверок. Они находятся в свойствах функции-компилятора `v`.
 
-1. `v.boolean: Schema`
+1) `v.boolean: Schema`
 
 ```typescript
 const checkBoolean = v(v.boolean)
@@ -210,7 +210,7 @@ const checkBoolean = v(v.boolean)
 const checkBoolean = x => typeof x === 'boolean'
 ```
 
-2. `v.finite: Schema`
+2) `v.finite: Schema`
 
 ```typescript
 const checkFinite = v(v.finite)
@@ -218,7 +218,7 @@ const checkFinite = v(v.finite)
 const checkFinite = x => Number.isFinite(x)
 ```
 
-3. `v.function: Schema`
+3) `v.function: Schema`
 
 ```typescript
 const checkFunction = v(v.function)
@@ -226,7 +226,7 @@ const checkFunction = v(v.function)
 const checkFunction = x => typeof x === 'function'
 ```
 
-4. `v.negative: Schema`
+4) `v.negative: Schema`
 
 ```typescript
 const checkNegative = v(v.negative)
@@ -234,7 +234,7 @@ const checkNegative = v(v.negative)
 const checkNegative = x => x < 0
 ```
 
-5. `v.number: Schema`
+5) `v.number: Schema`
 
 ```typescript
 const checkNumber = v(v.number)
@@ -242,7 +242,7 @@ const checkNumber = v(v.number)
 const checkNumber = x => typeof x === 'number'
 ```
 
-6. `v.positive: Schema`
+6) `v.positive: Schema`
 
 ```typescript
 const checkPositive = v(v.positive)
@@ -250,7 +250,7 @@ const checkPositive = v(v.positive)
 const checkPositive = x => x > 0
 ```
 
-7. `v.safeInteger: Schema`
+7) `v.safeInteger: Schema`
 
 ```typescript
 const checkSafeInteger = v(v.safeInteger)
@@ -258,7 +258,7 @@ const checkSafeInteger = v(v.safeInteger)
 const checkSafeInteger = x => Number.isSafeInteger(x)
 ```
 
-8. `v.string: Schema`
+8) `v.string: Schema`
 
 ```typescript
 const checkString = v(v.string)
@@ -266,7 +266,7 @@ const checkString = v(v.string)
 const checkString = x => typeof x === 'string'
 ```
 
-9. `v.symbol: Schema`
+9) `v.symbol: Schema`
 
 ```typescript
 const checkSymbol = v(v.symbol)
@@ -274,11 +274,11 @@ const checkSymbol = v(v.symbol)
 const checkSymbol = x => typeof x === 'symbol'
 ```
 
-### Схемы созданные с помощью методов quartet
+### Schemes created using quartet methods
 
 У функции-компилятора также есть методы
 
-1. `v.and(...schemas: Schema[]): Schema`
+1) `v.and(...schemes: Schema[]): Schema`
 
 Создаёт как бы соединение схем с помощью логического И (как оператор `&&`)
 
@@ -295,7 +295,7 @@ const isPositiveNumber = x => {
 }
 ```
 
-2. `v.arrayOf(elemSchema: Schema): Schema`
+2) `v.arrayOf(elemSchema: Schema): Schema`
 
 По схеме елемента создаёт схему валидации массива этих елементов:
 
@@ -317,7 +317,7 @@ const checkPositiveNumbersArray = x => {
 }
 ```
 
-3. `v.custom(checkFunction: (x: any) => boolean): Schema`
+3) `v.custom(checkFunction: (x: any) => boolean): Schema`
 
 По функции валидации создаёт схему.
 
@@ -342,7 +342,7 @@ const checkPositiveEvenNumber = x => {
 
 (Смотрите пункт "Advanced Quartet" если хотите большего)
 
-4. `v.max(maxValue: number, isExclusive?: boolean): Schema`
+4) `v.max(maxValue: number, isExclusive?: boolean): Schema`
 
 По максимальному(или граничному) числу возвращает соответствующую схему валидации
 
@@ -358,7 +358,7 @@ const checkLessThanFive = v(v.max(5, true))
 const checkLessThanFive = x => x < 5
 ```
 
-5. `v.maxLength(maxLength: number, isExclusive?: boolean): Schema`
+5) `v.maxLength(maxLength: number, isExclusive?: boolean): Schema`
 
 По максимальному(или граничному) значению длинны возвращает соответствующую cхему
 
@@ -375,7 +375,7 @@ const checkSmallArray = x => x != null && x.length < 140
 const checkTwitterText = v({ length: v.max(20, true) })
 ```
 
-6. `v.min(minValue: number, isExclusive?: boolean): Schema`
+6) `v.min(minValue: number, isExclusive?: boolean): Schema`
 
 По минимальному(или граничному) числу возвращает соответствующую схему валидации
 
@@ -391,7 +391,7 @@ const checkPositive = x => x > 0
 const checkPositive = v(v.positive)
 ```
 
-7. `v.minLength(minLength: number, isExclusive?: number): Schema`
+7) `v.minLength(minLength: number, isExclusive?: number): Schema`
 
 По максимальному(или граничному) значению длинны возвращает соответствующую cхему.
 
@@ -409,7 +409,7 @@ const checkNotEmptyStringOrArray = v({ length: v.min(0, true) })
 
 ```
 
-8. `v.not(schema: Schema): Schema`
+8) `v.not(schema: Schema): Schema`
    
 Как бы применяет логическое отрицание(оператор `!`) к переданной схеме. Возвращает схему "обратную" к переданной
 
@@ -421,7 +421,7 @@ const checkIsNotNullOrUndefined = v(
 )
 ```
 
-9. `v.test(tester: { test(x: any) => boolean }): Schema`
+9) `v.test(tester: { test(x: any) => boolean }): Schema`
 
 По объекту с методом `test` возвращает схему, которая проверяет возвращает ли данные метод на проверяемом значении `true`.
 
@@ -435,7 +435,7 @@ const checkIntegerNumberString = v(v.test(/[1-9]\d*/))
 const checkIntegerNumberString = x => /[1-9]\d*/.test(x)
 ```
 
-### Вариантные схемы
+### Variant schemes
 
 Массив схем выступает как бы соединением схем с помощью логической операции ИЛИ(оператор `||`)
 
@@ -472,7 +472,7 @@ const checkRating = x => {
 }
 ```
 
-### Cхема Валидации Объекта
+### The schema for an object is an object
 
 Объект, где значения являются схемами выступает схемой валидации объекта. Где соответствующие поля валидируется соответствующими схемами.
 
@@ -516,7 +516,7 @@ const checkPhoneBookWithAuthorId = v({
 })
 ```
 
-## Выводы
+## Conclusions
 
 Используя эти схемы и комбинируя их вы можете декларативно описывать функции валидации, а функция-компилятор `v` создаст функцию, которая в императивном стиле проверит значение на соответствие вашей схеме.
 
