@@ -3,9 +3,30 @@
 [![Build Status](https://travis-ci.com/whiteand/ts-quartet.svg?branch=master)](https://travis-ci.com/whiteand/ts-quartet)
 [![Coverage Status](https://coveralls.io/repos/github/whiteand/ts-quartet/badge.svg?branch=master)](https://coveralls.io/github/whiteand/ts-quartet?branch=master)
 
+- [Quartet 9: Allegro](#quartet-9-allegro)
+  - [Примеры](#%d0%9f%d1%80%d0%b8%d0%bc%d0%b5%d1%80%d1%8b)
+  - [Benchmarks](#benchmarks)
+  - [Найди лишнее слово в списке](#%d0%9d%d0%b0%d0%b9%d0%b4%d0%b8-%d0%bb%d0%b8%d1%88%d0%bd%d0%b5%d0%b5-%d1%81%d0%bb%d0%be%d0%b2%d0%be-%d0%b2-%d1%81%d0%bf%d0%b8%d1%81%d0%ba%d0%b5)
+  - [Возражения](#%d0%92%d0%be%d0%b7%d1%80%d0%b0%d0%b6%d0%b5%d0%bd%d0%b8%d1%8f)
+  - [Признание](#%d0%9f%d1%80%d0%b8%d0%b7%d0%bd%d0%b0%d0%bd%d0%b8%d0%b5)
+  - [Как этим пользоваться?](#%d0%9a%d0%b0%d0%ba-%d1%8d%d1%82%d0%b8%d0%bc-%d0%bf%d0%be%d0%bb%d1%8c%d0%b7%d0%be%d0%b2%d0%b0%d1%82%d1%8c%d1%81%d1%8f)
+  - [Какие бывают схемы?](#%d0%9a%d0%b0%d0%ba%d0%b8%d0%b5-%d0%b1%d1%8b%d0%b2%d0%b0%d1%8e%d1%82-%d1%81%d1%85%d0%b5%d0%bc%d1%8b)
+    - [Примитивы](#%d0%9f%d1%80%d0%b8%d0%bc%d0%b8%d1%82%d0%b8%d0%b2%d1%8b)
+    - [Готовые схемы из коробки](#%d0%93%d0%be%d1%82%d0%be%d0%b2%d1%8b%d0%b5-%d1%81%d1%85%d0%b5%d0%bc%d1%8b-%d0%b8%d0%b7-%d0%ba%d0%be%d1%80%d0%be%d0%b1%d0%ba%d0%b8)
+    - [Схемы созданные с помощью методов quartet](#%d0%a1%d1%85%d0%b5%d0%bc%d1%8b-%d1%81%d0%be%d0%b7%d0%b4%d0%b0%d0%bd%d0%bd%d1%8b%d0%b5-%d1%81-%d0%bf%d0%be%d0%bc%d0%be%d1%89%d1%8c%d1%8e-%d0%bc%d0%b5%d1%82%d0%be%d0%b4%d0%be%d0%b2-quartet)
+    - [Вариантные схемы](#%d0%92%d0%b0%d1%80%d0%b8%d0%b0%d0%bd%d1%82%d0%bd%d1%8b%d0%b5-%d1%81%d1%85%d0%b5%d0%bc%d1%8b)
+    - [Cхема Валидации Объекта](#c%d1%85%d0%b5%d0%bc%d0%b0-%d0%92%d0%b0%d0%bb%d0%b8%d0%b4%d0%b0%d1%86%d0%b8%d0%b8-%d0%9e%d0%b1%d1%8a%d0%b5%d0%ba%d1%82%d0%b0)
+  - [Выводы](#%d0%92%d1%8b%d0%b2%d0%be%d0%b4%d1%8b)
+  - [Advanced Quartet](#advanced-quartet)
+
 ## Примеры
 
 Примеры смотрите [здесь](https://github.com/whiteand/ts-quartet/tree/master/examples).
+
+## Benchmarks
+
+`// TODO: Write it!`
+
 
 ## Найди лишнее слово в списке
 
@@ -151,7 +172,7 @@ const checkMyType = v(myTypeSchema)
 
 6. Используйте `checkMyType` на тех данных, в которых вы не уверены. Она вернёт `true`, если данные валидны. Она вернёт `false` если данные не валидны.
 
-(Смотрите статью "Advanced Quartet" если хотите большего)
+(Смотрите пункт "Advanced Quartet" если хотите большего)
 
 ## Какие бывают схемы?
 
@@ -259,7 +280,7 @@ const checkSymbol = x => typeof x === 'symbol'
 
 1. `v.and(...schemas: Schema[]): Schema`
 
-Создаёт как бы соединение схем с помощью логического И (как оператор &&)
+Создаёт как бы соединение схем с помощью логического И (как оператор `&&`)
 
 ```typescript
 const positiveNumberSchema = v.and(v.number, v.positive)
@@ -294,8 +315,6 @@ const checkPositiveNumbersArray = x => {
   }
   return true
 }
-
-
 ```
 
 3. `v.custom(checkFunction: (x: any) => boolean): Schema`
@@ -321,7 +340,7 @@ const checkPositiveEvenNumber = x => {
 
 ```
 
-(Читайте Advanced Quartet если хотите большего)
+(Смотрите пункт "Advanced Quartet" если хотите большего)
 
 4. `v.max(maxValue: number, isExclusive?: boolean): Schema`
 
@@ -331,8 +350,9 @@ const checkPositiveEvenNumber = x => {
 const checkLessOrEqualToFive = v(v.max(5))
 // то же, что
 const checkLessOrEqualToFive = x => x <= 5
+```
 
-
+```typescript
 const checkLessThanFive = v(v.max(5, true))
 // то же, что
 const checkLessThanFive = x => x < 5
@@ -340,44 +360,166 @@ const checkLessThanFive = x => x < 5
 
 5. `v.maxLength(maxLength: number, isExclusive?: boolean): Schema`
 
-По максимальному(или граничному) значению длинны возвращает соответствующую функцию
+По максимальному(или граничному) значению длинны возвращает соответствующую cхему
 
 ```typescript
 const checkTwitterText = v(v.maxLength(140))
 // то же, что
-const checkTwitterText = x => x.length <= 140
-
+const checkTwitterText = x => x != null && x.length <= 140
+const checkTwitterText = v({ length: v.max(140) })
+```
+```typescript
 const checkSmallArray = v(v.maxLength(20, true))
 // то же, что
-const checkSmallArray = x => x.length < 140
+const checkSmallArray = x => x != null && x.length < 140
+const checkTwitterText = v({ length: v.max(20, true) })
 ```
 
-1. `v.min(minValue: number, isExclusive?: boolean): Schema`
+6. `v.min(minValue: number, isExclusive?: boolean): Schema`
 
-По максимальному(или граничному) числу возвращает соответствующую схему валидации
+По минимальному(или граничному) числу возвращает соответствующую схему валидации
 
 ```typescript
-
-
+const checkNonNegative = v(v.min(0))
+// то же, что
+const checkNonNegative = x => x >= 0
+```
+```typescript
+const checkPositive = v(v.min(0, true))
+// то же, что
+const checkPositive = x => x > 0
+const checkPositive = v(v.positive)
 ```
 
-7. `v.minLength`
+7. `v.minLength(minLength: number, isExclusive?: number): Schema`
+
+По максимальному(или граничному) значению длинны возвращает соответствующую cхему.
 
 ```typescript
-
+const checkLargeArrayOrString = v(v.minLength(1024))
+// то же, что
+const checkLargeArrayOrString = x => x != null && x.length >= 1024
+const checkLargeArrayOrString = v({ length: v.min(1024) })
+```
+```typescript
+const checkNotEmptyStringOrArray = v(v.minLength(0, true))
+// то же, что
+const checkNotEmptyStringOrArray = x => x != null && x.length > 0
+const checkNotEmptyStringOrArray = v({ length: v.min(0, true) })
 
 ```
 
-8. `v.not`
+8. `v.not(schema: Schema): Schema`
+   
+Как бы применяет логическое отрицание(оператор `!`) к переданной схеме. Возвращает схему "обратную" к переданной
 
 ```typescript
-
-
+const checkNonPositive = v(v.not(v.positive))
+const checkNot42 = v(v.not(42))
+const checkIsNotNullOrUndefined = v(
+  v.and(v.not(null), v.not(undefined))
+)
 ```
 
-9. `v.test`
+9. `v.test(tester: { test(x: any) => boolean }): Schema`
+
+По объекту с методом `test` возвращает схему, которая проверяет возвращает ли данные метод на проверяемом значении `true`.
+
+Чаще всего используется с Regular Expressions.
+
+`v.test(tester) === v.custom(x => tester.test(x))`
 
 ```typescript
-
-
+const checkIntegerNumberString = v(v.test(/[1-9]\d*/))
+// то же, что
+const checkIntegerNumberString = x => /[1-9]\d*/.test(x)
 ```
+
+### Вариантные схемы
+
+Массив схем выступает как бы соединением схем с помощью логической операции ИЛИ(оператор `||`)
+
+```typescript
+const checkStringOrNull = v([v.string, null])
+// то же, что
+const checkStringOrNull = x => {
+  if (typeof x === 'string') return true
+  if (x === null) return true
+  return false
+}
+```
+
+```typescript
+const checkGender = v(['male', 'female'])
+// то же, что
+const VALID_GENDERS = { male: true, female: true }
+const checkStringOrNull = x => {
+  if (VALID_GENDERS[x] === true) return true
+  return false
+}
+```
+
+```typescript
+const checkRating = v([1,2,3,4,5])
+// то же, что
+const checkRating = x => {
+  if (x === 1) return true
+  if (x === 2) return true
+  if (x === 3) return true
+  if (x === 4) return true
+  if (x === 5) return true
+  return false
+}
+```
+
+### Cхема Валидации Объекта
+
+Объект, где значения являются схемами выступает схемой валидации объекта. Где соответствующие поля валидируется соответствующими схемами.
+
+```typescript
+const checkHelloWorld = v({ hello: 'World' })
+// то же, что
+const checkHelloWorld = x => {
+  if (x == null) return false
+  if (x.hello !== 'World') return false
+  return true
+}
+```
+
+Если вы хотите валидировать объекты с неизвестными заранее полями - используйте `v.rest`
+
+```typescript
+interface PhoneBook {
+  [name: string]: string
+}
+```
+
+```typescript
+const checkPhoneBook = v({
+  [v.rest]: v.string
+})
+```
+
+Схема по ключу `v.rest` будет валидировать все неуказанные поля.
+
+```typescript
+interface PhoneBookWithAuthorId {
+  authorId: number
+  [name: string]: string
+}
+```
+
+```typescript
+const checkPhoneBookWithAuthorId = v({
+  authorId: v.number,
+  [v.rest]: v.string,
+})
+```
+
+## Выводы
+
+Используя эти схемы и комбинируя их вы можете декларативно описывать функции валидации, а функция-компилятор `v` создаст функцию, которая в императивном стиле проверит значение на соответствие вашей схеме.
+
+## Advanced Quartet
+
+`// TODO: Write it!`
