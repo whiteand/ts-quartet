@@ -5,11 +5,11 @@ import { compileObjectSchemaWithRest } from "./compileObjectSchemaWithRest";
 import { compileVariants } from "./compileVariants";
 import { handleSchema } from "./handleSchema";
 import { methods } from "./methods";
-import { CompilationResult, QuartetInstance, Schema } from "./types";
 import { clearContextCounters } from "./toContext";
+import { CompilationResult, QuartetInstance, Schema } from "./types";
 
 export function quartet(): QuartetInstance {
-  const _compile = function _compile(s: Schema): CompilationResult {
+  const pureCompile = function _compile(s: Schema): CompilationResult {
     const compiled = handleSchema<CompilationResult>({
       constant: constant => compileConstant(constant),
       function: funcSchema => compileFunctionSchemaResult(funcSchema()),
@@ -23,7 +23,7 @@ export function quartet(): QuartetInstance {
   }
   const compilator = function compile(s: Schema): CompilationResult {
     clearContextCounters()
-    return _compile(s)
+    return pureCompile(s)
   };
   return Object.assign(compilator, methods) as QuartetInstance;
 }

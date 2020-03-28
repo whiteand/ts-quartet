@@ -1,11 +1,11 @@
 import { addTabs } from "./addTabs";
+import { compileIfNotValidReturnFalse } from "./compileIfNotValidReturnFalse";
 import {
   CompilationResult,
   Prepare,
   Schema,
   TypedCompilationResult
 } from "./types";
-import { compileIfNotValidReturnFalse } from "./compileIfNotValidReturnFalse";
 
 export function arrayOf<T = any>(
   c: (schema: Schema) => CompilationResult,

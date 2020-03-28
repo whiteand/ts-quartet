@@ -1,3 +1,5 @@
+import { constantToFunc } from "./constantToFunc";
+import { getKeyAccessor } from "./getKeyAccessor";
 import { handleSchema } from "./handleSchema";
 import { toContext } from "./toContext";
 import {
@@ -6,8 +8,6 @@ import {
   HandleSchemaHandler,
   Schema
 } from "./types";
-import { constantToFunc } from "./constantToFunc";
-import { getKeyAccessor } from "./getKeyAccessor";
 
 export function compileNot(
   c: (schema: Schema) => CompilationResult,

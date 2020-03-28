@@ -132,27 +132,20 @@
 
 ## handleSchema
 
-- handleSchema(pureFunc)
-- handleSchema(null)
-- handleSchema(all primitives)
-- handleSchema([])
-- handleSchema({ a: 1 })
-- handleSchema({ a: 1, [v.rest]: 2 })
-- handleSchema(pureFunc)
-- handleSchema(null)
-- handleSchema(all primitives)
-- handleSchema([])
-- handleSchema({ a: 1 })
-- handleSchema({ a: 1, [v.rest]: 2, [v.restOmit]: ['a'] })
-- handleSchema({ a: 1, [v.restOmit]: ['a'] })
+01. handleSchema(pureFunc)
+02. handleSchema(all primitives)
+03. handleSchema([])
+04. handleSchema({ a: 1 })
+05. handleSchema({ a: 1, [v.rest]: 2, [v.restOmit]: ['a'] })
+06. handleSchema({ a: 1, [v.restOmit]: ['a'] })
 
 ## has
 
-- has(null, 'Andrew')
-- has({}, 'toString')
-- has({}, 'toString2')
-- has({ toString: 'toString' }, 'toString')
-- has({ a: 1 }, 'a')
+
+
+
+
+
 
 ## index
 

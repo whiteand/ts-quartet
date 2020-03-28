@@ -1,6 +1,6 @@
 import { addTabs } from "./addTabs";
-import { compileObjectSchema } from "./compileObjectSchema";
-import { compileObjectSchemaWithRest } from "./compileObjectSchemaWithRest";
+import { constantToFunc } from "./constantToFunc";
+import { getKeyAccessor } from "./getKeyAccessor";
 import { handleSchema } from "./handleSchema";
 import { toContext } from "./toContext";
 import {
@@ -10,8 +10,7 @@ import {
   Prepare,
   Schema
 } from "./types";
-import { constantToFunc } from "./constantToFunc";
-import { getKeyAccessor } from "./getKeyAccessor";
+
 function defaultHandler(
   c: (schema: Schema) => CompilationResult,
   index: number,

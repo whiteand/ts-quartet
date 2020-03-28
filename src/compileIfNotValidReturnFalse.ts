@@ -1,11 +1,11 @@
 import { addTabs } from "./addTabs";
+import { constantToFunc } from "./constantToFunc";
 import { getKeyAccessor } from "./getKeyAccessor";
 import { handleSchema } from "./handleSchema";
-import { toContext } from "./toContext";
-import { CompilationResult, Prepare, Schema } from "./types";
-import { constantToFunc } from "./constantToFunc";
 import { methods } from "./methods";
+import { toContext } from "./toContext";
 import { toDict } from "./toDict";
+import { CompilationResult, Prepare, Schema } from "./types";
 
 function defaultHandler(
   c: (schema: Schema) => CompilationResult,

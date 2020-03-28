@@ -1,6 +1,6 @@
-import { CompilationResult, IObjectSchema, Schema, Prepare } from "./types";
-import { compileIfNotValidReturnFalse } from "./compileIfNotValidReturnFalse";
 import { addTabs } from "./addTabs";
+import { compileIfNotValidReturnFalse } from "./compileIfNotValidReturnFalse";
+import { CompilationResult, IObjectSchema, Prepare, Schema } from "./types";
 
 export function compileObjectSchemaWithRest(
   c: (schema: Schema) => CompilationResult,
@@ -19,6 +19,7 @@ export function compileObjectSchemaWithRest(
   );
   ctx.explanations = [];
   ctx.pure = isPure;
+  // tslint:disable-next-line
   for (let i = 0; i < preparations.length; i++) {
     preparations[i](ctx)
   }

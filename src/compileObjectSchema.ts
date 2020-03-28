@@ -1,6 +1,6 @@
 import { addTabs } from "./addTabs";
-import { CompilationResult, IObjectSchema, Prepare, Schema } from "./types";
 import { compileIfNotValidReturnFalse } from "./compileIfNotValidReturnFalse";
+import { CompilationResult, IObjectSchema, Prepare, Schema } from "./types";
 
 export function compileObjectSchema(
   c: (schema: Schema) => CompilationResult,

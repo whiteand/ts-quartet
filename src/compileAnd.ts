@@ -1,6 +1,6 @@
 import { addTabs } from "./addTabs";
-import { CompilationResult, Prepare, Schema } from "./types";
 import { compileIfNotValidReturnFalse } from "./compileIfNotValidReturnFalse";
+import { CompilationResult, Prepare, Schema } from "./types";
 
 export function compileAnd(
   c: (schema: Schema) => CompilationResult,

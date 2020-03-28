@@ -1,7 +1,8 @@
 export function toDict(
-  list: (string | symbol)[]
+  list: Array<string | symbol>
 ): Record<string | symbol, true> {
-  let res: Record<string | symbol, true> = {};
+  const res: Record<string | symbol, true> = {};
+  // tslint:disable-next-line
   for (let i = 0; i < list.length; i++) {
     (res as any)[list[i]] = true;
   }

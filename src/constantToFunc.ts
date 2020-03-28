@@ -1,6 +1,6 @@
-import { ConstantSchema, FunctionSchema } from "./types";
-import { toContext } from "./toContext";
 import { getKeyAccessor } from "./getKeyAccessor";
+import { toContext } from "./toContext";
+import { ConstantSchema, FunctionSchema } from "./types";
 
 export function constantToFunc(c: ConstantSchema): FunctionSchema {
   if (c === undefined) {

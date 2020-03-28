@@ -2,7 +2,7 @@ import { compileAnd } from "./compileAnd";
 import { arrayOf } from "./compileArrayOf";
 import { compileNot } from "./compileNot";
 import { getKeyAccessor } from "./getKeyAccessor";
-import { toContext, clearContextCounters } from "./toContext";
+import { clearContextCounters, toContext } from "./toContext";
 import {
   HandleError,
   IMethods,
