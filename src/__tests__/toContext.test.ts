@@ -62,4 +62,21 @@ describe("toContext", () => {
     expect(id1).toMatchInlineSnapshot(`"prefix"`);
     expect(id2).toMatchInlineSnapshot(`"prefix-1"`);
   });
+  test("add number when necessary", () => {
+    clearContextCounters();
+    const [id1, prepare1] = toContext("prefix", 42, true);
+    const [id2, prepare2] = toContext("prefix", 43, true);
+    const ctx: IContext = { explanations: [], pure: true };
+    prepare1(ctx);
+    prepare2(ctx);
+    expect(ctx).toMatchInlineSnapshot(`
+      Object {
+        "explanations": Array [],
+        "prefix": 43,
+        "pure": true,
+      }
+    `);
+    expect(id1).toMatchInlineSnapshot(`"prefix"`);
+    expect(id2).toMatchInlineSnapshot(`"prefix"`);
+  });
 });

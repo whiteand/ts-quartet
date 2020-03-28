@@ -1,6 +1,10 @@
 import { v } from "../index";
 import { snapshot, tables, puretables } from "./utils";
-import { funcSchemaWithNot, primitives } from "./mocks";
+import {
+  funcSchemaWithNot,
+  primitives,
+  funcSchemaWithNotWithPrepare
+} from "./mocks";
 import { FunctionSchema } from "../types";
 
 const funcSchemaWithNotHandleError: FunctionSchema = () => ({
@@ -34,6 +38,7 @@ describe("variants", () => {
       ]
     );
   });
+
   test("03. v([pureFunc, is3k])", () => {
     const validator = v([funcSchemaWithNot, funcSchemaWithNotHandleError]);
     expect(validator.pure).toBe(false);
@@ -96,17 +101,37 @@ describe("variants", () => {
     );
   });
   test("08 v([{ a: impure }, { a: pure }])", () => {
-    const validator = v([funcSchemaWithNotHandleError, funcSchemaWithNot]);
+    const validator = v([
+      funcSchemaWithNotHandleError,
+      funcSchemaWithNotWithPrepare
+    ]);
     tables(validator, [2, 4, 6, 8, 10], [["2", ["2"]]]);
   });
-  test("09. v([{ a: impure }, pure]", () => {
-    const validator = v([{ a: funcSchemaWithNotHandleError }, v.number]);
+  test("09. v([[{ a: funcSchemaWithNotHandleError }, v.safeInteger], [{ a: v.safeInteger }, 0]])", () => {
+    const validator = v([
+      [{ a: funcSchemaWithNotHandleError }, v.safeInteger],
+      [{ a: v.safeInteger }, 0]
+    ]);
     expect(validator.pure).toBe(false);
     snapshot(validator);
     tables(
       validator,
       [1, 2, 3, 3, 4, { a: 3 }, { a: 6 }],
-      [[null, []], ["1", [undefined]], [{ a: 2 }, [2]]]
+      [[null, []], ["1", [undefined]], [{ a: 2.5 }, [2.5]]]
+    );
+  });
+  test("10. v(['true','false'])", () => {
+    const validator = v(["true", "false", { a: 1, [v.rest]: 1 }]);
+    snapshot(validator, true);
+    puretables(
+      validator,
+      ["true", "false", { a: 1, b: 1 }, { a: 1 }],
+      [
+        ...primitives,
+        {
+          a: 2
+        }
+      ]
     );
   });
 });
