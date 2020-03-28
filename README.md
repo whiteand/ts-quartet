@@ -135,7 +135,7 @@ const checkResponse = v<Response>({
     id: v.number,
     name: v.string,
     age: v.number,
-    gender: [Gender.Male, Gender.Female],
+    gender: ['Male', 'Female'],
     friendsIds: v.arrayOf(v.number)
   }
 });
