@@ -123,11 +123,11 @@ export const methods: IMethods = {
   }),
   maxLength: (maxLength: number, exclusive: boolean = false) => () => ({
     check: exclusive
-      ? valueId => `${valueId} && ${valueId}.length < ${maxLength}`
-      : valueId => `${valueId} && ${valueId}.length <= ${maxLength}`,
+      ? valueId => `${valueId} != null && ${valueId}.length < ${maxLength}`
+      : valueId => `${valueId} != null && ${valueId}.length <= ${maxLength}`,
     not: exclusive
-      ? valueId => `!${valueId} || ${valueId}.length >= ${maxLength}`
-      : valueId => `!${valueId} || ${valueId}.length > ${maxLength}`
+      ? valueId => `${valueId} == null || ${valueId}.length >= ${maxLength}`
+      : valueId => `${valueId} == null || ${valueId}.length > ${maxLength}`
   }),
   min: (minValue: number, exclusive: boolean = false) => () => ({
     check: exclusive
@@ -139,11 +139,11 @@ export const methods: IMethods = {
   }),
   minLength: (maxLength: number, exclusive: boolean = false) => () => ({
     check: exclusive
-      ? valueId => `${valueId} && ${valueId}.length > ${maxLength}`
-      : valueId => `${valueId} && ${valueId}.length >= ${maxLength}`,
+      ? valueId => `${valueId} != null && ${valueId}.length > ${maxLength}`
+      : valueId => `${valueId} != null && ${valueId}.length >= ${maxLength}`,
     not: exclusive
-      ? valueId => `!${valueId} || ${valueId}.length <= ${maxLength}`
-      : valueId => `!${valueId} || ${valueId}.length < ${maxLength}`
+      ? valueId => `${valueId} == null || ${valueId}.length <= ${maxLength}`
+      : valueId => `${valueId} == null || ${valueId}.length < ${maxLength}`
   }),
   negative: () => ({
     check: valueId => `${valueId} < 0`,
