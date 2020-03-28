@@ -423,7 +423,7 @@ describe("v(object)", () => {
     );
   });
   test("31. v({ explanations: 42 })", () => {
-      const validator = v({ explanations: 42 })
-      expect(validator.pure).toBe(true)
-    });
+    const validator = v({ explanations: 42 });
+    expect(validator.pure).toBe(true);
+  });
 });

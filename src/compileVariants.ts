@@ -27,7 +27,7 @@ function defaultHandler(
   const idAcc = getKeyAccessor(id);
   const funcSchema = compiled.pure
     ? () => ({
-        check: () => `${ctxId}${idAcc}(${valueId})`,
+        check: () => `${ctxId}${idAcc}(${valueId})`
       })
     : () => ({
         check: () => `${ctxId}${idAcc}(${valueId})`,

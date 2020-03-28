@@ -189,7 +189,7 @@ describe("v.and", () => {
         undefined,
         false,
         true
-      ].map(e => [e, typeof e === 'number' ? [e] : []] as [any, any[]])
+      ].map(e => [e, typeof e === "number" ? [e] : []] as [any, any[]])
     );
   });
 });
