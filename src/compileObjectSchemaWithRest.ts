@@ -1,6 +1,11 @@
 import { addTabs } from "./addTabs";
 import { compileIfNotValidReturnFalse } from "./compileIfNotValidReturnFalse";
-import { CompilationResult, IObjectSchema, Prepare, QuartetInstance } from "./types";
+import {
+  CompilationResult,
+  IObjectSchema,
+  Prepare,
+  QuartetInstance
+} from "./types";
 
 export function compileObjectSchemaWithRest(
   v: QuartetInstance,

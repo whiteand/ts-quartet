@@ -10,12 +10,9 @@ export const getPureCompile = () =>
   function pureCompile(this: QuartetInstance, s: Schema): CompilationResult {
     const compiled = handleSchema<CompilationResult>({
       constant: constant => compileConstant(this, constant),
-      function: funcSchema =>
-        compileFunctionSchemaResult(this, funcSchema()),
-      object: objSchema =>
-        compileObjectSchema(this, objSchema),
-      objectRest: objSchema =>
-        compileObjectSchemaWithRest(this, objSchema),
+      function: funcSchema => compileFunctionSchemaResult(this, funcSchema()),
+      object: objSchema => compileObjectSchema(this, objSchema),
+      objectRest: objSchema => compileObjectSchemaWithRest(this, objSchema),
       variant: schemas => compileVariants(this, schemas)
     })(s);
 

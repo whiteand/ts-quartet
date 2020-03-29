@@ -19,7 +19,7 @@ export const getContextControllers = (): [ToContext, () => void] => {
       (ctx: IContext) => {
         ctx[id] = value;
       }
-    ]
+    ];
   };
 
   const clearContextCounters = () => {

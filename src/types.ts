@@ -57,17 +57,43 @@ export interface IMethods {
   and: (this: QuartetInstance, ...schemas: Schema[]) => FunctionSchema;
   arrayOf: (this: QuartetInstance, schema: Schema) => FunctionSchema;
   boolean: FunctionSchema;
-  compileAnd: (<T = any>(this: QuartetInstance, ...schemas: Schema[]) => TypedCompilationResult<T>) &
+  compileAnd: (<T = any>(
+    this: QuartetInstance,
+    ...schemas: Schema[]
+  ) => TypedCompilationResult<T>) &
     ((this: QuartetInstance, ...schemas: Schema[]) => CompilationResult);
-  compileArrayOf: (<T = any>(this: QuartetInstance, schema: Schema) => TypedCompilationResult<T[]>) &
+  compileArrayOf: (<T = any>(
+    this: QuartetInstance,
+    schema: Schema
+  ) => TypedCompilationResult<T[]>) &
     ((this: QuartetInstance, schema: Schema) => CompilationResult);
-  custom: (this: QuartetInstance, check: CustomFunction, explanation?: any) => FunctionSchema;
+  custom: (
+    this: QuartetInstance,
+    check: CustomFunction,
+    explanation?: any
+  ) => FunctionSchema;
   finite: FunctionSchema;
   function: FunctionSchema;
-  max: (this: QuartetInstance, maxValue: number, exclusive?: boolean) => FunctionSchema;
-  maxLength: (this: QuartetInstance, maxLength: number, exclusive?: boolean) => FunctionSchema;
-  min: (this: QuartetInstance, minValue: number, exclusive?: boolean) => FunctionSchema;
-  minLength: (this: QuartetInstance, minLength: number, exclusive?: boolean) => FunctionSchema;
+  max: (
+    this: QuartetInstance,
+    maxValue: number,
+    exclusive?: boolean
+  ) => FunctionSchema;
+  maxLength: (
+    this: QuartetInstance,
+    maxLength: number,
+    exclusive?: boolean
+  ) => FunctionSchema;
+  min: (
+    this: QuartetInstance,
+    minValue: number,
+    exclusive?: boolean
+  ) => FunctionSchema;
+  minLength: (
+    this: QuartetInstance,
+    minLength: number,
+    exclusive?: boolean
+  ) => FunctionSchema;
   negative: FunctionSchema;
   not: (this: QuartetInstance, schema: Schema) => FunctionSchema;
   number: FunctionSchema;
@@ -80,15 +106,20 @@ export interface IMethods {
   test: (this: QuartetInstance, test: ITest) => FunctionSchema;
 }
 
-export type PureCompile = (schema: Schema) => CompilationResult
-export type ToContext = (prefix: string | number, value: any, isUniq?: boolean) => [string, Prepare]
+export type PureCompile = (schema: Schema) => CompilationResult;
+export type ToContext = (
+  prefix: string | number,
+  value: any,
+  isUniq?: boolean
+) => [string, Prepare];
 
 interface IInnerMethods {
-  pureCompile: PureCompile
-  toContext: ToContext
-  clearContextCounters: () => void
+  pureCompile: PureCompile;
+  toContext: ToContext;
+  clearContextCounters: () => void;
 }
 
-export type QuartetInstance = IMethods & IInnerMethods &
+export type QuartetInstance = IMethods &
+  IInnerMethods &
   (<T>(schema: Schema) => TypedCompilationResult<T>) &
   ((schema: Schema) => CompilationResult);

@@ -9,7 +9,7 @@ import {
   Prepare,
   QuartetInstance,
   Schema,
-  TypedCompilationResult,
+  TypedCompilationResult
 } from "./types";
 
 export const methods: IMethods = {
@@ -60,9 +60,7 @@ export const methods: IMethods = {
   },
   compileArrayOf<T>(this: QuartetInstance, schema: Schema) {
     this.clearContextCounters();
-    return compileArrayOf(this, schema) as TypedCompilationResult<
-      T[]
-    >;
+    return compileArrayOf(this, schema) as TypedCompilationResult<T[]>;
   },
   custom(
     check: ((value: any) => boolean) & { explanations?: any[]; pure?: boolean },

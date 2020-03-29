@@ -8,7 +8,7 @@ import {
   IVariantSchema,
   Prepare,
   QuartetInstance,
-  Schema,
+  Schema
 } from "./types";
 
 function defaultHandler(

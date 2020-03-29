@@ -5,13 +5,10 @@ import {
   FunctionSchema,
   HandleSchemaHandler,
   QuartetInstance,
-  Schema,
+  Schema
 } from "./types";
 
-export function compileNot(
-  v: QuartetInstance,
-  schema: Schema
-): FunctionSchema {
+export function compileNot(v: QuartetInstance, schema: Schema): FunctionSchema {
   const defaultHandler: HandleSchemaHandler<Schema, FunctionSchema> = (
     schemaToBeReverted: Schema
   ): FunctionSchema => {

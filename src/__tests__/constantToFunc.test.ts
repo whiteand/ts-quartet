@@ -1,4 +1,4 @@
-import { v } from '../index'
+import { v } from "../index";
 import { constantToFunc } from "../constantToFunc";
 import { primitives } from "./mocks";
 

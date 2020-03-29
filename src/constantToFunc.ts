@@ -1,7 +1,10 @@
 import { getKeyAccessor } from "./getKeyAccessor";
 import { ConstantSchema, FunctionSchema, QuartetInstance } from "./types";
 
-export function constantToFunc(v: QuartetInstance, c: ConstantSchema): FunctionSchema {
+export function constantToFunc(
+  v: QuartetInstance,
+  c: ConstantSchema
+): FunctionSchema {
   if (c === undefined) {
     return () => ({
       check: id => `${id} === undefined`,
