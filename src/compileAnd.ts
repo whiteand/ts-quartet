@@ -1,21 +1,21 @@
 import { addTabs } from "./addTabs";
 import { compileIfNotValidReturnFalse } from "./compileIfNotValidReturnFalse";
-import { CompilationResult, Prepare, Schema } from "./types";
+import { CompilationResult, Prepare, Schema, QuartetInstance } from "./types";
 
 export function compileAnd(
-  c: (schema: Schema) => CompilationResult,
+  v: QuartetInstance,
   schemas: Schema[]
 ): CompilationResult {
   if (schemas.length === 0) {
     return Object.assign(() => true, { explanations: [], pure: true });
   }
   if (schemas.length === 1) {
-    return c(schemas[0]);
+    return v.pureCompile(schemas[0]);
   }
 
   const preparations: Prepare[] = [];
   let [bodyCode, isPure] = compileIfNotValidReturnFalse(
-    c,
+    v,
     "value",
     "validator",
     schemas[0],
@@ -23,7 +23,7 @@ export function compileAnd(
   );
   for (let i = 1; i < schemas.length; i++) {
     const [anotherBodyCode, anotherIsPure] = compileIfNotValidReturnFalse(
-      c,
+      v,
       "value",
       "validator",
       schemas[i],

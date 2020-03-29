@@ -3,19 +3,18 @@ import { constantToFunc } from "./constantToFunc";
 import { getKeyAccessor } from "./getKeyAccessor";
 import { handleSchema } from "./handleSchema";
 import { methods } from "./methods";
-import { toContext } from "./toContext";
 import { toDict } from "./toDict";
-import { CompilationResult, Prepare, Schema } from "./types";
+import { CompilationResult, Prepare, Schema, QuartetInstance } from "./types";
 
 function defaultHandler(
-  c: (schema: Schema) => CompilationResult,
+  v: QuartetInstance,
   valueId: string,
   ctxId: string,
   schema: Schema,
   preparations: Prepare[]
 ): [string, boolean] {
-  const compiled = c(schema);
-  const [id, prepare] = toContext(valueId, compiled);
+  const compiled = v.pureCompile(schema);
+  const [id, prepare] = v.toContext(valueId, compiled);
   preparations.push(prepare);
   const idAcc = getKeyAccessor(id);
   const funcSchema = compiled.pure
@@ -30,7 +29,7 @@ function defaultHandler(
         not: () => `!${ctxId}${idAcc}(${valueId})`
       });
   return compileIfNotValidReturnFalse(
-    c,
+    v,
     valueId,
     ctxId,
     funcSchema,
@@ -39,7 +38,7 @@ function defaultHandler(
 }
 
 export function compileIfNotValidReturnFalse(
-  c: (schema: Schema) => CompilationResult,
+  v: QuartetInstance,
   valueId: string,
   ctxId: string,
   schema: Schema,
@@ -48,10 +47,10 @@ export function compileIfNotValidReturnFalse(
   return handleSchema<[string, boolean]>({
     constant: constant =>
       compileIfNotValidReturnFalse(
-        c,
+        v,
         valueId,
         ctxId,
-        constantToFunc(constant),
+        constantToFunc(v, constant),
         preparations
       ),
     function: funcSchema => {
@@ -82,7 +81,7 @@ export function compileIfNotValidReturnFalse(
         const innerKeyAccessor = getKeyAccessor(innerKey);
         const innerKeyId = valueId + innerKeyAccessor;
         const [code, isPurePart] = compileIfNotValidReturnFalse(
-          c,
+          v,
           innerKeyId,
           ctxId,
           objectSchema[innerKey],
@@ -109,20 +108,20 @@ export function compileIfNotValidReturnFalse(
       const [checkIsObject, isCheckObjectPure] =
         objectSchemaKeys.length > 0
           ? compileIfNotValidReturnFalse(
-              c,
+              v,
               valueId,
               ctxId,
               objectSchema,
               preparations
             )
           : [`if (${valueId} == null) return false`, true];
-      const [elemId, prepareElem] = toContext("elem", undefined);
-      const [keysId, prepareKeysId] = toContext("keys", []);
+      const [elemId, prepareElem] = v.toContext("elem", undefined);
+      const [keysId, prepareKeysId] = v.toContext("keys", []);
       const getElem = `${ctxId}${getKeyAccessor(elemId)}`;
       const getKeys = `${ctxId}${getKeyAccessor(keysId)}`;
       preparations.push(prepareElem, prepareKeysId);
       const [forLoopBody, forLoopBodyIsPure] = compileIfNotValidReturnFalse(
-        c,
+        v,
         getElem,
         ctxId,
         restValidator,
@@ -130,11 +129,11 @@ export function compileIfNotValidReturnFalse(
       );
       const keysToBeOmmited = [...(omitKeys || []), ...objectSchemaKeys];
       if (keysToBeOmmited && keysToBeOmmited.length > 0) {
-        const [omitKeysId, prepareOmitKeys] = toContext(
+        const [omitKeysId, prepareOmitKeys] = v.toContext(
           "omitkeys",
           toDict(keysToBeOmmited)
         );
-        const [keyId, prepareKey] = toContext("key", undefined);
+        const [keyId, prepareKey] = v.toContext("key", undefined);
         preparations.push(prepareOmitKeys, prepareKey);
         const getOmitKeysId = `${ctxId}${getKeyAccessor(omitKeysId)}`;
         const getKey = `${ctxId}${getKeyAccessor(keyId)}`;
@@ -161,14 +160,14 @@ export function compileIfNotValidReturnFalse(
       }
       if (schemas.length === 1) {
         return compileIfNotValidReturnFalse(
-          c,
+          v,
           valueId,
           ctxId,
           schemas[0],
           preparations
         );
       }
-      return defaultHandler(c, valueId, ctxId, schemas, preparations);
+      return defaultHandler(v, valueId, ctxId, schemas, preparations);
     }
   })(schema);
 }

@@ -1,27 +1,43 @@
 import { addTabs } from "./addTabs";
 import { compileIfNotValidReturnFalse } from "./compileIfNotValidReturnFalse";
 import {
-  CompilationResult,
   Prepare,
   Schema,
-  TypedCompilationResult
+  TypedCompilationResult,
+  QuartetInstance
 } from "./types";
+import { handleSchema } from "./handleSchema";
+
+function getOptimizedOrNull<T = any>(schema: Schema) {
+  return handleSchema<null | TypedCompilationResult<T[]>>({
+    variant: schemas => {
+      if (Array.isArray(schemas) && schemas.length === 0) {
+        return Object.assign((value: any): value is T[] => value && Array.isArray(value) && value.length === 0, { explanations: [], pure: true });
+      }
+      return null;
+    },
+    constant: () => null,
+    function: () => null,
+    object: () => null,
+    objectRest: () => null
+  })(schema);
+}
+
 
 export function compileArrayOf<T = any>(
-  c: (schema: Schema) => CompilationResult,
+  v: QuartetInstance,
   schema: Schema
 ): TypedCompilationResult<T[]> {
   // compileArrayOf([])
-  if (Array.isArray(schema) && schema.length === 0) {
-    return Object.assign(
-      (value: any): value is T[] =>
-        value && Array.isArray(value) && value.length === 0,
-      { explanations: [], pure: true }
-    );
+  const optimizedOrNull = getOptimizedOrNull<T>(schema);
+
+  if (optimizedOrNull) {
+    return optimizedOrNull
   }
+
   const preparations: Prepare[] = [];
   const [forLoopBody, pure] = compileIfNotValidReturnFalse(
-    c,
+    v,
     "elem",
     "validator",
     schema,
@@ -51,3 +67,4 @@ export function compileArrayOf<T = any>(
 
   return ctx;
 }
+

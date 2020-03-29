@@ -1,7 +1,8 @@
 import { addTabs } from "./addTabs";
-import { CompilationResult, IFunctionSchemaResult } from "./types";
+import { CompilationResult, IFunctionSchemaResult, QuartetInstance } from "./types";
 
 export function compileFunctionSchemaResult(
+  v: QuartetInstance,
   s: IFunctionSchemaResult
 ): CompilationResult {
   let code;

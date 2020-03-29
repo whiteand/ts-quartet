@@ -1,14 +1,14 @@
 import { addTabs } from "./addTabs";
 import { compileIfNotValidReturnFalse } from "./compileIfNotValidReturnFalse";
-import { CompilationResult, IObjectSchema, Prepare, Schema } from "./types";
+import { CompilationResult, IObjectSchema, Prepare, QuartetInstance } from "./types";
 
 export function compileObjectSchemaWithRest(
-  c: (schema: Schema) => CompilationResult,
+  v: QuartetInstance,
   s: IObjectSchema
 ): CompilationResult {
   const preparations: Prepare[] = [];
   const [funcBodyCode, isPure] = compileIfNotValidReturnFalse(
-    c,
+    v,
     "value",
     "validator",
     s,

@@ -1,23 +1,22 @@
 import { constantToFunc } from "./constantToFunc";
 import { getKeyAccessor } from "./getKeyAccessor";
 import { handleSchema } from "./handleSchema";
-import { toContext } from "./toContext";
 import {
-  CompilationResult,
   FunctionSchema,
   HandleSchemaHandler,
-  Schema
+  Schema,
+  QuartetInstance
 } from "./types";
 
 export function compileNot(
-  c: (schema: Schema) => CompilationResult,
+  v: QuartetInstance,
   schema: Schema
 ): FunctionSchema {
   const defaultHandler: HandleSchemaHandler<Schema, FunctionSchema> = (
     schemaToBeReverted: Schema
   ): FunctionSchema => {
-    const compiled = c(schemaToBeReverted);
-    const [notId, prepare] = toContext("not", compiled);
+    const compiled = v.pureCompile(schemaToBeReverted);
+    const [notId, prepare] = v.toContext("not", compiled);
     const notAcc = getKeyAccessor(notId);
     return () => ({
       check: (valueId, ctxId) => `!${ctxId}${notAcc}(${valueId})`,
@@ -26,7 +25,7 @@ export function compileNot(
     });
   };
   return handleSchema({
-    constant: constant => compileNot(c, constantToFunc(constant)),
+    constant: constant => compileNot(v, constantToFunc(v, constant)),
     function: funcSchema => {
       const s = funcSchema();
       if (s.not) {

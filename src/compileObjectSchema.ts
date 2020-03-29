@@ -1,9 +1,9 @@
 import { addTabs } from "./addTabs";
 import { compileIfNotValidReturnFalse } from "./compileIfNotValidReturnFalse";
-import { CompilationResult, IObjectSchema, Prepare, Schema } from "./types";
+import { CompilationResult, IObjectSchema, Prepare, Schema, QuartetInstance } from "./types";
 
 export function compileObjectSchema(
-  c: (schema: Schema) => CompilationResult,
+  v: QuartetInstance,
   s: IObjectSchema
 ): CompilationResult {
   const keys = Object.keys(s);
@@ -17,7 +17,7 @@ export function compileObjectSchema(
   const preparations: Prepare[] = [];
   const ctxId = "validator";
   const [bodyCode, isPure] = compileIfNotValidReturnFalse(
-    c,
+    v,
     "value",
     ctxId,
     s,

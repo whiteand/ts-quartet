@@ -1,10 +1,11 @@
+import { v } from '../index'
 import { constantToFunc } from "../constantToFunc";
 import { primitives } from "./mocks";
 
 describe("constantToFunc", () => {
   test("works", () => {
     for (const primitive of primitives) {
-      const funcRes = constantToFunc(primitive)();
+      const funcRes = constantToFunc(v, primitive)();
       expect(funcRes.check("value", "validator")).toMatchSnapshot();
       expect(
         funcRes.handleError && funcRes.handleError("value", "validator")

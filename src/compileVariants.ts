@@ -2,17 +2,17 @@ import { addTabs } from "./addTabs";
 import { constantToFunc } from "./constantToFunc";
 import { getKeyAccessor } from "./getKeyAccessor";
 import { handleSchema } from "./handleSchema";
-import { toContext } from "./toContext";
 import {
   CompilationResult,
   HandleError,
   IVariantSchema,
   Prepare,
-  Schema
+  Schema,
+  QuartetInstance
 } from "./types";
 
 function defaultHandler(
-  c: (schema: Schema) => CompilationResult,
+  v: QuartetInstance,
   index: number,
   valueId: string,
   ctxId: string,
@@ -21,8 +21,8 @@ function defaultHandler(
   handleErrors: HandleError[],
   stringsSymbols: Array<string | number | symbol>
 ): [string, boolean] {
-  const compiled = c(schema);
-  const [id, prepare] = toContext(index, compiled);
+  const compiled = v.pureCompile(schema);
+  const [id, prepare] = v.toContext(index, compiled);
   preparations.push(prepare);
   const idAcc = getKeyAccessor(id);
   const funcSchema = compiled.pure
@@ -35,7 +35,7 @@ function defaultHandler(
           `${ctxId}.explanations.push(...${ctxId}${idAcc}.explanations)`
       });
   return compileVariantElementToReturnWay(
-    c,
+    v,
     index,
     valueId,
     ctxId,
@@ -46,7 +46,7 @@ function defaultHandler(
   );
 }
 function compileVariantElementToReturnWay(
-  c: (schema: Schema) => CompilationResult,
+  v: QuartetInstance,
   index: number,
   valueId: string,
   ctxId: string,
@@ -59,11 +59,11 @@ function compileVariantElementToReturnWay(
     constant: constant => {
       if (constant === "false" || constant === "true") {
         return compileVariantElementToReturnWay(
-          c,
+          v,
           index,
           valueId,
           ctxId,
-          constantToFunc(constant),
+          constantToFunc(v, constant),
           preparations,
           handleErrors,
           stringsSymbols
@@ -74,11 +74,11 @@ function compileVariantElementToReturnWay(
         return ["", true];
       }
       return compileVariantElementToReturnWay(
-        c,
+        v,
         index,
         valueId,
         ctxId,
-        constantToFunc(constant),
+        constantToFunc(v, constant),
         preparations,
         handleErrors,
         stringsSymbols
@@ -97,7 +97,7 @@ function compileVariantElementToReturnWay(
     },
     object: objectSchema =>
       defaultHandler(
-        c,
+        v,
         index,
         valueId,
         ctxId,
@@ -108,7 +108,7 @@ function compileVariantElementToReturnWay(
       ),
     objectRest: objectSchema =>
       defaultHandler(
-        c,
+        v,
         index,
         valueId,
         ctxId,
@@ -122,7 +122,7 @@ function compileVariantElementToReturnWay(
       let isPure = true;
       for (const variant of schemas) {
         const [codePart, isPartPure] = compileVariantElementToReturnWay(
-          c,
+          v,
           index,
           valueId,
           ctxId,
@@ -142,14 +142,14 @@ function compileVariantElementToReturnWay(
 }
 
 export function compileVariants(
-  c: (schema: Schema) => CompilationResult,
+  v: QuartetInstance,
   variants: IVariantSchema
 ): CompilationResult {
   if (variants.length === 0) {
     return Object.assign(() => false, { explanations: [], pure: true });
   }
   if (variants.length === 1) {
-    return c(variants[0]);
+    return v.pureCompile(variants[0]);
   }
   const preparations: Prepare[] = [];
   const handleErrors: HandleError[] = [];
@@ -159,7 +159,7 @@ export function compileVariants(
   for (let i = 0; i < variants.length; i++) {
     const variant = variants[i];
     const [codePart, purePart] = compileVariantElementToReturnWay(
-      c,
+      v,
       i,
       `value`,
       `validator`,

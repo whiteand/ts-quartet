@@ -1,14 +1,20 @@
 import { methods } from "./methods";
-import { pureCompile } from "./pureCompile";
-import { clearContextCounters } from "./toContext";
-import { CompilationResult, QuartetInstance, Schema } from "./types";
+import { getPureCompile } from "./getPureCompile";
+import { getContextControllers } from "./toContext";
+import { QuartetInstance, Schema } from "./types";
 
 export function quartet(): QuartetInstance {
-  const compilator = function compile(s: Schema): CompilationResult {
-    clearContextCounters();
-    return pureCompile(s);
-  };
-  return Object.assign(compilator, methods) as QuartetInstance;
+  const [toContext, clearContextCounters] = getContextControllers();
+  const pureCompile = getPureCompile();
+  const compilator: QuartetInstance = Object.assign(
+    function compile(s: Schema): any {
+      compilator.clearContextCounters();
+      return compilator.pureCompile(s);
+    },
+    { pureCompile, toContext, clearContextCounters },
+    methods
+  );
+  return compilator
 }
 
 export const v = quartet();

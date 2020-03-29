@@ -1,30 +1,29 @@
-import { IContext } from "./types";
+import { IContext, ToContext } from "./types";
 
-let toContextCounter: Record<string, number> = {};
-export const toContext = (
-  prefix: string | number,
-  value: any,
-  withoutPostfix: boolean = false
-) => {
-  if (!toContextCounter[prefix]) {
-    toContextCounter[prefix] = 0;
-  }
-  let id =
-    withoutPostfix || toContextCounter[prefix] === 0
-      ? prefix
-      : `${prefix}-${toContextCounter[prefix]}`;
-  if (id === "explanations" || id === "pure") {
-    id = `${prefix}-${toContextCounter[prefix]}`;
-  }
-  toContextCounter[prefix]++;
-  return [
-    id,
-    (ctx: IContext) => {
-      ctx[id] = value;
+export const getContextControllers = (): [ToContext, () => void] => {
+  let toContextCounter: Record<string, number> = {};
+  const toContext: ToContext = (prefix, value, withoutPostfix = false) => {
+    if (!toContextCounter[prefix]) {
+      toContextCounter[prefix] = 0;
     }
-  ] as [string, (ctx: IContext) => void];
-};
+    let id =
+      withoutPostfix || toContextCounter[prefix] === 0
+        ? prefix
+        : `${prefix}-${toContextCounter[prefix]}`;
+    if (id === "explanations" || id === "pure") {
+      id = `${prefix}-${toContextCounter[prefix]}`;
+    }
+    toContextCounter[prefix]++;
+    return [
+      id.toString(),
+      (ctx: IContext) => {
+        ctx[id] = value;
+      }
+    ]
+  };
 
-export const clearContextCounters = () => {
-  toContextCounter = {};
+  const clearContextCounters = () => {
+    toContextCounter = {};
+  };
+  return [toContext, clearContextCounters];
 };

@@ -1,5 +1,7 @@
-import { toContext, clearContextCounters } from "../toContext";
+import { getContextControllers } from "../toContext";
 import { IContext } from "..";
+
+const [toContext, clearContextCounters] = getContextControllers();
 
 describe("toContext", () => {
   test("Do not add number when uniq without number", () => {

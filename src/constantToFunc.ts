@@ -1,8 +1,7 @@
 import { getKeyAccessor } from "./getKeyAccessor";
-import { toContext } from "./toContext";
-import { ConstantSchema, FunctionSchema } from "./types";
+import { ConstantSchema, FunctionSchema, QuartetInstance } from "./types";
 
-export function constantToFunc(c: ConstantSchema): FunctionSchema {
+export function constantToFunc(v: QuartetInstance, c: ConstantSchema): FunctionSchema {
   if (c === undefined) {
     return () => ({
       check: id => `${id} === undefined`,
@@ -38,7 +37,7 @@ export function constantToFunc(c: ConstantSchema): FunctionSchema {
           not: id => `${id} !== ${c}`
         });
   }
-  const [cId, prepare] = toContext("constant", c);
+  const [cId, prepare] = v.toContext("constant", c);
   const constantAccessor = getKeyAccessor(cId);
   return () => ({
     check: (id, ctx) => `${id} === ${ctx}${constantAccessor}`,

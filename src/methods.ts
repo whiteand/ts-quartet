@@ -2,22 +2,21 @@ import { compileAnd } from "./compileAnd";
 import { compileArrayOf } from "./compileArrayOf";
 import { compileNot } from "./compileNot";
 import { getKeyAccessor } from "./getKeyAccessor";
-import { pureCompile } from "./pureCompile";
-import { clearContextCounters, toContext } from "./toContext";
 import {
   HandleError,
   IMethods,
   ITest,
   Prepare,
   Schema,
-  TypedCompilationResult
+  TypedCompilationResult,
+  QuartetInstance,
 } from "./types";
 
 export const methods: IMethods = {
   and(...schemas: Schema[]) {
-    const compiledAnd = compileAnd(pureCompile, schemas);
+    const compiledAnd = compileAnd(this, schemas);
 
-    const [checkAndId, prepare] = toContext("and", compiledAnd);
+    const [checkAndId, prepare] = this.toContext("and", compiledAnd);
     const checkAnd = getKeyAccessor(checkAndId);
     return compiledAnd.pure
       ? () => ({
@@ -34,8 +33,8 @@ export const methods: IMethods = {
         });
   },
   arrayOf(schema: Schema) {
-    const compiledArr = compileArrayOf(pureCompile, schema);
-    const [checkArrayId, prepare] = toContext("arr", compiledArr);
+    const compiledArr = compileArrayOf(this, schema);
+    const [checkArrayId, prepare] = this.toContext("arr", compiledArr);
     const checkArray = getKeyAccessor(checkArrayId);
     return compiledArr.pure
       ? () => ({
@@ -55,54 +54,58 @@ export const methods: IMethods = {
     check: valueId => `typeof ${valueId} === 'boolean'`,
     not: valueId => `typeof ${valueId} !== 'boolean'`
   }),
-  compileAnd<T>(...schemas: Schema[]) {
-    clearContextCounters();
-    return compileAnd(pureCompile, schemas) as TypedCompilationResult<T>;
+  compileAnd<T>(this: QuartetInstance, ...schemas: Schema[]) {
+    this.clearContextCounters();
+    return compileAnd(this, schemas) as TypedCompilationResult<T>;
   },
-  compileArrayOf<T>(schema: Schema) {
-    clearContextCounters();
-    return compileArrayOf(pureCompile, schema) as TypedCompilationResult<T[]>;
+  compileArrayOf<T>(this: QuartetInstance, schema: Schema) {
+    this.clearContextCounters();
+    return compileArrayOf(this, schema) as TypedCompilationResult<
+      T[]
+    >;
   },
-  custom: (
+  custom(
     check: ((value: any) => boolean) & { explanations?: any[]; pure?: boolean },
     explanation?: any
-  ) => () => {
-    const preparations: Prepare[] = [];
-    const [checkId, prepare] = toContext("custom", check);
-    const checkIdAccessor = getKeyAccessor(checkId);
-    preparations.push(prepare);
-    let handleError: HandleError | undefined;
-    if (explanation !== undefined) {
-      const [explanationId, prepareExplanation] = toContext(
-        "explanation",
-        explanation
-      );
-      const [explanationValue, prepareExplanationValue] = toContext(
-        "explvalue",
-        undefined
-      );
-      preparations.push(prepareExplanation, prepareExplanationValue);
-      const explanationAcc = getKeyAccessor(explanationId);
-      const explanationValueAcc = getKeyAccessor(explanationValue);
-      handleError =
-        typeof explanation === "function"
-          ? (id, ctxId) =>
-              `${ctxId}${explanationValueAcc} = ${ctxId}${explanationAcc}(${id},${ctxId}${checkIdAccessor}.explanations)\nif (${ctxId}${explanationValueAcc} !== undefined) {\n  ${ctxId}.explanations.push(${ctxId}${explanationValueAcc})\n}`
-          : (id, ctxId) =>
-              `${ctxId}.explanations.push(${ctxId}${explanationAcc})`;
-    } else if (Array.isArray(check.explanations) && !check.pure) {
-      handleError = (id, ctxId) =>
-        `${ctxId}.explanations.push(...${ctxId}${checkIdAccessor}.explanations)`;
-    }
-    return {
-      check: (id: any, ctx: any) => `${ctx}${checkIdAccessor}(${id})`,
-      handleError,
-      not: (id: any, ctx: any) => `!${ctx}${checkIdAccessor}(${id})`,
-      prepare: ctx => {
-        for (const partialPrepare of preparations) {
-          partialPrepare(ctx);
-        }
+  ) {
+    return () => {
+      const preparations: Prepare[] = [];
+      const [checkId, prepare] = this.toContext("custom", check);
+      const checkIdAccessor = getKeyAccessor(checkId);
+      preparations.push(prepare);
+      let handleError: HandleError | undefined;
+      if (explanation !== undefined) {
+        const [explanationId, prepareExplanation] = this.toContext(
+          "explanation",
+          explanation
+        );
+        const [explanationValue, prepareExplanationValue] = this.toContext(
+          "explvalue",
+          undefined
+        );
+        preparations.push(prepareExplanation, prepareExplanationValue);
+        const explanationAcc = getKeyAccessor(explanationId);
+        const explanationValueAcc = getKeyAccessor(explanationValue);
+        handleError =
+          typeof explanation === "function"
+            ? (id, ctxId) =>
+                `${ctxId}${explanationValueAcc} = ${ctxId}${explanationAcc}(${id},${ctxId}${checkIdAccessor}.explanations)\nif (${ctxId}${explanationValueAcc} !== undefined) {\n  ${ctxId}.explanations.push(${ctxId}${explanationValueAcc})\n}`
+            : (id, ctxId) =>
+                `${ctxId}.explanations.push(${ctxId}${explanationAcc})`;
+      } else if (Array.isArray(check.explanations) && !check.pure) {
+        handleError = (id, ctxId) =>
+          `${ctxId}.explanations.push(...${ctxId}${checkIdAccessor}.explanations)`;
       }
+      return {
+        check: (id: any, ctx: any) => `${ctx}${checkIdAccessor}(${id})`,
+        handleError,
+        not: (id: any, ctx: any) => `!${ctx}${checkIdAccessor}(${id})`,
+        prepare: ctx => {
+          for (const partialPrepare of preparations) {
+            partialPrepare(ctx);
+          }
+        }
+      };
     };
   },
   finite: () => ({
@@ -154,7 +157,7 @@ export const methods: IMethods = {
     not: valueId => `typeof ${valueId} !== 'number'`
   }),
   not(schema) {
-    return compileNot(pureCompile, schema);
+    return compileNot(this, schema);
   },
   positive: () => ({
     check: valueId => `${valueId} > 0`,
@@ -174,13 +177,15 @@ export const methods: IMethods = {
     check: valueId => `typeof ${valueId} === 'symbol'`,
     not: valueId => `typeof ${valueId} !== 'symbol'`
   }),
-  test: (tester: ITest) => () => {
-    const [testId, prepare] = toContext("tester", tester);
-    const testerAcc = getKeyAccessor(testId);
-    return {
-      check: (id, ctx) => `${ctx}${testerAcc}.test(${id})`,
-      not: (id, ctx) => `!${ctx}${testerAcc}.test(${id})`,
-      prepare
+  test(tester: ITest) {
+    return () => {
+      const [testId, prepare] = this.toContext("tester", tester);
+      const testerAcc = getKeyAccessor(testId);
+      return {
+        check: (id, ctx) => `${ctx}${testerAcc}.test(${id})`,
+        not: (id, ctx) => `!${ctx}${testerAcc}.test(${id})`,
+        prepare
+      };
     };
   }
 };
