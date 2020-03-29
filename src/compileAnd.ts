@@ -1,6 +1,6 @@
 import { addTabs } from "./addTabs";
 import { compileIfNotValidReturnFalse } from "./compileIfNotValidReturnFalse";
-import { CompilationResult, Prepare, Schema, QuartetInstance } from "./types";
+import { CompilationResult, Prepare, QuartetInstance, Schema } from "./types";
 
 export function compileAnd(
   v: QuartetInstance,

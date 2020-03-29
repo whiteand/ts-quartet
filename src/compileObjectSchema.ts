@@ -1,6 +1,11 @@
 import { addTabs } from "./addTabs";
 import { compileIfNotValidReturnFalse } from "./compileIfNotValidReturnFalse";
-import { CompilationResult, IObjectSchema, Prepare, Schema, QuartetInstance } from "./types";
+import {
+  CompilationResult,
+  IObjectSchema,
+  Prepare,
+  QuartetInstance
+} from "./types";
 
 export function compileObjectSchema(
   v: QuartetInstance,
@@ -8,7 +13,7 @@ export function compileObjectSchema(
 ): CompilationResult {
   const keys = Object.keys(s);
   if (keys.length === 0) {
-    return Object.assign((v: any) => v != null, {
+    return Object.assign((x: any) => x != null, {
       explanations: [],
       pure: true
     });

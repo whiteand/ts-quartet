@@ -83,12 +83,12 @@ export interface IMethods {
 export type PureCompile = (schema: Schema) => CompilationResult
 export type ToContext = (prefix: string | number, value: any, isUniq?: boolean) => [string, Prepare]
 
-interface InnerMethods {
+interface IInnerMethods {
   pureCompile: PureCompile
   toContext: ToContext
   clearContextCounters: () => void
 }
 
-export type QuartetInstance = IMethods & InnerMethods &
+export type QuartetInstance = IMethods & IInnerMethods &
   (<T>(schema: Schema) => TypedCompilationResult<T>) &
   ((schema: Schema) => CompilationResult);

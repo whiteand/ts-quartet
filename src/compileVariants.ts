@@ -7,8 +7,8 @@ import {
   HandleError,
   IVariantSchema,
   Prepare,
+  QuartetInstance,
   Schema,
-  QuartetInstance
 } from "./types";
 
 function defaultHandler(

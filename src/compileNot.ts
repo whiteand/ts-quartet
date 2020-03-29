@@ -4,8 +4,8 @@ import { handleSchema } from "./handleSchema";
 import {
   FunctionSchema,
   HandleSchemaHandler,
+  QuartetInstance,
   Schema,
-  QuartetInstance
 } from "./types";
 
 export function compileNot(

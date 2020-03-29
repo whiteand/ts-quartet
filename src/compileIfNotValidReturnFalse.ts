@@ -4,7 +4,7 @@ import { getKeyAccessor } from "./getKeyAccessor";
 import { handleSchema } from "./handleSchema";
 import { methods } from "./methods";
 import { toDict } from "./toDict";
-import { CompilationResult, Prepare, Schema, QuartetInstance } from "./types";
+import { Prepare, QuartetInstance, Schema } from "./types";
 
 function defaultHandler(
   v: QuartetInstance,

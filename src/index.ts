@@ -1,5 +1,5 @@
-import { methods } from "./methods";
 import { getPureCompile } from "./getPureCompile";
+import { methods } from "./methods";
 import { getContextControllers } from "./toContext";
 import { QuartetInstance, Schema } from "./types";
 
@@ -14,7 +14,7 @@ export function quartet(): QuartetInstance {
     { pureCompile, toContext, clearContextCounters },
     methods
   );
-  return compilator
+  return compilator;
 }
 
 export const v = quartet();

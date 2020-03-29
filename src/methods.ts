@@ -7,9 +7,9 @@ import {
   IMethods,
   ITest,
   Prepare,
+  QuartetInstance,
   Schema,
   TypedCompilationResult,
-  QuartetInstance,
 } from "./types";
 
 export const methods: IMethods = {

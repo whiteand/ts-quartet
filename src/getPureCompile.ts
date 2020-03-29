@@ -4,7 +4,7 @@ import { compileObjectSchema } from "./compileObjectSchema";
 import { compileObjectSchemaWithRest } from "./compileObjectSchemaWithRest";
 import { compileVariants } from "./compileVariants";
 import { handleSchema } from "./handleSchema";
-import { CompilationResult, Schema, QuartetInstance } from "./types";
+import { CompilationResult, QuartetInstance, Schema } from "./types";
 
 export const getPureCompile = () =>
   function pureCompile(this: QuartetInstance, s: Schema): CompilationResult {
