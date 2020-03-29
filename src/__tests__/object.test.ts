@@ -426,4 +426,17 @@ describe("v(object)", () => {
     const validator = v({ explanations: 42 });
     expect(validator.pure).toBe(true);
   });
+  test("32. Performance", () => {
+    const checkPerson = v({
+      id: v.and(v.safeInteger, v.positive),
+      name: v.and(v.string, v.minLength(1)),
+      phone: [null, v.test(/^\d{12}$/)],
+      phoneBook: {
+        [v.rest]: v.test(/^\d{12}$/)
+      },
+      gender: ["male", "female"]
+    });
+    expect(checkPerson.pure).toBe(true);
+    snapshot(checkPerson);
+  });
 });

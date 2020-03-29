@@ -1,4 +1,4 @@
-import { compileAnd } from "./compileAnd";
+import { AND_SCHEMA_ID } from "./andId";
 import { compileArrayOf } from "./compileArrayOf";
 import { compileNot } from "./compileNot";
 import { getKeyAccessor } from "./getKeyAccessor";
@@ -14,23 +14,7 @@ import {
 
 export const methods: IMethods = {
   and(...schemas: Schema[]) {
-    const compiledAnd = compileAnd(this, schemas);
-
-    const [checkAndId, prepare] = this.toContext("and", compiledAnd);
-    const checkAnd = getKeyAccessor(checkAndId);
-    return compiledAnd.pure
-      ? () => ({
-          check: (id, ctx) => `${ctx}${checkAnd}(${id})`,
-          not: (id, ctx) => `!${ctx}${checkAnd}(${id})`,
-          prepare
-        })
-      : () => ({
-          check: (id, ctx) => `${ctx}${checkAnd}(${id})`,
-          handleError: (id, ctx) =>
-            `${ctx}.explanations.push(...${ctx}${checkAnd}.explanations)`,
-          not: (id, ctx) => `!${ctx}${checkAnd}(${id})`,
-          prepare
-        });
+    return [AND_SCHEMA_ID, ...schemas]
   },
   arrayOf(schema: Schema) {
     const compiledArr = compileArrayOf(this, schema);
@@ -55,8 +39,7 @@ export const methods: IMethods = {
     not: valueId => `typeof ${valueId} !== 'boolean'`
   }),
   compileAnd<T>(this: QuartetInstance, ...schemas: Schema[]) {
-    this.clearContextCounters();
-    return compileAnd(this, schemas) as TypedCompilationResult<T>;
+    return this(this.and(...schemas)) as any
   },
   compileArrayOf<T>(this: QuartetInstance, schema: Schema) {
     this.clearContextCounters();

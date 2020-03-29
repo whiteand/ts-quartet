@@ -56,6 +56,16 @@ function compileVariantElementToReturnWay(
   stringsSymbols: Array<string | number | symbol>
 ): [string, boolean] {
   return handleSchema<[string, boolean]>({
+    and: andSchema => defaultHandler(
+      v,
+      index,
+      valueId,
+      ctxId,
+      andSchema,
+      preparations,
+      handleErrors,
+      stringsSymbols
+    ),
     constant: constant => {
       if (constant === "false" || constant === "true") {
         return compileVariantElementToReturnWay(

@@ -22,6 +22,7 @@ export function compileNot(v: QuartetInstance, schema: Schema): FunctionSchema {
     });
   };
   return handleSchema({
+    and: defaultHandler,
     constant: constant => compileNot(v, constantToFunc(v, constant)),
     function: funcSchema => {
       const s = funcSchema();

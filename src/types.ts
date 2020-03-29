@@ -19,6 +19,9 @@ export interface IObjectSchema {
   [key: string]: Schema;
 }
 export interface IVariantSchema extends Array<Schema> {}
+export interface IAndSchema extends Array<Schema> {
+  0: "__quartet/and__";
+}
 export type ConstantSchema =
   | undefined
   | null
@@ -30,6 +33,7 @@ export type Schema =
   | FunctionSchema
   | ConstantSchema
   | IObjectSchema
+  | IAndSchema
   | IVariantSchema;
 
 export type HandleSchemaHandler<T extends Schema, R> = (schema: T) => R;
@@ -39,6 +43,7 @@ export interface IHandleSchemaHandlers<R> {
   object: HandleSchemaHandler<IObjectSchema, R>;
   objectRest: HandleSchemaHandler<IObjectSchema, R>;
   variant: HandleSchemaHandler<IVariantSchema, R>;
+  and: HandleSchemaHandler<IAndSchema, R>;
 }
 
 export interface ITest {
@@ -54,7 +59,7 @@ export type CompilationResult = ((value: any) => boolean) & IContext;
 export type TypedCompilationResult<T> = ((value: any) => value is T) & IContext;
 
 export interface IMethods {
-  and: (this: QuartetInstance, ...schemas: Schema[]) => FunctionSchema;
+  and: (this: QuartetInstance, ...schemas: Schema[]) => IAndSchema;
   arrayOf: (this: QuartetInstance, schema: Schema) => FunctionSchema;
   boolean: FunctionSchema;
   compileAnd: (<T = any>(

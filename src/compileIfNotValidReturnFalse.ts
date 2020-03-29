@@ -45,6 +45,24 @@ export function compileIfNotValidReturnFalse(
   preparations: Prepare[]
 ): [string, boolean] {
   return handleSchema<[string, boolean]>({
+    and: andSchema => {
+      let bodyCode = "";
+      let isPure = true;
+      for (let i = 1; i < andSchema.length; i++) {
+        const [anotherCode, anotherIsPure] = compileIfNotValidReturnFalse(
+          v,
+          valueId,
+          ctxId,
+          andSchema[i],
+          preparations
+        );
+        bodyCode += (bodyCode ? "\n" : '') + anotherCode;
+        if (!anotherIsPure) {
+          isPure = false;
+        }
+      }
+      return [bodyCode, isPure];
+    },
     constant: constant =>
       compileIfNotValidReturnFalse(
         v,

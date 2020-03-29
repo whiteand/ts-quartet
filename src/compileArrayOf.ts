@@ -10,19 +10,27 @@ import {
 
 function getOptimizedOrNull<T = any>(schema: Schema) {
   return handleSchema<null | TypedCompilationResult<T[]>>({
+    and: andSchema =>
+      andSchema.length === 1
+        ? Object.assign(
+            (value: any): value is T[] => value && Array.isArray(value),
+            { explanations: [], pure: true }
+          )
+        : null,
     constant: () => null,
     function: () => null,
     object: () => null,
     objectRest: () => null,
     variant: schemas => {
-      if (Array.isArray(schemas) && schemas.length === 0) {
-        return Object.assign(
-          (value: any): value is T[] =>
-            value && Array.isArray(value) && value.length === 0,
-          { explanations: [], pure: true }
-        );
+      if (schemas.length > 0) {
+        return null;
       }
-      return null;
+
+      return Object.assign(
+        (value: any): value is T[] =>
+          value && Array.isArray(value) && value.length === 0,
+        { explanations: [], pure: true }
+      );
     }
   })(schema);
 }
