@@ -5,7 +5,7 @@
 
 **Size: 4.6 KB** (minified and gzipped). No dependencies. [Size Limit](https://github.com/ai/size-limit) controls the size.
 
-Это декларативный и быстрый инструмент для валидации данных.
+It is a declarative and fast tool for data validation.
 
 - [Quartet 9: Allegro](#quartet-9-allegro)
   - [Examples](#examples)
@@ -16,7 +16,7 @@
   - [How to use it?](#how-to-use-it)
   - [What could be a validation scheme?](#what-could-be-a-validation-scheme)
     - [Primitives](#primitives)
-    - [Schemes out of the box](#schemes-out-of-the-box)
+    - [Schemas out of the box](#schemas-out-of-the-box)
       - [`v.boolean: Schema`](#vboolean-schema)
       - [`v.finite: Schema`](#vfinite-schema)
       - [`v.function: Schema`](#vfunction-schema)
@@ -26,8 +26,8 @@
       - [`v.safeInteger: Schema`](#vsafeinteger-schema)
       - [`v.string: Schema`](#vstring-schema)
       - [`v.symbol: Schema`](#vsymbol-schema)
-    - [Schemes created using quartet methods](#schemes-created-using-quartet-methods)
-      - [`v.and(...schemes: Schema[]): Schema`](#vandschemes-schema-schema)
+    - [Schemas created using quartet methods](#schemas-created-using-quartet-methods)
+      - [`v.and(...schemas: Schema[]): Schema`](#vandschemas-schema-schema)
       - [`v.arrayOf(elemSchema: Schema): Schema`](#varrayofelemschema-schema-schema)
       - [`v.custom(checkFunction: (x: any) => boolean): Schema`](#vcustomcheckfunction-x-any--boolean-schema)
       - [`v.max(maxValue: number, isExclusive?: boolean): Schema`](#vmaxmaxvalue-number-isexclusive-boolean-schema)
@@ -36,7 +36,7 @@
       - [`v.minLength(minLength: number, isExclusive?: number): Schema`](#vminlengthminlength-number-isexclusive-number-schema)
       - [`v.not(schema: Schema): Schema`](#vnotschema-schema-schema)
       - [`v.test(tester: { test(x: any) => boolean }): Schema`](#vtesttester--testx-any--boolean--schema)
-    - [Variant schemes](#variant-schemes)
+    - [Variant schemas](#variant-schemas)
     - [The schema for an object is an object](#the-schema-for-an-object-is-an-object)
   - [Conclusions](#conclusions)
   - [Advanced Quartet](#advanced-quartet)
@@ -44,7 +44,7 @@
 
 ## Examples
 
-Примеры смотрите [здесь](https://github.com/whiteand/ts-quartet/tree/master/examples/javascript).
+See examples [here](https://github.com/whiteand/ts-quartet/tree/master/examples/javascript).
 
 ## Benchmarks
 
@@ -53,17 +53,19 @@
 
 ## Is there extra word in this list?
 
-- Чужое API
+- 3rd-party API
 - Typescript
-- Уверенность
-- Простота
-- Производительность
+- Confidence
+- Simplicity
+- Performance
 
-На наш взгляд здесь нет лишнего слова. Давайте взглянем на следующую ситуацию.
+In our opinion, there is no extra word. Let's take a look at the following situation.
 
-Мы запрашиваем с **Чужого API** информацию про пользователя.
 
-Эта информация имеет определённый тип, запишем его на языке **TypeScript**:
+We request information about the user from the **3rd-party API**.
+
+
+This data has a certain type, we write it in the **TypeScript** language in this way:
 
 ```typescript
 interface Response {
@@ -77,10 +79,11 @@ interface Response {
 }
 ```
 
-Чтобы добиться **Уверенности** мы напишем функцию, которая сообщит нам действительно ли ответ имеет тип `Response`.
+To achieve **Confidence** we will write a function that tells us whether the answer is of type `Response`.
 
 ```typescript
-// Подробнее о таких функциях гуглите "Typescript Custom Type Guards"
+// More details about such functions google
+// "Typescript Custom Type Guards"
 function checkResponse(response: any): response is Response {
   if (response == null) return false;
 
@@ -110,7 +113,7 @@ const VALID_GENDERS_DICT = {
 };
 ```
 
-Теперь в том месте где мы делаем запрос сделаем проверку:
+Now in the place where we make the request, we will check:
 
 ```typescript
 // ...
@@ -118,20 +121,20 @@ const userResponse = await GET("http://api.com/user/1");
 if (!checkResponse(userResponse)) {
   throw new Error("API response is invalid");
 }
-const { user } = userResponse; // имеет тип Response
+const { user } = userResponse; // has type Response
 // ...
 ```
 
-Данный подход, с натяжкой, но можно назвать **Простым**.
+This approach, with a stretch, but can be called **Simple**.
 
-Довольно сложно придумать более быстрый вариант обеспечить гарантию типа. Поэтому этот код обладает достаточной **Производительностью**.
+It's pretty hard to come up with a faster option to provide a type guarantee. Therefore, this code has sufficient **Performance**.
 
-Мы получили всё то, что хотели!
+We got everything we wanted!
 
 ## Objections
 
-Вы можете сказать: Как же вы можете называть функцию `checkResponse` простой?
-Мы бы согласились, если бы она была такой же декларативной как сам тип `Response`. Что то на подобие:
+You can say: How can you call the function `checkResponse` simple?
+We would agree if it were as declarative as the type of `Response` itself. Something like:
 
 ```typescript
 const checkResponse = v<Response>({
@@ -145,91 +148,91 @@ const checkResponse = v<Response>({
 });
 ```
 
-Да! Любой бы с этим согласился. Такой подход был бы крайне удобным. Но только при условии, что производительность останется на том же уровне, что и у императивной версии.
+Yes! Anyone would agree with that. Such an approach would be extremely convenient. But only on condition that the performance remains at the same level as the imperative version.
 
 ## Confession
 
-Это именно то, что предоставляет вам эта библиотека. Надеюсь этот пример вас воодушевит читать дальше и в последствии начать пользоваться данной библиотекой.
+This is exactly what this library provides you. I hope this example inspires you to read further and subsequently start using this library.
 
 ## How to use it?
 
-Первое что нужно усвоить это основной порядок действий:
+Here's what you need to do to use this library.:
 
-- Установка
+- Install
 
 ```
 npm i -S quartet
 ```
 
-- Импортируйте "компилятор" схем:
+- Import the "compiler" of schemas:
 
 ```typescript
 import { v } from 'quartet'
 ```
 
-- Опишите тип значения, который вы хотите проверить.
+- Describe the type of value you want to check.
    
-Этот шаг не обязательный, и если вы не пользуетесь TypeScript - можете его смело пропускать. Просто он вам поможет написать схему валидации.
+This step is optional, and if you do not use TypeScript, you can safely skip it. It just helps you write a validation scheme.
 
 ```typescript
 type MyType = // ...
 ```
 
-- Создайте схему валидации
+- Create a validation scheme
 
 ```typescript
 const myTypeSchema = // ...
 ```
 
-- "Скомпилируйте" эту схему в функцию валидации
+- Compile this schema into a validation function
 
 ```typescript
 const checkMyType = v<MyType>(myTypeSchema)
 ```
 
-или тоже самое без параметра типа TypeScript:
+or the same without TypeScript type parameter:
 
 ```typescript
 const checkMyType = v(myTypeSchema)
 ```
 
-- Используйте `checkMyType` на тех данных, в которых вы не уверены. Она вернёт `true`, если данные валидны. Она вернёт `false` если данные не валидны.
+- Use `checkMyType` on data that you are not sure about. It will return `true` if the data is valid. It will return `false` if the data is not valid.
 
-(Смотрите пункт "Advanced Quartet" если хотите большего)
+(See [Advanced Quartet](#advanced-quartet) for more.)
 
 ## What could be a validation scheme?
 
 ### Primitives
 
-Каждое примитивное значение Javascript является собственной схемой валидации.
+Each primitive Javascript value is its own validation scheme.
 
-Приведу пример:
+I will give an example:
 
 ```typescript
 const isNull = v(null)
-// то же, что
+// same as
 const isNull = x => x === null
 ```
 
-или
+or
 
 ```typescript
 const is42 = v(42)
-// то же, что
+// same as
 const is42 = x => x === 42
 ```
 
-Примитивами считаются все значения Javascript, за исключением объектов(массивов в том числе) и функций. То есть: `undefined`, `null`, `false`, `true`, числа(`NaN`, `Infinity`, `-Infinity` в том числе) и строки.
+Primitives are all Javascript values, with the exception of objects (including arrays) and functions. That is: `undefined`,` null`, `false`,` true`, numbers (`NaN`,` Infinity`, `-Infinity` including) and strings.
 
-### Schemes out of the box
+### Schemas out of the box
 
-В `quartet` предусмотрены заготовленные схемы для определённых проверок. Они находятся в свойствах функции-компилятора `v`.
+Quartet provides pre-defined schemas for specific checks. They are in the properties of the `v` compiler function.
 
 #### `v.boolean: Schema`
 
 ```typescript
 const checkBoolean = v(v.boolean)
-// то же, что
+// same as
 const checkBoolean = x => typeof x === 'boolean'
 ```
 
@@ -237,7 +240,7 @@ const checkBoolean = x => typeof x === 'boolean'
 
 ```typescript
 const checkFinite = v(v.finite)
-// то же, что
+// same as
 const checkFinite = x => Number.isFinite(x)
 ```
 
@@ -245,7 +248,7 @@ const checkFinite = x => Number.isFinite(x)
 
 ```typescript
 const checkFunction = v(v.function)
-// то же, что
+// same as
 const checkFunction = x => typeof x === 'function'
 ```
 
@@ -253,7 +256,7 @@ const checkFunction = x => typeof x === 'function'
 
 ```typescript
 const checkNegative = v(v.negative)
-// то же, что
+// same as
 const checkNegative = x => x < 0
 ```
 
@@ -261,7 +264,7 @@ const checkNegative = x => x < 0
 
 ```typescript
 const checkNumber = v(v.number)
-// то же, что
+// same as
 const checkNumber = x => typeof x === 'number'
 ```
 
@@ -269,7 +272,7 @@ const checkNumber = x => typeof x === 'number'
 
 ```typescript
 const checkPositive = v(v.positive)
-// то же, что
+// same as
 const checkPositive = x => x > 0
 ```
 
@@ -277,7 +280,7 @@ const checkPositive = x => x > 0
 
 ```typescript
 const checkSafeInteger = v(v.safeInteger)
-// то же, что
+// same as
 const checkSafeInteger = x => Number.isSafeInteger(x)
 ```
 
@@ -285,7 +288,7 @@ const checkSafeInteger = x => Number.isSafeInteger(x)
 
 ```typescript
 const checkString = v(v.string)
-// то же, что
+// same as
 const checkString = x => typeof x === 'string'
 ```
 
@@ -293,23 +296,23 @@ const checkString = x => typeof x === 'string'
 
 ```typescript
 const checkSymbol = v(v.symbol)
-// то же, что
+// same as
 const checkSymbol = x => typeof x === 'symbol'
 ```
 
-### Schemes created using quartet methods
+### Schemas created using quartet methods
 
-У функции-компилятора также есть методы
+The compiler function also has methods that return schemas.
 
-#### `v.and(...schemes: Schema[]): Schema`
+#### `v.and(...schemas: Schema[]): Schema`
 
-Создаёт как бы соединение схем с помощью логического И (как оператор `&&`)
+It creates a kind of connection schemas using a logical AND (like the operator `&&`)
 
 ```typescript
 const positiveNumberSchema = v.and(v.number, v.positive)
 const isPositiveNumber = v(positiveNumberSchema)
 
-// то же, что
+// same as
 
 const isPositiveNumber = x => {
   if (typeof x !== 'number') return false
@@ -320,14 +323,14 @@ const isPositiveNumber = x => {
 
 #### `v.arrayOf(elemSchema: Schema): Schema`
 
-По схеме елемента создаёт схему валидации массива этих елементов:
+According to the element scheme, it creates a validation scheme for an array of these elements:
 
 ```typescript
 const elemSchema = v.and(v.number, v.positive)
 const arraySchema = v.arrayOf(elemSchema)
 const checkPositiveNumbersArray = v(arraySchema)
 
-// то же, что
+// same as
 
 const checkPositiveNumbersArray = x => {
   if (!x || !Array.isArray(x)) return false
@@ -342,7 +345,7 @@ const checkPositiveNumbersArray = x => {
 
 #### `v.custom(checkFunction: (x: any) => boolean): Schema`
 
-По функции валидации создаёт схему.
+From the validation function, it creates a schema.
 
 ```typescript
 function checkEven(x) {
@@ -352,7 +355,7 @@ function checkEven(x) {
 const evenSchema = v.custom(isEven)
 const checkPositiveEvenNumber = v.and(v.number, v.positive, evenSchema)
 
-// то же, что
+// same as
 
 const checkPositiveEvenNumber = x => {
   if (typeof x !== 'number') return false
@@ -363,70 +366,70 @@ const checkPositiveEvenNumber = x => {
 
 ```
 
-(Смотрите пункт "Advanced Quartet" если хотите большего)
+(See [Advanced Quartet](#advanced-quartet) for more.)
 
 #### `v.max(maxValue: number, isExclusive?: boolean): Schema`
 
-По максимальному(или граничному) числу возвращает соответствующую схему валидации
+By the maximum (or boundary) number returns the corresponding validation scheme.
 
 ```typescript
 const checkLessOrEqualToFive = v(v.max(5))
-// то же, что
+// same as
 const checkLessOrEqualToFive = x => x <= 5
 ```
 
 ```typescript
 const checkLessThanFive = v(v.max(5, true))
-// то же, что
+// same as
 const checkLessThanFive = x => x < 5
 ```
 
 #### `v.maxLength(maxLength: number, isExclusive?: boolean): Schema`
 
-По максимальному(или граничному) значению длинны возвращает соответствующую cхему
+By the maximum (or boundary) value of the length, returns the corresponding schema.
 
 ```typescript
 const checkTwitterText = v(v.maxLength(140))
-// то же, что
+// same as
 const checkTwitterText = x => x != null && x.length <= 140
 const checkTwitterText = v({ length: v.max(140) })
 ```
 ```typescript
 const checkSmallArray = v(v.maxLength(20, true))
-// то же, что
+// same as
 const checkSmallArray = x => x != null && x.length < 140
 const checkTwitterText = v({ length: v.max(20, true) })
 ```
 
 #### `v.min(minValue: number, isExclusive?: boolean): Schema`
 
-По минимальному(или граничному) числу возвращает соответствующую схему валидации
+By the minimum (or boundary) number returns the corresponding validation scheme.
 
 ```typescript
 const checkNonNegative = v(v.min(0))
-// то же, что
+// same as
 const checkNonNegative = x => x >= 0
 ```
 ```typescript
 const checkPositive = v(v.min(0, true))
-// то же, что
+// same as
 const checkPositive = x => x > 0
 const checkPositive = v(v.positive)
 ```
 
 #### `v.minLength(minLength: number, isExclusive?: number): Schema`
 
-По максимальному(или граничному) значению длинны возвращает соответствующую cхему.
+By the minimum (or boundary) value of the length, returns the corresponding schema.
 
 ```typescript
 const checkLargeArrayOrString = v(v.minLength(1024))
-// то же, что
+// same as
 const checkLargeArrayOrString = x => x != null && x.length >= 1024
 const checkLargeArrayOrString = v({ length: v.min(1024) })
 ```
 ```typescript
 const checkNotEmptyStringOrArray = v(v.minLength(0, true))
-// то же, что
+// same as
 const checkNotEmptyStringOrArray = x => x != null && x.length > 0
 const checkNotEmptyStringOrArray = v({ length: v.min(0, true) })
 
@@ -434,7 +437,7 @@ const checkNotEmptyStringOrArray = v({ length: v.min(0, true) })
 
 #### `v.not(schema: Schema): Schema`
    
-Как бы применяет логическое отрицание(оператор `!`) к переданной схеме. Возвращает схему "обратную" к переданной
+Applies logical negation (like the `!` Operator) to the passed schema. Returns the inverse schema to the passed one.
 
 ```typescript
 const checkNonPositive = v(v.not(v.positive))
@@ -446,25 +449,25 @@ const checkIsNotNullOrUndefined = v(
 
 #### `v.test(tester: { test(x: any) => boolean }): Schema`
 
-По объекту с методом `test` возвращает схему, которая проверяет возвращает ли данные метод на проверяемом значении `true`.
+On an object with the `test` method, returns a schema that checks whether the given `test` method returns `true` on the checked value .
 
-Чаще всего используется с Regular Expressions.
+Most commonly used with Regular Expressions.
 
 `v.test(tester) === v.custom(x => tester.test(x))`
 
 ```typescript
 const checkIntegerNumberString = v(v.test(/[1-9]\d*/))
-// то же, что
+// same as
 const checkIntegerNumberString = x => /[1-9]\d*/.test(x)
 ```
 
-### Variant schemes
+### Variant schemas
 
-Массив схем выступает как бы соединением схем с помощью логической операции ИЛИ(оператор `||`)
+An array of schemas acts as a connection of schemas using the logical operation OR (operator `||`)
 
 ```typescript
 const checkStringOrNull = v([v.string, null])
-// то же, что
+// same as
 const checkStringOrNull = x => {
   if (typeof x === 'string') return true
   if (x === null) return true
@@ -474,7 +477,7 @@ const checkStringOrNull = x => {
 
 ```typescript
 const checkGender = v(['male', 'female'])
-// то же, что
+// same as
 const VALID_GENDERS = { male: true, female: true }
 const checkStringOrNull = x => {
   if (VALID_GENDERS[x] === true) return true
@@ -484,7 +487,7 @@ const checkStringOrNull = x => {
 
 ```typescript
 const checkRating = v([1,2,3,4,5])
-// то же, что
+// same as
 const checkRating = x => {
   if (x === 1) return true
   if (x === 2) return true
@@ -497,11 +500,11 @@ const checkRating = x => {
 
 ### The schema for an object is an object
 
-Объект, где значения являются схемами выступает схемой валидации объекта. Где соответствующие поля валидируется соответствующими схемами.
+An object whose values are schemas is an object validation schema. Where the appropriate fields are validated by the appropriate schemas.
 
 ```typescript
 const checkHelloWorld = v({ hello: 'World' })
-// то же, что
+// same as
 const checkHelloWorld = x => {
   if (x == null) return false
   if (x.hello !== 'World') return false
@@ -509,7 +512,7 @@ const checkHelloWorld = x => {
 }
 ```
 
-Если вы хотите валидировать объекты с неизвестными заранее полями - используйте `v.rest`
+If you want to validate objects with previously unknown fields, use `v.rest`
 
 ```typescript
 interface PhoneBook {
@@ -523,7 +526,7 @@ const checkPhoneBook = v({
 })
 ```
 
-Схема по ключу `v.rest` будет валидировать все неуказанные поля.
+The scheme from the `v.rest` key will validate all unspecified fields.
 
 ```typescript
 interface PhoneBookWithAuthorId {
@@ -541,7 +544,7 @@ const checkPhoneBookWithAuthorId = v({
 
 ## Conclusions
 
-Используя эти схемы и комбинируя их вы можете декларативно описывать функции валидации, а функция-компилятор `v` создаст функцию, которая в императивном стиле проверит значение на соответствие вашей схеме.
+Using these schemes and combining them, you can declaratively describe validation functions, and the `v` compiler function will create a function that imperatively checks the value against your scheme.
 
 ## Advanced Quartet
 
@@ -549,7 +552,7 @@ const checkPhoneBookWithAuthorId = v({
 
 ## Ajv vs Quartet 9: Allegro
 
-Я написал бенчмарк для того, чтобы сравнить одну из самых быстрых библиотек валидации `ajv` с моей на примере из вступления.
+I wrote a benchmark in order to compare one of the fastest `ajv` validation libraries with my example from the introduction.
 
 ```javascript
 
@@ -691,7 +694,7 @@ suite
   .run();
 ```
 
-И результат такой:
+And the result is this:
 
 ```
 ajv                x 1,670,584 ops/sec ±0.79% (90 runs sampled)
