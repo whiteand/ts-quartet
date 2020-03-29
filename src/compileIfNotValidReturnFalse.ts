@@ -56,7 +56,7 @@ export function compileIfNotValidReturnFalse(
           andSchema[i],
           preparations
         );
-        bodyCode += (bodyCode ? "\n" : '') + anotherCode;
+        bodyCode += (bodyCode ? "\n" : "") + anotherCode;
         if (!anotherIsPure) {
           isPure = false;
         }

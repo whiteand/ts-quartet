@@ -14,7 +14,7 @@ import {
 
 export const methods: IMethods = {
   and(...schemas: Schema[]) {
-    return [AND_SCHEMA_ID, ...schemas]
+    return [AND_SCHEMA_ID, ...schemas];
   },
   arrayOf(schema: Schema) {
     const compiledArr = compileArrayOf(this, schema);
@@ -39,7 +39,7 @@ export const methods: IMethods = {
     not: valueId => `typeof ${valueId} !== 'boolean'`
   }),
   compileAnd<T>(this: QuartetInstance, ...schemas: Schema[]) {
-    return this(this.and(...schemas)) as any
+    return this(this.and(...schemas)) as any;
   },
   compileArrayOf<T>(this: QuartetInstance, schema: Schema) {
     this.clearContextCounters();
