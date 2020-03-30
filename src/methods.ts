@@ -101,14 +101,14 @@ export const methods: IMethods = {
     });
     const [boundaryId, prepareBoundary] = this.toContext("errorBoundary", {
       handler: errorBoundary,
-      schema,
-      validator: compiled,
       p: {
-        value: null,
         id: null,
+        innerExplanations: [],
         schema: null,
-        innerExplanations: []
-      }
+        value: null
+      },
+      schema,
+      validator: compiled
     });
     const getBoundary = getKeyAccessor(boundaryId);
 
@@ -116,7 +116,9 @@ export const methods: IMethods = {
       check: (id, ctx) => `${ctx}${getBoundary}.validator(${id})`,
       handleError: (id, ctx) => {
         const b = `${ctx}${getBoundary}`;
-        return `${b}.p.id = ${JSON.stringify(id)}\n${b}.p.innerExplanations =  ${b}.validator.explanations\n${b}.p.schema = ${b}.schema\n${b}.p.value=${id}\n${b}.handler(${ctx}.explanations,${b}.p)`;
+        return `${b}.p.id = ${JSON.stringify(
+          id
+        )}\n${b}.p.innerExplanations =  ${b}.validator.explanations\n${b}.p.schema = ${b}.schema\n${b}.p.value=${id}\n${b}.handler(${ctx}.explanations,${b}.p)`;
       },
       not: (id, ctx) => `!${ctx}${getBoundary}.validator(${id})`,
       prepare: prepareBoundary
