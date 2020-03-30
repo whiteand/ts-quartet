@@ -1,6 +1,6 @@
 import { v, e, quartet } from "../index";
 import { ErrorBoundary } from "../types";
-import { tables } from "./utils";
+import { tables, snapshot } from "./utils";
 const errorBoundary: ErrorBoundary = (
   explanations,
   { value, innerExplanations, schema, id }
