@@ -69,7 +69,7 @@ describe("errorBoundary", () => {
       id: v.safeInteger
     };
     const checkPerson = exp(schema);
-    console.log(checkPerson.toString())
+    console.log(checkPerson.toString());
     const expl2 = (checkPerson({ name: "Andrew", id: "1" }),
     checkPerson.explanations);
     expect(expl2).toEqual([
