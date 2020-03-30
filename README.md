@@ -391,7 +391,7 @@ Where
 
 - `explanations` - an array into which we must insert explanations
 - `value` - invalid value
-- `schema` - passed scheme
+- `schema` - schema that was cause invalidation
 - `innerExplanations` - explanations of internal invalidations
 - `id` - name of invalid value in validator code
 
