@@ -1,6 +1,6 @@
 import { v, e, quartet } from "../index";
 import { ErrorBoundary } from "../types";
-import { tables, snapshot } from "./utils";
+import { tables } from "./utils";
 const errorBoundary: ErrorBoundary = (
   explanations,
   { value, innerExplanations, schema, id }
@@ -69,7 +69,6 @@ describe("errorBoundary", () => {
       id: v.safeInteger
     };
     const checkPerson = exp(schema);
-    console.log(checkPerson.toString());
     const expl2 = (checkPerson({ name: "Andrew", id: "1" }),
     checkPerson.explanations);
     expect(expl2).toEqual([
