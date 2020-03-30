@@ -1,4 +1,4 @@
-import { v } from "../index";
+import { v, quartet, e } from "../index";
 import { snapshot, puretables, tables } from "./utils";
 import {
   primitives,

@@ -30,6 +30,7 @@ It is a declarative and fast tool for data validation.
       - [`v.and(...schemas: Schema[]): Schema`](#vandschemas-schema-schema)
       - [`v.arrayOf(elemSchema: Schema): Schema`](#varrayofelemschema-schema-schema)
       - [`v.custom(checkFunction: (x: any) => boolean): Schema`](#vcustomcheckfunction-x-any--boolean-schema)
+      - [`v.errorBoundary(schema: Schema, errorBoundary?: ErrorBoundary): Schema`](#verrorboundaryschema-schema-errorboundary-errorboundary-schema)
       - [`v.max(maxValue: number, isExclusive?: boolean): Schema`](#vmaxmaxvalue-number-isexclusive-boolean-schema)
       - [`v.maxLength(maxLength: number, isExclusive?: boolean): Schema`](#vmaxlengthmaxlength-number-isexclusive-boolean-schema)
       - [`v.min(minValue: number, isExclusive?: boolean): Schema`](#vminminvalue-number-isexclusive-boolean-schema)
@@ -39,6 +40,8 @@ It is a declarative and fast tool for data validation.
     - [Variant schemas](#variant-schemas)
     - [The schema for an object is an object](#the-schema-for-an-object-is-an-object)
   - [Conclusions](#conclusions)
+  - [Configuring](#configuring)
+    - [`errorBoundary`](#errorboundary)
   - [Advanced Quartet](#advanced-quartet)
   - [Ajv vs Quartet 9: Allegro](#ajv-vs-quartet-9-allegro)
 
@@ -50,7 +53,6 @@ See examples [here](https://github.com/whiteand/ts-quartet/tree/master/examples/
 
 [`Ajv` vs `quartet` 9: Allegro](#ajv-vs-quartet-9-allegro)
 
-
 ## Is there extra word in this list?
 
 - 3rd-party API
@@ -61,9 +63,7 @@ See examples [here](https://github.com/whiteand/ts-quartet/tree/master/examples/
 
 In our opinion, there is no extra word. Let's take a look at the following situation.
 
-
 We request information about the user from the **3rd-party API**.
-
 
 This data has a certain type, we write it in the **TypeScript** language in this way:
 
@@ -73,9 +73,9 @@ interface Response {
     id: number;
     name: string;
     age: number;
-    gender: 'Male' | 'Female';
+    gender: "Male" | "Female";
     friendsIds: number[];
-  }
+  };
 }
 ```
 
@@ -142,7 +142,7 @@ const checkResponse = v<Response>({
     id: v.number,
     name: v.string,
     age: v.number,
-    gender: ['Male', 'Female'],
+    gender: ["Male", "Female"],
     friendsIds: v.arrayOf(v.number)
   }
 });
@@ -167,11 +167,11 @@ npm i -S quartet
 - Import the "compiler" of schemas:
 
 ```typescript
-import { v } from 'quartet'
+import { v } from "quartet";
 ```
 
 - Describe the type of value you want to check.
-   
+
 This step is optional, and if you do not use TypeScript, you can safely skip it. It just helps you write a validation scheme.
 
 ```typescript
@@ -187,13 +187,13 @@ const myTypeSchema = // ...
 - Compile this schema into a validation function
 
 ```typescript
-const checkMyType = v<MyType>(myTypeSchema)
+const checkMyType = v<MyType>(myTypeSchema);
 ```
 
 or the same without TypeScript type parameter:
 
 ```typescript
-const checkMyType = v(myTypeSchema)
+const checkMyType = v(myTypeSchema);
 ```
 
 - Use `checkMyType` on data that you are not sure about. It will return `true` if the data is valid. It will return `false` if the data is not valid.
@@ -209,20 +209,20 @@ Each primitive Javascript value is its own validation scheme.
 I will give an example:
 
 ```typescript
-const isNull = v(null)
+const isNull = v(null);
 // same as
-const isNull = x => x === null
+const isNull = x => x === null;
 ```
 
 or
 
 ```typescript
-const is42 = v(42)
+const is42 = v(42);
 // same as
-const is42 = x => x === 42
+const is42 = x => x === 42;
 ```
 
-Primitives are all Javascript values, with the exception of objects (including arrays) and functions. That is: `undefined`,` null`, `false`,` true`, numbers (`NaN`,` Infinity`, `-Infinity` including) and strings.
+Primitives are all Javascript values, with the exception of objects (including arrays) and functions. That is: `undefined`,`null`, `false`,`true`, numbers (`NaN`,`Infinity`, `-Infinity` including) and strings.
 
 ### Schemas out of the box
 
@@ -231,73 +231,73 @@ Quartet provides pre-defined schemas for specific checks. They are in the proper
 #### `v.boolean: Schema`
 
 ```typescript
-const checkBoolean = v(v.boolean)
+const checkBoolean = v(v.boolean);
 // same as
-const checkBoolean = x => typeof x === 'boolean'
+const checkBoolean = x => typeof x === "boolean";
 ```
 
 #### `v.finite: Schema`
 
 ```typescript
-const checkFinite = v(v.finite)
+const checkFinite = v(v.finite);
 // same as
-const checkFinite = x => Number.isFinite(x)
+const checkFinite = x => Number.isFinite(x);
 ```
 
 #### `v.function: Schema`
 
 ```typescript
-const checkFunction = v(v.function)
+const checkFunction = v(v.function);
 // same as
-const checkFunction = x => typeof x === 'function'
+const checkFunction = x => typeof x === "function";
 ```
 
 #### `v.negative: Schema`
 
 ```typescript
-const checkNegative = v(v.negative)
+const checkNegative = v(v.negative);
 // same as
-const checkNegative = x => x < 0
+const checkNegative = x => x < 0;
 ```
 
 #### `v.number: Schema`
 
 ```typescript
-const checkNumber = v(v.number)
+const checkNumber = v(v.number);
 // same as
-const checkNumber = x => typeof x === 'number'
+const checkNumber = x => typeof x === "number";
 ```
 
 #### `v.positive: Schema`
 
 ```typescript
-const checkPositive = v(v.positive)
+const checkPositive = v(v.positive);
 // same as
-const checkPositive = x => x > 0
+const checkPositive = x => x > 0;
 ```
 
 #### `v.safeInteger: Schema`
 
 ```typescript
-const checkSafeInteger = v(v.safeInteger)
+const checkSafeInteger = v(v.safeInteger);
 // same as
-const checkSafeInteger = x => Number.isSafeInteger(x)
+const checkSafeInteger = x => Number.isSafeInteger(x);
 ```
 
 #### `v.string: Schema`
 
 ```typescript
-const checkString = v(v.string)
+const checkString = v(v.string);
 // same as
-const checkString = x => typeof x === 'string'
+const checkString = x => typeof x === "string";
 ```
 
 #### `v.symbol: Schema`
 
 ```typescript
-const checkSymbol = v(v.symbol)
+const checkSymbol = v(v.symbol);
 // same as
-const checkSymbol = x => typeof x === 'symbol'
+const checkSymbol = x => typeof x === "symbol";
 ```
 
 ### Schemas created using quartet methods
@@ -309,16 +309,16 @@ The compiler function also has methods that return schemas.
 It creates a kind of connection schemas using a logical AND (like the operator `&&`)
 
 ```typescript
-const positiveNumberSchema = v.and(v.number, v.positive)
-const isPositiveNumber = v(positiveNumberSchema)
+const positiveNumberSchema = v.and(v.number, v.positive);
+const isPositiveNumber = v(positiveNumberSchema);
 
 // same as
 
 const isPositiveNumber = x => {
-  if (typeof x !== 'number') return false
-  if (x <= 0) return false
-  return true
-}
+  if (typeof x !== "number") return false;
+  if (x <= 0) return false;
+  return true;
+};
 ```
 
 #### `v.arrayOf(elemSchema: Schema): Schema`
@@ -326,21 +326,21 @@ const isPositiveNumber = x => {
 According to the element scheme, it creates a validation scheme for an array of these elements:
 
 ```typescript
-const elemSchema = v.and(v.number, v.positive)
-const arraySchema = v.arrayOf(elemSchema)
-const checkPositiveNumbersArray = v(arraySchema)
+const elemSchema = v.and(v.number, v.positive);
+const arraySchema = v.arrayOf(elemSchema);
+const checkPositiveNumbersArray = v(arraySchema);
 
 // same as
 
 const checkPositiveNumbersArray = x => {
-  if (!x || !Array.isArray(x)) return false
+  if (!x || !Array.isArray(x)) return false;
   for (let i = 0; i < 0; i++) {
-    const elem = x[i]
-    if (typeof elem !== 'number') return false
-    if (elem <= 0) return false
+    const elem = x[i];
+    if (typeof elem !== "number") return false;
+    if (elem <= 0) return false;
   }
-  return true
-}
+  return true;
+};
 ```
 
 #### `v.custom(checkFunction: (x: any) => boolean): Schema`
@@ -349,39 +349,90 @@ From the validation function, it creates a schema.
 
 ```typescript
 function checkEven(x) {
-  return x % 2 === 0
+  return x % 2 === 0;
 }
 
-const evenSchema = v.custom(isEven)
-const checkPositiveEvenNumber = v.and(v.number, v.positive, evenSchema)
+const evenSchema = v.custom(isEven);
+const checkPositiveEvenNumber = v.and(v.number, v.positive, evenSchema);
 
 // same as
 
 const checkPositiveEvenNumber = x => {
-  if (typeof x !== 'number') return false
-  if (x <= 0) return false
-  if (!checkEven(x)) return false
-  return true
-}
-
+  if (typeof x !== "number") return false;
+  if (x <= 0) return false;
+  if (!checkEven(x)) return false;
+  return true;
+};
 ```
 
 (See [Advanced Quartet](#advanced-quartet) for more.)
+
+#### `v.errorBoundary(schema: Schema, errorBoundary?: ErrorBoundary): Schema`
+
+Returns an equivalent schema to the one passed, but with additional behavior. If validation fails, the `errorBoundary` function is called.
+
+This function inserts the necessary explanations into the array passed to it by the first parameter.
+
+This function has the following type:
+
+```typescript
+type ErrorBoundary = (
+  explanations: any[],
+  data: {
+    value: any;
+    schema: Schema;
+    innerExplanations: any[];
+    id: string | number;
+  }
+) => void;
+```
+
+Where
+
+- `explanations` - an array into which we must insert explanations
+- `value` - invalid value
+- `schema` - passed scheme
+- `innerExplanations` - explanations of internal invalidations
+- `id` - name of invalid value in validator code
+
+If the parameter `errorBoundary` is not forwarded, the default `errorBoundary` from this quartet instance will be used. (See [Configuration](#configuring))
+
+If the parameter `errorBoundary` is not forwarded and there is no `errorBoundary` by default, the scheme will return without any changes.
+
+Example:
+
+```typescript
+const errorBoundaryHandler = (explanations, { value }) =>
+  explanations.push(value);
+
+const elementSchema = v.errorBoundary(v.number, errorBoundaryHandler);
+
+const checkNumbers = v(v.arrayOf(elementSchema));
+
+checkNumbers([]); // true
+checkNumbers.explanations; // []
+
+checkNumbers([1, 2, 3, 4]); // true
+checkNumbers.explanations; // []
+
+checkNumbers([1, 2, 3, "4"]);
+checkNumbers.explanations; // ['4']
+```
 
 #### `v.max(maxValue: number, isExclusive?: boolean): Schema`
 
 By the maximum (or boundary) number returns the corresponding validation scheme.
 
 ```typescript
-const checkLessOrEqualToFive = v(v.max(5))
+const checkLessOrEqualToFive = v(v.max(5));
 // same as
-const checkLessOrEqualToFive = x => x <= 5
+const checkLessOrEqualToFive = x => x <= 5;
 ```
 
 ```typescript
-const checkLessThanFive = v(v.max(5, true))
+const checkLessThanFive = v(v.max(5, true));
 // same as
-const checkLessThanFive = x => x < 5
+const checkLessThanFive = x => x < 5;
 ```
 
 #### `v.maxLength(maxLength: number, isExclusive?: boolean): Schema`
@@ -389,16 +440,17 @@ const checkLessThanFive = x => x < 5
 By the maximum (or boundary) value of the length, returns the corresponding schema.
 
 ```typescript
-const checkTwitterText = v(v.maxLength(140))
+const checkTwitterText = v(v.maxLength(140));
 // same as
-const checkTwitterText = x => x != null && x.length <= 140
-const checkTwitterText = v({ length: v.max(140) })
+const checkTwitterText = x => x != null && x.length <= 140;
+const checkTwitterText = v({ length: v.max(140) });
 ```
+
 ```typescript
-const checkSmallArray = v(v.maxLength(20, true))
+const checkSmallArray = v(v.maxLength(20, true));
 // same as
-const checkSmallArray = x => x != null && x.length < 140
-const checkTwitterText = v({ length: v.max(20, true) })
+const checkSmallArray = x => x != null && x.length < 140;
+const checkTwitterText = v({ length: v.max(20, true) });
 ```
 
 #### `v.min(minValue: number, isExclusive?: boolean): Schema`
@@ -406,15 +458,16 @@ const checkTwitterText = v({ length: v.max(20, true) })
 By the minimum (or boundary) number returns the corresponding validation scheme.
 
 ```typescript
-const checkNonNegative = v(v.min(0))
+const checkNonNegative = v(v.min(0));
 // same as
-const checkNonNegative = x => x >= 0
+const checkNonNegative = x => x >= 0;
 ```
+
 ```typescript
-const checkPositive = v(v.min(0, true))
+const checkPositive = v(v.min(0, true));
 // same as
-const checkPositive = x => x > 0
-const checkPositive = v(v.positive)
+const checkPositive = x => x > 0;
+const checkPositive = v(v.positive);
 ```
 
 #### `v.minLength(minLength: number, isExclusive?: number): Schema`
@@ -422,29 +475,27 @@ const checkPositive = v(v.positive)
 By the minimum (or boundary) value of the length, returns the corresponding schema.
 
 ```typescript
-const checkLargeArrayOrString = v(v.minLength(1024))
+const checkLargeArrayOrString = v(v.minLength(1024));
 // same as
-const checkLargeArrayOrString = x => x != null && x.length >= 1024
-const checkLargeArrayOrString = v({ length: v.min(1024) })
+const checkLargeArrayOrString = x => x != null && x.length >= 1024;
+const checkLargeArrayOrString = v({ length: v.min(1024) });
 ```
-```typescript
-const checkNotEmptyStringOrArray = v(v.minLength(0, true))
-// same as
-const checkNotEmptyStringOrArray = x => x != null && x.length > 0
-const checkNotEmptyStringOrArray = v({ length: v.min(0, true) })
 
+```typescript
+const checkNotEmptyStringOrArray = v(v.minLength(0, true));
+// same as
+const checkNotEmptyStringOrArray = x => x != null && x.length > 0;
+const checkNotEmptyStringOrArray = v({ length: v.min(0, true) });
 ```
 
 #### `v.not(schema: Schema): Schema`
-   
+
 Applies logical negation (like the `!` Operator) to the passed schema. Returns the inverse schema to the passed one.
 
 ```typescript
-const checkNonPositive = v(v.not(v.positive))
-const checkNot42 = v(v.not(42))
-const checkIsNotNullOrUndefined = v(
-  v.and(v.not(null), v.not(undefined))
-)
+const checkNonPositive = v(v.not(v.positive));
+const checkNot42 = v(v.not(42));
+const checkIsNotNullOrUndefined = v(v.and(v.not(null), v.not(undefined)));
 ```
 
 #### `v.test(tester: { test(x: any) => boolean }): Schema`
@@ -456,9 +507,9 @@ Most commonly used with Regular Expressions.
 `v.test(tester) === v.custom(x => tester.test(x))`
 
 ```typescript
-const checkIntegerNumberString = v(v.test(/[1-9]\d*/))
+const checkIntegerNumberString = v(v.test(/[1-9]\d*/));
 // same as
-const checkIntegerNumberString = x => /[1-9]\d*/.test(x)
+const checkIntegerNumberString = x => /[1-9]\d*/.test(x);
 ```
 
 ### Variant schemas
@@ -466,36 +517,36 @@ const checkIntegerNumberString = x => /[1-9]\d*/.test(x)
 An array of schemas acts as a connection of schemas using the logical operation OR (operator `||`)
 
 ```typescript
-const checkStringOrNull = v([v.string, null])
+const checkStringOrNull = v([v.string, null]);
 // same as
 const checkStringOrNull = x => {
-  if (typeof x === 'string') return true
-  if (x === null) return true
-  return false
-}
+  if (typeof x === "string") return true;
+  if (x === null) return true;
+  return false;
+};
 ```
 
 ```typescript
-const checkGender = v(['male', 'female'])
+const checkGender = v(["male", "female"]);
 // same as
-const VALID_GENDERS = { male: true, female: true }
+const VALID_GENDERS = { male: true, female: true };
 const checkStringOrNull = x => {
-  if (VALID_GENDERS[x] === true) return true
-  return false
-}
+  if (VALID_GENDERS[x] === true) return true;
+  return false;
+};
 ```
 
 ```typescript
-const checkRating = v([1,2,3,4,5])
+const checkRating = v([1, 2, 3, 4, 5]);
 // same as
 const checkRating = x => {
-  if (x === 1) return true
-  if (x === 2) return true
-  if (x === 3) return true
-  if (x === 4) return true
-  if (x === 5) return true
-  return false
-}
+  if (x === 1) return true;
+  if (x === 2) return true;
+  if (x === 3) return true;
+  if (x === 4) return true;
+  if (x === 5) return true;
+  return false;
+};
 ```
 
 ### The schema for an object is an object
@@ -503,48 +554,109 @@ const checkRating = x => {
 An object whose values are schemas is an object validation schema. Where the appropriate fields are validated by the appropriate schemas.
 
 ```typescript
-const checkHelloWorld = v({ hello: 'World' })
+const checkHelloWorld = v({ hello: "World" });
 // same as
 const checkHelloWorld = x => {
-  if (x == null) return false
-  if (x.hello !== 'World') return false
-  return true
-}
+  if (x == null) return false;
+  if (x.hello !== "World") return false;
+  return true;
+};
 ```
 
 If you want to validate objects with previously unknown fields, use `v.rest`
 
 ```typescript
 interface PhoneBook {
-  [name: string]: string
+  [name: string]: string;
 }
 ```
 
 ```typescript
 const checkPhoneBook = v({
   [v.rest]: v.string
-})
+});
 ```
 
 The scheme from the `v.rest` key will validate all unspecified fields.
 
 ```typescript
 interface PhoneBookWithAuthorId {
-  authorId: number
-  [name: string]: string
+  authorId: number;
+  [name: string]: string;
 }
 ```
 
 ```typescript
 const checkPhoneBookWithAuthorId = v({
   authorId: v.number,
-  [v.rest]: v.string,
-})
+  [v.rest]: v.string
+});
 ```
 
 ## Conclusions
 
 Using these schemes and combining them, you can declaratively describe validation functions, and the `v` compiler function will create a function that imperatively checks the value against your scheme.
+
+## Configuring
+
+`v` that is used in this documentation is an zero-configured "instance" of `quartet`.
+
+```typescript
+export const v = quartet();
+```
+
+You can create your own customized instances of `quartet`
+
+```typescript
+import { quartet } from "quartet";
+
+const config = {
+  // ...
+};
+const myV = quartet(config);
+```
+
+`config` can contain such props:
+
+### `errorBoundary`
+
+This field describes default errorBoundary that will be applied for each compiled schema(Each function that will be generated by `quartet` will have this error boundary by default).
+
+(Look more [here](#verrorboundaryschema-schema-errorboundaryhandler-errorboundary-schema))
+
+Example:
+
+```typescript
+const exp = quartet({
+  errorBoundary(explanations, { id, value, schema, innerExplanations }) {
+    if (innerExplanations.length > 0) {
+      explanations.push(...innerExplanations);
+    } else {
+      explanations.push({ id, value, schema });
+    }
+  }
+});
+
+const nameSchema = exp.and(exp.string, exp.minLength(1));
+const idSchema = v.safeInteger;
+const schema = {
+  name: exp.errorBoundary(nameSchema), // apply default error boundary for name property
+  id: exp.errorBoundary(idSchema) // apply default error boundary for id property
+};
+const checkPerson = exp(schema);
+
+checkPerson(null); // false
+console.log(checkPerson.explanations);
+// [{ value: null, schema: { name: ..., id: ... }, id: "value" }]
+
+checkPerson({});
+console.log(checkPerson.explanations);
+// [{ value: undefined, schema: nameSchema, id: "value.name" }]
+
+checkPerson({ name: "Andrew", id: "1" });
+console.log(checkPerson.explanations);
+// [{ value: '1', schema: v.safeInteger, id: "value.id" }]
+```
 
 ## Advanced Quartet
 
@@ -555,7 +667,6 @@ Using these schemes and combining them, you can declaratively describe validatio
 I wrote a benchmark in order to compare one of the fastest `ajv` validation libraries with my example from the introduction.
 
 ```javascript
-
 const Benchmark = require("benchmark");
 
 const { v } = require("quartet");
@@ -564,10 +675,10 @@ const validator = v({
     id: v.number,
     name: v.string,
     age: v.number,
-    gender: ['Male', 'Female'],
+    gender: ["Male", "Female"],
     friendsIds: v.arrayOf(v.number)
   }
-})
+});
 
 const Ajv = require("ajv");
 const ajv = new Ajv();

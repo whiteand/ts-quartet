@@ -77,6 +77,11 @@ export interface IMethods {
     check: CustomFunction,
     explanation?: any
   ) => FunctionSchema;
+  errorBoundary: (
+    this: QuartetInstance,
+    schema: Schema,
+    errorBoundary?: ErrorBoundary
+  ) => Schema;
   finite: FunctionSchema;
   function: FunctionSchema;
   max: (
@@ -110,8 +115,13 @@ export interface IMethods {
   symbol: FunctionSchema;
   test: (this: QuartetInstance, test: ITest) => FunctionSchema;
 }
-
-export type PureCompile = (schema: Schema) => CompilationResult;
+export interface IPureCompileConfig {
+  ignoreGlobalErrorBoundary: boolean;
+}
+export type PureCompile = (
+  schema: Schema,
+  compilationParam?: IPureCompileConfig
+) => CompilationResult;
 export type ToContext = (
   prefix: string | number,
   value: any,
@@ -122,6 +132,22 @@ interface IInnerMethods {
   pureCompile: PureCompile;
   toContext: ToContext;
   clearContextCounters: () => void;
+  settings: ISettings;
+}
+
+export interface IErrorBoundaryParams {
+  value: any;
+  schema: Schema;
+  innerExplanations: any[];
+  id: string | number
+}
+export type ErrorBoundary = (
+  explanations: any[],
+  params: IErrorBoundaryParams
+) => any;
+
+export interface ISettings {
+  errorBoundary?: ErrorBoundary;
 }
 
 export type QuartetInstance = IMethods &

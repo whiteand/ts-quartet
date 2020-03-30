@@ -89,6 +89,33 @@ export const methods: IMethods = {
       };
     };
   },
+  errorBoundary(schema, errorBoundary) {
+    if (!errorBoundary && !this.settings.errorBoundary) {
+      return schema;
+    }
+
+    errorBoundary = errorBoundary || this.settings.errorBoundary;
+
+    const compiled = this.pureCompile(schema, {
+      ignoreGlobalErrorBoundary: true
+    });
+    const [boundaryId, prepareBoundary] = this.toContext("errorBoundary", {
+      handler: errorBoundary,
+      schema,
+      validator: compiled
+    });
+    const getBoundary = getKeyAccessor(boundaryId);
+
+    return () => ({
+      check: (id, ctx) => `${ctx}${getBoundary}.validator(${id})`,
+      handleError: (id, ctx) =>
+        `${ctx}${getBoundary}.handler(\n  ${ctx}.explanations,\n  {\n    id: ${JSON.stringify(
+          id
+        )},\n    innerExplanations: ${ctx}${getBoundary}.validator.explanations,\n    schema: ${ctx}${getBoundary}.schema,\n    value: ${id}\n  }\n)`,
+      not: (id, ctx) => `!${ctx}${getBoundary}.validator(${id})`,
+      prepare: prepareBoundary
+    });
+  },
   finite: () => ({
     check: valueId => `Number.isFinite(${valueId})`,
     not: valueId => `!Number.isFinite(${valueId})`

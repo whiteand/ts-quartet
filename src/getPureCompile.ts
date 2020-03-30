@@ -5,11 +5,37 @@ import { compileObjectSchema } from "./compileObjectSchema";
 import { compileObjectSchemaWithRest } from "./compileObjectSchemaWithRest";
 import { compileVariants } from "./compileVariants";
 import { handleSchema } from "./handleSchema";
-import { CompilationResult, QuartetInstance, Schema } from "./types";
+import {
+  CompilationResult,
+  IPureCompileConfig,
+  ISettings,
+  QuartetInstance,
+  Schema
+} from "./types";
 
-export const getPureCompile = () =>
-  function pureCompile(this: QuartetInstance, s: Schema): CompilationResult {
-    const compiled = handleSchema<CompilationResult>({
+export const getPureCompile = ({ errorBoundary }: ISettings) =>
+  function pureCompile(
+    this: QuartetInstance,
+    s: Schema,
+    config?: IPureCompileConfig
+  ): CompilationResult {
+    if (errorBoundary && (!config || !config.ignoreGlobalErrorBoundary)) {
+      s = handleSchema<Schema>({
+        and: andSchema => this.errorBoundary(andSchema, errorBoundary),
+        constant: constantSchema =>
+          this.errorBoundary(constantSchema, errorBoundary),
+        function: functionSchema =>
+          functionSchema().handleError
+            ? functionSchema
+            : this.errorBoundary(functionSchema, errorBoundary),
+        object: objectSchema => this.errorBoundary(objectSchema, errorBoundary),
+        objectRest: objectRestSchema =>
+          this.errorBoundary(objectRestSchema, errorBoundary),
+        variant: variantSchema =>
+          this.errorBoundary(variantSchema, errorBoundary)
+      })(s);
+    }
+    const validator = handleSchema<CompilationResult>({
       and: andSchema => compileAnd(this, andSchema.slice(1)),
       constant: constant => compileConstant(this, constant),
       function: funcSchema => compileFunctionSchemaResult(this, funcSchema()),
@@ -18,5 +44,5 @@ export const getPureCompile = () =>
       variant: schemas => compileVariants(this, schemas)
     })(s);
 
-    return compiled as any;
+    return validator as any;
   };
