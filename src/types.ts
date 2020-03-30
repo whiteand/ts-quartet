@@ -10,13 +10,13 @@ export interface IFunctionSchemaResult {
   check: (valueId: string, ctxId: string) => string;
   handleError?: HandleError;
   not?: (valudId: string, ctxId: string) => string;
+  errorBoundary?: ErrorBoundary;
 }
 
 export type FunctionSchema = () => IFunctionSchemaResult;
 
-export interface IObjectSchema {
+export interface IObjectSchema extends Record<string, Schema> {
   "__quartet/rest-omit__"?: string[];
-  [key: string]: Schema;
 }
 export interface IVariantSchema extends Array<Schema> {}
 export interface IAndSchema extends Array<Schema> {

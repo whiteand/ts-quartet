@@ -64,23 +64,22 @@ describe("errorBoundary", () => {
       }
     });
 
-    const nameSchema = exp.and(exp.string, exp.minLength(1));
-    const idSchema = v.safeInteger;
     const schema = {
-      name: exp.errorBoundary(nameSchema),
-      id: exp.errorBoundary(idSchema)
+      name: exp.and(exp.string, exp.minLength(1)),
+      id: v.safeInteger
     };
     const checkPerson = exp(schema);
-    const expl0 = (checkPerson(null), checkPerson.explanations);
-    expect(expl0).toEqual([{ value: null, schema, id: "value" }]);
-    const expl1 = (checkPerson({}), checkPerson.explanations);
-    expect(expl1).toEqual([
-      { value: undefined, schema: nameSchema, id: "value.name" }
-    ]);
+    console.log(checkPerson.toString())
     const expl2 = (checkPerson({ name: "Andrew", id: "1" }),
     checkPerson.explanations);
     expect(expl2).toEqual([
       { value: "1", schema: v.safeInteger, id: "value.id" }
+    ]);
+    const expl0 = (checkPerson(null), checkPerson.explanations);
+    expect(expl0).toEqual([]);
+    const expl1 = (checkPerson({}), checkPerson.explanations);
+    expect(expl1).toEqual([
+      { value: undefined, schema: exp.string, id: "value.name" }
     ]);
   });
 });

@@ -9,8 +9,11 @@ import {
   Prepare,
   QuartetInstance,
   Schema,
-  TypedCompilationResult
+  TypedCompilationResult,
+  IObjectSchema
 } from "./types";
+import { handleSchema } from "./handleSchema";
+import { constantToFunc } from "./constantToFunc";
 
 export const methods: IMethods = {
   and(...schemas: Schema[]) {
@@ -93,36 +96,140 @@ export const methods: IMethods = {
     if (!errorBoundary && !this.settings.errorBoundary) {
       return schema;
     }
-
     errorBoundary = errorBoundary || this.settings.errorBoundary;
+    const defaultHandler = (schema: Schema): Schema => {
+      const compiled = this.pureCompile(schema, {
+        ignoreGlobalErrorBoundary: true
+      });
+      const [boundaryId, prepareBoundary] = this.toContext("errorBoundary", {
+        handler: errorBoundary,
+        p: {
+          id: null,
+          innerExplanations: [],
+          schema,
+          value: null
+        },
+        validator: compiled
+      });
+      const getBoundary = getKeyAccessor(boundaryId);
 
-    const compiled = this.pureCompile(schema, {
-      ignoreGlobalErrorBoundary: true
-    });
-    const [boundaryId, prepareBoundary] = this.toContext("errorBoundary", {
-      handler: errorBoundary,
-      p: {
-        id: null,
-        innerExplanations: [],
-        schema: null,
-        value: null
-      },
-      schema,
-      validator: compiled
-    });
-    const getBoundary = getKeyAccessor(boundaryId);
+      return () => ({
+        check: (id, ctx) => `${ctx}${getBoundary}.validator(${id})`,
+        handleError: (id, ctx) => {
+          const b = `${ctx}${getBoundary}`;
+          return `${b}.p.id = ${JSON.stringify(
+            id
+          )}\n${b}.p.innerExplanations = ${b}.validator.explanations\n${b}.p.value=${id}\n${b}.handler(${ctx}.explanations,${b}.p)`;
+        },
+        not: (id, ctx) => `!${ctx}${getBoundary}.validator(${id})`,
+        prepare: prepareBoundary,
+        errorBoundary,
+      });
+    };
 
-    return () => ({
-      check: (id, ctx) => `${ctx}${getBoundary}.validator(${id})`,
-      handleError: (id, ctx) => {
-        const b = `${ctx}${getBoundary}`;
-        return `${b}.p.id = ${JSON.stringify(
-          id
-        )}\n${b}.p.innerExplanations =  ${b}.validator.explanations\n${b}.p.schema = ${b}.schema\n${b}.p.value=${id}\n${b}.handler(${ctx}.explanations,${b}.p)`;
+    return handleSchema({
+      and: andSchema => {
+        const errorBoundedSchemas: Schema[] = [];
+        for (let i = 1; i < andSchema.length; i++) {
+          const newSchema = this.errorBoundary(andSchema[i], errorBoundary);
+          errorBoundedSchemas.push(newSchema);
+        }
+        return [AND_SCHEMA_ID, ...errorBoundedSchemas];
       },
-      not: (id, ctx) => `!${ctx}${getBoundary}.validator(${id})`,
-      prepare: prepareBoundary
-    });
+      constant: constant => {
+        const res = constantToFunc(this, constant)();
+        const [boundaryId, prepareBoundary] = this.toContext("errorBoundary", {
+          handler: errorBoundary,
+          p: {
+            id: null,
+            schema: constant,
+            value: null,
+            innerExplanations: [],
+            exps: []
+          }
+        });
+        const getBoundary = getKeyAccessor(boundaryId);
+
+        return () => ({
+          check: res.check,
+          handleError: (id, ctx) => {
+            const b = ctx + getBoundary;
+            return `${b}.p.id = ${JSON.stringify(
+              id
+            )}\n${b}.p.value=${id}\n${b}.p.exps=[]\n${b}.handler(${b}.p.exps,${b}.p)\n${ctx}.explanations = ${b}.p.exps`;
+          },
+          not: res.not,
+          prepare: ctx => {
+            if (res.prepare) {
+              res.prepare(ctx);
+            }
+            prepareBoundary(ctx);
+          },
+          errorBoundary,
+        });
+      },
+      function: funcSchema => {
+        const res = funcSchema();
+        if (res.errorBoundary === errorBoundary) return funcSchema
+        const [boundaryId, prepareBoundary] = this.toContext("errorBoundary", {
+          handler: errorBoundary,
+          p: {
+            id: null,
+            schema: funcSchema,
+            value: null,
+            innerExplanations: []
+          },
+          exps: []
+        });
+        const getBoundary = getKeyAccessor(boundaryId);
+
+        return () => ({
+          check: res.check,
+          handleError: (id, ctx) => {
+            const b = ctx + getBoundary;
+            const errorBoundaryHandling = `${b}.p.id = ${JSON.stringify(
+              id
+            )}\n${b}.p.innerExplanations = ${ctx}.explanations\n${b}.p.value=${id}\n${b}.exps=[]\n${b}.handler(${b}.exps,${b}.p)\n${ctx}.explanations = ${b}.exps`;
+            return res.handleError
+              ? res.handleError(id, ctx) + "\n" + errorBoundaryHandling
+              : errorBoundaryHandling;
+          },
+          not: res.not,
+          prepare: ctx => {
+            if (res.prepare) {
+              res.prepare(ctx);
+            }
+            prepareBoundary(ctx);
+          },
+          errorBoundary,
+        });
+      },
+      object: objectSchema => {
+        let res: IObjectSchema = {};
+        const entries = Object.entries(objectSchema);
+        for (let i = 0; i < entries.length; i++) {
+          const [key, schema] = entries[i];
+          const boundedSchema = this.errorBoundary(schema, errorBoundary);
+          res[key] = boundedSchema;
+        }
+        return res;
+      },
+      objectRest: objectSchema => {
+        let res: IObjectSchema = {};
+        const entries = Object.entries(objectSchema);
+        for (let i = 0; i < entries.length; i++) {
+          const [key, schema] = entries[i];
+          if (key === this.restOmit) {
+            res[key] = objectSchema[this.restOmit];
+            continue;
+          }
+          const boundedSchema = this.errorBoundary(schema, errorBoundary);
+          res[key] = boundedSchema;
+        }
+        return res;
+      },
+      variant: defaultHandler
+    })(schema);
   },
   finite: () => ({
     check: valueId => `Number.isFinite(${valueId})`,
