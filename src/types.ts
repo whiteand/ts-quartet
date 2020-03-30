@@ -139,7 +139,7 @@ export interface IErrorBoundaryParams {
   value: any;
   schema: Schema;
   innerExplanations: any[];
-  id: string | number
+  id: string | number;
 }
 export type ErrorBoundary = (
   explanations: any[],
