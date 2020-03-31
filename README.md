@@ -198,9 +198,11 @@ const checkMyType = v(myTypeSchema);
 
 - Use `checkMyType` on data that you are not sure about. It will return `true` if the data is valid. It will return `false` if the data is not valid.
 
-(See [Advanced Quartet](#advanced-quartet) for more.)
+![Flow](https://raw.githubusercontent.com/whiteand/ts-quartet/master/infographic/flow.jpg)
 
 ## What could be a validation scheme?
+
+![Flow](https://raw.githubusercontent.com/whiteand/ts-quartet/master/infographic/schema.jpg)
 
 ### Primitives
 
