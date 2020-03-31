@@ -355,7 +355,7 @@ function checkEven(x) {
 }
 
 const evenSchema = v.custom(isEven);
-const checkPositiveEvenNumber = v.and(v.number, v.positive, evenSchema);
+const checkPositiveEvenNumber = v(v.and(v.number, v.positive, evenSchema));
 
 // same as
 
