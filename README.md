@@ -570,7 +570,7 @@ const checkHelloWorld = x => {
 
 ![Flow](https://raw.githubusercontent.com/whiteand/ts-quartet/master/infographic/obj_schema.jpg)
 
-(This is only illustration real compilation result will behave in similar way but much more faster)
+(This is only illustration. Real compilation result will behave in similar way but much more faster)
 
 If you want to validate objects with previously unknown fields, use `v.rest`
 
@@ -604,7 +604,7 @@ const checkPhoneBookWithAuthorId = v({
 
 ![Flow](https://raw.githubusercontent.com/whiteand/ts-quartet/master/infographic/obj_schema_with_rest.jpg)
 
-(This is only illustration real compilation result will behave in similar way but much more faster)
+(This is only illustration. Real compilation result will behave in similar way but much more faster)
 
 ### Conclusions
 
