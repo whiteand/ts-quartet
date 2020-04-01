@@ -59,7 +59,7 @@ type IfAny<T, Any, NotAny> = true extends T
   ? ("1" extends T
       ? (1 extends T
           ? ({} extends T
-              ? (() => void extends T
+              ? ((() => void) extends T
                   ? (null extends T ? (Any) : (NotAny))
                   : NotAny)
               : NotAny)
@@ -79,16 +79,14 @@ export interface IMethods {
   and: (this: QuartetInstance, ...schemas: Schema[]) => IAndSchema;
   arrayOf: (this: QuartetInstance, schema: Schema) => FunctionSchema;
   boolean: FunctionSchema;
-  compileAnd: (<T = any>(
+  compileAnd: <T = any>(
     this: QuartetInstance,
     ...schemas: Schema[]
-  ) => TypedCompilationResult<T>) &
-    ((this: QuartetInstance, ...schemas: Schema[]) => CompilationResult);
-  compileArrayOf: (<T = any>(
+  ) => TypedCompilationResult<T>;
+  compileArrayOf: <T = any>(
     this: QuartetInstance,
     schema: Schema
-  ) => TypedCompilationResult<T[]>) &
-    ((this: QuartetInstance, schema: Schema) => CompilationResult);
+  ) => TypedCompilationResult<T[]>;
   custom: (
     this: QuartetInstance,
     check: CustomFunction,
