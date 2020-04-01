@@ -568,7 +568,7 @@ const checkHelloWorld = x => {
 };
 ```
 
-![Flow](https://raw.githubusercontent.com/whiteand/ts-quartet/master/infographic/object_schema.jpg)
+![Flow](https://raw.githubusercontent.com/whiteand/ts-quartet/master/infographic/obj_schema.jpg)
 
 (This is only illustration real compilation result will behave in similar way but much more faster)
 
@@ -602,7 +602,7 @@ const checkPhoneBookWithAuthorId = v({
 });
 ```
 
-![Flow](https://raw.githubusercontent.com/whiteand/ts-quartet/master/infographic/object_schema_with_rest.jpg)
+![Flow](https://raw.githubusercontent.com/whiteand/ts-quartet/master/infographic/obj_schema_with_rest.jpg)
 
 (This is only illustration real compilation result will behave in similar way but much more faster)
 
