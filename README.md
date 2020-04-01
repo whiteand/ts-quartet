@@ -226,6 +226,8 @@ const is42 = x => x === 42;
 
 Primitives are all Javascript values, with the exception of objects (including arrays) and functions. That is: `undefined`,`null`, `false`,`true`, numbers (`NaN`,`Infinity`, `-Infinity` including) and strings.
 
+![Flow](https://raw.githubusercontent.com/whiteand/ts-quartet/master/infographic/primitive_schema.jpg)
+
 ### Schemas out of the box
 
 Quartet provides pre-defined schemas for specific checks. They are in the properties of the `v` compiler function.
