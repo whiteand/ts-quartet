@@ -55,8 +55,25 @@ export type CustomFunction = ((value: any) => boolean) & {
   pure?: boolean;
 };
 
+type IfAny<T, Any, NotAny> = true extends T
+  ? ("1" extends T
+      ? (1 extends T
+          ? ({} extends T
+              ? (() => void extends T
+                  ? (null extends T ? (Any) : (NotAny))
+                  : NotAny)
+              : NotAny)
+          : NotAny)
+      : NotAny)
+  : NotAny;
+
 export type CompilationResult = ((value: any) => boolean) & IContext;
-export type TypedCompilationResult<T> = ((value: any) => value is T) & IContext;
+export type TypedCompilationResult<T> = IfAny<
+  T,
+  (value: any) => boolean,
+  (value: any) => value is T
+> &
+  IContext;
 
 export interface IMethods {
   and: (this: QuartetInstance, ...schemas: Schema[]) => IAndSchema;
@@ -152,5 +169,4 @@ export interface ISettings {
 
 export type QuartetInstance = IMethods &
   IInnerMethods &
-  (<T>(schema: Schema) => TypedCompilationResult<T>) &
-  ((schema: Schema) => CompilationResult);
+  (<T = any>(schema: Schema) => TypedCompilationResult<T>);

@@ -39,7 +39,8 @@ It is a declarative and fast tool for data validation.
       - [`v.test(tester: { test(x: any) => boolean }): Schema`](#vtesttester--testx-any--boolean--schema)
     - [Variant schemas](#variant-schemas)
     - [The schema for an object is an object](#the-schema-for-an-object-is-an-object)
-  - [Conclusions](#conclusions)
+    - [Conclusions](#conclusions)
+  - [Predefined Instances](#predefined-instances)
   - [Configuring](#configuring)
     - [`errorBoundary`](#errorboundary)
   - [Advanced Quartet](#advanced-quartet)
@@ -597,9 +598,21 @@ const checkPhoneBookWithAuthorId = v({
 });
 ```
 
-## Conclusions
+
+### Conclusions
 
 Using these schemes and combining them, you can declaratively describe validation functions, and the `v` compiler function will create a function that imperatively checks the value against your scheme.
+
+## Predefined Instances
+
+There is two predefined instances of quartet:
+
+```typescript
+import { v } from 'quartet' // Zero-configured instance, without default explanations
+
+import { e } from 'quartet' // Instance with default errorBoundary.
+```
+
 
 ## Configuring
 
