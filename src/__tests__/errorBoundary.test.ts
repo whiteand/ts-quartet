@@ -50,7 +50,12 @@ describe("errorBoundary", () => {
     tables(
       checkNumbers,
       [[], [1], [1, 2, 3]],
-      [[[1, 2, 3, "4"], [{ value: "4", id: "validator.elem", schema: v.number }]]]
+      [
+        [
+          [1, 2, 3, "4"],
+          [{ value: "4", id: "validator.elem", schema: v.number }]
+        ]
+      ]
     );
   });
   test("from Documentation", () => {
