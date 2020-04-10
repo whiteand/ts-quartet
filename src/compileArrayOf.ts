@@ -47,10 +47,12 @@ export function compileArrayOf<T = any>(
     return optimizedOrNull;
   }
 
-  const preparations: Prepare[] = [];
+  const [elemId, prepareElem] = v.toContext("elem", undefined);
+  const preparations: Prepare[] = [prepareElem];
+  const getElem = getKeyAccessor(elemId);
   const [forLoopBody, pure] = compileIfNotValidReturnFalse(
     v,
-    "elem",
+    `validator${getElem}`,
     "validator",
     schema,
     preparations
@@ -63,7 +65,7 @@ export function compileArrayOf<T = any>(
   const code = `
     (() => {function validator(value) {${
       pure ? "" : "\n  validator.explanations = []"
-    }\n  if (!value || !Array.isArray(value)) return false\n  for (validator${iAcc} = 0; validator${iAcc} < value.length; validator${iAcc}++) {\n    const elem = value[validator${iAcc}]\n${addTabs(
+    }\n  if (!value || !Array.isArray(value)) return false\n  for (validator${iAcc} = 0; validator${iAcc} < value.length; validator${iAcc}++) {\n    validator${getElem} = value[validator${iAcc}]\n${addTabs(
     forLoopBody,
     2
   )}\n  }\n  return true\n}
