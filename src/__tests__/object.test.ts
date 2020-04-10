@@ -439,4 +439,25 @@ describe("v(object)", () => {
     expect(checkPerson.pure).toBe(true);
     snapshot(checkPerson);
   });
+  test("33. v.rest + v.rest", () => {
+    const checkMatrix = v({ [v.rest]: { [v.rest]: v.number } });
+    expect(checkMatrix.pure).toBe(true);
+    snapshot(checkMatrix);
+    puretables(
+      checkMatrix,
+      [
+        {},
+        { a: {} },
+        { a: { b: 1 } },
+        { a: { b: 1, c: 2 } },
+        { a: { b: 1, c: 2, e: NaN } },
+        { a: { b: 1, c: 2, e: NaN, f: Infinity }, b: { c: 1 } }
+      ],
+      [
+        null,
+        { a: null },
+        { a: { b: 1, c: 2, e: NaN, f: Infinity }, b: { c: "" } }
+      ]
+    );
+  });
 });

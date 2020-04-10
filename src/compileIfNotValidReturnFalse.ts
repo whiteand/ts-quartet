@@ -145,6 +145,11 @@ export function compileIfNotValidReturnFalse(
         restValidator,
         preparations
       );
+
+      const [index, prepareI] = v.toContext("i", 0);
+      const iAcc = getKeyAccessor(index);
+      preparations.push(prepareI);
+
       const keysToBeOmmited = [...(omitKeys || []), ...objectSchemaKeys];
       if (keysToBeOmmited && keysToBeOmmited.length > 0) {
         const [omitKeysId, prepareOmitKeys] = v.toContext(
@@ -155,8 +160,9 @@ export function compileIfNotValidReturnFalse(
         preparations.push(prepareOmitKeys, prepareKey);
         const getOmitKeysId = `${ctxId}${getKeyAccessor(omitKeysId)}`;
         const getKey = `${ctxId}${getKeyAccessor(keyId)}`;
+
         return [
-          `${checkIsObject}\n${getKeys} = Object.keys(${valueId})\nfor (let i = 0; i < ${getKeys}.length; i++) {\n  ${getKey} = ${getKeys}[i]\n  if (${getOmitKeysId}[${getKey}] === true) continue\n  ${getElem} = ${valueId}[${getKey}]\n${addTabs(
+          `${checkIsObject}\n${getKeys} = Object.keys(${valueId})\nfor (${ctxId}${iAcc} = 0; ${ctxId}${iAcc} < ${getKeys}.length; ${ctxId}${iAcc}++) {\n  ${getKey} = ${getKeys}[${ctxId}${iAcc}]\n  if (${getOmitKeysId}[${getKey}] === true) continue\n  ${getElem} = ${valueId}[${getKey}]\n${addTabs(
             forLoopBody
           )}\n}
             `,
@@ -164,7 +170,7 @@ export function compileIfNotValidReturnFalse(
         ];
       } else {
         return [
-          `${checkIsObject}\n${getKeys} = Object.keys(${valueId})\nfor (let i = 0; i < ${getKeys}.length; i++) {\n  ${getElem} = ${valueId}[${getKeys}[i]]\n${addTabs(
+          `${checkIsObject}\n${getKeys} = Object.keys(${valueId})\nfor (${ctxId}${iAcc} = 0; ${ctxId}${iAcc} < ${getKeys}.length; ${ctxId}${iAcc}++) {\n  ${getElem} = ${valueId}[${getKeys}[${ctxId}${iAcc}]]\n${addTabs(
             forLoopBody
           )}\n}
               `,

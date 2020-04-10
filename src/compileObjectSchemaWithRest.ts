@@ -19,17 +19,17 @@ export function compileObjectSchemaWithRest(
     s,
     preparations
   );
+  const code = `
+    (()=>{
+      function validator(value) {${
+        isPure ? "" : "\n  validator.explanations = []"
+      }\n${addTabs(funcBodyCode)}\n  return true\n}
+      return validator
+    })()
+  `;
+  // console.log(code)
   // tslint:disable-next-line
-  const ctx = eval(
-    `
-      (()=>{
-        function validator(value) {${
-          isPure ? "" : "\n  validator.explanations = []"
-        }\n${addTabs(funcBodyCode)}\n  return true\n}
-        return validator
-      })()
-    `
-  );
+  const ctx = eval(code);
   ctx.explanations = [];
   ctx.pure = isPure;
   // tslint:disable-next-line

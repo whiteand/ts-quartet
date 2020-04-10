@@ -6,8 +6,8 @@ Object {
   if (value == null) return false
   if (value.a !== 1) return false
   validator.keys = Object.keys(value)
-  for (let i = 0; i < validator.keys.length; i++) {
-    validator.key = validator.keys[i]
+  for (validator.i = 0; validator.i < validator.keys.length; validator.i++) {
+    validator.key = validator.keys[validator.i]
     if (validator.omitkeys[validator.key] === true) continue
     validator.elem = value[validator.key]
     if (validator.elem !== 1) return false
@@ -17,6 +17,7 @@ Object {
 }",
   "2.elem": undefined,
   "2.explanations": Array [],
+  "2.i": 0,
   "2.key": undefined,
   "2.keys": Array [],
   "2.omitkeys": Object {
