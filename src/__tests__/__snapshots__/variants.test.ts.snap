@@ -12,7 +12,6 @@ Object {
     validator.elem = value[validator.key]
     if (validator.elem !== 1) return false
   }
-              
   return true
 }",
   "2.elem": undefined,
