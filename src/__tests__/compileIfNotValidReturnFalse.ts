@@ -10,7 +10,8 @@ describe("compileIfNotValidReturnFalse", () => {
       "value",
       "validator",
       { [v.rest]: funcSchemaWithNot },
-      preparations
+      preparations,
+      null
     )
   ).toMatchInlineSnapshot();
   expect(preparations.map(e => e.toString())).toMatchInlineSnapshot();

@@ -19,7 +19,8 @@ function defaultHandler(
   schema: Schema,
   preparations: Prepare[],
   handleErrors: HandleError[],
-  stringsSymbols: Array<string | number | symbol>
+  stringsSymbols: Array<string | number | symbol>,
+  parentKey: string | null
 ): [string, boolean] {
   const compiled = v.pureCompile(schema);
   const [id, prepare] = v.toContext(index, compiled);
@@ -42,7 +43,8 @@ function defaultHandler(
     funcSchema,
     preparations,
     handleErrors,
-    stringsSymbols
+    stringsSymbols,
+    parentKey
   );
 }
 function compileVariantElementToReturnWay(
@@ -53,7 +55,8 @@ function compileVariantElementToReturnWay(
   schema: Schema,
   preparations: Prepare[],
   handleErrors: HandleError[],
-  stringsSymbols: Array<string | number | symbol>
+  stringsSymbols: Array<string | number | symbol>,
+  parentKey: string | null
 ): [string, boolean] {
   return handleSchema<[string, boolean]>({
     and: andSchema =>
@@ -65,7 +68,8 @@ function compileVariantElementToReturnWay(
         andSchema,
         preparations,
         handleErrors,
-        stringsSymbols
+        stringsSymbols,
+        parentKey
       ),
     constant: constant => {
       if (constant === "false" || constant === "true") {
@@ -77,7 +81,8 @@ function compileVariantElementToReturnWay(
           constantToFunc(v, constant),
           preparations,
           handleErrors,
-          stringsSymbols
+          stringsSymbols,
+          parentKey
         );
       }
       if (typeof constant === "symbol" || typeof constant === "string") {
@@ -92,7 +97,8 @@ function compileVariantElementToReturnWay(
         constantToFunc(v, constant),
         preparations,
         handleErrors,
-        stringsSymbols
+        stringsSymbols,
+        parentKey
       );
     },
     function: funcSchema => {
@@ -106,6 +112,7 @@ function compileVariantElementToReturnWay(
       }
       return [`if (${s.check(valueId, ctxId)}) return true;`, !s.handleError];
     },
+
     object: objectSchema =>
       defaultHandler(
         v,
@@ -115,7 +122,8 @@ function compileVariantElementToReturnWay(
         objectSchema,
         preparations,
         handleErrors,
-        stringsSymbols
+        stringsSymbols,
+        parentKey
       ),
     objectRest: objectSchema =>
       defaultHandler(
@@ -126,8 +134,43 @@ function compileVariantElementToReturnWay(
         objectSchema,
         preparations,
         handleErrors,
-        stringsSymbols
+        stringsSymbols,
+        parentKey
       ),
+    pair: pairSchema => {
+      if (!parentKey) {
+        throw new Error("Wrong usage of v.pair");
+      }
+
+      const keyValueSchema = pairSchema[1];
+
+      const compiled = v.pureCompile(keyValueSchema);
+      const [validatorId, prepare] = v.toContext(valueId, compiled);
+      const validatorAcc = getKeyAccessor(validatorId);
+      const [keyValueObjId, prepareKeyValue] = v.toContext("keyvalue", {
+        key: undefined,
+        value: undefined
+      });
+      const keyValueObjAcc = getKeyAccessor(keyValueObjId);
+      preparations.push(prepare, prepareKeyValue);
+
+      if (compiled.pure) {
+        return [
+          `${ctxId}${keyValueObjAcc}.key = ${parentKey};\n${ctxId}${keyValueObjAcc}.value = ${valueId};\nif (${ctxId}${validatorAcc}(${ctxId}${keyValueObjAcc})) return true;`,
+          true
+        ];
+      }
+
+      handleErrors.push(
+        () =>
+          `${ctxId}.explanations.push(...${ctxId}${validatorAcc}.explanations)`
+      );
+
+      return [
+        `${ctxId}${keyValueObjAcc}.key = ${parentKey};\n${ctxId}${keyValueObjAcc}.value = ${valueId};\nif (${ctxId}${validatorAcc}(${ctxId}${keyValueObjAcc})) return true`,
+        false
+      ];
+    },
     variant: schemas => {
       const res = [];
       let isPure = true;
@@ -140,7 +183,8 @@ function compileVariantElementToReturnWay(
           variant,
           preparations,
           handleErrors,
-          stringsSymbols
+          stringsSymbols,
+          parentKey
         );
         if (!isPartPure) {
           isPure = false;
@@ -177,7 +221,8 @@ export function compileVariants(
       variant,
       preparations,
       handleErrors,
-      stringsSymbols
+      stringsSymbols,
+      null
     );
     if (!purePart) {
       isPure = false;

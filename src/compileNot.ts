@@ -4,11 +4,15 @@ import { handleSchema } from "./handleSchema";
 import {
   FunctionSchema,
   HandleSchemaHandler,
+  PairSchema,
   QuartetInstance,
   Schema
 } from "./types";
 
-export function compileNot(v: QuartetInstance, schema: Schema): FunctionSchema {
+export function compileNot(
+  v: QuartetInstance,
+  schema: Schema
+): FunctionSchema | PairSchema {
   const defaultHandler: HandleSchemaHandler<Schema, FunctionSchema> = (
     schemaToBeReverted: Schema
   ): FunctionSchema => {
@@ -41,6 +45,7 @@ export function compileNot(v: QuartetInstance, schema: Schema): FunctionSchema {
     },
     object: defaultHandler,
     objectRest: defaultHandler,
+    pair: pairSchema => v.pair(compileNot(v, pairSchema[1])),
     variant: defaultHandler
   })(schema);
 }

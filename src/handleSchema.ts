@@ -1,5 +1,5 @@
-import { isAndSchema } from "./andId";
 import { has } from "./has";
+import { isAndSchema, isPairSchema } from "./ids";
 import { methods } from "./methods";
 import { IHandleSchemaHandlers, Schema } from "./types";
 
@@ -14,9 +14,13 @@ export function handleSchema<R>(
       return handlers.constant(schema);
     }
     if (Array.isArray(schema)) {
-      return isAndSchema(schema)
-        ? handlers.and(schema)
-        : handlers.variant(schema);
+      if (isAndSchema(schema)) {
+        return handlers.and(schema);
+      }
+      if (isPairSchema(schema)) {
+        return handlers.pair(schema);
+      }
+      return handlers.variant(schema);
     }
     if (has(schema, methods.rest)) {
       return handlers.objectRest(schema);

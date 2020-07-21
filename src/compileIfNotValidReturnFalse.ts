@@ -6,43 +6,13 @@ import { methods } from "./methods";
 import { toDict } from "./toDict";
 import { Prepare, QuartetInstance, Schema } from "./types";
 
-function defaultHandler(
-  v: QuartetInstance,
-  valueId: string,
-  ctxId: string,
-  schema: Schema,
-  preparations: Prepare[]
-): [string, boolean] {
-  const compiled = v.pureCompile(schema);
-  const [id, prepare] = v.toContext(valueId, compiled);
-  preparations.push(prepare);
-  const idAcc = getKeyAccessor(id);
-  const funcSchema = compiled.pure
-    ? () => ({
-        check: () => `${ctxId}${idAcc}(${valueId})`,
-        not: () => `!${ctxId}${idAcc}(${valueId})`
-      })
-    : () => ({
-        check: () => `${ctxId}${idAcc}(${valueId})`,
-        handleError: () =>
-          `${ctxId}.explanations.push(...${ctxId}${idAcc}.explanations)`,
-        not: () => `!${ctxId}${idAcc}(${valueId})`
-      });
-  return compileIfNotValidReturnFalse(
-    v,
-    valueId,
-    ctxId,
-    funcSchema,
-    preparations
-  );
-}
-
 export function compileIfNotValidReturnFalse(
   v: QuartetInstance,
   valueId: string,
   ctxId: string,
   schema: Schema,
-  preparations: Prepare[]
+  preparations: Prepare[],
+  parentKey: string | null
 ): [string, boolean] {
   return handleSchema<[string, boolean]>({
     and: andSchema => {
@@ -54,7 +24,8 @@ export function compileIfNotValidReturnFalse(
           valueId,
           ctxId,
           andSchema[i],
-          preparations
+          preparations,
+          parentKey
         );
         bodyCode += (bodyCode ? "\n" : "") + anotherCode;
         if (!anotherIsPure) {
@@ -63,13 +34,15 @@ export function compileIfNotValidReturnFalse(
       }
       return [bodyCode, isPure];
     },
+
     constant: constant =>
       compileIfNotValidReturnFalse(
         v,
         valueId,
         ctxId,
         constantToFunc(v, constant),
-        preparations
+        preparations,
+        parentKey
       ),
     function: funcSchema => {
       const s = funcSchema();
@@ -88,6 +61,7 @@ export function compileIfNotValidReturnFalse(
         !s.handleError
       ];
     },
+
     object: objectSchema => {
       const keys = Object.keys(objectSchema);
       const codeLines = [`if (${valueId} == null) return false`];
@@ -103,7 +77,8 @@ export function compileIfNotValidReturnFalse(
           innerKeyId,
           ctxId,
           objectSchema[innerKey],
-          preparations
+          preparations,
+          null
         );
         if (!isPurePart) {
           isPure = false;
@@ -130,7 +105,8 @@ export function compileIfNotValidReturnFalse(
               valueId,
               ctxId,
               objectSchema,
-              preparations
+              preparations,
+              null
             )
           : [`if (${valueId} == null) return false`, true];
       const [elemId, prepareElem] = v.toContext("elem", undefined);
@@ -138,12 +114,15 @@ export function compileIfNotValidReturnFalse(
       const getElem = `${ctxId}${getKeyAccessor(elemId)}`;
       const getKeys = `${ctxId}${getKeyAccessor(keysId)}`;
       preparations.push(prepareElem, prepareKeysId);
+      const [keyId, prepareKey] = v.toContext("key", undefined);
+      const getKey = `${ctxId}${getKeyAccessor(keyId)}`;
       const [forLoopBody, forLoopBodyIsPure] = compileIfNotValidReturnFalse(
         v,
         getElem,
         ctxId,
         restValidator,
-        preparations
+        preparations,
+        getKey
       );
 
       const [index, prepareI] = v.toContext("i", 0);
@@ -156,27 +135,53 @@ export function compileIfNotValidReturnFalse(
           "omitkeys",
           toDict(keysToBeOmmited)
         );
-        const [keyId, prepareKey] = v.toContext("key", undefined);
+
         preparations.push(prepareOmitKeys, prepareKey);
         const getOmitKeysId = `${ctxId}${getKeyAccessor(omitKeysId)}`;
-        const getKey = `${ctxId}${getKeyAccessor(keyId)}`;
 
         return [
           `${checkIsObject}\n${getKeys} = Object.keys(${valueId})\nfor (${ctxId}${iAcc} = 0; ${ctxId}${iAcc} < ${getKeys}.length; ${ctxId}${iAcc}++) {\n  ${getKey} = ${getKeys}[${ctxId}${iAcc}]\n  if (${getOmitKeysId}[${getKey}] === true) continue\n  ${getElem} = ${valueId}[${getKey}]\n${addTabs(
             forLoopBody
-          )}\n}
-            `,
+          )}\n}`,
           isCheckObjectPure && forLoopBodyIsPure
         ];
       } else {
         return [
-          `${checkIsObject}\n${getKeys} = Object.keys(${valueId})\nfor (${ctxId}${iAcc} = 0; ${ctxId}${iAcc} < ${getKeys}.length; ${ctxId}${iAcc}++) {\n  ${getElem} = ${valueId}[${getKeys}[${ctxId}${iAcc}]]\n${addTabs(
+          `${checkIsObject}\n${getKeys} = Object.keys(${valueId})\nfor (${ctxId}${iAcc} = 0; ${ctxId}${iAcc} < ${getKeys}.length; ${ctxId}${iAcc}++) {\n  ${getKey} = ${getKeys}[${ctxId}${iAcc}]\n  ${getElem} = ${valueId}[${getKey}]\n${addTabs(
             forLoopBody
-          )}\n}
-              `,
+          )}\n}`,
           isCheckObjectPure && forLoopBodyIsPure
         ];
       }
+    },
+    pair: pairSchema => {
+      if (!parentKey) {
+        throw new Error("Wrong usage of v.pair");
+      }
+
+      const keyValueSchema = pairSchema[1];
+
+      const compiled = v.pureCompile(keyValueSchema);
+      const [validatorId, prepare] = v.toContext(valueId, compiled);
+      const validatorAcc = getKeyAccessor(validatorId);
+      const [keyValueObjId, prepareKeyValue] = v.toContext("keyvalue", {
+        key: undefined,
+        value: undefined
+      });
+      const keyValueObjAcc = getKeyAccessor(keyValueObjId);
+      preparations.push(prepare, prepareKeyValue);
+
+      if (compiled.pure) {
+        return [
+          `${ctxId}${keyValueObjAcc}.key = ${parentKey};\n${ctxId}${keyValueObjAcc}.value = ${valueId};\nif (!${ctxId}${validatorAcc}(${ctxId}${keyValueObjAcc})) return false;`,
+          true
+        ];
+      }
+
+      return [
+        `${ctxId}${keyValueObjAcc}.key = ${parentKey};\n${ctxId}${keyValueObjAcc}.value = ${valueId};\nif (!${ctxId}${validatorAcc}(${ctxId}${keyValueObjAcc})) {\n  ${ctxId}.explanations.push(...${ctxId}${validatorAcc}.explanations);\n  return false\n}`,
+        false
+      ];
     },
     variant: schemas => {
       if (schemas.length === 0) {
@@ -188,10 +193,34 @@ export function compileIfNotValidReturnFalse(
           valueId,
           ctxId,
           schemas[0],
-          preparations
+          preparations,
+          parentKey
         );
       }
-      return defaultHandler(v, valueId, ctxId, schemas, preparations);
+
+      const compiled = v.pureCompile(schemas);
+      const [id, prepare] = v.toContext(valueId, compiled);
+      preparations.push(prepare);
+      const idAcc = getKeyAccessor(id);
+      const funcSchema = compiled.pure
+        ? () => ({
+            check: () => `${ctxId}${idAcc}(${valueId})`,
+            not: () => `!${ctxId}${idAcc}(${valueId})`
+          })
+        : () => ({
+            check: () => `${ctxId}${idAcc}(${valueId})`,
+            handleError: () =>
+              `${ctxId}.explanations.push(...${ctxId}${idAcc}.explanations)`,
+            not: () => `!${ctxId}${idAcc}(${valueId})`
+          });
+      return compileIfNotValidReturnFalse(
+        v,
+        valueId,
+        ctxId,
+        funcSchema,
+        preparations,
+        parentKey
+      );
     }
   })(schema);
 }

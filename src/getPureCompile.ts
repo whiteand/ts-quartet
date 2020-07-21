@@ -31,16 +31,21 @@ export const getPureCompile = ({ errorBoundary }: ISettings) =>
         object: objectSchema => this.errorBoundary(objectSchema, errorBoundary),
         objectRest: objectRestSchema =>
           this.errorBoundary(objectRestSchema, errorBoundary),
+        pair: pairSchema => this.errorBoundary(pairSchema, errorBoundary),
         variant: variantSchema =>
           this.errorBoundary(variantSchema, errorBoundary)
       })(s);
     }
     const validator = handleSchema<CompilationResult>({
+      // TODO: Check if appropriate
       and: andSchema => compileAnd(this, andSchema.slice(1)),
       constant: constant => compileConstant(this, constant),
       function: funcSchema => compileFunctionSchemaResult(this, funcSchema()),
       object: objSchema => compileObjectSchema(this, objSchema),
       objectRest: objSchema => compileObjectSchemaWithRest(this, objSchema),
+      pair: pairSchema => {
+        throw new Error("Wrong usage of v.pair");
+      },
       variant: schemas => compileVariants(this, schemas)
     })(s);
 

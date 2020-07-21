@@ -26,6 +26,7 @@ export function compileFunctionSchemaResult(
       return validator
     })()`;
   }
+
   // tslint:disable-next-line
   const ctx = eval(code);
   ctx.explanations = [];

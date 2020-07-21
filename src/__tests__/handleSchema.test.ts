@@ -10,7 +10,8 @@ describe("handleSchema", () => {
       function: func => ["func", typeof func],
       object: obj => ["obj", obj],
       objectRest: withRest => ["objWithRest", withRest],
-      variant: schemas => ["variants", schemas]
+      variant: schemas => ["variants", schemas],
+      pair: pairSchemas => ["pair", pairSchemas]
     });
     expect(handle(v.and(1, 2))).toMatchInlineSnapshot(`
       Array [

@@ -15,13 +15,17 @@ function getOptimizedOrNull<T = any>(schema: Schema) {
       andSchema.length === 1
         ? Object.assign(
             (value: any): value is T[] => value && Array.isArray(value),
-            { explanations: [], pure: true }
+            {
+              explanations: [],
+              pure: true
+            }
           )
         : null,
     constant: () => null,
     function: () => null,
     object: () => null,
     objectRest: () => null,
+    pair: () => null,
     variant: schemas => {
       if (schemas.length > 0) {
         return null;
@@ -50,16 +54,17 @@ export function compileArrayOf<T = any>(
   const [elemId, prepareElem] = v.toContext("elem", undefined);
   const preparations: Prepare[] = [prepareElem];
   const getElem = getKeyAccessor(elemId);
+  const [index, prepareI] = v.toContext("i", 0);
+  const iAcc = getKeyAccessor(index);
   const [forLoopBody, pure] = compileIfNotValidReturnFalse(
     v,
     `validator${getElem}`,
     "validator",
     schema,
-    preparations
+    preparations,
+    `validator${iAcc}`
   );
 
-  const [index, prepareI] = v.toContext("i", 0);
-  const iAcc = getKeyAccessor(index);
   preparations.push(prepareI);
 
   const code = `

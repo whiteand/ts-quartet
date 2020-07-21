@@ -26,7 +26,8 @@ export function compileObjectSchema(
     "value",
     ctxId,
     s,
-    preparations
+    preparations,
+    null
   );
   if (!isPure) {
     bodyCodeLines.push("validator.explanations = []");

@@ -1,9 +1,9 @@
-import { AND_SCHEMA_ID } from "./andId";
 import { compileArrayOf } from "./compileArrayOf";
 import { compileNot } from "./compileNot";
 import { constantToFunc } from "./constantToFunc";
 import { getKeyAccessor } from "./getKeyAccessor";
 import { handleSchema } from "./handleSchema";
+import { AND_SCHEMA_ID, PAIR_SCHEMA_ID } from "./ids";
 import {
   HandleError,
   IMethods,
@@ -203,6 +203,8 @@ export const methods: IMethods = {
         }
         return res;
       },
+      pair: pairSchema =>
+        this.pair(this.errorBoundary(pairSchema[1], errorBoundary)),
       variant: (variantSchema: Schema): Schema => {
         const compiled = this.pureCompile(variantSchema, {
           ignoreGlobalErrorBoundary: true
@@ -284,6 +286,9 @@ export const methods: IMethods = {
   }),
   not(schema) {
     return compileNot(this, schema);
+  },
+  pair(keyValueSchema) {
+    return [PAIR_SCHEMA_ID, keyValueSchema];
   },
   positive: () => ({
     check: valueId => `${valueId} > 0`,

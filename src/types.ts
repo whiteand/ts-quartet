@@ -1,3 +1,5 @@
+import { PAIR_SCHEMA_ID } from "./ids";
+
 export interface IContext {
   explanations: any[];
   pure: boolean;
@@ -22,6 +24,9 @@ export interface IVariantSchema extends Array<Schema> {}
 export interface IAndSchema extends Array<Schema> {
   0: "__quartet/and__";
 }
+
+export type PairSchema = [typeof PAIR_SCHEMA_ID, Schema];
+
 export type ConstantSchema =
   | undefined
   | null
@@ -34,7 +39,8 @@ export type Schema =
   | ConstantSchema
   | IObjectSchema
   | IAndSchema
-  | IVariantSchema;
+  | IVariantSchema
+  | PairSchema;
 
 export type HandleSchemaHandler<T extends Schema, R> = (schema: T) => R;
 export interface IHandleSchemaHandlers<R> {
@@ -44,6 +50,7 @@ export interface IHandleSchemaHandlers<R> {
   objectRest: HandleSchemaHandler<IObjectSchema, R>;
   variant: HandleSchemaHandler<IVariantSchema, R>;
   and: HandleSchemaHandler<IAndSchema, R>;
+  pair: HandleSchemaHandler<PairSchema, R>;
 }
 
 export interface ITest {
@@ -120,8 +127,9 @@ export interface IMethods {
     exclusive?: boolean
   ) => FunctionSchema;
   negative: FunctionSchema;
-  not: (this: QuartetInstance, schema: Schema) => FunctionSchema;
+  not: (this: QuartetInstance, schema: Schema) => FunctionSchema | PairSchema;
   number: FunctionSchema;
+  pair: (keyValueSchema: Schema) => PairSchema;
   positive: FunctionSchema;
   rest: "__quartet/rest__";
   restOmit: "__quartet/rest-omit__";

@@ -17,7 +17,8 @@ export function compileObjectSchemaWithRest(
     "value",
     "validator",
     s,
-    preparations
+    preparations,
+    null
   );
   const code = `
     (()=>{

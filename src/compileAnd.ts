@@ -19,7 +19,8 @@ export function compileAnd(
     "value",
     "validator",
     schemas[0],
-    preparations
+    preparations,
+    null
   );
   for (let i = 1; i < schemas.length; i++) {
     const [anotherBodyCode, anotherIsPure] = compileIfNotValidReturnFalse(
@@ -27,7 +28,8 @@ export function compileAnd(
       "value",
       "validator",
       schemas[i],
-      preparations
+      preparations,
+      null
     );
     bodyCode += "\n" + anotherBodyCode;
     isPure = isPure && anotherIsPure;
