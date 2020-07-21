@@ -43,7 +43,7 @@ describe('v.pair', () => {
       ),
     )
 
-    snapshot(squareNumbers, true)
+    snapshot(squareNumbers)
 
     puretables(squareNumbers, [[], [0], [0, 1], [0, 1, 4]], [[1], [0, 2], [0, 1, 3]])
   })
