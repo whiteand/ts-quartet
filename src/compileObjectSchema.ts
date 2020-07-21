@@ -1,50 +1,55 @@
-import { addTabs } from './addTabs'
-import { compileIfNotValidReturnFalse } from './compileIfNotValidReturnFalse'
-import { CompilationResult, IObjectSchema, Prepare, QuartetInstance } from './types'
+import { addTabs } from "./addTabs";
+import { compileIfNotValidReturnFalse } from "./compileIfNotValidReturnFalse";
+import {
+  CompilationResult,
+  IObjectSchema,
+  Prepare,
+  QuartetInstance
+} from "./types";
 
 export function compileObjectSchema(
   v: QuartetInstance,
-  s: IObjectSchema,
+  s: IObjectSchema
 ): CompilationResult {
-  const keys = Object.keys(s)
+  const keys = Object.keys(s);
   if (keys.length === 0) {
     return Object.assign((x: any) => x != null, {
       explanations: [],
-      pure: true,
-    })
+      pure: true
+    });
   }
-  const bodyCodeLines = []
-  const preparations: Prepare[] = []
-  const ctxId = 'validator'
+  const bodyCodeLines = [];
+  const preparations: Prepare[] = [];
+  const ctxId = "validator";
   const [bodyCode, isPure] = compileIfNotValidReturnFalse(
     v,
-    'value',
+    "value",
     ctxId,
     s,
     preparations,
-    null,
-  )
+    null
+  );
   if (!isPure) {
-    bodyCodeLines.push('validator.explanations = []')
+    bodyCodeLines.push("validator.explanations = []");
   }
-  bodyCodeLines.push(bodyCode)
+  bodyCodeLines.push(bodyCode);
   const code = `
     (() => {\nfunction validator(value) {\n${addTabs(
-      bodyCodeLines.join('\n'),
+      bodyCodeLines.join("\n")
     )}\n  return true\n}
       return validator
     })()
-  `.trim()
+  `.trim();
 
   // tslint:disable-next-line
-  const ctx = eval(code)
+  const ctx = eval(code);
 
   for (const prepare of preparations) {
-    prepare(ctx)
+    prepare(ctx);
   }
 
-  ctx.explanations = []
-  ctx.pure = isPure
+  ctx.explanations = [];
+  ctx.pure = isPure;
 
-  return ctx
+  return ctx;
 }

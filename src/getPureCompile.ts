@@ -1,28 +1,29 @@
-import { compileAnd } from './compileAnd'
-import { compileConstant } from './compileConstant'
-import { compileFunctionSchemaResult } from './compileFunctionSchemaResult'
-import { compileObjectSchema } from './compileObjectSchema'
-import { compileObjectSchemaWithRest } from './compileObjectSchemaWithRest'
-import { compileVariants } from './compileVariants'
-import { handleSchema } from './handleSchema'
+import { compileAnd } from "./compileAnd";
+import { compileConstant } from "./compileConstant";
+import { compileFunctionSchemaResult } from "./compileFunctionSchemaResult";
+import { compileObjectSchema } from "./compileObjectSchema";
+import { compileObjectSchemaWithRest } from "./compileObjectSchemaWithRest";
+import { compileVariants } from "./compileVariants";
+import { handleSchema } from "./handleSchema";
 import {
   CompilationResult,
   IPureCompileConfig,
   ISettings,
   QuartetInstance,
-  Schema,
-} from './types'
+  Schema
+} from "./types";
 
 export const getPureCompile = ({ errorBoundary }: ISettings) =>
   function pureCompile(
     this: QuartetInstance,
     s: Schema,
-    config?: IPureCompileConfig,
+    config?: IPureCompileConfig
   ): CompilationResult {
     if (errorBoundary && (!config || !config.ignoreGlobalErrorBoundary)) {
       s = handleSchema<Schema>({
         and: andSchema => this.errorBoundary(andSchema, errorBoundary),
-        constant: constantSchema => this.errorBoundary(constantSchema, errorBoundary),
+        constant: constantSchema =>
+          this.errorBoundary(constantSchema, errorBoundary),
         function: functionSchema =>
           functionSchema().handleError
             ? functionSchema
@@ -31,8 +32,9 @@ export const getPureCompile = ({ errorBoundary }: ISettings) =>
         objectRest: objectRestSchema =>
           this.errorBoundary(objectRestSchema, errorBoundary),
         pair: pairSchema => this.errorBoundary(pairSchema, errorBoundary),
-        variant: variantSchema => this.errorBoundary(variantSchema, errorBoundary),
-      })(s)
+        variant: variantSchema =>
+          this.errorBoundary(variantSchema, errorBoundary)
+      })(s);
     }
     const validator = handleSchema<CompilationResult>({
       // TODO: Check if appropriate
@@ -42,10 +44,10 @@ export const getPureCompile = ({ errorBoundary }: ISettings) =>
       object: objSchema => compileObjectSchema(this, objSchema),
       objectRest: objSchema => compileObjectSchemaWithRest(this, objSchema),
       pair: pairSchema => {
-        throw new Error('Wrong usage of v.pair')
+        throw new Error("Wrong usage of v.pair");
       },
-      variant: schemas => compileVariants(this, schemas),
-    })(s)
+      variant: schemas => compileVariants(this, schemas)
+    })(s);
 
-    return validator as any
-  }
+    return validator as any;
+  };
