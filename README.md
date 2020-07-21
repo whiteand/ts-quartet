@@ -36,6 +36,7 @@ It is a declarative and fast tool for data validation.
       - [`v.min(minValue: number, isExclusive?: boolean): Schema`](#vminminvalue-number-isexclusive-boolean-schema)
       - [`v.minLength(minLength: number, isExclusive?: number): Schema`](#vminlengthminlength-number-isexclusive-number-schema)
       - [`v.not(schema: Schema): Schema`](#vnotschema-schema-schema)
+      - [`v.pair(keyValueSchema: Schema): Schema`](#vpairkeyValueSchema-schema-schema)
       - [`v.test(tester: { test(x: any) => boolean }): Schema`](#vtesttester--testx-any--boolean--schema)
     - [Variant schemas](#variant-schemas)
     - [The schema for an object is an object](#the-schema-for-an-object-is-an-object)
