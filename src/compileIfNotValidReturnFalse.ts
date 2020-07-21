@@ -34,35 +34,7 @@ export function compileIfNotValidReturnFalse(
       }
       return [bodyCode, isPure]
     },
-    pair: pairSchema => {
-      if (!parentKey) {
-        throw new Error('Wrong usage of v.pair')
-      }
 
-      const keyValueSchema = pairSchema[1]
-
-      const compiled = v.pureCompile(keyValueSchema)
-      const [validatorId, prepare] = v.toContext(valueId, compiled)
-      const validatorAcc = getKeyAccessor(validatorId)
-      const [keyValueObjId, prepareKeyValue] = v.toContext('keyvalue', {
-        key: undefined,
-        value: undefined,
-      })
-      const keyValueObjAcc = getKeyAccessor(keyValueObjId)
-      preparations.push(prepare, prepareKeyValue)
-
-      if (compiled.pure) {
-        return [
-          `${ctxId}${keyValueObjAcc}.key = ${parentKey};\n${ctxId}${keyValueObjAcc}.value = ${valueId};\nif (!${ctxId}${validatorAcc}(${ctxId}${keyValueObjAcc})) return false;`,
-          true,
-        ]
-      }
-
-      return [
-        `${ctxId}${keyValueObjAcc}.key = ${parentKey};\n${ctxId}${keyValueObjAcc}.value = ${valueId};\nif (!${ctxId}${validatorAcc}(${ctxId}${keyValueObjAcc})) {\n  ${ctxId}.explanations.push(...${ctxId}${validatorAcc}.explanations);\n  return false\n}`,
-        false,
-      ]
-    },
     constant: constant =>
       compileIfNotValidReturnFalse(
         v,
@@ -87,6 +59,7 @@ export function compileIfNotValidReturnFalse(
         !s.handleError,
       ]
     },
+
     object: objectSchema => {
       const keys = Object.keys(objectSchema)
       const codeLines = [`if (${valueId} == null) return false`]
@@ -178,6 +151,35 @@ export function compileIfNotValidReturnFalse(
           isCheckObjectPure && forLoopBodyIsPure,
         ]
       }
+    },
+    pair: pairSchema => {
+      if (!parentKey) {
+        throw new Error('Wrong usage of v.pair')
+      }
+
+      const keyValueSchema = pairSchema[1]
+
+      const compiled = v.pureCompile(keyValueSchema)
+      const [validatorId, prepare] = v.toContext(valueId, compiled)
+      const validatorAcc = getKeyAccessor(validatorId)
+      const [keyValueObjId, prepareKeyValue] = v.toContext('keyvalue', {
+        key: undefined,
+        value: undefined,
+      })
+      const keyValueObjAcc = getKeyAccessor(keyValueObjId)
+      preparations.push(prepare, prepareKeyValue)
+
+      if (compiled.pure) {
+        return [
+          `${ctxId}${keyValueObjAcc}.key = ${parentKey};\n${ctxId}${keyValueObjAcc}.value = ${valueId};\nif (!${ctxId}${validatorAcc}(${ctxId}${keyValueObjAcc})) return false;`,
+          true,
+        ]
+      }
+
+      return [
+        `${ctxId}${keyValueObjAcc}.key = ${parentKey};\n${ctxId}${keyValueObjAcc}.value = ${valueId};\nif (!${ctxId}${validatorAcc}(${ctxId}${keyValueObjAcc})) {\n  ${ctxId}.explanations.push(...${ctxId}${validatorAcc}.explanations);\n  return false\n}`,
+        false,
+      ]
     },
     variant: schemas => {
       if (schemas.length === 0) {

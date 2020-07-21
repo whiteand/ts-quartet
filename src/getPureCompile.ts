@@ -28,9 +28,9 @@ export const getPureCompile = ({ errorBoundary }: ISettings) =>
             ? functionSchema
             : this.errorBoundary(functionSchema, errorBoundary),
         object: objectSchema => this.errorBoundary(objectSchema, errorBoundary),
-        pair: pairSchema => this.errorBoundary(pairSchema, errorBoundary),
         objectRest: objectRestSchema =>
           this.errorBoundary(objectRestSchema, errorBoundary),
+        pair: pairSchema => this.errorBoundary(pairSchema, errorBoundary),
         variant: variantSchema => this.errorBoundary(variantSchema, errorBoundary),
       })(s)
     }
@@ -41,10 +41,10 @@ export const getPureCompile = ({ errorBoundary }: ISettings) =>
       function: funcSchema => compileFunctionSchemaResult(this, funcSchema()),
       object: objSchema => compileObjectSchema(this, objSchema),
       objectRest: objSchema => compileObjectSchemaWithRest(this, objSchema),
-      variant: schemas => compileVariants(this, schemas),
       pair: pairSchema => {
         throw new Error('Wrong usage of v.pair')
       },
+      variant: schemas => compileVariants(this, schemas),
     })(s)
 
     return validator as any

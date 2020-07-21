@@ -1,9 +1,9 @@
-import { AND_SCHEMA_ID, PAIR_SCHEMA_ID } from './ids'
 import { compileArrayOf } from './compileArrayOf'
 import { compileNot } from './compileNot'
 import { constantToFunc } from './constantToFunc'
 import { getKeyAccessor } from './getKeyAccessor'
 import { handleSchema } from './handleSchema'
+import { AND_SCHEMA_ID, PAIR_SCHEMA_ID } from './ids'
 import {
   HandleError,
   IMethods,

@@ -53,7 +53,7 @@ export function compileArrayOf<T = any>(
     'validator',
     schema,
     preparations,
-    iAcc,
+    `validator${iAcc}`,
   )
 
   preparations.push(prepareI)

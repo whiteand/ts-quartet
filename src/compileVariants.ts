@@ -111,8 +111,35 @@ function compileVariantElementToReturnWay(
       }
       return [`if (${s.check(valueId, ctxId)}) return true;`, !s.handleError]
     },
+
+    object: objectSchema =>
+      defaultHandler(
+        v,
+        index,
+        valueId,
+        ctxId,
+        objectSchema,
+        preparations,
+        handleErrors,
+        stringsSymbols,
+        parentKey,
+      ),
+    objectRest: objectSchema =>
+      defaultHandler(
+        v,
+        index,
+        valueId,
+        ctxId,
+        objectSchema,
+        preparations,
+        handleErrors,
+        stringsSymbols,
+        parentKey,
+      ),
     pair: pairSchema => {
-      if (!parentKey) throw new Error('Wrong usage of v.pair')
+      if (!parentKey) {
+        throw new Error('Wrong usage of v.pair')
+      }
 
       const keyValueSchema = pairSchema[1]
 
@@ -142,30 +169,6 @@ function compileVariantElementToReturnWay(
         false,
       ]
     },
-    object: objectSchema =>
-      defaultHandler(
-        v,
-        index,
-        valueId,
-        ctxId,
-        objectSchema,
-        preparations,
-        handleErrors,
-        stringsSymbols,
-        parentKey,
-      ),
-    objectRest: objectSchema =>
-      defaultHandler(
-        v,
-        index,
-        valueId,
-        ctxId,
-        objectSchema,
-        preparations,
-        handleErrors,
-        stringsSymbols,
-        parentKey,
-      ),
     variant: schemas => {
       const res = []
       let isPure = true

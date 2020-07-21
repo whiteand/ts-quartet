@@ -1,0 +1,98 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`v.pair Impure v.rest with another props 1`] = `
+Object {
+  "_": "function validator(value) {
+  validator.explanations = []
+  if (value == null) return false
+  if (typeof value.id !== 'string') return false
+  validator.keys = Object.keys(value)
+  for (validator.i = 0; validator.i < validator.keys.length; validator.i++) {
+    validator.key = validator.keys[validator.i]
+    if (validator.omitkeys[validator.key] === true) continue
+    validator.elem = value[validator.key]
+    validator.keyvalue.key = validator.key;
+    validator.keyvalue.value = validator.elem;
+    if (!validator[\\"validator.elem\\"](validator.keyvalue)) {
+      validator.explanations.push(...validator[\\"validator.elem\\"].explanations);
+      return false
+    }
+  }
+  return true
+}",
+  "elem": undefined,
+  "explanations": Array [],
+  "i": 0,
+  "key": undefined,
+  "keys": Array [],
+  "keyvalue": Object {
+    "key": undefined,
+    "value": undefined,
+  },
+  "omitkeys": Object {
+    "id": true,
+  },
+  "pure": false,
+  "validator.elem": "function validator(value) {
+  validator.explanations = []
+  if (validator.custom(value)) {
+    return true
+  }
+  validator.explvalue = validator.explanation(value,validator.custom.explanations)
+  if (validator.explvalue !== undefined) {
+    validator.explanations.push(validator.explvalue)
+  }
+  return false
+}",
+  "validator.elem.custom": "function (_a) {
+                var key = _a.key, value = _a.value;
+                return validGender.includes(key) && typeof value === 'number';
+            }",
+  "validator.elem.explanation": "function (value) { return value; }",
+  "validator.elem.explanations": Array [],
+  "validator.elem.explvalue": undefined,
+  "validator.elem.pure": false,
+}
+`;
+
+exports[`v.pair Pure v.arrayOf in complex 1`] = `
+Object {
+  "_": "function validator(value) {
+  return validator.arr(value)
+}",
+  "arr": "function validator(value) {
+  if (!value || !Array.isArray(value)) return false
+  for (validator.i = 0; validator.i < value.length; validator.i++) {
+    validator.elem = value[validator.i]
+    if (typeof validator.elem !== 'number') return false
+    validator.keyvalue.key = validator.i;
+    validator.keyvalue.value = validator.elem;
+    if (!validator[\\"validator.elem\\"](validator.keyvalue)) return false;
+  }
+  return true
+}",
+  "arr.elem": undefined,
+  "arr.explanations": Array [],
+  "arr.i": 0,
+  "arr.keyvalue": Object {
+    "key": undefined,
+    "value": undefined,
+  },
+  "arr.pure": true,
+  "arr.validator.elem": "function validator(value) {
+  if (value == null) return false
+  if (typeof value.value !== 'number') return false
+  if (typeof value.key !== 'number') return false
+  if (!validator.custom(value)) return false
+  return true
+}",
+  "arr.validator.elem.custom": "function (_a) {
+            var key = _a.key, value = _a.value;
+            return value === key * key;
+        }",
+  "arr.validator.elem.explanations": Array [],
+  "arr.validator.elem.pure": true,
+  "explanations": Array [],
+  "pure": true,
+}
+`;

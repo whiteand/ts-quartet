@@ -1,5 +1,5 @@
-import { isAndSchema, isPairSchema } from './ids'
 import { has } from './has'
+import { isAndSchema, isPairSchema } from './ids'
 import { methods } from './methods'
 import { IHandleSchemaHandlers, Schema } from './types'
 

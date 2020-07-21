@@ -4,9 +4,9 @@ import { handleSchema } from './handleSchema'
 import {
   FunctionSchema,
   HandleSchemaHandler,
+  PairSchema,
   QuartetInstance,
   Schema,
-  PairSchema,
 } from './types'
 
 export function compileNot(
@@ -43,9 +43,9 @@ export function compileNot(
         prepare: s.prepare,
       })
     },
-    pair: schema => v.pair(compileNot(v, schema[1])),
     object: defaultHandler,
     objectRest: defaultHandler,
+    pair: pairSchema => v.pair(compileNot(v, pairSchema[1])),
     variant: defaultHandler,
   })(schema)
 }
