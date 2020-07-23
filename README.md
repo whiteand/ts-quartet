@@ -357,7 +357,7 @@ function checkEven(x) {
   return x % 2 === 0
 }
 
-const evenSchema = v.custom(isEven)
+const evenSchema = v.custom(checkEven)
 const checkPositiveEvenNumber = v(v.and(v.number, v.positive, evenSchema))
 
 // same as
