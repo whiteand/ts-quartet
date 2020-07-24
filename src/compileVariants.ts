@@ -19,7 +19,8 @@ function defaultHandler(
   schema: Schema,
   preparations: Prepare[],
   handleErrors: HandleError[],
-  stringsSymbols: Array<string | number | symbol>,
+  stringsSymbols: Array<string | symbol>,
+  numbers: number[],
   parentKey: string | null
 ): [string, boolean] {
   const compiled = v.pureCompile(schema);
@@ -44,6 +45,7 @@ function defaultHandler(
     preparations,
     handleErrors,
     stringsSymbols,
+    numbers,
     parentKey
   );
 }
@@ -55,7 +57,8 @@ function compileVariantElementToReturnWay(
   schema: Schema,
   preparations: Prepare[],
   handleErrors: HandleError[],
-  stringsSymbols: Array<string | number | symbol>,
+  stringsSymbols: Array<string | symbol>,
+  numbers: number[],
   parentKey: string | null
 ): [string, boolean] {
   return handleSchema<[string, boolean]>({
@@ -69,6 +72,7 @@ function compileVariantElementToReturnWay(
         preparations,
         handleErrors,
         stringsSymbols,
+        numbers,
         parentKey
       ),
     constant: constant => {
@@ -82,11 +86,16 @@ function compileVariantElementToReturnWay(
           preparations,
           handleErrors,
           stringsSymbols,
+          numbers,
           parentKey
         );
       }
       if (typeof constant === "symbol" || typeof constant === "string") {
         stringsSymbols.push(constant);
+        return ["", true];
+      }
+      if (typeof constant === "number" && !Number.isNaN(constant)) {
+        numbers.push(constant);
         return ["", true];
       }
       return compileVariantElementToReturnWay(
@@ -98,6 +107,7 @@ function compileVariantElementToReturnWay(
         preparations,
         handleErrors,
         stringsSymbols,
+        numbers,
         parentKey
       );
     },
@@ -123,6 +133,7 @@ function compileVariantElementToReturnWay(
         preparations,
         handleErrors,
         stringsSymbols,
+        numbers,
         parentKey
       ),
     objectRest: objectSchema =>
@@ -135,6 +146,7 @@ function compileVariantElementToReturnWay(
         preparations,
         handleErrors,
         stringsSymbols,
+        numbers,
         parentKey
       ),
     pair: pairSchema => {
@@ -184,6 +196,7 @@ function compileVariantElementToReturnWay(
           preparations,
           handleErrors,
           stringsSymbols,
+          numbers,
           parentKey
         );
         if (!isPartPure) {
@@ -208,7 +221,8 @@ export function compileVariants(
   }
   const preparations: Prepare[] = [];
   const handleErrors: HandleError[] = [];
-  const stringsSymbols: Array<string | number | symbol> = [];
+  const stringsSymbols: Array<string | symbol> = [];
+  const numbers: number[] = [];
   const bodyCodeLines = [];
   let isPure = true;
   for (let i = 0; i < variants.length; i++) {
@@ -222,6 +236,7 @@ export function compileVariants(
       preparations,
       handleErrors,
       stringsSymbols,
+      numbers,
       null
     );
     if (!purePart) {
@@ -229,15 +244,28 @@ export function compileVariants(
     }
     bodyCodeLines.push(codePart);
   }
+
   // tslint:disable-next-line
-  let __validValuesDict = {};
-  if (stringsSymbols.length > 0) {
-    __validValuesDict = stringsSymbols.reduce((dict: any, el) => {
-      dict[el] = true;
-      return dict;
-    }, {});
+  const __validNumbersDict: Record<number, boolean> = {};
+  if (numbers.length > 0) {
+    // tslint:disable-next-line
+    for (let i = 0; i < numbers.length; i++) {
+      __validNumbersDict[numbers[i]] = true;
+    }
     bodyCodeLines.unshift(
-      `if (validator.__validValuesDict[value] === true) return true`
+      `if (typeof value === 'number' && validator.__validNumbersDict[value] === true) return true`
+    );
+  }
+
+  // tslint:disable-next-line
+  const __validStringsAndSymbols: Record<string | symbol, boolean> = {};
+  if (stringsSymbols.length > 0) {
+    // tslint:disable-next-line
+    for (let i = 0; i < stringsSymbols.length; i++) {
+      __validStringsAndSymbols[stringsSymbols[i] as any] = true;
+    }
+    bodyCodeLines.unshift(
+      `if ((typeof value === 'string' || typeof value === 'symbol') && validator.__validStringsAndSymbols[value] === true) return true`
     );
   }
   if (handleErrors.length > 0) {
@@ -264,7 +292,10 @@ export function compileVariants(
   ctx.explanations = [];
   ctx.pure = isPure;
   if (stringsSymbols.length > 0) {
-    ctx.__validValuesDict = __validValuesDict;
+    ctx.__validStringsAndSymbols = __validStringsAndSymbols;
+  }
+  if (numbers.length > 0) {
+    ctx.__validNumbersDict = __validNumbersDict;
   }
   return ctx;
 }
