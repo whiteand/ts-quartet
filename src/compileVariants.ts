@@ -8,7 +8,7 @@ import {
   IVariantSchema,
   Prepare,
   QuartetInstance,
-  Schema
+  Schema,
 } from "./types";
 
 function defaultHandler(
@@ -29,12 +29,12 @@ function defaultHandler(
   const idAcc = getKeyAccessor(id);
   const funcSchema = compiled.pure
     ? () => ({
-        check: () => `${ctxId}${idAcc}(${valueId})`
+        check: () => `${ctxId}${idAcc}(${valueId})`,
       })
     : () => ({
         check: () => `${ctxId}${idAcc}(${valueId})`,
         handleError: () =>
-          `${ctxId}.explanations.push(...${ctxId}${idAcc}.explanations)`
+          `${ctxId}.explanations.push(...${ctxId}${idAcc}.explanations)`,
       });
   return compileVariantElementToReturnWay(
     v,
@@ -62,7 +62,7 @@ function compileVariantElementToReturnWay(
   parentKey: string | null
 ): [string, boolean] {
   return handleSchema<[string, boolean]>({
-    and: andSchema =>
+    and: (andSchema) =>
       defaultHandler(
         v,
         index,
@@ -75,7 +75,7 @@ function compileVariantElementToReturnWay(
         numbers,
         parentKey
       ),
-    constant: constant => {
+    constant: (constant) => {
       if (constant === "false" || constant === "true") {
         return compileVariantElementToReturnWay(
           v,
@@ -111,7 +111,7 @@ function compileVariantElementToReturnWay(
         parentKey
       );
     },
-    function: funcSchema => {
+    function: (funcSchema) => {
       const s = funcSchema();
 
       if (s.prepare) {
@@ -123,7 +123,7 @@ function compileVariantElementToReturnWay(
       return [`if (${s.check(valueId, ctxId)}) return true;`, !s.handleError];
     },
 
-    object: objectSchema =>
+    object: (objectSchema) =>
       defaultHandler(
         v,
         index,
@@ -136,7 +136,7 @@ function compileVariantElementToReturnWay(
         numbers,
         parentKey
       ),
-    objectRest: objectSchema =>
+    objectRest: (objectSchema) =>
       defaultHandler(
         v,
         index,
@@ -149,7 +149,7 @@ function compileVariantElementToReturnWay(
         numbers,
         parentKey
       ),
-    pair: pairSchema => {
+    pair: (pairSchema) => {
       if (!parentKey) {
         throw new Error("Wrong usage of v.pair");
       }
@@ -161,7 +161,7 @@ function compileVariantElementToReturnWay(
       const validatorAcc = getKeyAccessor(validatorId);
       const [keyValueObjId, prepareKeyValue] = v.toContext("keyvalue", {
         key: undefined,
-        value: undefined
+        value: undefined,
       });
       const keyValueObjAcc = getKeyAccessor(keyValueObjId);
       preparations.push(prepare, prepareKeyValue);
@@ -169,7 +169,7 @@ function compileVariantElementToReturnWay(
       if (compiled.pure) {
         return [
           `${ctxId}${keyValueObjAcc}.key = ${parentKey};\n${ctxId}${keyValueObjAcc}.value = ${valueId};\nif (${ctxId}${validatorAcc}(${ctxId}${keyValueObjAcc})) return true;`,
-          true
+          true,
         ];
       }
 
@@ -180,10 +180,10 @@ function compileVariantElementToReturnWay(
 
       return [
         `${ctxId}${keyValueObjAcc}.key = ${parentKey};\n${ctxId}${keyValueObjAcc}.value = ${valueId};\nif (${ctxId}${validatorAcc}(${ctxId}${keyValueObjAcc})) return true`,
-        false
+        false,
       ];
     },
-    variant: schemas => {
+    variant: (schemas) => {
       const res = [];
       let isPure = true;
       for (const variant of schemas) {
@@ -205,7 +205,7 @@ function compileVariantElementToReturnWay(
         res.push(codePart);
       }
       return [res.join("\n"), isPure];
-    }
+    },
   })(schema);
 }
 
@@ -246,8 +246,9 @@ export function compileVariants(
   }
 
   // tslint:disable-next-line
-  const __validNumbersDict: Record<number, boolean> = {};
+  const __validNumbersDict: Record<number, boolean> = Object.create(null);
   if (numbers.length > 0) {
+    numbers.sort((a, b) => (a > b ? 1 : -1));
     // tslint:disable-next-line
     for (let i = 0; i < numbers.length; i++) {
       __validNumbersDict[numbers[i]] = true;
@@ -258,8 +259,18 @@ export function compileVariants(
   }
 
   // tslint:disable-next-line
-  const __validStringsAndSymbols: Record<string | symbol, boolean> = {};
+  const __validStringsAndSymbols: Record<string | symbol, boolean> = Object.create(null);
   if (stringsSymbols.length > 0) {
+    // tslint:disable-next-line
+    stringsSymbols.sort((a: any, b: any) => {
+      if (typeof a === 'symbol') {
+        return 0
+      }
+      if (typeof b === 'symbol') {
+        return 0
+      }
+      return a > b ? 1 : -1
+    });
     // tslint:disable-next-line
     for (let i = 0; i < stringsSymbols.length; i++) {
       __validStringsAndSymbols[stringsSymbols[i] as any] = true;
@@ -270,11 +281,11 @@ export function compileVariants(
   }
   if (handleErrors.length > 0) {
     bodyCodeLines.push(
-      ...handleErrors.map(handleError => handleError("value", "validator"))
+      ...handleErrors.map((handleError) => handleError("value", "validator"))
     );
   }
   const bodyCode = bodyCodeLines
-    .map(e => e.trim())
+    .map((e) => e.trim())
     .filter(Boolean)
     .join("\n");
 
