@@ -20,62 +20,6 @@ export function getSimpleCondition<S = any>(
   };
 }
 
-export function getDispatchedRenderer<S>(
-  getRenderer: (schema: S) => ISchemaRenderer<S>
-): ISchemaRenderer<S> {
-  return {
-    getExpr(valueId, schema, alloc, pathToValueId, explanationsArrId) {
-      return getRenderer(schema).getExpr(
-        valueId,
-        schema,
-        alloc,
-        pathToValueId,
-        explanationsArrId
-      );
-    },
-    getNotExpr(valueId, schema, alloc, pathToValueId, explanationsArrId) {
-      return getRenderer(schema).getNotExpr(
-        valueId,
-        schema,
-        alloc,
-        pathToValueId,
-        explanationsArrId
-      );
-    },
-    getIfExprReturnTrue(
-      valueId,
-      schema,
-      alloc,
-      pathToValueId,
-      explanationsArrId
-    ) {
-      return getRenderer(schema).getIfExprReturnTrue(
-        valueId,
-        schema,
-        alloc,
-        pathToValueId,
-        explanationsArrId
-      );
-    },
-    getIfNotExprReturnFalse(
-      valueId,
-      schema,
-      alloc,
-      pathToValueId,
-      explanationsArrId
-    ) {
-      return getRenderer(schema).getIfNotExprReturnFalse(
-        valueId,
-        schema,
-
-        alloc,
-        pathToValueId,
-        explanationsArrId
-      );
-    }
-  };
-}
-
 export function fromValueSchemaAlloc<S = any>(
   getExpr: (
     valueId: string,

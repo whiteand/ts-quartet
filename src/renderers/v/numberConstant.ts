@@ -1,6 +1,6 @@
 import { ISchemaRenderer } from "../../types";
+import { getDispatchedRenderer } from "../utils";
 import {
-  getDispatchedRenderer,
   getSimpleCondition,
   getStrictComparisonWithSchemaRenderer
 } from "./utils";

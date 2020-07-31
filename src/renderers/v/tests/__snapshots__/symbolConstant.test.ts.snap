@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`v constant number renderer v(Symbol.for('quartet')) 1`] = `"_valueId === _validSymbol_undefined"`;
+
+exports[`v constant number renderer v(Symbol.for('quartet')) 2`] = `"_valueId !== _validSymbol_undefined"`;
+
+exports[`v constant number renderer v(Symbol.for('quartet')) 3`] = `"if (_valueId === _validSymbol_undefined) return true;"`;
+
+exports[`v constant number renderer v(Symbol.for('quartet')) 4`] = `"if (_valueId !== _validSymbol_undefined) return false;"`;

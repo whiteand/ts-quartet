@@ -1,0 +1,73 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`primitiveConstantRenderer v(NaN) 1`] = `"Number.isNaN(_valueId)"`;
+
+exports[`primitiveConstantRenderer v(NaN) 2`] = `"!Number.isNaN(_valueId)"`;
+
+exports[`primitiveConstantRenderer v(NaN) 3`] = `"if (Number.isNaN(_valueId)) return true;"`;
+
+exports[`primitiveConstantRenderer v(NaN) 4`] = `"if (!Number.isNaN(_valueId)) return false;"`;
+
+exports[`primitiveConstantRenderer v(false) 1`] = `"_valueId === false"`;
+
+exports[`primitiveConstantRenderer v(false) 2`] = `"_valueId !== false"`;
+
+exports[`primitiveConstantRenderer v(false) 3`] = `"if (_valueId === false) return true;"`;
+
+exports[`primitiveConstantRenderer v(false) 4`] = `"if (_valueId !== false) return false;"`;
+
+exports[`primitiveConstantRenderer v(long string) 1`] = `"_valueId === _validString_\\"Very very veryVery very veryVery very veryVery very veryVery very very long list\\""`;
+
+exports[`primitiveConstantRenderer v(long string) 2`] = `"_valueId !== _validString_\\"Very very veryVery very veryVery very veryVery very veryVery very very long list\\""`;
+
+exports[`primitiveConstantRenderer v(long string) 3`] = `"if (_valueId === _validString_\\"Very very veryVery very veryVery very veryVery very veryVery very very long list\\") return true;"`;
+
+exports[`primitiveConstantRenderer v(long string) 4`] = `"if (_valueId !== _validString_\\"Very very veryVery very veryVery very veryVery very veryVery very very long list\\") return false;"`;
+
+exports[`primitiveConstantRenderer v(null) 1`] = `"_valueId === null"`;
+
+exports[`primitiveConstantRenderer v(null) 2`] = `"_valueId !== null"`;
+
+exports[`primitiveConstantRenderer v(null) 3`] = `"if (_valueId === null) return true;"`;
+
+exports[`primitiveConstantRenderer v(null) 4`] = `"if (_valueId !== null) return false;"`;
+
+exports[`primitiveConstantRenderer v(number) 1`] = `"_valueId === _validNumber_42"`;
+
+exports[`primitiveConstantRenderer v(number) 2`] = `"_valueId !== _validNumber_42"`;
+
+exports[`primitiveConstantRenderer v(number) 3`] = `"if (_valueId === _validNumber_42) return true;"`;
+
+exports[`primitiveConstantRenderer v(number) 4`] = `"if (_valueId !== _validNumber_42) return false;"`;
+
+exports[`primitiveConstantRenderer v(string) 1`] = `"_valueId === \\"Andrew\\""`;
+
+exports[`primitiveConstantRenderer v(string) 2`] = `"_valueId !== \\"Andrew\\""`;
+
+exports[`primitiveConstantRenderer v(string) 3`] = `"if (_valueId === \\"Andrew\\") return true;"`;
+
+exports[`primitiveConstantRenderer v(string) 4`] = `"if (_valueId !== \\"Andrew\\") return false;"`;
+
+exports[`primitiveConstantRenderer v(symbol) 1`] = `"_valueId === _validSymbol_undefined"`;
+
+exports[`primitiveConstantRenderer v(symbol) 2`] = `"_valueId !== _validSymbol_undefined"`;
+
+exports[`primitiveConstantRenderer v(symbol) 3`] = `"if (_valueId === _validSymbol_undefined) return true;"`;
+
+exports[`primitiveConstantRenderer v(symbol) 4`] = `"if (_valueId !== _validSymbol_undefined) return false;"`;
+
+exports[`primitiveConstantRenderer v(true) 1`] = `"_valueId === true"`;
+
+exports[`primitiveConstantRenderer v(true) 2`] = `"_valueId !== true"`;
+
+exports[`primitiveConstantRenderer v(true) 3`] = `"if (_valueId === true) return true;"`;
+
+exports[`primitiveConstantRenderer v(true) 4`] = `"if (_valueId !== true) return false;"`;
+
+exports[`primitiveConstantRenderer v(undefined) 1`] = `"_valueId === undefined"`;
+
+exports[`primitiveConstantRenderer v(undefined) 2`] = `"_valueId !== undefined"`;
+
+exports[`primitiveConstantRenderer v(undefined) 3`] = `"if (_valueId === undefined) return true;"`;
+
+exports[`primitiveConstantRenderer v(undefined) 4`] = `"if (_valueId !== undefined) return false;"`;

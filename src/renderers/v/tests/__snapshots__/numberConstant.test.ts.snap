@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`v constant number renderer v(42) 1`] = `"_valueId === _validNumber_42"`;
+
+exports[`v constant number renderer v(42) 2`] = `"_valueId !== _validNumber_42"`;
+
+exports[`v constant number renderer v(42) 3`] = `"if (_valueId === _validNumber_42) return true;"`;
+
+exports[`v constant number renderer v(42) 4`] = `"if (_valueId !== _validNumber_42) return false;"`;
+
+exports[`v constant number renderer v(NaN) 1`] = `"Number.isNaN(_valueId)"`;
+
+exports[`v constant number renderer v(NaN) 2`] = `"!Number.isNaN(_valueId)"`;
+
+exports[`v constant number renderer v(NaN) 3`] = `"if (Number.isNaN(_valueId)) return true;"`;
+
+exports[`v constant number renderer v(NaN) 4`] = `"if (!Number.isNaN(_valueId)) return false;"`;

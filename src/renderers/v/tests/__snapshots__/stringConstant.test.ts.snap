@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`v constant number renderer v("Andrew is the creator of quartet data validation library. Try to create another long string") 1`] = `"_valueId === _validString_\\"Andrew is the creator of quartet data validation library. Try to create another long string\\""`;
+
+exports[`v constant number renderer v("Andrew is the creator of quartet data validation library. Try to create another long string") 2`] = `"_valueId !== _validString_\\"Andrew is the creator of quartet data validation library. Try to create another long string\\""`;
+
+exports[`v constant number renderer v("Andrew is the creator of quartet data validation library. Try to create another long string") 3`] = `"if (_valueId === _validString_\\"Andrew is the creator of quartet data validation library. Try to create another long string\\") return true;"`;
+
+exports[`v constant number renderer v("Andrew is the creator of quartet data validation library. Try to create another long string") 4`] = `"if (_valueId !== _validString_\\"Andrew is the creator of quartet data validation library. Try to create another long string\\") return false;"`;
+
+exports[`v constant number renderer v("Andrew") 1`] = `"_valueId === \\"Andrew\\""`;
+
+exports[`v constant number renderer v("Andrew") 2`] = `"_valueId !== \\"Andrew\\""`;
+
+exports[`v constant number renderer v("Andrew") 3`] = `"if (_valueId === \\"Andrew\\") return true;"`;
+
+exports[`v constant number renderer v("Andrew") 4`] = `"if (_valueId !== \\"Andrew\\") return false;"`;
