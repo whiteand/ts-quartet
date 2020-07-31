@@ -1,5 +1,13 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`simple methods v.array 1`] = `"Array.isArray(_valueId)"`;
+
+exports[`simple methods v.array 2`] = `"!Array.isArray(_valueId)"`;
+
+exports[`simple methods v.array 3`] = `"if (Array.isArray(_valueId)) return true;"`;
+
+exports[`simple methods v.array 4`] = `"if (!Array.isArray(_valueId)) return false;"`;
+
 exports[`simple methods v.boolean 1`] = `"typeof _valueId === 'boolean'"`;
 
 exports[`simple methods v.boolean 2`] = `"typeof _valueId !== 'boolean'"`;
