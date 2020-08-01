@@ -1,4 +1,15 @@
-import { anySchema, array, boolean, finite, neverSchema } from "../../schemas";
+import {
+  anySchema,
+  array,
+  boolean,
+  finite,
+  functionSchema,
+  negative,
+  neverSchema,
+  number,
+  positive,
+  safeInteger
+} from "../../schemas";
 import { vCompiler } from "../vCompiler";
 import { snapshot } from "./snapshot";
 
@@ -211,18 +222,53 @@ describe("v()", () => {
   });
   test("v(v.function)", () => {
     // TODO: Add v.function test
+    snapshot(
+      vCompiler,
+      functionSchema(),
+      [
+        () => {
+          // Something
+        },
+        new Function(),
+        function() {
+          // Something
+        },
+        Array
+      ],
+      ["function", null, undefined, null, "Function"]
+    );
   });
   test("v(v.negative)", () => {
-    // TODO: Add v.negative test
+    snapshot(
+      vCompiler,
+      negative(),
+      [-1, -Infinity, -1.5, "-1", [-1]],
+      [0, -0, 1, Infinity, "negative"]
+    );
   });
   test("v(v.number)", () => {
-    // TODO: Add v.number test
+    snapshot(
+      vCompiler,
+      number(),
+      [-1, -Infinity, -1.5, 0, -0, 1, Infinity, NaN],
+      ["-1", [-1], "number", "", false, true, null, "negative"]
+    );
   });
   test("v(v.positive)", () => {
-    // TODO: Add v.positive test
+    snapshot(
+      vCompiler,
+      positive(),
+      [Infinity, 1, 1.5],
+      [-1, -Infinity, NaN, -1.5, "-1", [-1], 0, -0, "positive"]
+    );
   });
   test("v(v.safeInteger)", () => {
-    // TODO: Add v.safeInteger test
+    snapshot(
+      vCompiler,
+      safeInteger(),
+      [1, 0, -1],
+      [0.5, -Infinity, Infinity, NaN, -1.5, "-1", [-1], Infinity, "positive"]
+    );
   });
   test("v(v.string)", () => {
     // TODO: Add v.string test

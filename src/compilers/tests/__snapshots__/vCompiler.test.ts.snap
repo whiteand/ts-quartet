@@ -237,6 +237,42 @@ return Number.isFinite(value)
 }
 `;
 
+exports[`v() v(v.function) 1`] = `
+Object {
+  "code": "function (value) {
+        return ctx.pure(value, ctx);
+    }",
+  "explanations": Array [],
+  "memory": Object {
+    "pathToValueId": Array [],
+  },
+  "pure": Object {
+    "code": "function anonymous(value,ctx
+) {
+return typeof value === 'function'
+}",
+  },
+}
+`;
+
+exports[`v() v(v.negative) 1`] = `
+Object {
+  "code": "function (value) {
+        return ctx.pure(value, ctx);
+    }",
+  "explanations": Array [],
+  "memory": Object {
+    "pathToValueId": Array [],
+  },
+  "pure": Object {
+    "code": "function anonymous(value,ctx
+) {
+return value < 0
+}",
+  },
+}
+`;
+
 exports[`v() v(v.never) 1`] = `
 Object {
   "code": "function (value) {
@@ -250,6 +286,60 @@ Object {
     "code": "function anonymous(value,ctx
 ) {
 return false
+}",
+  },
+}
+`;
+
+exports[`v() v(v.number) 1`] = `
+Object {
+  "code": "function (value) {
+        return ctx.pure(value, ctx);
+    }",
+  "explanations": Array [],
+  "memory": Object {
+    "pathToValueId": Array [],
+  },
+  "pure": Object {
+    "code": "function anonymous(value,ctx
+) {
+return typeof value === 'number'
+}",
+  },
+}
+`;
+
+exports[`v() v(v.positive) 1`] = `
+Object {
+  "code": "function (value) {
+        return ctx.pure(value, ctx);
+    }",
+  "explanations": Array [],
+  "memory": Object {
+    "pathToValueId": Array [],
+  },
+  "pure": Object {
+    "code": "function anonymous(value,ctx
+) {
+return value > 0
+}",
+  },
+}
+`;
+
+exports[`v() v(v.safeInteger) 1`] = `
+Object {
+  "code": "function (value) {
+        return ctx.pure(value, ctx);
+    }",
+  "explanations": Array [],
+  "memory": Object {
+    "pathToValueId": Array [],
+  },
+  "pure": Object {
+    "code": "function anonymous(value,ctx
+) {
+return Number.isSafeInteger(value)
 }",
   },
 }
