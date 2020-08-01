@@ -1,10 +1,10 @@
-import { SchemaType } from './SchemaType'
-import { ArraySchema } from '../types'
+import { IArraySchema } from "../types";
+import { SchemaType } from "./SchemaType";
 
-const ARRAY_SCHEMA = {
-  type: SchemaType.Array,
-}
+const ARRAY_SCHEMA: IArraySchema = {
+  type: SchemaType.Array
+};
 
-export function array(): ArraySchema {
-  return ARRAY_SCHEMA
+export function array(): IArraySchema {
+  return ARRAY_SCHEMA;
 }

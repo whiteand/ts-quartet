@@ -1,10 +1,10 @@
-import { SchemaType } from './SchemaType'
-import { BooleanSchema } from '../types'
+import { IBooleanSchema } from "../types";
+import { SchemaType } from "./SchemaType";
 
-const BOOLEAN_SCHEMA = {
-  type: SchemaType.Boolean,
-}
+const BOOLEAN_SCHEMA: IBooleanSchema = {
+  type: SchemaType.Boolean
+};
 
-export function array(): BooleanSchema {
-  return BOOLEAN_SCHEMA
+export function boolean(): IBooleanSchema {
+  return BOOLEAN_SCHEMA;
 }

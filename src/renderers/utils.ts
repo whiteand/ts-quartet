@@ -4,22 +4,31 @@ export function getDispatchedRenderer<S>(
   getRenderer: (schema: S) => ISchemaRenderer<any>
 ): ISchemaRenderer<S> {
   return {
-    getExpr(valueId, schema, alloc, pathToValueId, explanationsArrId) {
+    getExpr(valueId, schema, alloc, pathToValueId, explanationsArrId, compile) {
       return getRenderer(schema).getExpr(
         valueId,
         schema,
         alloc,
         pathToValueId,
-        explanationsArrId
+        explanationsArrId,
+        compile
       );
     },
-    getNotExpr(valueId, schema, alloc, pathToValueId, explanationsArrId) {
+    getNotExpr(
+      valueId,
+      schema,
+      alloc,
+      pathToValueId,
+      explanationsArrId,
+      compile
+    ) {
       return getRenderer(schema).getNotExpr(
         valueId,
         schema,
         alloc,
         pathToValueId,
-        explanationsArrId
+        explanationsArrId,
+        compile
       );
     },
     getIfExprReturnTrue(
@@ -27,14 +36,16 @@ export function getDispatchedRenderer<S>(
       schema,
       alloc,
       pathToValueId,
-      explanationsArrId
+      explanationsArrId,
+      compile
     ) {
       return getRenderer(schema).getIfExprReturnTrue(
         valueId,
         schema,
         alloc,
         pathToValueId,
-        explanationsArrId
+        explanationsArrId,
+        compile
       );
     },
     getIfNotExprReturnFalse(
@@ -42,7 +53,8 @@ export function getDispatchedRenderer<S>(
       schema,
       alloc,
       pathToValueId,
-      explanationsArrId
+      explanationsArrId,
+      compile
     ) {
       return getRenderer(schema).getIfNotExprReturnFalse(
         valueId,
@@ -50,7 +62,8 @@ export function getDispatchedRenderer<S>(
 
         alloc,
         pathToValueId,
-        explanationsArrId
+        explanationsArrId,
+        compile
       );
     }
   };

@@ -1,9 +1,9 @@
-import { SchemaType } from './SchemaType'
-import { AndSchema } from '../types'
+import { IAndSchema, TSchema } from "../types";
+import { SchemaType } from "./SchemaType";
 
-export function and(...schemas): AndSchema {
+export function and(...schemas: TSchema[]): IAndSchema {
   return {
-    type: SchemaType.And,
     schemas,
-  }
+    type: SchemaType.And
+  };
 }

@@ -1,9 +1,9 @@
-import { SchemaType } from './SchemaType'
-import { ArrayOfSchema, TSchema } from '../types'
+import { IArrayOfSchema, TSchema } from "../types";
+import { SchemaType } from "./SchemaType";
 
-export function arrayOf(elementSchema: TSchema): ArrayOfSchema {
+export function arrayOf(elementSchema: TSchema): IArrayOfSchema {
   return {
-    type: SchemaType.ArrayOf,
     elementSchema,
-  }
+    type: SchemaType.ArrayOf
+  };
 }

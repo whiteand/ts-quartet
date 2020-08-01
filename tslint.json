@@ -1,6 +1,8 @@
 {
   "extends": ["tslint:recommended", "tslint-config-prettier"],
   "rules": {
-    "only-arrow-functions": false
+    "only-arrow-functions": false,
+    "prefer-for-of": false,
+    "no-shadowed-variable": false
   }
 }
