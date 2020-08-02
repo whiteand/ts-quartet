@@ -1,4 +1,5 @@
 import { IfAny } from "./IfAny";
+import { RawSchema } from "./rawSchemaToSchema";
 import { SchemaType } from "./schemas/SchemaType";
 
 export interface IAndSchema {
@@ -65,6 +66,10 @@ export interface INotSchema {
 
 export interface INumberSchema {
   type: SchemaType.Number;
+}
+
+export interface INotANumberSchema {
+  type: SchemaType.NotANumber;
 }
 
 export type KeyType = string | number | symbol;
@@ -137,6 +142,7 @@ export type TNonPrimitiveSchema =
   | INegativeSchema
   | INeverSchema
   | INotSchema
+  | INotANumberSchema
   | INumberSchema
   | IObjectSchema
   | IPairSchema

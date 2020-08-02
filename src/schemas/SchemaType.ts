@@ -13,6 +13,7 @@ export enum SchemaType {
   Negative = "__!quartet/Negative!__",
   Never = "__!quartet/Never!__",
   Not = "__!quartet/Not!__",
+  NotANumber = "__!quartet/NotANumber!__",
   Number = "__!quartet/Number!__",
   Object = "__!quartet/Object!__",
   Pair = "__!quartet/Pair!__",

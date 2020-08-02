@@ -1,30 +1,33 @@
 import { RawSchema, rawSchemaToSchema } from "../rawSchemaToSchema";
-import { Validator, CompilationResult, KeyType, TSchema } from "../types";
 import { SchemaType } from "../schemas";
+import { CompilationResult, KeyType, TSchema, Validator } from "../types";
 import { has } from "../utils";
 
 function validate(value: any, schema: TSchema, path: KeyType[]): boolean {
   if (typeof schema !== "object" || schema === null) {
-    return Number.isNaN(schema) ? Number.isNaN(value) : value === schema;
+    return value === schema;
   }
   switch (schema.type) {
     case SchemaType.And:
       const { schemas } = schema;
       for (let i = 0; i < schemas.length; i++) {
         const andSchema = schemas[i];
-        if (!validate(value, schema, path)) {
+        if (!validate(value, andSchema, path)) {
           return false;
         }
       }
       return true;
-      break;
     case SchemaType.Any:
       return true;
     case SchemaType.Array:
       return Array.isArray(value);
     case SchemaType.ArrayOf:
-      if (!Array.isArray(value)) return false;
-      if (value.length <= 0) return true;
+      if (!Array.isArray(value)) {
+        return false;
+      }
+      if (value.length <= 0) {
+        return true;
+      }
       const { elementSchema } = schema;
       for (let i = 0; i < value.length; i++) {
         const element = value[i];
@@ -47,7 +50,9 @@ function validate(value: any, schema: TSchema, path: KeyType[]): boolean {
         ? value < schema.maxValue
         : value <= schema.maxValue;
     case SchemaType.MaxLength:
-      if (value == null) return false;
+      if (value == null) {
+        return false;
+      }
       return schema.isExclusive
         ? value.length < schema.maxLength
         : value.length <= schema.maxLength;
@@ -56,7 +61,9 @@ function validate(value: any, schema: TSchema, path: KeyType[]): boolean {
         ? value > schema.minValue
         : value >= schema.minValue;
     case SchemaType.MinLength:
-      if (value == null) return false;
+      if (value == null) {
+        return false;
+      }
       return schema.isExclusive
         ? value.length > schema.minLength
         : value.length >= schema.minLength;
@@ -66,10 +73,14 @@ function validate(value: any, schema: TSchema, path: KeyType[]): boolean {
       return false;
     case SchemaType.Not:
       return !validate(value, schema.schema, path);
+    case SchemaType.NotANumber:
+      return Number.isNaN(value);
     case SchemaType.Number:
       return typeof value === "number";
     case SchemaType.Object:
-      if (value == null) return false;
+      if (value == null) {
+        return false;
+      }
       const { props, propsSchemas } = schema;
       for (let i = 0; i < props.length; i++) {
         const prop = props[i];
@@ -83,7 +94,7 @@ function validate(value: any, schema: TSchema, path: KeyType[]): boolean {
       }
       if (schema.hasRestValidator) {
         const restProps = Object.keys(value).filter(
-          (key) => !has(propsSchemas, key) && schema.restOmit.indexOf(key) < 0
+          key => !has(propsSchemas, key) && schema.restOmit.indexOf(key) < 0
         );
         for (let i = 0; i < restProps.length; i++) {
           const restProp = restProps[i];
@@ -97,11 +108,10 @@ function validate(value: any, schema: TSchema, path: KeyType[]): boolean {
         }
       }
       return true;
-      break;
     case SchemaType.Pair:
       const obj = {
         key: path[path.length - 1],
-        value,
+        value
       };
       return validate(obj, schema.keyValueSchema, path);
     case SchemaType.Positive:

@@ -13,6 +13,7 @@ export * from "./minLength";
 export * from "./negative";
 export * from "./neverSchema";
 export * from "./not";
+export * from "./notANumber";
 export * from "./number";
 export * from "./objectSchema";
 export * from "./pair";

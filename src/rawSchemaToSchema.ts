@@ -1,6 +1,7 @@
 import { EMPTY_ARR } from "./empty";
 import {
   neverSchema,
+  notANumber,
   objectSchema,
   SchemaType,
   variant as variantSchema
@@ -42,6 +43,9 @@ export function rawSchemaToSchema(rawSchema: RawSchema): TSchema {
     return rawSchema as null | undefined;
   }
   if (typeof rawSchema !== "object") {
+    if (typeof rawSchema === "number" && Number.isNaN(rawSchema)) {
+      return notANumber();
+    }
     return rawSchema;
   }
   if (Array.isArray(rawSchema)) {
