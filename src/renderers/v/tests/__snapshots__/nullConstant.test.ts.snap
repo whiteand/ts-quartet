@@ -1,9 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`v constant number renderer v(null) 1`] = `"_valueId === null"`;
-
-exports[`v constant number renderer v(null) 2`] = `"_valueId !== null"`;
-
-exports[`v constant number renderer v(null) 3`] = `"if (_valueId === null) return true;"`;
-
-exports[`v constant number renderer v(null) 4`] = `"if (_valueId !== null) return false;"`;
