@@ -1,29 +1,6 @@
 import { IfAny } from "./IfAny";
 import { SchemaType } from "./schemas/SchemaType";
 
-export type Alloc = (initialValue?: any, prefix?: string) => string;
-
-type RendererMethod<R = string, S = any> = (
-  valueId: string,
-  // id that is ready to be used in expression for reading
-  schema: S,
-  // function that is used to allocate place to do something, returns id that is ready to be used for reading and writing
-  alloc: Alloc,
-  // id of array that is ready to be used in expression for reading
-  pathToValueId: string,
-  // id of array that is ready to be used for reading and writing
-  explanationsArrId: string,
-  // function that turns schema into validator function
-  compileSchema: (schema: TSchema) => CompilationResult<any, any>
-) => R;
-
-export interface ISchemaRenderer<S = any> {
-  getExpr: RendererMethod<string, S>;
-  getNotExpr: RendererMethod<string, S>;
-  getIfNotExprReturnFalse: RendererMethod<string, S>;
-  getIfExprReturnTrue: RendererMethod<string, S>;
-}
-
 export interface IAndSchema {
   type: SchemaType.And;
   schemas: TSchema[];
