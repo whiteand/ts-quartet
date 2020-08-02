@@ -1,9 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`v constant number renderer v(undefined) 1`] = `"_valueId === undefined"`;
-
-exports[`v constant number renderer v(undefined) 2`] = `"_valueId !== undefined"`;
-
-exports[`v constant number renderer v(undefined) 3`] = `"if (_valueId === undefined) return true;"`;
-
-exports[`v constant number renderer v(undefined) 4`] = `"if (_valueId !== undefined) return false;"`;
