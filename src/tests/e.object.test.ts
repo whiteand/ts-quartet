@@ -160,4 +160,20 @@ describe("v({ ... })", () => {
       [null, undefined]
     );
   });
+  test("for readme", () => {
+    const checkPerson = v({
+      name: v.string
+    });
+
+    expect(checkPerson({ name: 1 })).toBe(false); // false
+    expect(checkPerson.explanations).toEqual([
+      {
+        path: ["name"],
+        schema: {
+          type: "String"
+        },
+        value: 1
+      }
+    ]);
+  });
 });

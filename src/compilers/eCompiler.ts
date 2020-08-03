@@ -1,3 +1,4 @@
+/* tslint:disable:object-literal-sort-keys */
 import { IExplanation, schemaToExplanationSchema } from "../explanations";
 import { RawSchema, rawSchemaToSchema } from "../rawSchemaToSchema";
 import { SchemaType } from "../schemas";
@@ -10,9 +11,9 @@ function explanation(
   schema: TSchema
 ): IExplanation {
   return {
-    path: [...path],
+    value,
     schema: schemaToExplanationSchema(schema),
-    value
+    path: [...path]
   };
 }
 
