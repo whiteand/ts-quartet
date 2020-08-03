@@ -200,12 +200,6 @@ const checkMyType = v(myTypeSchema)
 
 - Use `checkMyType` on data that you are not sure about. It will return `true` if the data is valid. It will return `false` if the data is not valid.
 
-![Flow](https://raw.githubusercontent.com/whiteand/ts-quartet/master/infographic/quartet_flow.jpg)
-
-## What could be a validation scheme?
-
-![Schema Types](https://raw.githubusercontent.com/whiteand/ts-quartet/master/infographic/schema_diagram.jpg)
-
 ### Primitives
 
 Each primitive Javascript value is its own validation scheme.
@@ -227,8 +221,6 @@ const is42 = x => x === 42
 ```
 
 Primitives are all Javascript values, with the exception of objects (including arrays) and functions. That is: `undefined`,`null`, `false`,`true`, numbers (`NaN`,`Infinity`, `-Infinity` including) and strings.
-
-![Primitives](https://raw.githubusercontent.com/whiteand/ts-quartet/master/infographic/primitive_schema.jpg)
 
 ### Schemas out of the box
 
@@ -631,10 +623,6 @@ const checkHelloWorld = x => {
 }
 ```
 
-![Flow](https://raw.githubusercontent.com/whiteand/ts-quartet/master/infographic/obj_schema.jpg)
-
-(This is only illustration. Real compilation result will behave in similar way but much more faster)
-
 If you want to validate objects with previously unknown fields, use `v.rest`
 
 ```typescript
@@ -664,10 +652,6 @@ const checkPhoneBookWithAuthorId = v({
   [v.rest]: v.string,
 })
 ```
-
-![Flow](https://raw.githubusercontent.com/whiteand/ts-quartet/master/infographic/obj_schema_with_rest.jpg)
-
-(This is only illustration. Real compilation result will behave in similar way but much more faster)
 
 ### Conclusions
 
