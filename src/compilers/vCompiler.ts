@@ -128,9 +128,6 @@ function validate(value: any, schema: TSchema, path: KeyType[]): boolean {
       return Boolean(schema.tester.test(value));
     case SchemaType.Variant:
       const { variants } = schema;
-      if (variants.length === 0) {
-        return false;
-      }
       for (let i = 0; i < variants.length; i++) {
         const variantSchema = variants[i];
         if (validate(value, variantSchema, path)) {

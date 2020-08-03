@@ -1,7 +1,7 @@
 const EMPTY: any = {};
 
 export function has(obj: any, key: string | number): boolean {
-  if (!obj) {
+  if (obj == null) {
     return false;
   }
   if (EMPTY[key] !== undefined) {
@@ -21,13 +21,4 @@ export function arrToDict<T extends string | number | symbol>(
   }
 
   return res;
-}
-
-export function getKeyAccessor(key: string | number) {
-  if (typeof key === "number" || /^[1-9]\d*$/.test(key)) {
-    return `[${key}]`;
-  }
-  return typeof key === "string" && /^[a-zA-Z_][a-zA-Z0-9_]*$/.test(key)
-    ? "." + key
-    : `[${JSON.stringify(key)}]`;
 }

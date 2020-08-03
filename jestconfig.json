@@ -5,5 +5,5 @@
   "testPathIgnorePatterns": ["/node_modules/", "/examples/"],
   "testRegex": "(/__tests__/.*.test.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
   "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json", "node"],
-  "collectCoverageFrom": ["src/*.ts"]
+  "collectCoverageFrom": ["src/*.ts", "src/schemas/**/*.ts", "src/compilers/**/*.ts"]
 }

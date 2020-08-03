@@ -1,10 +1,7 @@
 import { IMaxSchema } from "../types";
 import { SchemaType } from "./SchemaType";
 
-export function max(
-  maxValue: number,
-  isExclusive: boolean = false
-): IMaxSchema {
+export function max(maxValue: number, isExclusive: boolean): IMaxSchema {
   return {
     isExclusive,
     maxValue,

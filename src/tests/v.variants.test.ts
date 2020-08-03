@@ -8,6 +8,20 @@ describe("v([...])", () => {
   test("v([1])", () => {
     testValidator(v([1]), [1], [null, false, [], {}, 0, NaN, undefined, true]);
   });
+  test("v([1, 2])", () => {
+    testValidator(
+      v([1, 2]),
+      [1, 2],
+      ["2", "1", null, false, [], {}, 0, NaN, undefined, true]
+    );
+  });
+  test("v([1, '2'])", () => {
+    testValidator(
+      v([1, "2"]),
+      [1, "2"],
+      [2, "1", null, false, [], {}, 0, NaN, undefined, true]
+    );
+  });
   test("v([true, false])", () => {
     let flag = true;
     const validator = v([

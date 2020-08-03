@@ -3,7 +3,7 @@ import { SchemaType } from "./SchemaType";
 
 export function minLength(
   minLength: number,
-  isExclusive: boolean = false
+  isExclusive: boolean
 ): IMinLengthSchema {
   return {
     isExclusive,

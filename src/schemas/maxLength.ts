@@ -3,7 +3,7 @@ import { SchemaType } from "./SchemaType";
 
 export function maxLength(
   maxLength: number,
-  isExclusive: boolean = false
+  isExclusive: boolean
 ): IMaxLengthSchema {
   return {
     isExclusive,
