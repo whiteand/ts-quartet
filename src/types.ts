@@ -72,7 +72,7 @@ export interface INotANumberSchema {
   type: SchemaType.NotANumber;
 }
 
-export type KeyType = string | number | symbol;
+export type KeyType = string | number;
 
 export interface IObjectSchema {
   type: SchemaType.Object;

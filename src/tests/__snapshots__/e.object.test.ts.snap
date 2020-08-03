@@ -1,0 +1,685 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`v({ ... }) symbol prop 1`] = `
+Array [
+  Object {
+    "path": Array [],
+    "schema": Object {
+      "propsSchemas": Object {},
+      "type": "Object",
+    },
+    "value": null,
+  },
+]
+`;
+
+exports[`v({ ... }) symbol prop 2`] = `
+Array [
+  Object {
+    "path": Array [],
+    "schema": Object {
+      "propsSchemas": Object {},
+      "type": "Object",
+    },
+    "value": undefined,
+  },
+]
+`;
+
+exports[`v({ ... }) v({ [rest]: number }) 1`] = `
+Array [
+  Object {
+    "path": Array [
+      "b",
+    ],
+    "schema": Object {
+      "type": "Number",
+    },
+    "value": "string",
+  },
+]
+`;
+
+exports[`v({ ... }) v({ [rest]: number }) 2`] = `
+Array [
+  Object {
+    "path": Array [],
+    "schema": Object {
+      "[v.restOmit]": Array [],
+      "[v.rest]": Object {
+        "type": "Number",
+      },
+      "propsSchemas": Object {},
+      "type": "Object",
+    },
+    "value": null,
+  },
+]
+`;
+
+exports[`v({ ... }) v({ [rest]: number }) 3`] = `
+Array [
+  Object {
+    "path": Array [],
+    "schema": Object {
+      "[v.restOmit]": Array [],
+      "[v.rest]": Object {
+        "type": "Number",
+      },
+      "propsSchemas": Object {},
+      "type": "Object",
+    },
+    "value": undefined,
+  },
+]
+`;
+
+exports[`v({ ... }) v({ [rest]: number, [restOmit]: ["valid"] }) 1`] = `
+Array [
+  Object {
+    "path": Array [
+      "b",
+    ],
+    "schema": Object {
+      "type": "Number",
+    },
+    "value": "string",
+  },
+]
+`;
+
+exports[`v({ ... }) v({ [rest]: number, [restOmit]: ["valid"] }) 2`] = `
+Array [
+  Object {
+    "path": Array [],
+    "schema": Object {
+      "[v.restOmit]": Array [
+        "valid",
+      ],
+      "[v.rest]": Object {
+        "type": "Number",
+      },
+      "propsSchemas": Object {},
+      "type": "Object",
+    },
+    "value": null,
+  },
+]
+`;
+
+exports[`v({ ... }) v({ [rest]: number, [restOmit]: ["valid"] }) 3`] = `
+Array [
+  Object {
+    "path": Array [],
+    "schema": Object {
+      "[v.restOmit]": Array [
+        "valid",
+      ],
+      "[v.rest]": Object {
+        "type": "Number",
+      },
+      "propsSchemas": Object {},
+      "type": "Object",
+    },
+    "value": undefined,
+  },
+]
+`;
+
+exports[`v({ ... }) v({ [rest]: number, a: string, [restOmit]: ["b"] }) 1`] = `
+Array [
+  Object {
+    "path": Array [
+      "a",
+    ],
+    "schema": Object {
+      "type": "String",
+    },
+    "value": undefined,
+  },
+]
+`;
+
+exports[`v({ ... }) v({ [rest]: number, a: string, [restOmit]: ["b"] }) 2`] = `
+Array [
+  Object {
+    "path": Array [],
+    "schema": Object {
+      "[v.restOmit]": Array [
+        "b",
+      ],
+      "[v.rest]": Object {
+        "type": "Number",
+      },
+      "propsSchemas": Object {
+        "a": Object {
+          "type": "String",
+        },
+      },
+      "type": "Object",
+    },
+    "value": null,
+  },
+]
+`;
+
+exports[`v({ ... }) v({ [rest]: number, a: string, [restOmit]: ["b"] }) 3`] = `
+Array [
+  Object {
+    "path": Array [],
+    "schema": Object {
+      "[v.restOmit]": Array [
+        "b",
+      ],
+      "[v.rest]": Object {
+        "type": "Number",
+      },
+      "propsSchemas": Object {
+        "a": Object {
+          "type": "String",
+        },
+      },
+      "type": "Object",
+    },
+    "value": undefined,
+  },
+]
+`;
+
+exports[`v({ ... }) v({ [rest]: number, a: string, [restOmit]: ["b"] }) 4`] = `
+Array [
+  Object {
+    "path": Array [
+      "a",
+    ],
+    "schema": Object {
+      "type": "String",
+    },
+    "value": 1,
+  },
+]
+`;
+
+exports[`v({ ... }) v({ [rest]: number, a: string, [restOmit]: ["b"] }) 5`] = `
+Array [
+  Object {
+    "path": Array [
+      "a",
+    ],
+    "schema": Object {
+      "type": "String",
+    },
+    "value": undefined,
+  },
+]
+`;
+
+exports[`v({ ... }) v({ [rest]: number, a: string, [restOmit]: ["b"] }) 6`] = `
+Array [
+  Object {
+    "path": Array [
+      "a",
+    ],
+    "schema": Object {
+      "type": "String",
+    },
+    "value": undefined,
+  },
+]
+`;
+
+exports[`v({ ... }) v({ [rest]: number, a: string, [restOmit]: ["b"] }) 7`] = `
+Array [
+  Object {
+    "path": Array [
+      "a",
+    ],
+    "schema": Object {
+      "type": "String",
+    },
+    "value": null,
+  },
+]
+`;
+
+exports[`v({ ... }) v({ [restOmit]: something }) 1`] = `
+Array [
+  Object {
+    "path": Array [],
+    "schema": Object {
+      "propsSchemas": Object {},
+      "type": "Object",
+    },
+    "value": null,
+  },
+]
+`;
+
+exports[`v({ ... }) v({ [restOmit]: something }) 2`] = `
+Array [
+  Object {
+    "path": Array [],
+    "schema": Object {
+      "propsSchemas": Object {},
+      "type": "Object",
+    },
+    "value": undefined,
+  },
+]
+`;
+
+exports[`v({ ... }) v({ a: number }) 1`] = `
+Array [
+  Object {
+    "path": Array [],
+    "schema": Object {
+      "propsSchemas": Object {
+        "a": Object {
+          "type": "Number",
+        },
+      },
+      "type": "Object",
+    },
+    "value": null,
+  },
+]
+`;
+
+exports[`v({ ... }) v({ a: number }) 2`] = `
+Array [
+  Object {
+    "path": Array [],
+    "schema": Object {
+      "propsSchemas": Object {
+        "a": Object {
+          "type": "Number",
+        },
+      },
+      "type": "Object",
+    },
+    "value": undefined,
+  },
+]
+`;
+
+exports[`v({ ... }) v({ a: number }) 3`] = `
+Array [
+  Object {
+    "path": Array [
+      "a",
+    ],
+    "schema": Object {
+      "type": "Number",
+    },
+    "value": undefined,
+  },
+]
+`;
+
+exports[`v({ ... }) v({ a: number }) 4`] = `
+Array [
+  Object {
+    "path": Array [
+      "a",
+    ],
+    "schema": Object {
+      "type": "Number",
+    },
+    "value": undefined,
+  },
+]
+`;
+
+exports[`v({ ... }) v({ a: number }) 5`] = `
+Array [
+  Object {
+    "path": Array [
+      "a",
+    ],
+    "schema": Object {
+      "type": "Number",
+    },
+    "value": undefined,
+  },
+]
+`;
+
+exports[`v({ ... }) v({ a: number }) 6`] = `
+Array [
+  Object {
+    "path": Array [
+      "a",
+    ],
+    "schema": Object {
+      "type": "Number",
+    },
+    "value": undefined,
+  },
+]
+`;
+
+exports[`v({ ... }) v({ a: number }) 7`] = `
+Array [
+  Object {
+    "path": Array [
+      "a",
+    ],
+    "schema": Object {
+      "type": "Number",
+    },
+    "value": undefined,
+  },
+]
+`;
+
+exports[`v({ ... }) v({ a: number }) 8`] = `
+Array [
+  Object {
+    "path": Array [
+      "a",
+    ],
+    "schema": Object {
+      "type": "Number",
+    },
+    "value": undefined,
+  },
+]
+`;
+
+exports[`v({ ... }) v({ a: number }) 9`] = `
+Array [
+  Object {
+    "path": Array [
+      "a",
+    ],
+    "schema": Object {
+      "type": "Number",
+    },
+    "value": undefined,
+  },
+]
+`;
+
+exports[`v({ ... }) v({ a: number, [restOmit]: ["valid"] }) 1`] = `
+Array [
+  Object {
+    "path": Array [],
+    "schema": Object {
+      "propsSchemas": Object {
+        "a": Object {
+          "type": "Number",
+        },
+      },
+      "type": "Object",
+    },
+    "value": null,
+  },
+]
+`;
+
+exports[`v({ ... }) v({ a: number, [restOmit]: ["valid"] }) 2`] = `
+Array [
+  Object {
+    "path": Array [],
+    "schema": Object {
+      "propsSchemas": Object {
+        "a": Object {
+          "type": "Number",
+        },
+      },
+      "type": "Object",
+    },
+    "value": undefined,
+  },
+]
+`;
+
+exports[`v({ ... }) v({ a: number, [restOmit]: ["valid"] }) 3`] = `
+Array [
+  Object {
+    "path": Array [
+      "a",
+    ],
+    "schema": Object {
+      "type": "Number",
+    },
+    "value": undefined,
+  },
+]
+`;
+
+exports[`v({ ... }) v({ a: number, [restOmit]: ["valid"] }) 4`] = `
+Array [
+  Object {
+    "path": Array [
+      "a",
+    ],
+    "schema": Object {
+      "type": "Number",
+    },
+    "value": undefined,
+  },
+]
+`;
+
+exports[`v({ ... }) v({ a: number, [restOmit]: ["valid"] }) 5`] = `
+Array [
+  Object {
+    "path": Array [
+      "a",
+    ],
+    "schema": Object {
+      "type": "Number",
+    },
+    "value": undefined,
+  },
+]
+`;
+
+exports[`v({ ... }) v({ a: number, [restOmit]: ["valid"] }) 6`] = `
+Array [
+  Object {
+    "path": Array [
+      "a",
+    ],
+    "schema": Object {
+      "type": "Number",
+    },
+    "value": undefined,
+  },
+]
+`;
+
+exports[`v({ ... }) v({ a: number, [restOmit]: ["valid"] }) 7`] = `
+Array [
+  Object {
+    "path": Array [
+      "a",
+    ],
+    "schema": Object {
+      "type": "Number",
+    },
+    "value": undefined,
+  },
+]
+`;
+
+exports[`v({ ... }) v({ a: number, [restOmit]: ["valid"] }) 8`] = `
+Array [
+  Object {
+    "path": Array [
+      "a",
+    ],
+    "schema": Object {
+      "type": "Number",
+    },
+    "value": undefined,
+  },
+]
+`;
+
+exports[`v({ ... }) v({ a: number, [restOmit]: ["valid"] }) 9`] = `
+Array [
+  Object {
+    "path": Array [
+      "a",
+    ],
+    "schema": Object {
+      "type": "Number",
+    },
+    "value": undefined,
+  },
+]
+`;
+
+exports[`v({ ... }) v({ a: string, [rest]: number }) 1`] = `
+Array [
+  Object {
+    "path": Array [
+      "a",
+    ],
+    "schema": Object {
+      "type": "String",
+    },
+    "value": undefined,
+  },
+]
+`;
+
+exports[`v({ ... }) v({ a: string, [rest]: number }) 2`] = `
+Array [
+  Object {
+    "path": Array [],
+    "schema": Object {
+      "[v.restOmit]": Array [],
+      "[v.rest]": Object {
+        "type": "Number",
+      },
+      "propsSchemas": Object {
+        "a": Object {
+          "type": "String",
+        },
+      },
+      "type": "Object",
+    },
+    "value": null,
+  },
+]
+`;
+
+exports[`v({ ... }) v({ a: string, [rest]: number }) 3`] = `
+Array [
+  Object {
+    "path": Array [],
+    "schema": Object {
+      "[v.restOmit]": Array [],
+      "[v.rest]": Object {
+        "type": "Number",
+      },
+      "propsSchemas": Object {
+        "a": Object {
+          "type": "String",
+        },
+      },
+      "type": "Object",
+    },
+    "value": undefined,
+  },
+]
+`;
+
+exports[`v({ ... }) v({ a: string, [rest]: number }) 4`] = `
+Array [
+  Object {
+    "path": Array [
+      "a",
+    ],
+    "schema": Object {
+      "type": "String",
+    },
+    "value": 1,
+  },
+]
+`;
+
+exports[`v({ ... }) v({ a: string, [rest]: number }) 5`] = `
+Array [
+  Object {
+    "path": Array [
+      "a",
+    ],
+    "schema": Object {
+      "type": "String",
+    },
+    "value": undefined,
+  },
+]
+`;
+
+exports[`v({ ... }) v({ a: string, [rest]: number }) 6`] = `
+Array [
+  Object {
+    "path": Array [
+      "a",
+    ],
+    "schema": Object {
+      "type": "String",
+    },
+    "value": undefined,
+  },
+]
+`;
+
+exports[`v({ ... }) v({ a: string, [rest]: number }) 7`] = `
+Array [
+  Object {
+    "path": Array [
+      "a",
+    ],
+    "schema": Object {
+      "type": "String",
+    },
+    "value": null,
+  },
+]
+`;
+
+exports[`v({ ... }) v({ a: string, [rest]: number }) 8`] = `
+Array [
+  Object {
+    "path": Array [
+      "b",
+    ],
+    "schema": Object {
+      "type": "Number",
+    },
+    "value": "1",
+  },
+]
+`;
+
+exports[`v({ ... }) v({}) 1`] = `
+Array [
+  Object {
+    "path": Array [],
+    "schema": Object {
+      "propsSchemas": Object {},
+      "type": "Object",
+    },
+    "value": null,
+  },
+]
+`;
+
+exports[`v({ ... }) v({}) 2`] = `
+Array [
+  Object {
+    "path": Array [],
+    "schema": Object {
+      "propsSchemas": Object {},
+      "type": "Object",
+    },
+    "value": undefined,
+  },
+]
+`;

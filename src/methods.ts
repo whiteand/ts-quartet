@@ -77,4 +77,4 @@ export const methods = {
   }
 };
 
-export type VMethods = typeof methods;
+export type IMethods = typeof methods;

@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`v.not v.not 1`] = `
+Array [
+  Object {
+    "path": Array [],
+    "schema": Object {
+      "schema": Object {
+        "type": "Primitive",
+        "value": false,
+      },
+      "type": "Not",
+    },
+    "value": false,
+  },
+]
+`;

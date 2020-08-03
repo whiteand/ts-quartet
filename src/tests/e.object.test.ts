@@ -1,14 +1,18 @@
-import { v } from "../v";
-import { testValidator } from "./testValidator";
+import { e as v } from "..";
+import { testValidatorImpure } from "./testValidatorImpure";
 
 describe("v({ ... })", () => {
   test("v({})", () => {
     const notNull = v({});
-    testValidator(notNull, [{}, 1, 0, false, true, "", []], [null, undefined]);
+    testValidatorImpure(
+      notNull,
+      [{}, 1, 0, false, true, "", []],
+      [null, undefined]
+    );
   });
   test("v({ a: number })", () => {
     const notNull = v({ a: v.number });
-    testValidator(
+    testValidatorImpure(
       notNull,
       [{ a: NaN }, { a: Infinity }, { a: 1, b: "123" }],
       [null, undefined, {}, 1, 0, false, true, "", []]
@@ -16,7 +20,7 @@ describe("v({ ... })", () => {
   });
   test('v({ a: number, [restOmit]: ["valid"] })', () => {
     const notNull = v({ a: v.number, [v.restOmit]: ["valid"] });
-    testValidator(
+    testValidatorImpure(
       notNull,
       [{ a: NaN }, { a: Infinity }, { a: 1 }],
       [null, undefined, {}, 1, 0, false, true, "", []]
@@ -26,13 +30,17 @@ describe("v({ ... })", () => {
     const notNull = v({
       [v.restOmit]: ["andrew"]
     });
-    testValidator(notNull, [{}, 1, 0, false, true, "", []], [null, undefined]);
+    testValidatorImpure(
+      notNull,
+      [{}, 1, 0, false, true, "", []],
+      [null, undefined]
+    );
   });
   test("v({ [rest]: number })", () => {
     const notNull = v({
       [v.rest]: v.number
     });
-    testValidator(
+    testValidatorImpure(
       notNull,
       [{}, 1, 0, false, true, "", [], { a: 1 }],
       [{ b: "string" }, null, undefined]
@@ -44,7 +52,7 @@ describe("v({ ... })", () => {
       [v.rest]: v.number,
       [v.restOmit]: ["valid"]
     });
-    testValidator(
+    testValidatorImpure(
       notNull,
       [
         {},
@@ -66,7 +74,7 @@ describe("v({ ... })", () => {
       a: v.string,
       [v.rest]: v.number
     });
-    testValidator(
+    testValidatorImpure(
       notNull,
       [{ a: "" }, { a: "1" }, { a: "1", b: 1 }],
       [
@@ -87,7 +95,7 @@ describe("v({ ... })", () => {
       [v.rest]: v.number,
       [v.restOmit]: ["b"]
     });
-    testValidator(
+    testValidatorImpure(
       notNull,
       [
         { a: "" },
@@ -138,7 +146,7 @@ describe("v({ ... })", () => {
     const checkQuartet = v({
       [Symbol.for("quartet")]: v.number
     });
-    testValidator(
+    testValidatorImpure(
       checkQuartet,
       [
         { [Symbol.for("quartet")]: 1 },
