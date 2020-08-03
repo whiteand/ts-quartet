@@ -3,7 +3,8 @@ import { CompilationResult } from "../types";
 export function testValidatorImpure(
   validator: CompilationResult<any, any>,
   valids: any[],
-  invalids: any[]
+  invalids: any[],
+  matchExplanationSnapshot: boolean = false
 ) {
   expect(typeof validator).toBe("function");
   expect(Array.isArray(validator.explanations)).toBe(true);
@@ -15,6 +16,9 @@ export function testValidatorImpure(
     expect(validator.explanations.length > 0 ? invalid : [invalid]).toBe(
       invalid
     );
-    expect(validator.explanations).toMatchSnapshot();
+
+    if (matchExplanationSnapshot) {
+      expect(validator.explanations).toMatchSnapshot();
+    }
   }
 }
