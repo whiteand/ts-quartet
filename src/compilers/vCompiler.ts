@@ -93,11 +93,13 @@ function validate(value: any, schema: TSchema, path: KeyType[]): boolean {
         path.pop();
       }
       if (schema.hasRestValidator) {
-        const restProps = Object.keys(value).filter(
-          key => !has(propsSchemas, key) && schema.restOmit.indexOf(key) < 0
-        );
+        const { restOmitDict } = schema;
+        const restProps = Object.keys(value);
         for (let i = 0; i < restProps.length; i++) {
           const restProp = restProps[i];
+          if (has(propsSchemas, restProp) || restOmitDict[restProp] === true) {
+            continue;
+          }
           const restValue = value[restProp];
           path.push(restProp);
           if (!validate(restValue, schema.rest, path)) {

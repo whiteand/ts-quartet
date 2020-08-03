@@ -1,24 +1,9 @@
-import { CompilationResult } from "../../types";
-import { vCompiler } from "../vCompiler";
-
-const testValidator = (
-  validator: CompilationResult<any, any>,
-  valids: any[],
-  invalids: any[]
-) => {
-  expect(typeof validator).toBe("function");
-  expect(Array.isArray(validator.explanations)).toBe(true);
-  for (const valid of valids) {
-    expect(validator(valid) ? valid : [valid]).toBe(valid);
-  }
-  for (const invalid of invalids) {
-    expect(validator(invalid) ? [invalid] : invalid).toBe(invalid);
-  }
-};
+import { v } from "../v";
+import { testValidator } from "./testValidator";
 
 describe("v(primitive)", () => {
   test("v(null)", () => {
-    const validator = vCompiler<null>(null);
+    const validator = v<null>(null);
     testValidator(
       validator,
       [null],
@@ -26,7 +11,7 @@ describe("v(primitive)", () => {
     );
   });
   test("v(undefined)", () => {
-    const validator = vCompiler(undefined);
+    const validator = v(undefined);
     testValidator(
       validator,
       [undefined],
@@ -34,7 +19,7 @@ describe("v(primitive)", () => {
     );
   });
   test("v(true)", () => {
-    const validator = vCompiler(true);
+    const validator = v(true);
     testValidator(
       validator,
       [true],
@@ -42,7 +27,7 @@ describe("v(primitive)", () => {
     );
   });
   test("v(false)", () => {
-    const validator = vCompiler(false);
+    const validator = v(false);
     testValidator(
       validator,
       [false],
@@ -50,7 +35,7 @@ describe("v(primitive)", () => {
     );
   });
   test("v(NaN)", () => {
-    const validator = vCompiler(NaN);
+    const validator = v(NaN);
     testValidator(
       validator,
       [NaN],
@@ -58,7 +43,7 @@ describe("v(primitive)", () => {
     );
   });
   test("v(0)", () => {
-    const validator = vCompiler(0);
+    const validator = v(0);
     testValidator(
       validator,
       [0],
@@ -66,7 +51,7 @@ describe("v(primitive)", () => {
     );
   });
   test("v(1)", () => {
-    const validator = vCompiler(1);
+    const validator = v(1);
     testValidator(
       validator,
       [1],
@@ -74,7 +59,7 @@ describe("v(primitive)", () => {
     );
   });
   test('v("0")', () => {
-    const validator = vCompiler("0");
+    const validator = v("0");
     testValidator(
       validator,
       ["0"],
@@ -82,7 +67,7 @@ describe("v(primitive)", () => {
     );
   });
   test('v(Symbol.for("quartet"))', () => {
-    const validator = vCompiler(Symbol.for("quartet"));
+    const validator = v(Symbol.for("quartet"));
     testValidator(
       validator,
       [Symbol.for("quartet")],

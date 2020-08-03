@@ -1,1 +1,1 @@
-export const EMPTY_ARR: any[] = [];
+export const EMPTY_OBJ = Object.create(null);

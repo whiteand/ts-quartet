@@ -5,14 +5,14 @@ export function objectSchema(
   propsSchemas: Record<KeyType, TSchema>,
   hasRestValidator: boolean,
   rest: TSchema,
-  restOmit: KeyType[]
+  restOmitDict: Record<KeyType, boolean>
 ): IObjectSchema {
   return {
     hasRestValidator,
     props: Object.keys(propsSchemas),
     propsSchemas,
     rest,
-    restOmit,
+    restOmitDict,
     type: SchemaType.Object
   };
 }

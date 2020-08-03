@@ -80,7 +80,7 @@ export interface IObjectSchema {
   props: KeyType[];
   hasRestValidator: boolean;
   rest: TSchema;
-  restOmit: KeyType[];
+  restOmitDict: Record<KeyType, boolean>;
 }
 
 export interface IPairSchema {

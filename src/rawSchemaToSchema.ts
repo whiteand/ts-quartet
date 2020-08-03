@@ -1,4 +1,4 @@
-import { EMPTY_ARR } from "./empty";
+import { EMPTY_OBJ } from "./empty";
 import {
   neverSchema,
   notANumber,
@@ -80,7 +80,7 @@ export function rawSchemaToSchema(rawSchema: RawSchema): TSchema {
       const propsSchemas = rawPropsSchemasToPropsSchemas(
         rawPropsSchemas as Record<KeyType, RawSchema>
       );
-      return objectSchema(propsSchemas, true, restSchema, restOmit);
+      return objectSchema(propsSchemas, true, restSchema, arrToDict(restOmit));
     }
     const {
       [SpecialProp.Rest]: rawRest,
@@ -90,7 +90,7 @@ export function rawSchemaToSchema(rawSchema: RawSchema): TSchema {
     const propsSchemas = rawPropsSchemasToPropsSchemas(
       rawPropsSchemas as Record<KeyType, RawSchema>
     );
-    return objectSchema(propsSchemas, true, restSchema, EMPTY_ARR);
+    return objectSchema(propsSchemas, true, restSchema, EMPTY_OBJ);
   }
   if (has(rawSchema, SpecialProp.RestOmit)) {
     const {
@@ -100,11 +100,11 @@ export function rawSchemaToSchema(rawSchema: RawSchema): TSchema {
     const propsSchemas = rawPropsSchemasToPropsSchemas(
       rawPropsSchemas as Record<KeyType, RawSchema>
     );
-    return objectSchema(propsSchemas, false, null, EMPTY_ARR);
+    return objectSchema(propsSchemas, false, null, EMPTY_OBJ);
   }
   const propsSchemas = rawPropsSchemasToPropsSchemas(rawSchema as Record<
     KeyType,
     RawSchema
   >);
-  return objectSchema(propsSchemas, false, null, EMPTY_ARR);
+  return objectSchema(propsSchemas, false, null, EMPTY_OBJ);
 }
