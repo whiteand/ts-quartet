@@ -1,13 +1,13 @@
-# Quartet 9: Allegro
+# Quartet 10
 
 [![Build Status](https://travis-ci.com/whiteand/ts-quartet.svg?branch=master)](https://travis-ci.com/whiteand/ts-quartet)
 [![Coverage Status](https://coveralls.io/repos/github/whiteand/ts-quartet/badge.svg?branch=master)](https://coveralls.io/github/whiteand/ts-quartet?branch=master)
 
-**Size: 5.62 KB** (minified and gzipped). No dependencies. [Size Limit](https://github.com/ai/size-limit) controls the size.
+**Size: 6.06 KB** (minified and gzipped). No dependencies. [Size Limit](https://github.com/ai/size-limit) controls the size.
 
 It is a declarative and fast tool for data validation.
 
-- [Quartet 9: Allegro](#quartet-9-allegro)
+- [Quartet 10](#quartet-10)
   - [Examples](#examples)
   - [Benchmarks](#benchmarks)
   - [Is there extra word in this list?](#is-there-extra-word-in-this-list)
@@ -17,10 +17,13 @@ It is a declarative and fast tool for data validation.
   - [What could be a validation scheme?](#what-could-be-a-validation-scheme)
     - [Primitives](#primitives)
     - [Schemas out of the box](#schemas-out-of-the-box)
+      - [`v.any: Schema`](#vany-schema)
+      - [`v.array: Schema`](#varray-schema)
       - [`v.boolean: Schema`](#vboolean-schema)
       - [`v.finite: Schema`](#vfinite-schema)
       - [`v.function: Schema`](#vfunction-schema)
       - [`v.negative: Schema`](#vnegative-schema)
+      - [`v.never: Schema`](#vnever-schema)
       - [`v.number: Schema`](#vnumber-schema)
       - [`v.positive: Schema`](#vpositive-schema)
       - [`v.safeInteger: Schema`](#vsafeinteger-schema)
@@ -30,7 +33,6 @@ It is a declarative and fast tool for data validation.
       - [`v.and(...schemas: Schema[]): Schema`](#vandschemas-schema-schema)
       - [`v.arrayOf(elemSchema: Schema): Schema`](#varrayofelemschema-schema-schema)
       - [`v.custom(checkFunction: (x: any) => boolean): Schema`](#vcustomcheckfunction-x-any--boolean-schema)
-      - [`v.errorBoundary(schema: Schema, errorBoundary?: ErrorBoundary): Schema`](#verrorboundaryschema-schema-errorboundary-errorboundary-schema)
       - [`v.max(maxValue: number, isExclusive?: boolean): Schema`](#vmaxmaxvalue-number-isexclusive-boolean-schema)
       - [`v.maxLength(maxLength: number, isExclusive?: boolean): Schema`](#vmaxlengthmaxlength-number-isexclusive-boolean-schema)
       - [`v.min(minValue: number, isExclusive?: boolean): Schema`](#vminminvalue-number-isexclusive-boolean-schema)
@@ -45,7 +47,6 @@ It is a declarative and fast tool for data validation.
   - [Configuring](#configuring)
     - [`errorBoundary`](#errorboundary)
   - [Advanced Quartet](#advanced-quartet)
-  - [Ajv vs Quartet 9: Allegro](#ajv-vs-quartet-9-allegro)
 
 ## Examples
 
@@ -233,6 +234,22 @@ Primitives are all Javascript values, with the exception of objects (including a
 
 Quartet provides pre-defined schemas for specific checks. They are in the properties of the `v` compiler function.
 
+#### `v.any: Schema`
+
+```typescript
+const checkBoolean = v(v.any)
+// same as
+const checkBoolean = () => true
+```
+
+#### `v.array: Schema`
+
+```typescript
+const checkBoolean = v(v.array)
+// same as
+const checkBoolean = value => Array.isArray(v)
+```
+
 #### `v.boolean: Schema`
 
 ```typescript
@@ -263,6 +280,14 @@ const checkFunction = x => typeof x === 'function'
 const checkNegative = v(v.negative)
 // same as
 const checkNegative = x => x < 0
+```
+
+#### `v.never: Schema`
+
+```typescript
+const checkNegative = v(v.never)
+// same as
+const checkNegative = () => false
 ```
 
 #### `v.number: Schema`
@@ -371,57 +396,6 @@ const checkPositiveEvenNumber = x => {
 ```
 
 (See [Advanced Quartet](#advanced-quartet) for more.)
-
-#### `v.errorBoundary(schema: Schema, errorBoundary?: ErrorBoundary): Schema`
-
-Returns an equivalent schema to the one passed, but with additional behavior. If validation fails, the `errorBoundary` function is called.
-
-This function inserts the necessary explanations into the array passed to it by the first parameter.
-
-This function has the following type:
-
-```typescript
-type ErrorBoundary = (
-  explanations: any[],
-  data: {
-    value: any
-    schema: Schema
-    innerExplanations: any[]
-    id: string | number
-  },
-) => void
-```
-
-Where
-
-- `explanations` - an array into which we must insert explanations
-- `value` - invalid value
-- `schema` - schema that was cause invalidation
-- `innerExplanations` - explanations of internal invalidations
-- `id` - name of invalid value in validator code
-
-If the parameter `errorBoundary` is not forwarded, the default `errorBoundary` from this quartet instance will be used. (See [Configuration](#configuring))
-
-If the parameter `errorBoundary` is not forwarded and there is no `errorBoundary` by default, the scheme will return without any changes.
-
-Example:
-
-```typescript
-const errorBoundaryHandler = (explanations, { value }) => explanations.push(value)
-
-const elementSchema = v.errorBoundary(v.number, errorBoundaryHandler)
-
-const checkNumbers = v(v.arrayOf(elementSchema))
-
-checkNumbers([]) // true
-checkNumbers.explanations // []
-
-checkNumbers([1, 2, 3, 4]) // true
-checkNumbers.explanations // []
-
-checkNumbers([1, 2, 3, '4'])
-checkNumbers.explanations // ['4']
-```
 
 #### `v.max(maxValue: number, isExclusive?: boolean): Schema`
 
@@ -699,227 +673,42 @@ const checkPhoneBookWithAuthorId = v({
 
 Using these schemes and combining them, you can declaratively describe validation functions, and the `v` compiler function will create a function that imperatively checks the value against your scheme.
 
+## Explanations
+
+If you need explanations of validation just use `e` instance instead of `v` instance.
+
+```javascript
+import { e as v } from 'quartet'
+
+const checkPerson = v({
+  name: v.string,
+})
+
+checkPerson({ name: 1 }) // false
+checkPerson.explanations
+/*
+[
+  {
+    path: ["name"],
+    schema: {
+      type: "String",
+    },
+    value: 1,
+  },
+]
+*/
+```
+
 ## Predefined Instances
 
 There is two predefined instances of quartet:
 
 ```typescript
-import { v } from 'quartet' // Zero-configured instance, without default explanations
+import { v } from 'quartet' // Zero-configured instance, without explanations
 
-import { e } from 'quartet' // Instance with default errorBoundary.
-```
-
-## Configuring
-
-`v` that is used in this documentation is an zero-configured "instance" of `quartet`.
-
-```typescript
-export const v = quartet()
-```
-
-You can create your own customized instances of `quartet`
-
-```typescript
-import { quartet } from 'quartet'
-
-const config = {
-  // ...
-}
-const myV = quartet(config)
-```
-
-`config` can contain such props:
-
-### `errorBoundary`
-
-This field describes default errorBoundary that will be applied for each compiled schema(Each function that will be generated by `quartet` will have this error boundary by default).
-
-(Look more [here](#verrorboundaryschema-schema-errorboundaryhandler-errorboundary-schema))
-
-Example:
-
-```typescript
-const exp = quartet({
-  errorBoundary(explanations, { id, value, schema, innerExplanations }) {
-    if (innerExplanations.length > 0) {
-      explanations.push(...innerExplanations)
-    } else {
-      explanations.push({ id, value, schema })
-    }
-  },
-})
-
-const nameSchema = exp.and(exp.string, exp.minLength(1))
-const idSchema = v.safeInteger
-const schema = {
-  name: exp.errorBoundary(nameSchema), // apply default error boundary for name property
-  id: exp.errorBoundary(idSchema), // apply default error boundary for id property
-}
-const checkPerson = exp(schema)
-
-checkPerson(null) // false
-console.log(checkPerson.explanations)
-// [{ value: null, schema: { name: ..., id: ... }, id: "value" }]
-
-checkPerson({})
-console.log(checkPerson.explanations)
-// [{ value: undefined, schema: nameSchema, id: "value.name" }]
-
-checkPerson({ name: 'Andrew', id: '1' })
-console.log(checkPerson.explanations)
-// [{ value: '1', schema: v.safeInteger, id: "value.id" }]
+import { e } from 'quartet' // Instance with explanations.
 ```
 
 ## Advanced Quartet
 
 `// TODO: Write it!`
-
-## Ajv vs Quartet 9: Allegro
-
-I wrote a benchmark in order to compare one of the fastest `ajv` validation libraries with my example from the introduction.
-
-```javascript
-const Benchmark = require('benchmark')
-
-const { v } = require('quartet')
-const validator = v({
-  user: {
-    id: v.number,
-    name: v.string,
-    age: v.number,
-    gender: ['Male', 'Female'],
-    friendsIds: v.arrayOf(v.number),
-  },
-})
-
-const Ajv = require('ajv')
-const ajv = new Ajv()
-
-const ajvValidator = ajv.compile({
-  type: 'object',
-  required: ['user'],
-  properties: {
-    user: {
-      type: 'object',
-      required: ['id', 'name', 'age', 'gender', 'friendsIds'],
-      properties: {
-        id: { type: 'number' },
-        name: { type: 'string' },
-        age: { type: 'number' },
-        gender: { type: 'string', enum: ['Male', 'Female'] },
-        friendsIds: { type: 'array', items: { type: 'number' } },
-      },
-    },
-  },
-})
-
-const positive = [
-  {
-    user: { id: 1, name: 'Andrew', age: 23, gender: 'Male', friendsIds: [2, 3] },
-  },
-  {
-    user: {
-      id: 2,
-      name: 'Vasilina',
-      age: 20,
-      gender: 'Female',
-      friendsIds: [1],
-    },
-  },
-  { user: { id: 3, name: 'Bohdan', age: 23, gender: 'Male', friendsIds: [1] } },
-  { user: { id: 4, name: 'Siroja', age: 99, gender: 'Male', friendsIds: [] } },
-]
-const negative = [
-  null,
-  false,
-  undefined,
-  {},
-  { user: null },
-  { user: false },
-  { user: undefined },
-  {
-    user: {
-      id: '1',
-      name: 'Andrew',
-      age: 23,
-      gender: 'Male',
-      friendsIds: [2, 3],
-    },
-  },
-  {
-    user: {
-      id: 1,
-      name: undefined,
-      age: 23,
-      gender: 'Male',
-      friendsIds: [2, 3],
-    },
-  },
-  {
-    user: {
-      id: 1,
-      name: 'Andrew',
-      age: undefined,
-      gender: 'Male',
-      friendsIds: [2, 3],
-    },
-  },
-  {
-    user: {
-      id: 1,
-      name: 'Andrew',
-      age: 23,
-      gender: undefined,
-      friendsIds: [2, 3],
-    },
-  },
-  {
-    user: { id: 1, name: 'Andrew', age: 23, gender: 'male', friendsIds: [2, 3] },
-  },
-  {
-    user: {
-      id: 1,
-      name: 'Andrew',
-      age: 23,
-      gender: 'Male',
-      friendsIds: undefined,
-    },
-  },
-]
-const suite = new Benchmark.Suite()
-suite
-  .add('ajv', function() {
-    for (let i = 0; i < positive.length; i++) {
-      ajvValidator(positive[i])
-    }
-    for (let i = 0; i < negative.length; i++) {
-      ajvValidator(negative[i])
-    }
-  })
-  .add('Quartet 9: Allegro', function() {
-    for (let i = 0; i < positive.length; i++) {
-      validator(positive[i])
-    }
-    for (let i = 0; i < negative.length; i++) {
-      validator(negative[i])
-    }
-  })
-  .on('cycle', function(event) {
-    console.log(String(event.target))
-  })
-  .on('complete', function() {
-    console.log(
-      this.filter('fastest')
-        .map('name')
-        .toString(),
-    )
-  })
-  .run()
-```
-
-And the result is this:
-
-```
-ajv                x 1,670,584 ops/sec ±0.79% (90 runs sampled)
-Quartet 9: Allegro x 3,587,787 ops/sec ±9.26% (66 runs sampled)
-```

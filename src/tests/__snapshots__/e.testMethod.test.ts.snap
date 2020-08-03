@@ -1,0 +1,131 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`v.test v.test 1`] = `
+Array [
+  Object {
+    "path": Array [],
+    "schema": Object {
+      "tester": /\\^a/,
+      "type": "Test",
+    },
+    "value": "A",
+  },
+]
+`;
+
+exports[`v.test v.test 2`] = `
+Array [
+  Object {
+    "path": Array [],
+    "schema": Object {
+      "tester": /\\^a/,
+      "type": "Test",
+    },
+    "value": null,
+  },
+]
+`;
+
+exports[`v.test v.test 3`] = `
+Array [
+  Object {
+    "path": Array [],
+    "schema": Object {
+      "tester": /\\^a/,
+      "type": "Test",
+    },
+    "value": false,
+  },
+]
+`;
+
+exports[`v.test v.test 4`] = `
+Array [
+  Object {
+    "path": Array [],
+    "schema": Object {
+      "tester": /\\^a/,
+      "type": "Test",
+    },
+    "value": Array [],
+  },
+]
+`;
+
+exports[`v.test v.test 5`] = `
+Array [
+  Object {
+    "path": Array [],
+    "schema": Object {
+      "tester": /\\^a/,
+      "type": "Test",
+    },
+    "value": Object {},
+  },
+]
+`;
+
+exports[`v.test v.test 6`] = `
+Array [
+  Object {
+    "path": Array [],
+    "schema": Object {
+      "tester": /\\^a/,
+      "type": "Test",
+    },
+    "value": 1,
+  },
+]
+`;
+
+exports[`v.test v.test 7`] = `
+Array [
+  Object {
+    "path": Array [],
+    "schema": Object {
+      "tester": /\\^a/,
+      "type": "Test",
+    },
+    "value": 0,
+  },
+]
+`;
+
+exports[`v.test v.test 8`] = `
+Array [
+  Object {
+    "path": Array [],
+    "schema": Object {
+      "tester": /\\^a/,
+      "type": "Test",
+    },
+    "value": NaN,
+  },
+]
+`;
+
+exports[`v.test v.test 9`] = `
+Array [
+  Object {
+    "path": Array [],
+    "schema": Object {
+      "tester": /\\^a/,
+      "type": "Test",
+    },
+    "value": undefined,
+  },
+]
+`;
+
+exports[`v.test v.test 10`] = `
+Array [
+  Object {
+    "path": Array [],
+    "schema": Object {
+      "tester": /\\^a/,
+      "type": "Test",
+    },
+    "value": true,
+  },
+]
+`;

@@ -1,0 +1,243 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`v.arrayOf v.arrayOf(v.number) 1`] = `
+Array [
+  Object {
+    "path": Array [
+      2,
+    ],
+    "schema": Object {
+      "type": "Number",
+    },
+    "value": "3",
+  },
+]
+`;
+
+exports[`v.arrayOf v.arrayOf(v.number) 2`] = `
+Array [
+  Object {
+    "path": Array [
+      0,
+    ],
+    "schema": Object {
+      "type": "Number",
+    },
+    "value": "3",
+  },
+]
+`;
+
+exports[`v.arrayOf v.arrayOf(v.number) 3`] = `
+Array [
+  Object {
+    "path": Array [
+      0,
+    ],
+    "schema": Object {
+      "type": "Number",
+    },
+    "value": Array [
+      1,
+    ],
+  },
+]
+`;
+
+exports[`v.arrayOf v.arrayOf(v.number) 4`] = `
+Array [
+  Object {
+    "path": Array [],
+    "schema": Object {
+      "elementSchema": Object {
+        "type": "Number",
+      },
+      "type": "ArrayOf",
+    },
+    "value": Object {},
+  },
+]
+`;
+
+exports[`v.arrayOf v.arrayOf(v.number) 5`] = `
+Array [
+  Object {
+    "path": Array [],
+    "schema": Object {
+      "elementSchema": Object {
+        "type": "Number",
+      },
+      "type": "ArrayOf",
+    },
+    "value": Object {
+      "length": 10,
+    },
+  },
+]
+`;
+
+exports[`v.arrayOf v.arrayOf(v.number) 6`] = `
+Array [
+  Object {
+    "path": Array [],
+    "schema": Object {
+      "elementSchema": Object {
+        "type": "Number",
+      },
+      "type": "ArrayOf",
+    },
+    "value": "Andrew",
+  },
+]
+`;
+
+exports[`v.arrayOf v.arrayOf(v.pair) 1`] = `
+Array [
+  Object {
+    "path": Array [
+      0,
+    ],
+    "schema": Object {
+      "customValidator": [Function],
+      "type": "Custom",
+    },
+    "value": Object {
+      "key": 0,
+      "value": 1,
+    },
+  },
+]
+`;
+
+exports[`v.arrayOf v.arrayOf(v.pair) 2`] = `
+Array [
+  Object {
+    "path": Array [
+      1,
+    ],
+    "schema": Object {
+      "customValidator": [Function],
+      "type": "Custom",
+    },
+    "value": Object {
+      "key": 1,
+      "value": 2,
+    },
+  },
+]
+`;
+
+exports[`v.arrayOf v.arrayOf(v.pair) 3`] = `
+Array [
+  Object {
+    "path": Array [
+      0,
+    ],
+    "schema": Object {
+      "customValidator": [Function],
+      "type": "Custom",
+    },
+    "value": Object {
+      "key": 0,
+      "value": 1,
+    },
+  },
+]
+`;
+
+exports[`v.arrayOf v.arrayOf(v.pair) 4`] = `
+Array [
+  Object {
+    "path": Array [
+      0,
+    ],
+    "schema": Object {
+      "customValidator": [Function],
+      "type": "Custom",
+    },
+    "value": Object {
+      "key": 0,
+      "value": "3",
+    },
+  },
+]
+`;
+
+exports[`v.arrayOf v.arrayOf(v.pair) 5`] = `
+Array [
+  Object {
+    "path": Array [
+      0,
+    ],
+    "schema": Object {
+      "customValidator": [Function],
+      "type": "Custom",
+    },
+    "value": Object {
+      "key": 0,
+      "value": Array [
+        1,
+      ],
+    },
+  },
+]
+`;
+
+exports[`v.arrayOf v.arrayOf(v.pair) 6`] = `
+Array [
+  Object {
+    "path": Array [],
+    "schema": Object {
+      "elementSchema": Object {
+        "keyValueSchema": Object {
+          "customValidator": [Function],
+          "type": "Custom",
+        },
+        "type": "Pair",
+      },
+      "type": "ArrayOf",
+    },
+    "value": Object {},
+  },
+]
+`;
+
+exports[`v.arrayOf v.arrayOf(v.pair) 7`] = `
+Array [
+  Object {
+    "path": Array [],
+    "schema": Object {
+      "elementSchema": Object {
+        "keyValueSchema": Object {
+          "customValidator": [Function],
+          "type": "Custom",
+        },
+        "type": "Pair",
+      },
+      "type": "ArrayOf",
+    },
+    "value": Object {
+      "length": 10,
+    },
+  },
+]
+`;
+
+exports[`v.arrayOf v.arrayOf(v.pair) 8`] = `
+Array [
+  Object {
+    "path": Array [],
+    "schema": Object {
+      "elementSchema": Object {
+        "keyValueSchema": Object {
+          "customValidator": [Function],
+          "type": "Custom",
+        },
+        "type": "Pair",
+      },
+      "type": "ArrayOf",
+    },
+    "value": "Andrew",
+  },
+]
+`;

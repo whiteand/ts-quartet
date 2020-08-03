@@ -1,0 +1,39 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`v.array v.array 1`] = `
+Array [
+  Object {
+    "path": Array [],
+    "schema": Object {
+      "type": "Array",
+    },
+    "value": Object {},
+  },
+]
+`;
+
+exports[`v.array v.array 2`] = `
+Array [
+  Object {
+    "path": Array [],
+    "schema": Object {
+      "type": "Array",
+    },
+    "value": Object {
+      "length": 10,
+    },
+  },
+]
+`;
+
+exports[`v.array v.array 3`] = `
+Array [
+  Object {
+    "path": Array [],
+    "schema": Object {
+      "type": "Array",
+    },
+    "value": "Andrew",
+  },
+]
+`;
