@@ -99,6 +99,7 @@ Array [
     ],
     "schema": Object {
       "customValidator": [Function],
+      "innerExplanations": Array [],
       "type": "Custom",
     },
     "value": Object {
@@ -117,6 +118,7 @@ Array [
     ],
     "schema": Object {
       "customValidator": [Function],
+      "innerExplanations": Array [],
       "type": "Custom",
     },
     "value": Object {
@@ -135,6 +137,7 @@ Array [
     ],
     "schema": Object {
       "customValidator": [Function],
+      "innerExplanations": Array [],
       "type": "Custom",
     },
     "value": Object {
@@ -153,6 +156,7 @@ Array [
     ],
     "schema": Object {
       "customValidator": [Function],
+      "innerExplanations": Array [],
       "type": "Custom",
     },
     "value": Object {
@@ -171,6 +175,7 @@ Array [
     ],
     "schema": Object {
       "customValidator": [Function],
+      "innerExplanations": Array [],
       "type": "Custom",
     },
     "value": Object {
@@ -191,6 +196,7 @@ Array [
       "elementSchema": Object {
         "keyValueSchema": Object {
           "customValidator": [Function],
+          "innerExplanations": Array [],
           "type": "Custom",
         },
         "type": "Pair",
@@ -210,6 +216,7 @@ Array [
       "elementSchema": Object {
         "keyValueSchema": Object {
           "customValidator": [Function],
+          "innerExplanations": Array [],
           "type": "Custom",
         },
         "type": "Pair",
@@ -231,6 +238,7 @@ Array [
       "elementSchema": Object {
         "keyValueSchema": Object {
           "customValidator": [Function],
+          "innerExplanations": Array [],
           "type": "Custom",
         },
         "type": "Pair",

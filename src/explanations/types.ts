@@ -158,6 +158,7 @@ export interface IVariantExplanationSchema {
 export interface ICustomExplanationSchema {
   type: ExplanationSchemaType.Custom;
   customValidator: TCustomValidator;
+  innerExplanations: any[];
 }
 
 export type TExplanationSchema =
