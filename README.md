@@ -43,9 +43,8 @@ It is a declarative and fast tool for data validation.
     - [Variant schemas](#variant-schemas)
     - [The schema for an object is an object](#the-schema-for-an-object-is-an-object)
     - [Conclusions](#conclusions)
+  - [Explanations](#explanations)
   - [Predefined Instances](#predefined-instances)
-  - [Configuring](#configuring)
-    - [`errorBoundary`](#errorboundary)
   - [Advanced Quartet](#advanced-quartet)
 
 ## Examples
