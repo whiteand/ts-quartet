@@ -1,10 +1,10 @@
-import { CompilationResult } from "../types";
 import { IExplanation } from "../explanations";
+import { CompilationResult } from "../types";
 
 export function testValidatorWithExplanations(
   validator: CompilationResult<any, any>,
   valids: any[],
-  invalids: [any, IExplanation[]][]
+  invalids: Array<[any, IExplanation[]]>
 ) {
   expect(typeof validator).toBe("function");
   expect(Array.isArray(validator.explanations)).toBe(true);
