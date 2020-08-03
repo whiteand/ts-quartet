@@ -51,10 +51,6 @@ It is a declarative and fast tool for data validation.
 
 See examples [here](https://github.com/whiteand/ts-quartet/tree/master/examples/javascript).
 
-## Benchmarks
-
-[`Ajv` vs `quartet` 9: Allegro](#ajv-vs-quartet-9-allegro)
-
 ## Is there extra word in this list?
 
 - 3rd-party API
