@@ -209,4 +209,21 @@ describe("v.arrayOf", () => {
       }
     ]);
   });
+  test("stops on first invalid", () => {
+    const arr: any[] = [1, 2, 3, "4", 5, 6];
+    const checked: any[] = [];
+    const checkArr = v(
+      v.arrayOf(
+        v.and(
+          v.custom(value => {
+            checked.push(value);
+            return true;
+          }),
+          v.number
+        )
+      )
+    );
+    expect(checkArr(arr)).toBe(false);
+    expect(checked).toEqual([1, 2, 3, "4"]);
+  });
 });
