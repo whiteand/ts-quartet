@@ -8,9 +8,9 @@ export function testValidator(
   expect(typeof validator).toBe("function");
   expect(Array.isArray(validator.explanations)).toBe(true);
   for (const valid of valids) {
-    expect(validator(valid) ? valid : [valid]).toBe(valid);
+    expect(validator(valid) === true ? valid : [valid]).toBe(valid);
   }
   for (const invalid of invalids) {
-    expect(validator(invalid) ? [invalid] : invalid).toBe(invalid);
+    expect(validator(invalid) === false ? invalid : [invalid]).toBe(invalid);
   }
 }

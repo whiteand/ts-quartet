@@ -1,11 +1,11 @@
-import { CompilationResult } from '../types'
+import { CompilationResult } from "../types";
 
 export function getExplanations<E>(
   validator: CompilationResult<any, E>,
-  value: any,
+  value: any
 ): E[] {
   if (validator(value)) {
-    throw new Error('valid value' + JSON.stringify(value))
+    throw new Error("valid value" + JSON.stringify(value));
   }
-  return validator.explanations
+  return validator.explanations;
 }

@@ -9,11 +9,11 @@ export function testValidatorImpure(
   expect(typeof validator).toBe("function");
   expect(Array.isArray(validator.explanations)).toBe(true);
   for (const valid of valids) {
-    expect(validator(valid) ? valid : [valid]).toBe(valid);
+    expect(validator(valid) === true ? valid : [valid]).toBe(valid);
     expect(validator.explanations).toEqual([]);
   }
   for (const invalid of invalids) {
-    expect(validator(invalid) ? [invalid] : invalid).toBe(invalid);
+    expect(validator(invalid) === false ? invalid : [invalid]).toBe(invalid);
     expect(validator.explanations.length > 0 ? invalid : [invalid]).toBe(
       invalid
     );
