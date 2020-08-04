@@ -1,13 +1,13 @@
 /* tslint:disable:object-literal-sort-keys */
-import { e as v } from '..'
-import { ExplanationSchemaType } from '../explanations'
-import { testValidatorWithExplanations } from './testValidatorWithExplanations'
+import { e as v } from "..";
+import { ExplanationSchemaType } from "../explanations";
+import { testValidatorWithExplanations } from "./testValidatorWithExplanations";
 
-describe('v.array', () => {
-  test('v.array', () => {
+describe("v.array", () => {
+  test("v.array", () => {
     testValidatorWithExplanations(
       v(v.array),
-      [[], [1, 2, '3']],
+      [[], [1, 2, "3"]],
       [
         [
           {},
@@ -16,10 +16,10 @@ describe('v.array', () => {
               value: {},
               path: [],
               schema: {
-                type: ExplanationSchemaType.Array,
-              },
-            },
-          ],
+                type: ExplanationSchemaType.Array
+              }
+            }
+          ]
         ],
         [
           { length: 10 },
@@ -28,24 +28,24 @@ describe('v.array', () => {
               value: { length: 10 },
               path: [],
               schema: {
-                type: ExplanationSchemaType.Array,
-              },
-            },
-          ],
+                type: ExplanationSchemaType.Array
+              }
+            }
+          ]
         ],
         [
-          'Andrew',
+          "Andrew",
           [
             {
-              value: 'Andrew',
+              value: "Andrew",
               path: [],
               schema: {
-                type: ExplanationSchemaType.Array,
-              },
-            },
-          ],
-        ],
-      ],
-    )
-  })
-})
+                type: ExplanationSchemaType.Array
+              }
+            }
+          ]
+        ]
+      ]
+    );
+  });
+});

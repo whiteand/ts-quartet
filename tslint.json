@@ -3,6 +3,7 @@
   "rules": {
     "only-arrow-functions": false,
     "prefer-for-of": false,
-    "no-shadowed-variable": false
+    "no-shadowed-variable": false,
+    "object-literal-sort-keys": false
   }
 }

@@ -10,6 +10,7 @@ export function testValidatorImpure(
   expect(Array.isArray(validator.explanations)).toBe(true);
   for (const valid of valids) {
     expect(validator(valid) ? valid : [valid]).toBe(valid);
+    expect(validator.explanations).toEqual([]);
   }
   for (const invalid of invalids) {
     expect(validator(invalid) ? [invalid] : invalid).toBe(invalid);
