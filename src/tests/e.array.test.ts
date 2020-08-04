@@ -1,6 +1,7 @@
+/* tslint:disable:object-literal-sort-keys */
 import { e as v } from '..'
-import { testValidatorWithExplanations } from './testValidatorWithExplanations'
 import { ExplanationSchemaType } from '../explanations'
+import { testValidatorWithExplanations } from './testValidatorWithExplanations'
 
 describe('v.array', () => {
   test('v.array', () => {
