@@ -1,18 +1,18 @@
+import { IExplanation } from "../explanations";
 import { CompilationResult } from "../types";
 
-export function testValidator(
+export function testValidatorWithExplanations(
   validator: CompilationResult<any, any>,
   valids: any[],
-  invalids: any[]
+  invalids: Array<[any, IExplanation[]]>
 ) {
   expect(typeof validator).toBe("function");
   expect(Array.isArray(validator.explanations)).toBe(true);
   for (const valid of valids) {
     expect(validator(valid) === true ? valid : [valid]).toBe(valid);
-    expect(validator.explanations).toEqual([]);
   }
-  for (const invalid of invalids) {
+  for (const [invalid, explanations] of invalids) {
     expect(validator(invalid) === false ? invalid : [invalid]).toBe(invalid);
-    expect(validator.explanations).toEqual([]);
+    expect(validator.explanations).toEqual(explanations);
   }
 }

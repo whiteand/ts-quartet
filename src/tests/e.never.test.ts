@@ -1,12 +1,95 @@
+/* tslint:disable:object-literal-sort-keys */
 import { e as v } from "..";
-import { testValidatorImpure } from "./testValidatorImpure";
+import { ExplanationSchemaType } from "../explanations";
+import { testValidatorWithExplanations } from "./testValidatorWithExplanations";
 
 describe("v.never", () => {
   test("v.never", () => {
-    testValidatorImpure(
+    testValidatorWithExplanations(
       v(v.never),
       [],
-      [null, false, [], {}, 1, 0, NaN, undefined, true]
+      [
+        [
+          null,
+          [
+            {
+              value: null,
+              schema: { type: ExplanationSchemaType.Never },
+              path: []
+            }
+          ]
+        ],
+        [
+          false,
+          [
+            {
+              value: false,
+              schema: { type: ExplanationSchemaType.Never },
+              path: []
+            }
+          ]
+        ],
+        [
+          [],
+          [
+            {
+              value: [],
+              schema: { type: ExplanationSchemaType.Never },
+              path: []
+            }
+          ]
+        ],
+        [
+          {},
+          [
+            {
+              value: {},
+              schema: { type: ExplanationSchemaType.Never },
+              path: []
+            }
+          ]
+        ],
+        [
+          1,
+          [
+            {
+              value: 1,
+              schema: { type: ExplanationSchemaType.Never },
+              path: []
+            }
+          ]
+        ],
+        [
+          0,
+          [
+            {
+              value: 0,
+              schema: { type: ExplanationSchemaType.Never },
+              path: []
+            }
+          ]
+        ],
+        [
+          NaN,
+          [
+            {
+              value: NaN,
+              schema: { type: ExplanationSchemaType.Never },
+              path: []
+            }
+          ]
+        ],
+        [
+          undefined,
+          [
+            {
+              value: undefined,
+              schema: { type: ExplanationSchemaType.Never },
+              path: []
+            }
+          ]
+        ]
+      ]
     );
   });
 });
