@@ -9,8 +9,10 @@ export function testValidator(
   expect(Array.isArray(validator.explanations)).toBe(true);
   for (const valid of valids) {
     expect(validator(valid) === true ? valid : [valid]).toBe(valid);
+    expect(validator.explanations).toEqual([]);
   }
   for (const invalid of invalids) {
     expect(validator(invalid) === false ? invalid : [invalid]).toBe(invalid);
+    expect(validator.explanations).toEqual([]);
   }
 }
