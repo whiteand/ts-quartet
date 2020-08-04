@@ -9,12 +9,10 @@ It is a declarative and fast tool for data validation.
 
 - [Quartet 10](#quartet-10)
   - [Examples](#examples)
-  - [Benchmarks](#benchmarks)
   - [Is there extra word in this list?](#is-there-extra-word-in-this-list)
   - [Objections](#objections)
   - [Confession](#confession)
   - [How to use it?](#how-to-use-it)
-  - [What could be a validation scheme?](#what-could-be-a-validation-scheme)
     - [Primitives](#primitives)
     - [Schemas out of the box](#schemas-out-of-the-box)
       - [`v.any: Schema`](#vany-schema)
