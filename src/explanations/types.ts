@@ -29,7 +29,7 @@ export enum ExplanationSchemaType {
   Custom = "Custom"
 }
 
-export interface IPrimitiveSchemaExplanation {
+export interface IPrimitiveExplanationSchema {
   type: "Primitive";
   value: TPrimitiveSchema;
 }
@@ -162,7 +162,7 @@ export interface ICustomExplanationSchema {
 }
 
 export type TExplanationSchema =
-  | IPrimitiveSchemaExplanation
+  | IPrimitiveExplanationSchema
   | IAndExplanationSchema
   | IAnyExplanationSchema
   | IArrayExplanationSchema
