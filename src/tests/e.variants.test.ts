@@ -1,571 +1,583 @@
-import { e as v, ExplanationSchemaType } from "..";
-import { getExplanations } from "./getExplanations";
-import { testValidatorImpure } from "./testValidatorImpure";
+import { e as v, ExplanationSchemaType } from '..'
+import { getExplanations } from './getExplanations'
+import { testValidatorImpure } from './testValidatorImpure'
 
-describe("v([...])", () => {
-  test("v([])", () => {
-    const validator = v([]);
-    testValidatorImpure(
-      validator,
-      [],
-      [null, false, [], {}, 1, 0, NaN, undefined, true]
-    );
+describe('v([...])', () => {
+  test('v([])', () => {
+    const validator = v([])
+    testValidatorImpure(validator, [], [null, false, [], {}, 1, 0, NaN, undefined, true])
     expect(getExplanations(validator, null)).toEqual([
       {
         path: [],
         schema: {
-          type: ExplanationSchemaType.Never
+          type: ExplanationSchemaType.Never,
         },
-        value: null
-      }
-    ]);
+        value: null,
+      },
+    ])
     expect(getExplanations(validator, false)).toEqual([
       {
         path: [],
         schema: {
-          type: ExplanationSchemaType.Never
+          type: ExplanationSchemaType.Never,
         },
-        value: false
-      }
-    ]);
+        value: false,
+      },
+    ])
     expect(getExplanations(validator, [])).toEqual([
       {
         path: [],
         schema: {
-          type: ExplanationSchemaType.Never
+          type: ExplanationSchemaType.Never,
         },
-        value: []
-      }
-    ]);
+        value: [],
+      },
+    ])
     expect(getExplanations(validator, {})).toEqual([
       {
         path: [],
         schema: {
-          type: ExplanationSchemaType.Never
+          type: ExplanationSchemaType.Never,
         },
-        value: {}
-      }
-    ]);
+        value: {},
+      },
+    ])
     expect(getExplanations(validator, 1)).toEqual([
       {
         path: [],
         schema: {
-          type: ExplanationSchemaType.Never
+          type: ExplanationSchemaType.Never,
         },
-        value: 1
-      }
-    ]);
+        value: 1,
+      },
+    ])
     expect(getExplanations(validator, 0)).toEqual([
       {
         path: [],
         schema: {
-          type: ExplanationSchemaType.Never
+          type: ExplanationSchemaType.Never,
         },
-        value: 0
-      }
-    ]);
+        value: 0,
+      },
+    ])
     expect(getExplanations(validator, NaN)).toEqual([
       {
         path: [],
         schema: {
-          type: ExplanationSchemaType.Never
+          type: ExplanationSchemaType.Never,
         },
-        value: NaN
-      }
-    ]);
+        value: NaN,
+      },
+    ])
     expect(getExplanations(validator, undefined)).toEqual([
       {
         path: [],
         schema: {
-          type: ExplanationSchemaType.Never
+          type: ExplanationSchemaType.Never,
         },
-        value: undefined
-      }
-    ]);
+        value: undefined,
+      },
+    ])
     expect(getExplanations(validator, true)).toEqual([
       {
         path: [],
         schema: {
-          type: ExplanationSchemaType.Never
+          type: ExplanationSchemaType.Never,
         },
-        value: true
-      }
-    ]);
-  });
-  test("v([1])", () => {
-    const validator = v([1]);
-    testValidatorImpure(
-      validator,
-      [1],
-      [null, false, [], {}, 0, NaN, undefined, true]
-    );
+        value: true,
+      },
+    ])
+  })
+  test('v([1])', () => {
+    const validator = v([1])
+    testValidatorImpure(validator, [1], [null, false, [], {}, 0, NaN, undefined, true])
     expect(getExplanations(validator, null)).toEqual([
       {
         path: [],
         schema: {
           type: ExplanationSchemaType.Primitive,
-          value: 1
+          value: 1,
         },
-        value: null
-      }
-    ]);
+        value: null,
+      },
+    ])
     expect(getExplanations(validator, false)).toEqual([
       {
         path: [],
         schema: {
           type: ExplanationSchemaType.Primitive,
-          value: 1
+          value: 1,
         },
-        value: false
-      }
-    ]);
+        value: false,
+      },
+    ])
     expect(getExplanations(validator, [])).toEqual([
       {
         path: [],
         schema: {
           type: ExplanationSchemaType.Primitive,
-          value: 1
+          value: 1,
         },
-        value: []
-      }
-    ]);
+        value: [],
+      },
+    ])
     expect(getExplanations(validator, {})).toEqual([
       {
         path: [],
         schema: {
           type: ExplanationSchemaType.Primitive,
-          value: 1
+          value: 1,
         },
-        value: {}
-      }
-    ]);
+        value: {},
+      },
+    ])
     expect(getExplanations(validator, 0)).toEqual([
       {
         path: [],
         schema: {
           type: ExplanationSchemaType.Primitive,
-          value: 1
+          value: 1,
         },
-        value: 0
-      }
-    ]);
+        value: 0,
+      },
+    ])
     expect(getExplanations(validator, NaN)).toEqual([
       {
         path: [],
         schema: {
           type: ExplanationSchemaType.Primitive,
-          value: 1
+          value: 1,
         },
-        value: NaN
-      }
-    ]);
+        value: NaN,
+      },
+    ])
     expect(getExplanations(validator, undefined)).toEqual([
       {
         path: [],
         schema: {
           type: ExplanationSchemaType.Primitive,
-          value: 1
+          value: 1,
         },
-        value: undefined
-      }
-    ]);
+        value: undefined,
+      },
+    ])
     expect(getExplanations(validator, true)).toEqual([
       {
         path: [],
         schema: {
           type: ExplanationSchemaType.Primitive,
-          value: 1
+          value: 1,
         },
-        value: true
-      }
-    ]);
-  });
-  test("v([1, 2])", () => {
-    const validator = v([1, 2]);
+        value: true,
+      },
+    ])
+  })
+  test('v([1, 2])', () => {
+    const validator = v([1, 2])
     testValidatorImpure(
       validator,
       [1, 2],
-      ["2", "1", null, false, [], {}, 0, NaN, undefined, true]
-    );
-    expect(getExplanations(validator, "2")).toEqual([
+      ['2', '1', null, false, [], {}, 0, NaN, undefined, true],
+    )
+    expect(getExplanations(validator, '2')).toEqual([
       {
         path: [],
         schema: {
-          type: ExplanationSchemaType.Primitive,
-          value: 1
+          type: ExplanationSchemaType.Variant,
+          variants: [
+            {
+              type: ExplanationSchemaType.Primitive,
+              value: 1,
+            },
+            {
+              type: ExplanationSchemaType.Primitive,
+              value: 2,
+            },
+          ],
         },
-        value: "2"
+        value: '2',
       },
+    ])
+    expect(getExplanations(validator, '1')).toEqual([
       {
         path: [],
         schema: {
-          type: ExplanationSchemaType.Primitive,
-          value: 2
+          type: ExplanationSchemaType.Variant,
+          variants: [
+            {
+              type: ExplanationSchemaType.Primitive,
+              value: 1,
+            },
+            {
+              type: ExplanationSchemaType.Primitive,
+              value: 2,
+            },
+          ],
         },
-        value: "2"
-      }
-    ]);
-    expect(getExplanations(validator, "1")).toEqual([
-      {
-        path: [],
-        schema: {
-          type: ExplanationSchemaType.Primitive,
-          value: 1
-        },
-        value: "1"
+        value: '1',
       },
-      {
-        path: [],
-        schema: {
-          type: ExplanationSchemaType.Primitive,
-          value: 2
-        },
-        value: "1"
-      }
-    ]);
+    ])
     expect(getExplanations(validator, null)).toEqual([
       {
         path: [],
         schema: {
-          type: ExplanationSchemaType.Primitive,
-          value: 1
+          type: ExplanationSchemaType.Variant,
+          variants: [
+            {
+              type: ExplanationSchemaType.Primitive,
+              value: 1,
+            },
+            {
+              type: ExplanationSchemaType.Primitive,
+              value: 2,
+            },
+          ],
         },
-        value: null
+        value: null,
       },
-      {
-        path: [],
-        schema: {
-          type: ExplanationSchemaType.Primitive,
-          value: 2
-        },
-        value: null
-      }
-    ]);
+    ])
     expect(getExplanations(validator, false)).toEqual([
       {
         path: [],
         schema: {
-          type: ExplanationSchemaType.Primitive,
-          value: 1
+          type: ExplanationSchemaType.Variant,
+          variants: [
+            {
+              type: ExplanationSchemaType.Primitive,
+              value: 1,
+            },
+            {
+              type: ExplanationSchemaType.Primitive,
+              value: 2,
+            },
+          ],
         },
-        value: false
+        value: false,
       },
-      {
-        path: [],
-        schema: {
-          type: ExplanationSchemaType.Primitive,
-          value: 2
-        },
-        value: false
-      }
-    ]);
+    ])
     expect(getExplanations(validator, [])).toEqual([
       {
         path: [],
         schema: {
-          type: ExplanationSchemaType.Primitive,
-          value: 1
+          type: ExplanationSchemaType.Variant,
+          variants: [
+            {
+              type: ExplanationSchemaType.Primitive,
+              value: 1,
+            },
+            {
+              type: ExplanationSchemaType.Primitive,
+              value: 2,
+            },
+          ],
         },
-        value: []
+        value: [],
       },
-      {
-        path: [],
-        schema: {
-          type: ExplanationSchemaType.Primitive,
-          value: 2
-        },
-        value: []
-      }
-    ]);
+    ])
     expect(getExplanations(validator, {})).toEqual([
       {
         path: [],
         schema: {
-          type: ExplanationSchemaType.Primitive,
-          value: 1
+          type: ExplanationSchemaType.Variant,
+          variants: [
+            {
+              type: ExplanationSchemaType.Primitive,
+              value: 1,
+            },
+            {
+              type: ExplanationSchemaType.Primitive,
+              value: 2,
+            },
+          ],
         },
-        value: {}
+        value: {},
       },
-      {
-        path: [],
-        schema: {
-          type: ExplanationSchemaType.Primitive,
-          value: 2
-        },
-        value: {}
-      }
-    ]);
+    ])
     expect(getExplanations(validator, 0)).toEqual([
       {
         path: [],
         schema: {
-          type: ExplanationSchemaType.Primitive,
-          value: 1
+          type: ExplanationSchemaType.Variant,
+          variants: [
+            {
+              type: ExplanationSchemaType.Primitive,
+              value: 1,
+            },
+            {
+              type: ExplanationSchemaType.Primitive,
+              value: 2,
+            },
+          ],
         },
-        value: 0
+        value: 0,
       },
-      {
-        path: [],
-        schema: {
-          type: ExplanationSchemaType.Primitive,
-          value: 2
-        },
-        value: 0
-      }
-    ]);
+    ])
     expect(getExplanations(validator, NaN)).toEqual([
       {
         path: [],
         schema: {
-          type: ExplanationSchemaType.Primitive,
-          value: 1
+          type: ExplanationSchemaType.Variant,
+          variants: [
+            {
+              type: ExplanationSchemaType.Primitive,
+              value: 1,
+            },
+            {
+              type: ExplanationSchemaType.Primitive,
+              value: 2,
+            },
+          ],
         },
-        value: NaN
+        value: NaN,
       },
-      {
-        path: [],
-        schema: {
-          type: ExplanationSchemaType.Primitive,
-          value: 2
-        },
-        value: NaN
-      }
-    ]);
+    ])
     expect(getExplanations(validator, undefined)).toEqual([
       {
         path: [],
         schema: {
-          type: ExplanationSchemaType.Primitive,
-          value: 1
+          type: ExplanationSchemaType.Variant,
+          variants: [
+            {
+              type: ExplanationSchemaType.Primitive,
+              value: 1,
+            },
+            {
+              type: ExplanationSchemaType.Primitive,
+              value: 2,
+            },
+          ],
         },
-        value: undefined
+        value: undefined,
       },
-      {
-        path: [],
-        schema: {
-          type: ExplanationSchemaType.Primitive,
-          value: 2
-        },
-        value: undefined
-      }
-    ]);
+    ])
     expect(getExplanations(validator, true)).toEqual([
       {
         path: [],
         schema: {
-          type: ExplanationSchemaType.Primitive,
-          value: 1
+          type: ExplanationSchemaType.Variant,
+          variants: [
+            {
+              type: ExplanationSchemaType.Primitive,
+              value: 1,
+            },
+            {
+              type: ExplanationSchemaType.Primitive,
+              value: 2,
+            },
+          ],
         },
-        value: true
+        value: true,
       },
-      {
-        path: [],
-        schema: {
-          type: ExplanationSchemaType.Primitive,
-          value: 2
-        },
-        value: true
-      }
-    ]);
-  });
+    ])
+  })
   test("v([1, '2'])", () => {
-    const validator = v([1, "2"]);
+    const validator = v([1, '2'])
     testValidatorImpure(
       validator,
-      [1, "2"],
-      [2, "1", null, false, [], {}, 0, NaN, undefined, true]
-    );
+      [1, '2'],
+      [2, '1', null, false, [], {}, 0, NaN, undefined, true],
+    )
     expect(getExplanations(validator, 2)).toEqual([
       {
         path: [],
         schema: {
-          type: ExplanationSchemaType.Primitive,
-          value: 1
+          type: ExplanationSchemaType.Variant,
+          variants: [
+            {
+              type: ExplanationSchemaType.Primitive,
+              value: 1,
+            },
+            {
+              type: ExplanationSchemaType.Primitive,
+              value: '2',
+            },
+          ],
         },
-        value: 2
+        value: 2,
       },
+    ])
+    expect(getExplanations(validator, '1')).toEqual([
       {
         path: [],
         schema: {
-          type: ExplanationSchemaType.Primitive,
-          value: "2"
+          type: ExplanationSchemaType.Variant,
+          variants: [
+            {
+              type: ExplanationSchemaType.Primitive,
+              value: 1,
+            },
+            {
+              type: ExplanationSchemaType.Primitive,
+              value: '2',
+            },
+          ],
         },
-        value: 2
-      }
-    ]);
-    expect(getExplanations(validator, "1")).toEqual([
-      {
-        path: [],
-        schema: {
-          type: ExplanationSchemaType.Primitive,
-          value: 1
-        },
-        value: "1"
+        value: '1',
       },
-      {
-        path: [],
-        schema: {
-          type: ExplanationSchemaType.Primitive,
-          value: "2"
-        },
-        value: "1"
-      }
-    ]);
+    ])
     expect(getExplanations(validator, null)).toEqual([
       {
         path: [],
         schema: {
-          type: ExplanationSchemaType.Primitive,
-          value: 1
+          type: ExplanationSchemaType.Variant,
+          variants: [
+            {
+              type: ExplanationSchemaType.Primitive,
+              value: 1,
+            },
+            {
+              type: ExplanationSchemaType.Primitive,
+              value: '2',
+            },
+          ],
         },
-        value: null
+        value: null,
       },
-      {
-        path: [],
-        schema: {
-          type: ExplanationSchemaType.Primitive,
-          value: "2"
-        },
-        value: null
-      }
-    ]);
+    ])
     expect(getExplanations(validator, false)).toEqual([
       {
         path: [],
         schema: {
-          type: ExplanationSchemaType.Primitive,
-          value: 1
+          type: ExplanationSchemaType.Variant,
+          variants: [
+            {
+              type: ExplanationSchemaType.Primitive,
+              value: 1,
+            },
+            {
+              type: ExplanationSchemaType.Primitive,
+              value: '2',
+            },
+          ],
         },
-        value: false
+        value: false,
       },
-      {
-        path: [],
-        schema: {
-          type: ExplanationSchemaType.Primitive,
-          value: "2"
-        },
-        value: false
-      }
-    ]);
+    ])
     expect(getExplanations(validator, [])).toEqual([
       {
         path: [],
         schema: {
-          type: ExplanationSchemaType.Primitive,
-          value: 1
+          type: ExplanationSchemaType.Variant,
+          variants: [
+            {
+              type: ExplanationSchemaType.Primitive,
+              value: 1,
+            },
+            {
+              type: ExplanationSchemaType.Primitive,
+              value: '2',
+            },
+          ],
         },
-        value: []
+        value: [],
       },
-      {
-        path: [],
-        schema: {
-          type: ExplanationSchemaType.Primitive,
-          value: "2"
-        },
-        value: []
-      }
-    ]);
+    ])
     expect(getExplanations(validator, {})).toEqual([
       {
         path: [],
         schema: {
-          type: ExplanationSchemaType.Primitive,
-          value: 1
+          type: ExplanationSchemaType.Variant,
+          variants: [
+            {
+              type: ExplanationSchemaType.Primitive,
+              value: 1,
+            },
+            {
+              type: ExplanationSchemaType.Primitive,
+              value: '2',
+            },
+          ],
         },
-        value: {}
+        value: {},
       },
-      {
-        path: [],
-        schema: {
-          type: ExplanationSchemaType.Primitive,
-          value: "2"
-        },
-        value: {}
-      }
-    ]);
+    ])
     expect(getExplanations(validator, 0)).toEqual([
       {
         path: [],
         schema: {
-          type: ExplanationSchemaType.Primitive,
-          value: 1
+          type: ExplanationSchemaType.Variant,
+          variants: [
+            {
+              type: ExplanationSchemaType.Primitive,
+              value: 1,
+            },
+            {
+              type: ExplanationSchemaType.Primitive,
+              value: '2',
+            },
+          ],
         },
-        value: 0
+        value: 0,
       },
-      {
-        path: [],
-        schema: {
-          type: ExplanationSchemaType.Primitive,
-          value: "2"
-        },
-        value: 0
-      }
-    ]);
+    ])
     expect(getExplanations(validator, NaN)).toEqual([
       {
         path: [],
         schema: {
-          type: ExplanationSchemaType.Primitive,
-          value: 1
+          type: ExplanationSchemaType.Variant,
+          variants: [
+            {
+              type: ExplanationSchemaType.Primitive,
+              value: 1,
+            },
+            {
+              type: ExplanationSchemaType.Primitive,
+              value: '2',
+            },
+          ],
         },
-        value: NaN
+        value: NaN,
       },
-      {
-        path: [],
-        schema: {
-          type: ExplanationSchemaType.Primitive,
-          value: "2"
-        },
-        value: NaN
-      }
-    ]);
+    ])
     expect(getExplanations(validator, undefined)).toEqual([
       {
         path: [],
         schema: {
-          type: ExplanationSchemaType.Primitive,
-          value: 1
+          type: ExplanationSchemaType.Variant,
+          variants: [
+            {
+              type: ExplanationSchemaType.Primitive,
+              value: 1,
+            },
+            {
+              type: ExplanationSchemaType.Primitive,
+              value: '2',
+            },
+          ],
         },
-        value: undefined
+        value: undefined,
       },
-      {
-        path: [],
-        schema: {
-          type: ExplanationSchemaType.Primitive,
-          value: "2"
-        },
-        value: undefined
-      }
-    ]);
+    ])
     expect(getExplanations(validator, true)).toEqual([
       {
         path: [],
         schema: {
-          type: ExplanationSchemaType.Primitive,
-          value: 1
+          type: ExplanationSchemaType.Variant,
+          variants: [
+            {
+              type: ExplanationSchemaType.Primitive,
+              value: 1,
+            },
+            {
+              type: ExplanationSchemaType.Primitive,
+              value: '2',
+            },
+          ],
         },
-        value: true
+        value: true,
       },
-      {
-        path: [],
-        schema: {
-          type: ExplanationSchemaType.Primitive,
-          value: "2"
-        },
-        value: true
-      }
-    ]);
-  });
-  test("v([true, false])", () => {
-    let flag = true;
+    ])
+  })
+  test('v([true, false])', () => {
+    let flag = true
     const validator = v([
       v.any,
       v.custom(() => {
-        flag = false;
-        return false;
-      })
-    ]);
-    validator(1);
-    expect(flag).toBeTruthy();
-  });
-});
+        flag = false
+        return false
+      }),
+    ])
+    validator(1)
+    expect(flag).toBeTruthy()
+  })
+})
