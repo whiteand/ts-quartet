@@ -1,164 +1,164 @@
-import { ITester, KeyType, TCustomValidator, TPrimitiveSchema } from "../types";
+import { ITester, KeyType, TCustomValidator, TPrimitiveSchema } from '../types'
 
 export enum ExplanationSchemaType {
-  Primitive = "Primitive",
-  And = "And",
-  Any = "Any",
-  Array = "Array",
-  ArrayOf = "ArrayOf",
-  Boolean = "Boolean",
-  Finite = "Finite",
-  Function = "Function",
-  Max = "Max",
-  MaxLength = "MaxLength",
-  Min = "Min",
-  MinLength = "MinLength",
-  Negative = "Negative",
-  Never = "Never",
-  Not = "Not",
-  NotANumber = "NotANumber",
-  Number = "Number",
-  Object = "Object",
-  Pair = "Pair",
-  Positive = "Positive",
-  SafeInteger = "SafeInteger",
-  String = "String",
-  Symbol = "Symbol",
-  Test = "Test",
-  Variant = "Variant",
-  Custom = "Custom"
+  Primitive = 'Primitive',
+  And = 'And',
+  Any = 'Any',
+  Array = 'Array',
+  ArrayOf = 'ArrayOf',
+  Boolean = 'Boolean',
+  Finite = 'Finite',
+  Function = 'Function',
+  Max = 'Max',
+  MaxLength = 'MaxLength',
+  Min = 'Min',
+  MinLength = 'MinLength',
+  Negative = 'Negative',
+  Never = 'Never',
+  Not = 'Not',
+  NotANumber = 'NotANumber',
+  Number = 'Number',
+  Object = 'Object',
+  Pair = 'Pair',
+  Positive = 'Positive',
+  SafeInteger = 'SafeInteger',
+  String = 'String',
+  Symbol = 'Symbol',
+  Test = 'Test',
+  Variant = 'Variant',
+  Custom = 'Custom',
 }
 
 export interface IPrimitiveExplanationSchema {
-  type: "Primitive";
-  value: TPrimitiveSchema;
+  type: 'Primitive'
+  value: TPrimitiveSchema
 }
 
 export interface IAndExplanationSchema {
-  type: ExplanationSchemaType.And;
-  schemas: TExplanationSchema[];
+  type: ExplanationSchemaType.And
+  schemas: TExplanationSchema[]
 }
 export interface IAnyExplanationSchema {
-  type: ExplanationSchemaType.Any;
+  type: ExplanationSchemaType.Any
 }
 
 export interface IArrayExplanationSchema {
-  type: ExplanationSchemaType.Array;
+  type: ExplanationSchemaType.Array
 }
 
 export interface IArrayOfExplanationSchema {
-  type: ExplanationSchemaType.ArrayOf;
-  elementSchema: TExplanationSchema;
+  type: ExplanationSchemaType.ArrayOf
+  elementSchema: TExplanationSchema
 }
 
 export interface IBooleanExplanationSchema {
-  type: ExplanationSchemaType.Boolean;
+  type: ExplanationSchemaType.Boolean
 }
 
 export interface IFiniteExplanationSchema {
-  type: ExplanationSchemaType.Finite;
+  type: ExplanationSchemaType.Finite
 }
 
 export interface IFunctionExplanationSchema {
-  type: ExplanationSchemaType.Function;
+  type: ExplanationSchemaType.Function
 }
 export interface IMaxExplanationSchema {
-  type: ExplanationSchemaType.Max;
-  maxValue: number;
-  isExclusive: boolean;
+  type: ExplanationSchemaType.Max
+  maxValue: number
+  isExclusive: boolean
 }
 
 export interface IMaxLengthExplanationSchema {
-  type: ExplanationSchemaType.MaxLength;
-  maxLength: number;
-  isExclusive: boolean;
+  type: ExplanationSchemaType.MaxLength
+  maxLength: number
+  isExclusive: boolean
 }
 export interface IMinExplanationSchema {
-  type: ExplanationSchemaType.Min;
-  minValue: number;
-  isExclusive: boolean;
+  type: ExplanationSchemaType.Min
+  minValue: number
+  isExclusive: boolean
 }
 
 export interface IMinLengthExplanationSchema {
-  type: ExplanationSchemaType.MinLength;
-  minLength: number;
-  isExclusive: boolean;
+  type: ExplanationSchemaType.MinLength
+  minLength: number
+  isExclusive: boolean
 }
 
 export interface INegativeExplanationSchema {
-  type: ExplanationSchemaType.Negative;
+  type: ExplanationSchemaType.Negative
 }
 export interface INeverExplanationSchema {
-  type: ExplanationSchemaType.Never;
+  type: ExplanationSchemaType.Never
 }
 export interface INotExplanationSchema {
-  type: ExplanationSchemaType.Not;
-  schema: TExplanationSchema;
+  type: ExplanationSchemaType.Not
+  schema: TExplanationSchema
 }
 
 export interface INumberExplanationSchema {
-  type: ExplanationSchemaType.Number;
+  type: ExplanationSchemaType.Number
 }
 
 export interface INotANumberExplanationSchema {
-  type: ExplanationSchemaType.NotANumber;
+  type: ExplanationSchemaType.NotANumber
 }
 
 export interface IObjectExplanationSchemaWithoutRest {
-  type: ExplanationSchemaType.Object;
+  type: ExplanationSchemaType.Object
   propsSchemas: {
-    [key: string]: TExplanationSchema;
-  };
+    [key: string]: TExplanationSchema
+  }
 }
 
 export interface IObjectExplanationSchemaWithRest {
-  type: ExplanationSchemaType.Object;
+  type: ExplanationSchemaType.Object
   propsSchemas: {
-    [key: string]: TExplanationSchema;
-  };
-  "[v.rest]": TExplanationSchema;
-  "[v.restOmit]"?: KeyType[];
+    [key: string]: TExplanationSchema
+  }
+  '[v.rest]': TExplanationSchema
+  '[v.restOmit]'?: KeyType[]
 }
 
 export type TObjectExplanationSchema =
   | IObjectExplanationSchemaWithoutRest
-  | IObjectExplanationSchemaWithRest;
+  | IObjectExplanationSchemaWithRest
 
 export interface IPairExplanationSchema {
-  type: ExplanationSchemaType.Pair;
-  keyValueSchema: TExplanationSchema;
+  type: ExplanationSchemaType.Pair
+  keyValueSchema: TExplanationSchema
 }
 
 export interface IPositiveExplanationSchema {
-  type: ExplanationSchemaType.Positive;
+  type: ExplanationSchemaType.Positive
 }
 
 export interface ISafeIntegerExplanationSchema {
-  type: ExplanationSchemaType.SafeInteger;
+  type: ExplanationSchemaType.SafeInteger
 }
 
 export interface IStringExplanationSchema {
-  type: ExplanationSchemaType.String;
+  type: ExplanationSchemaType.String
 }
 
 export interface ISymbolExplanationSchema {
-  type: ExplanationSchemaType.Symbol;
+  type: ExplanationSchemaType.Symbol
 }
 
 export interface ITestExplanationSchema {
-  type: ExplanationSchemaType.Test;
-  tester: ITester;
+  type: ExplanationSchemaType.Test
+  tester: ITester
 }
 
 export interface IVariantExplanationSchema {
-  type: ExplanationSchemaType.Variant;
-  variants: TExplanationSchema[];
+  type: ExplanationSchemaType.Variant
+  variants: TExplanationSchema[]
 }
 
 export interface ICustomExplanationSchema {
-  type: ExplanationSchemaType.Custom;
-  customValidator: TCustomValidator;
-  innerExplanations: any[];
+  type: ExplanationSchemaType.Custom
+  customValidator: TCustomValidator
+  innerExplanations: any[]
 }
 
 export type TExplanationSchema =
@@ -187,10 +187,11 @@ export type TExplanationSchema =
   | ISymbolExplanationSchema
   | ITestExplanationSchema
   | IVariantExplanationSchema
-  | ICustomExplanationSchema;
+  | ICustomExplanationSchema
 
 export interface IExplanation {
-  value: any;
-  path: KeyType[];
-  schema: TExplanationSchema;
+  value: any
+  path: KeyType[]
+  schema: TExplanationSchema
+  innerExplanations: IExplanation[]
 }
