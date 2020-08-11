@@ -1,10 +1,10 @@
 /* tslint:disable:object-literal-sort-keys */
-import { e as v } from '..'
-import { ExplanationSchemaType } from '../explanations'
-import { testValidatorWithExplanations } from './testValidatorWithExplanations'
+import { e as v } from "..";
+import { ExplanationSchemaType } from "../explanations";
+import { testValidatorWithExplanations } from "./testValidatorWithExplanations";
 
-describe('v.never', () => {
-  test('v.never', () => {
+describe("v.never", () => {
+  test("v.never", () => {
     testValidatorWithExplanations(
       v(v.never),
       [],
@@ -16,9 +16,9 @@ describe('v.never', () => {
               value: null,
               schema: { type: ExplanationSchemaType.Never },
               path: [],
-              innerExplanations: [],
-            },
-          ],
+              innerExplanations: []
+            }
+          ]
         ],
         [
           false,
@@ -27,9 +27,9 @@ describe('v.never', () => {
               value: false,
               schema: { type: ExplanationSchemaType.Never },
               path: [],
-              innerExplanations: [],
-            },
-          ],
+              innerExplanations: []
+            }
+          ]
         ],
         [
           [],
@@ -38,9 +38,9 @@ describe('v.never', () => {
               value: [],
               schema: { type: ExplanationSchemaType.Never },
               path: [],
-              innerExplanations: [],
-            },
-          ],
+              innerExplanations: []
+            }
+          ]
         ],
         [
           {},
@@ -49,9 +49,9 @@ describe('v.never', () => {
               value: {},
               schema: { type: ExplanationSchemaType.Never },
               path: [],
-              innerExplanations: [],
-            },
-          ],
+              innerExplanations: []
+            }
+          ]
         ],
         [
           1,
@@ -60,9 +60,9 @@ describe('v.never', () => {
               value: 1,
               schema: { type: ExplanationSchemaType.Never },
               path: [],
-              innerExplanations: [],
-            },
-          ],
+              innerExplanations: []
+            }
+          ]
         ],
         [
           0,
@@ -71,9 +71,9 @@ describe('v.never', () => {
               value: 0,
               schema: { type: ExplanationSchemaType.Never },
               path: [],
-              innerExplanations: [],
-            },
-          ],
+              innerExplanations: []
+            }
+          ]
         ],
         [
           NaN,
@@ -82,9 +82,9 @@ describe('v.never', () => {
               value: NaN,
               schema: { type: ExplanationSchemaType.Never },
               path: [],
-              innerExplanations: [],
-            },
-          ],
+              innerExplanations: []
+            }
+          ]
         ],
         [
           undefined,
@@ -93,11 +93,11 @@ describe('v.never', () => {
               value: undefined,
               schema: { type: ExplanationSchemaType.Never },
               path: [],
-              innerExplanations: [],
-            },
-          ],
-        ],
-      ],
-    )
-  })
-})
+              innerExplanations: []
+            }
+          ]
+        ]
+      ]
+    );
+  });
+});
