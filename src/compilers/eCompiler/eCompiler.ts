@@ -1,23 +1,10 @@
 /* tslint:disable:object-literal-sort-keys */
-import { IExplanation, schemaToExplanationSchema } from "../explanations";
-import { RawSchema, rawSchemaToSchema } from "../rawSchemaToSchema";
-import { SchemaType } from "../schemas";
-import { CompilationResult, KeyType, TSchema, Validator } from "../types";
-import { has } from "../utils";
-
-function explanation(
-  value: any,
-  path: KeyType[],
-  schema: TSchema,
-  innerExplanations: IExplanation[] = []
-): IExplanation {
-  return {
-    value,
-    schema: schemaToExplanationSchema(schema),
-    path: [...path],
-    innerExplanations
-  };
-}
+import { IExplanation, schemaToExplanationSchema } from "../../explanations";
+import { RawSchema, rawSchemaToSchema } from "../../rawSchemaToSchema";
+import { SchemaType } from "../../schemas";
+import { CompilationResult, KeyType, TSchema, Validator } from "../../types";
+import { has } from "../../utils";
+import { explanation } from "./explanation";
 
 function validate(
   value: any,
@@ -198,7 +185,7 @@ function validate(
       return validate(
         {
           key: path[path.length - 1],
-          value
+          value,
         },
         schema.keyValueSchema,
         path,

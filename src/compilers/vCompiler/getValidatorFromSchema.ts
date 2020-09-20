@@ -1,6 +1,6 @@
 import { SchemaType } from "../../schemas/SchemaType";
 import { TSchema } from "../../types";
-import { getAlloc } from "./getAlloc";
+import { getAlloc } from "../../getAlloc";
 import { ifInvalidReturnFalse } from "./ifInvalidReturnFalse";
 
 export function getValidatorFromSchema(

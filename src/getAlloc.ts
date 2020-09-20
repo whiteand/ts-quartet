@@ -1,4 +1,4 @@
-import { getAccessor } from "../../utils";
+import { getAccessor } from "./utils";
 
 export function getAlloc(context: Record<string, any>, contextVar: string) {
   const prefixesCounters: Record<string, number> = {};
