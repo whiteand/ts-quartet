@@ -1,9 +1,8 @@
-import { RawSchema, rawSchemaToSchema } from "../rawSchemaToSchema";
-import { SchemaType } from "../schemas";
-import { CompilationResult, KeyType, TSchema, Validator } from "../types";
-import { has } from "../utils";
+import { SchemaType } from "../../schemas";
+import { KeyType, TSchema } from "../../types";
+import { has } from "../../utils";
 
-function validate(value: any, schema: TSchema, path: KeyType[]): boolean {
+export function validate(value: any, schema: TSchema, path: KeyType[]): boolean {
   if (typeof schema !== "object" || schema === null) {
     return value === schema;
   }
@@ -113,7 +112,7 @@ function validate(value: any, schema: TSchema, path: KeyType[]): boolean {
     case SchemaType.Pair:
       const obj = {
         key: path[path.length - 1],
-        value
+        value,
       };
       return validate(obj, schema.keyValueSchema, path);
     case SchemaType.Positive:
@@ -139,19 +138,4 @@ function validate(value: any, schema: TSchema, path: KeyType[]): boolean {
       const { customValidator } = schema;
       return Boolean(customValidator(value));
   }
-}
-
-function vCompileSchema<T = any>(schema: TSchema): CompilationResult<T, any> {
-  const explanations: any[] = [];
-  const validator = ((value: any) => validate(value, schema, [])) as Validator<
-    T
-  >;
-  return Object.assign(validator, { explanations });
-}
-
-export function vCompiler<T = any>(
-  rawSchema: RawSchema
-): CompilationResult<T, any> {
-  const schema = rawSchemaToSchema(rawSchema);
-  return vCompileSchema<T>(schema);
 }
