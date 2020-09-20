@@ -1,9 +1,7 @@
-import { Validator, TSchema } from "../../types";
-import { validate } from "./validate";
 import { SchemaType } from "../../schemas/SchemaType";
-import { ifInvalidReturnFalse } from "./ifInvalidReturnFalse";
+import { TSchema } from "../../types";
 import { getAlloc } from "./getAlloc";
-import { arrayOf } from "../../schemas";
+import { ifInvalidReturnFalse } from "./ifInvalidReturnFalse";
 
 export function getValidatorFromSchema(
   schema: TSchema,
@@ -27,14 +25,7 @@ export function getValidatorFromSchema(
         value: any,
         context: any
       ) => boolean;
-      return (value) => {
-        try {
-          return isValid(value, context);
-        } catch (error) {
-          console.debug(isValid.toString());
-          throw error;
-        }
-      };
+      return (value) => isValid(value, context);
     case SchemaType.Any:
       return () => true;
     case SchemaType.Array:
@@ -74,7 +65,7 @@ export function getValidatorFromSchema(
       return (value) => typeof value === "number";
     case SchemaType.Pair:
       const isValidPair = getValidatorFromSchema(schema.keyValueSchema, key);
-      let pair = {
+      const pair = {
         value: undefined,
         key,
       };
@@ -102,7 +93,9 @@ export function getValidatorFromSchema(
       return (value) => {
         for (let i = 0; i < compiledVariants.length; i++) {
           const compiledVariant = compiledVariants[i];
-          if (compiledVariant(value)) return true;
+          if (compiledVariant(value)) {
+            return true;
+          }
         }
         return false;
       };

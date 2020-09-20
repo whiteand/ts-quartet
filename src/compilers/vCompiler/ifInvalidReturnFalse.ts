@@ -1,7 +1,7 @@
-import { TSchema } from "../../types";
 import { SchemaType } from "../../schemas";
-import { getValidatorFromSchema } from "./getValidatorFromSchema";
+import { TSchema } from "../../types";
 import { getAccessorWithAlloc, has } from "../../utils";
+import { getValidatorFromSchema } from "./getValidatorFromSchema";
 
 function fromNegation(negationConditionCode: string) {
   return `if (${negationConditionCode}) return false`;
@@ -170,7 +170,6 @@ export function ifInvalidReturnFalse(
       const customVar = alloc("custom", schema.customValidator);
       return fromNegation(`!${customVar}(${valueAddress})`);
     default:
-      console.debug(schema, valueAddress);
       throw new Error("Not implemented");
   }
 }

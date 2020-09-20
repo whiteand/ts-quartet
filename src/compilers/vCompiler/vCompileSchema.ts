@@ -1,4 +1,4 @@
-import { TSchema, CompilationResult, Validator } from "../../types";
+import { CompilationResult, TSchema, Validator } from "../../types";
 import { getValidatorFromSchema } from "./getValidatorFromSchema";
 
 export function vCompileSchema<T = any>(
