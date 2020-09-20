@@ -2,7 +2,11 @@ import { SchemaType } from "../../schemas";
 import { KeyType, TSchema } from "../../types";
 import { has } from "../../utils";
 
-export function validate(value: any, schema: TSchema, path: KeyType[]): boolean {
+export function validate(
+  value: any,
+  schema: TSchema,
+  path: KeyType[]
+): boolean {
   if (typeof schema !== "object" || schema === null) {
     return value === schema;
   }
