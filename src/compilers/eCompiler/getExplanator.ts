@@ -7,10 +7,9 @@ import { returnExplanations } from './returnExplanations'
 
 export function getExplanator(
   schema: TSchema,
-  path: KeyType[],
-): (value: any) => null | IExplanation[] {
+): (value: any, path: KeyType[]) => null | IExplanation[] {
   if (typeof schema !== 'object' || schema === null) {
-    return value => (value === schema ? null : [explanation(value, path, schema)])
+    return (value, path) => (value === schema ? null : [explanation(value, path, schema)])
   }
   switch (schema.type) {
     case SchemaType.And:
@@ -24,94 +23,100 @@ export function getExplanator(
         ${returnExplanations(schema, alloc, 'value', pathParamName).join('\n')}
         return null
       `
-      const clonedPath = [...path]
       const explanator = new Function(
         'value',
         contextParamName,
         pathParamName,
         funcBody,
       ) as (value: any, context: any, path: KeyType[]) => null | IExplanation[]
-      return value => explanator(value, context, clonedPath)
+      return (value, path) => explanator(value, context, path)
     case SchemaType.Any:
       return () => null
     case SchemaType.Array:
-      return value => (Array.isArray(value) ? null : [explanation(value, path, schema)])
+      return (value, path) =>
+        Array.isArray(value) ? null : [explanation(value, path, schema)]
     case SchemaType.Boolean:
-      return value =>
+      return (value, path) =>
         typeof value === 'boolean' ? null : [explanation(value, path, schema)]
     case SchemaType.Finite:
-      return value => (Number.isFinite(value) ? null : [explanation(value, path, schema)])
+      return (value, path) =>
+        Number.isFinite(value) ? null : [explanation(value, path, schema)]
     case SchemaType.Function:
-      return value =>
+      return (value, path) =>
         typeof value === 'function' ? null : [explanation(value, path, schema)]
     case SchemaType.Max:
       return schema.isExclusive
-        ? value => (value < schema.maxValue ? null : [explanation(value, path, schema)])
-        : value => (value <= schema.maxValue ? null : [explanation(value, path, schema)])
+        ? (value, path) =>
+            value < schema.maxValue ? null : [explanation(value, path, schema)]
+        : (value, path) =>
+            value <= schema.maxValue ? null : [explanation(value, path, schema)]
     case SchemaType.MaxLength:
       return schema.isExclusive
-        ? value =>
+        ? (value, path) =>
             value != null && value.length < schema.maxLength
               ? null
               : [explanation(value, path, schema)]
-        : value =>
+        : (value, path) =>
             value != null && value.length <= schema.maxLength
               ? null
               : [explanation(value, path, schema)]
     case SchemaType.Min:
       return schema.isExclusive
-        ? value => (value > schema.minValue ? null : [explanation(value, path, schema)])
-        : value => (value >= schema.minValue ? null : [explanation(value, path, schema)])
+        ? (value, path) =>
+            value > schema.minValue ? null : [explanation(value, path, schema)]
+        : (value, path) =>
+            value >= schema.minValue ? null : [explanation(value, path, schema)]
     case SchemaType.MinLength:
       return schema.isExclusive
-        ? value =>
+        ? (value, path) =>
             value != null && value.length > schema.minLength
               ? null
               : [explanation(value, path, schema)]
-        : value =>
+        : (value, path) =>
             value != null && value.length >= schema.minLength
               ? null
               : [explanation(value, path, schema)]
     case SchemaType.Negative:
-      return value => (value < 0 ? null : [explanation(value, path, schema)])
+      return (value, path) => (value < 0 ? null : [explanation(value, path, schema)])
 
     case SchemaType.Never:
-      return value => [explanation(value, path, schema)]
+      return (value, path) => [explanation(value, path, schema)]
     case SchemaType.Not:
-      const oppositeExplanator = getExplanator(schema.schema, path)
-      return value => {
-        if (!oppositeExplanator(value)) {
+      const oppositeExplanator = getExplanator(schema.schema)
+      return (value, path) => {
+        if (!oppositeExplanator(value, path)) {
           return null
         }
         return [explanation(value, path, schema)]
       }
     case SchemaType.NotANumber:
-      return value => (Number.isNaN(value) ? null : [explanation(value, path, schema)])
+      return (value, path) =>
+        Number.isNaN(value) ? null : [explanation(value, path, schema)]
     case SchemaType.Number:
-      return value =>
+      return (value, path) =>
         typeof value === 'number' ? null : [explanation(value, path, schema)]
     case SchemaType.Pair:
-      const pairValidationExplanator = getExplanator(schema.keyValueSchema, path)
-      return value => {
+      const pairValidationExplanator = getExplanator(schema.keyValueSchema)
+      return (value, path) => {
         const pair = { value, key: path[path.length - 1] }
-        return pairValidationExplanator(pair)
+        return pairValidationExplanator(pair, path)
       }
     case SchemaType.Positive:
-      return value => (value > 0 ? null : [explanation(value, path, schema)])
+      return (value, path) => (value > 0 ? null : [explanation(value, path, schema)])
     case SchemaType.SafeInteger:
-      return value =>
+      return (value, path) =>
         Number.isSafeInteger(value) ? null : [explanation(value, path, schema)]
     case SchemaType.String:
-      return value =>
+      return (value, path) =>
         typeof value === 'string' ? null : [explanation(value, path, schema)]
     case SchemaType.Symbol:
-      return value =>
+      return (value, path) =>
         typeof value === 'symbol' ? null : [explanation(value, path, schema)]
     case SchemaType.Test:
-      return value =>
+      return (value, path) =>
         schema.tester.test(value) ? null : [explanation(value, path, schema)]
     case SchemaType.Custom:
-      return value => {
+      return (value, path) => {
         const { customValidator } = schema
         if (customValidator(value)) {
           return null
@@ -120,18 +125,17 @@ export function getExplanator(
       }
     case SchemaType.Variant:
       const explanators = schema.variants.map(variantSchema =>
-        getExplanator(variantSchema, path),
+        getExplanator(variantSchema),
       )
-      return value => {
+      return (value, path) => {
         const innerExplanations: IExplanation[] = []
         for (let i = 0; i < explanators.length; i++) {
           const explanator = explanators[i]
-          if (!explanator(value)) {
+          if (!explanator(value, path)) {
             return null
           }
         }
         return [explanation(value, path, schema, innerExplanations)]
       }
   }
-  return () => null
 }

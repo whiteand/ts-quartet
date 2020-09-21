@@ -35,26 +35,98 @@ export function returnExplanations(
     return statements
   }
   switch (schema.type) {
-    // case SchemaType.And:
+    case SchemaType.Variant:
+    case SchemaType.Not:
+    case SchemaType.Pair:
+      const explanator = getExplanator(schema)
+      const explanatorVar = alloc('variantExp', explanator)
+      const explanationsVar = alloc('exps', null)
+      return [
+        `${explanationsVar} = ${explanatorVar}(${valueVar}, ${pathVar})`,
+        `if (${explanationsVar}) {`,
+        `  return ${explanationsVar}`,
+        `}`,
+      ]
+    case SchemaType.And:
+      const andStatements: string[] = []
+      for (let i = 0; i < schema.schemas.length; i++) {
+        const innerSchema = schema.schemas[i]
+        andStatements.push(...returnExplanations(innerSchema, alloc, valueVar, pathVar))
+      }
+      return andStatements
     case SchemaType.Any:
       return []
-    // case SchemaType.Array:
-    // case SchemaType.ArrayOf:
-    // case SchemaType.Boolean:
-    // case SchemaType.Finite:
-    // case SchemaType.Function:
+    case SchemaType.Array:
+      return [
+        `if (!Array.isArray(${valueVar})) {`,
+        `  return [${renderExplanation(valueVar, pathVar, schema)}]`,
+        `}`,
+      ]
+    case SchemaType.ArrayOf:
+      const arrayOfStatements: string[] = []
+      arrayOfStatements.push(
+        `if (!Array.isArray(${valueVar})) return [${renderExplanation(
+          valueVar,
+          pathVar,
+          schema,
+        )}] `,
+      )
+      const indexVar = alloc('i', 0)
+      const newPathVar = alloc('np', [])
+      const elemVar = alloc('e', undefined)
+      arrayOfStatements.push(
+        `for (${indexVar} = 0; ${indexVar} < ${valueVar}.length; ${indexVar}++) {`,
+        `  ${elemVar} = ${valueVar}[${indexVar}]`,
+        `  ${newPathVar} = ${pathVar}.concat([${indexVar}])`,
+        ...returnExplanations(schema.elementSchema, alloc, elemVar, newPathVar),
+        `}`,
+      )
+
+      return arrayOfStatements
+    case SchemaType.Boolean:
+      return [
+        `if (typeof ${valueVar} !== 'boolean') {`,
+        `  return [${renderExplanation(valueVar, pathVar, schema)}]`,
+        `}`,
+      ]
+    case SchemaType.Finite:
+      return [
+        `if (!Number.isFinite(${valueVar})) {`,
+        `  return [${renderExplanation(valueVar, pathVar, schema)}]`,
+        `}`,
+      ]
+    case SchemaType.Function:
+      return [
+        `if (typeof ${valueVar} !== 'function') {`,
+        `  return [${renderExplanation(valueVar, pathVar, schema)}]`,
+        `}`,
+      ]
     // case SchemaType.Max:
     // case SchemaType.MaxLength:
     // case SchemaType.Min:
     // case SchemaType.MinLength:
-    // case SchemaType.Negative:
+    case SchemaType.Negative:
+      return [
+        `if (!(${valueVar} < 0)) {`,
+        `  return [${renderExplanation(valueVar, pathVar, schema)}]`,
+        `}`,
+      ]
     case SchemaType.Never:
       return [`return [${renderExplanation(valueVar, pathVar, schema)}]`]
-    // case SchemaType.Not:
-    // case SchemaType.NotANumber:
-    // case SchemaType.Number:
+    case SchemaType.NotANumber:
+      return [
+        `if (!Number.isNaN(${valueVar})) {`,
+        `  return [${renderExplanation(valueVar, pathVar, schema)}]`,
+        `}`,
+      ]
+    case SchemaType.Number:
+      return [
+        `if (typeof ${valueVar} !== 'number') {`,
+        `  return [${renderExplanation(valueVar, pathVar, schema)}]`,
+        `}`,
+      ]
     // case SchemaType.Object:
-    // case SchemaType.Pair:
+
     case SchemaType.Positive:
       return [
         `if (!(${valueVar} > 0)) {`,
@@ -87,9 +159,7 @@ export function returnExplanations(
         `  return [${renderExplanation(valueVar, pathVar, schema)}]`,
         `}`,
       ]
-    case SchemaType.Variant:
-      const variantExplanator = getExplanator(schema)
-      const explanatorVar = alloc('variantExp', variantExplanator)
+
     case SchemaType.Custom:
       const customValidatorVar = alloc('tester', schema.customValidator)
       return [
