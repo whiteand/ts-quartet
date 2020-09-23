@@ -1,8 +1,8 @@
 import { IExplanation } from '../../explanations'
+import { getAlloc } from '../../getAlloc'
+import { SchemaType } from '../../schemas/SchemaType'
 import { TSchema } from '../../types'
 import { explanation } from './explanation'
-import { SchemaType } from '../../schemas/SchemaType'
-import { getAlloc } from '../../getAlloc'
 import { returnExplanations } from './returnExplanations'
 
 export function getExplanator(
@@ -20,7 +20,7 @@ export function getExplanator(
       const pathParamName = 'path'
       const alloc = getAlloc(context, contextParamName)
       const funcBody = `
-        ${returnExplanations(schema, alloc, 'value', pathParamName).join('\n')}
+        ${returnExplanations(schema, alloc, 'value', pathParamName, []).join('\n')}
         return null
       `
       const explanator = new Function(
@@ -29,7 +29,8 @@ export function getExplanator(
         pathParamName,
         funcBody,
       ) as (value: any, context: any, path: KeyType[]) => null | IExplanation[]
-      return (value, path) => explanator(value, context, path)
+      return (value: any, path: KeyType[]) => explanator(value, context, path)
+
     case SchemaType.Any:
       return () => null
     case SchemaType.Array:
@@ -83,12 +84,8 @@ export function getExplanator(
       return (value, path) => [explanation(value, path, schema)]
     case SchemaType.Not:
       const oppositeExplanator = getExplanator(schema.schema)
-      return (value, path) => {
-        if (!oppositeExplanator(value, path)) {
-          return null
-        }
-        return [explanation(value, path, schema)]
-      }
+      return (value, path) =>
+        oppositeExplanator(value, path) ? null : [explanation(value, path, schema)]
     case SchemaType.NotANumber:
       return (value, path) =>
         Number.isNaN(value) ? null : [explanation(value, path, schema)]
@@ -131,9 +128,11 @@ export function getExplanator(
         const innerExplanations: IExplanation[] = []
         for (let i = 0; i < explanators.length; i++) {
           const explanator = explanators[i]
-          if (!explanator(value, path)) {
+          const innerExps = explanator(value, path)
+          if (!innerExps) {
             return null
           }
+          innerExplanations.push(...innerExps)
         }
         return [explanation(value, path, schema, innerExplanations)]
       }

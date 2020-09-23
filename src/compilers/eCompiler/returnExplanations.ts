@@ -1,57 +1,73 @@
-import { TSchema } from '../../types'
-import { explanation } from './explanation'
-import { IExplanation } from '../../explanations'
 import { SchemaType } from '../../schemas/SchemaType'
+import { TSchema } from '../../types'
+import { getAccessorWithAlloc, has } from '../../utils'
+import { explanation } from './explanation'
 import { getExplanator } from './getExplanator'
 
-const VALUE_TEMPLATE = 'quartet_@@value@@template_quartet'
-const PATH_TEMPLATE = 'quartet_@@PATH@@template_quartet'
-function renderExplanation(valueVar: string, pathVar: string, schema: TSchema): string {
-  const exp = explanation(VALUE_TEMPLATE, [PATH_TEMPLATE], schema)
-  const jsonExp = JSON.stringify(exp)
-  const withReplacedValue = jsonExp.split(`"${VALUE_TEMPLATE}"`).join(valueVar)
-  const withReplacedPathAndValue = withReplacedValue
-    .split(`["${PATH_TEMPLATE}"]`)
-    .join(pathVar)
-  return withReplacedPathAndValue
+function renderExplanation(
+  valueVar: string,
+  pathVar: string,
+  schema: TSchema,
+  alloc: (varName: string, initialValue: any, singleton?: boolean) => string,
+  innerExplanationsVar?: string,
+): string {
+  const getExpVar = alloc(
+    'e',
+    (value: any, path: KeyType[], innerExplanations: any[] = []) =>
+      explanation(value, path, schema, innerExplanations),
+  )
+
+  return innerExplanationsVar
+    ? `${getExpVar}(${valueVar}, ${pathVar}, ${innerExplanationsVar})`
+    : `${getExpVar}(${valueVar}, ${pathVar})`
 }
 
 export function returnExplanations(
   schema: TSchema,
-  alloc: (varName: string, initialValue: any) => string,
+  alloc: (varName: string, initialValue: any, singleton?: boolean) => string,
   valueVar: string,
   pathVar: string,
+  statementsBeforeInvalidReturn: string[],
 ): string[] {
+  const expsVar = alloc('es', [])
   if (typeof schema !== 'object' || schema === null) {
     const constantVar = alloc('c', schema)
     const statements: string[] = []
     statements.push(
-      `if (${valueVar} !== ${constantVar}) return [${renderExplanation(
-        valueVar,
-        pathVar,
-        schema,
-      )}]`,
+      `if (${valueVar} !== ${constantVar}) {`,
+      `${expsVar} = [${renderExplanation(valueVar, pathVar, schema, alloc)}]`,
+      ...statementsBeforeInvalidReturn,
+      `return ${expsVar}`,
+      '}',
     )
     return statements
   }
   switch (schema.type) {
-    case SchemaType.Variant:
     case SchemaType.Not:
+    case SchemaType.Variant:
     case SchemaType.Pair:
       const explanator = getExplanator(schema)
       const explanatorVar = alloc('variantExp', explanator)
-      const explanationsVar = alloc('exps', null)
       return [
-        `${explanationsVar} = ${explanatorVar}(${valueVar}, ${pathVar})`,
-        `if (${explanationsVar}) {`,
-        `  return ${explanationsVar}`,
+        `${expsVar} = ${explanatorVar}(${valueVar}, ${pathVar})`,
+        `if (${expsVar}) {`,
+        ...statementsBeforeInvalidReturn,
+        `  return ${expsVar}`,
         `}`,
       ]
     case SchemaType.And:
       const andStatements: string[] = []
       for (let i = 0; i < schema.schemas.length; i++) {
         const innerSchema = schema.schemas[i]
-        andStatements.push(...returnExplanations(innerSchema, alloc, valueVar, pathVar))
+        andStatements.push(
+          ...returnExplanations(
+            innerSchema,
+            alloc,
+            valueVar,
+            pathVar,
+            statementsBeforeInvalidReturn,
+          ),
+        )
       }
       return andStatements
     case SchemaType.Any:
@@ -59,26 +75,31 @@ export function returnExplanations(
     case SchemaType.Array:
       return [
         `if (!Array.isArray(${valueVar})) {`,
-        `  return [${renderExplanation(valueVar, pathVar, schema)}]`,
+        `${expsVar} = [${renderExplanation(valueVar, pathVar, schema, alloc)}]`,
+        ...statementsBeforeInvalidReturn,
+        `  return ${expsVar}`,
         `}`,
       ]
     case SchemaType.ArrayOf:
       const arrayOfStatements: string[] = []
       arrayOfStatements.push(
-        `if (!Array.isArray(${valueVar})) return [${renderExplanation(
-          valueVar,
-          pathVar,
-          schema,
-        )}] `,
+        `if (!Array.isArray(${valueVar})) {`,
+        `${expsVar} = [${renderExplanation(valueVar, pathVar, schema, alloc)}]`,
+        ...statementsBeforeInvalidReturn,
+        `  return ${expsVar}`,
+        `}`,
       )
       const indexVar = alloc('i', 0)
-      const newPathVar = alloc('np', [])
       const elemVar = alloc('e', undefined)
       arrayOfStatements.push(
         `for (${indexVar} = 0; ${indexVar} < ${valueVar}.length; ${indexVar}++) {`,
         `  ${elemVar} = ${valueVar}[${indexVar}]`,
-        `  ${newPathVar} = ${pathVar}.concat([${indexVar}])`,
-        ...returnExplanations(schema.elementSchema, alloc, elemVar, newPathVar),
+        `  ${pathVar}.push(${indexVar})`,
+        ...returnExplanations(schema.elementSchema, alloc, elemVar, pathVar, [
+          ...statementsBeforeInvalidReturn,
+          `  ${pathVar}.pop()`,
+        ]),
+        `  ${pathVar}.pop()`,
         `}`,
       )
 
@@ -86,69 +107,180 @@ export function returnExplanations(
     case SchemaType.Boolean:
       return [
         `if (typeof ${valueVar} !== 'boolean') {`,
-        `  return [${renderExplanation(valueVar, pathVar, schema)}]`,
+        `${expsVar} = [${renderExplanation(valueVar, pathVar, schema, alloc)}]`,
+        ...statementsBeforeInvalidReturn,
+        `  return ${expsVar}`,
         `}`,
       ]
     case SchemaType.Finite:
       return [
         `if (!Number.isFinite(${valueVar})) {`,
-        `  return [${renderExplanation(valueVar, pathVar, schema)}]`,
+        `${expsVar} = [${renderExplanation(valueVar, pathVar, schema, alloc)}]`,
+        ...statementsBeforeInvalidReturn,
+        `  return ${expsVar}`,
         `}`,
       ]
     case SchemaType.Function:
       return [
         `if (typeof ${valueVar} !== 'function') {`,
-        `  return [${renderExplanation(valueVar, pathVar, schema)}]`,
+        `${expsVar} = [${renderExplanation(valueVar, pathVar, schema, alloc)}]`,
+        ...statementsBeforeInvalidReturn,
+        `  return ${expsVar}`,
         `}`,
       ]
-    // case SchemaType.Max:
-    // case SchemaType.MaxLength:
-    // case SchemaType.Min:
-    // case SchemaType.MinLength:
+    case SchemaType.Max:
+      const maxValueVar = alloc('mv', schema.maxValue)
+      const cmpMax = schema.isExclusive ? '<' : '<='
+      return [
+        `if (!(${valueVar} ${cmpMax} ${maxValueVar})) {`,
+        `${expsVar} = [${renderExplanation(valueVar, pathVar, schema, alloc)}]`,
+        ...statementsBeforeInvalidReturn,
+        `  return ${expsVar}`,
+        `}`,
+      ]
+    case SchemaType.MaxLength:
+      const maxLengthVar = alloc('ml', schema.maxLength)
+      const cmpMaxLen = schema.isExclusive ? '<' : '<='
+      return [
+        `if (${valueVar} == null || !(${valueVar}.length ${cmpMaxLen} ${maxLengthVar})) {`,
+        `${expsVar} = [${renderExplanation(valueVar, pathVar, schema, alloc)}]`,
+        ...statementsBeforeInvalidReturn,
+        `  return ${expsVar}`,
+        `}`,
+      ]
+    case SchemaType.Min:
+      const minValueVar = alloc('mv', schema.minValue)
+      const cmpMin = schema.isExclusive ? '>' : '>='
+      return [
+        `if (!(${valueVar} ${cmpMin} ${minValueVar})) {`,
+        `${expsVar} = [${renderExplanation(valueVar, pathVar, schema, alloc)}]`,
+        ...statementsBeforeInvalidReturn,
+        `  return ${expsVar}`,
+        `}`,
+      ]
+    case SchemaType.MinLength:
+      const minLengthVar = alloc('ml', schema.minLength)
+      const cmpMinLen = schema.isExclusive ? '>' : '>='
+      return [
+        `if (${valueVar} == null || !(${valueVar}.length ${cmpMinLen} ${minLengthVar})) {`,
+        `${expsVar} = [${renderExplanation(valueVar, pathVar, schema, alloc)}]`,
+        ...statementsBeforeInvalidReturn,
+        `  return ${expsVar}`,
+        `}`,
+      ]
     case SchemaType.Negative:
       return [
         `if (!(${valueVar} < 0)) {`,
-        `  return [${renderExplanation(valueVar, pathVar, schema)}]`,
+        `${expsVar} = [${renderExplanation(valueVar, pathVar, schema, alloc)}]`,
+        ...statementsBeforeInvalidReturn,
+        `  return ${expsVar}`,
         `}`,
       ]
     case SchemaType.Never:
-      return [`return [${renderExplanation(valueVar, pathVar, schema)}]`]
+      return [
+        `${expsVar} = [${renderExplanation(valueVar, pathVar, schema, alloc)}]`,
+        ...statementsBeforeInvalidReturn,
+        `  return ${expsVar}`,
+      ]
     case SchemaType.NotANumber:
       return [
         `if (!Number.isNaN(${valueVar})) {`,
-        `  return [${renderExplanation(valueVar, pathVar, schema)}]`,
+        `${expsVar} = [${renderExplanation(valueVar, pathVar, schema, alloc)}]`,
+        ...statementsBeforeInvalidReturn,
+        `  return ${expsVar}`,
         `}`,
       ]
     case SchemaType.Number:
       return [
         `if (typeof ${valueVar} !== 'number') {`,
-        `  return [${renderExplanation(valueVar, pathVar, schema)}]`,
+        `${expsVar} = [${renderExplanation(valueVar, pathVar, schema, alloc)}]`,
+        ...statementsBeforeInvalidReturn,
+        `  return ${expsVar}`,
         `}`,
       ]
-    // case SchemaType.Object:
+    case SchemaType.Object:
+      const statements: string[] = []
+      statements.push(
+        `if (${valueVar} == null) {`,
+        `${expsVar} = [${renderExplanation(valueVar, pathVar, schema, alloc)}]`,
+        ...statementsBeforeInvalidReturn,
+        `  return ${expsVar}`,
+        `}`,
+      )
+      const { props, propsSchemas } = schema
+      for (let i = 0; i < props.length; i++) {
+        const prop = props[i]
+        const propSchema = propsSchemas[prop]
+
+        statements.push(
+          `${pathVar}.push(${JSON.stringify(prop)})`,
+          ...returnExplanations(
+            propSchema,
+            alloc,
+            `${valueVar}${getAccessorWithAlloc(prop, alloc)}`,
+            pathVar,
+            [...statementsBeforeInvalidReturn, `${pathVar}.pop()`],
+          ),
+          `${pathVar}.pop()`,
+        )
+      }
+
+      if (schema.hasRestValidator) {
+        const restPropsVar = alloc('rps', [])
+        const indexVar = alloc('i', 0)
+        const restPropVar = alloc('rp', '')
+        const restPropValueVar = alloc('rpv', undefined)
+        const hasVar = alloc('has', has, true)
+        const propsSchemasVar = alloc('ps', schema.propsSchemas)
+        const restOmitDictVar = alloc('rod', schema.restOmitDict)
+
+        statements.push(
+          `${restPropsVar} = Object.keys(${valueVar})`,
+          `for (${indexVar} = 0; ${indexVar} < ${restPropsVar}.length; ${indexVar}++) {`,
+          `  ${restPropVar} = ${restPropsVar}[${indexVar}]`,
+          `  if (${hasVar}(${propsSchemasVar}, ${restPropVar}) || ${restOmitDictVar}[${restPropVar}] === true) continue;`,
+          `  ${restPropValueVar} = ${valueVar}[${restPropVar}]`,
+          `  ${pathVar}.push(${restPropVar})`,
+          ...returnExplanations(schema.rest, alloc, restPropValueVar, pathVar, [
+            `${pathVar}.pop()`,
+          ]),
+          `${pathVar}.pop()`,
+          `}`,
+        )
+      }
+
+      return statements
 
     case SchemaType.Positive:
       return [
         `if (!(${valueVar} > 0)) {`,
-        `  return [${renderExplanation(valueVar, pathVar, schema)}]`,
+        `${expsVar} = [${renderExplanation(valueVar, pathVar, schema, alloc)}]`,
+        ...statementsBeforeInvalidReturn,
+        `  return ${expsVar}`,
         `}`,
       ]
     case SchemaType.SafeInteger:
       return [
         `if (!Number.isSafeInteger(${valueVar})) {`,
-        `  return [${renderExplanation(valueVar, pathVar, schema)}]`,
+        `${expsVar} = [${renderExplanation(valueVar, pathVar, schema, alloc)}]`,
+        ...statementsBeforeInvalidReturn,
+        `  return ${expsVar}`,
         `}`,
       ]
     case SchemaType.String:
       return [
         `if (typeof ${valueVar} !== 'string') {`,
-        `  return [${renderExplanation(valueVar, pathVar, schema)}]`,
+        `${expsVar} = [${renderExplanation(valueVar, pathVar, schema, alloc)}]`,
+        ...statementsBeforeInvalidReturn,
+        `  return ${expsVar}`,
         `}`,
       ]
     case SchemaType.Symbol:
       return [
         `if (typeof ${valueVar} !== 'symbol') {`,
-        `  return [${renderExplanation(valueVar, pathVar, schema)}]`,
+        `${expsVar} = [${renderExplanation(valueVar, pathVar, schema, alloc)}]`,
+        ...statementsBeforeInvalidReturn,
+        `  return ${expsVar}`,
         `}`,
       ]
 
@@ -156,7 +288,9 @@ export function returnExplanations(
       const testerVar = alloc('tester', schema.tester)
       return [
         `if (!${testerVar}.test(${valueVar})) {`,
-        `  return [${renderExplanation(valueVar, pathVar, schema)}]`,
+        `${expsVar} = [${renderExplanation(valueVar, pathVar, schema, alloc)}]`,
+        ...statementsBeforeInvalidReturn,
+        `  return ${expsVar}`,
         `}`,
       ]
 
@@ -164,7 +298,9 @@ export function returnExplanations(
       const customValidatorVar = alloc('tester', schema.customValidator)
       return [
         `if (!${customValidatorVar}(${valueVar})) {`,
-        `  return [${renderExplanation(valueVar, pathVar, schema)}]`,
+        `${expsVar} = [${renderExplanation(valueVar, pathVar, schema, alloc)}]`,
+        ...statementsBeforeInvalidReturn,
+        `  return ${expsVar}`,
         `}`,
       ]
   }
