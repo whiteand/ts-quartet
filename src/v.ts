@@ -1,4 +1,4 @@
-import { vCompiler } from "./compilers/vCompiler/vCompiler";
+import { vCompiler } from "./compilers/vCompiler";
 import { IQuartetInstance } from "./IQuartetInstance";
 import { methods } from "./methods";
 
