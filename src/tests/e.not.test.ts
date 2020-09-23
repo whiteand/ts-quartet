@@ -4,12 +4,14 @@ import { testValidatorImpure } from "./testValidatorImpure";
 
 describe("v.not", () => {
   test("v.not", () => {
+    const validator = v(v.not(false));
     testValidatorImpure(
-      v(v.not(false)),
+      validator,
       [null, [], {}, 1, 0, NaN, undefined, true],
       [false]
     );
-    expect(getExplanations(v(v.not(false)), false)).toEqual([
+
+    expect(getExplanations(validator, false)).toEqual([
       {
         path: [],
         schema: {

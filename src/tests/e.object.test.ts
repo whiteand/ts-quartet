@@ -697,7 +697,6 @@ describe("v({ ... })", () => {
     const checkPerson = v({
       name: v.string
     });
-
     expect(checkPerson({ name: 1 })).toBe(false); // false
     expect(checkPerson.explanations).toEqual([
       {

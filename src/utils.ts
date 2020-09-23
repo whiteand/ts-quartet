@@ -22,3 +22,30 @@ export function arrToDict<T extends string | number | symbol>(
 
   return res;
 }
+
+const isSimplePropRegex = /^[a-zA-Z_][_a-zA-Z0-9]*$/;
+export function getAccessor(prop: string | number) {
+  if (typeof prop === "number") {
+    return `[${prop}]`;
+  }
+  if (!isSimplePropRegex.test(prop)) {
+    return `[${JSON.stringify(prop)}]`;
+  }
+  return `.${prop}`;
+}
+export function getAccessorWithAlloc(
+  prop: string | number,
+  alloc: (varName: string, initialValue: any, singleton?: boolean) => string
+) {
+  if (typeof prop === "number") {
+    if (Number.isSafeInteger(prop)) {
+      return `[${prop}]`;
+    }
+    const propVar = alloc("c", prop);
+    return `[${propVar}]`;
+  }
+  if (!isSimplePropRegex.test(prop)) {
+    return `[${JSON.stringify(prop)}]`;
+  }
+  return `.${prop}`;
+}
