@@ -1,8 +1,8 @@
-import { returnExplanations } from './returnExplanations'
+import { returnExplanations } from "./returnExplanations";
 
-describe('return explanations', () => {
-  test('primitive', () => {
-    expect(returnExplanations(123, x => x, 'value', 'path', ['// todo']))
+describe("return explanations", () => {
+  test("primitive", () => {
+    expect(returnExplanations(123, x => x, "value", "path", ["// todo"]))
       .toMatchInlineSnapshot(`
       Array [
         "if (value !== c) {",
@@ -11,6 +11,6 @@ describe('return explanations', () => {
         "return es",
         "}",
       ]
-    `)
-  })
-})
+    `);
+  });
+});

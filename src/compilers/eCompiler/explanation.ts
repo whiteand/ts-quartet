@@ -12,6 +12,6 @@ export function explanation(
     value,
     schema: schemaToExplanationSchema(schema),
     path: [...path],
-    innerExplanations,
+    innerExplanations
   };
 }

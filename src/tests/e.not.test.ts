@@ -1,11 +1,15 @@
-import { e as v, ExplanationSchemaType } from '..'
-import { getExplanations } from './getExplanations'
-import { testValidatorImpure } from './testValidatorImpure'
+import { e as v, ExplanationSchemaType } from "..";
+import { getExplanations } from "./getExplanations";
+import { testValidatorImpure } from "./testValidatorImpure";
 
-describe('v.not', () => {
-  test('v.not', () => {
-    const validator = v(v.not(false))
-    testValidatorImpure(validator, [null, [], {}, 1, 0, NaN, undefined, true], [false])
+describe("v.not", () => {
+  test("v.not", () => {
+    const validator = v(v.not(false));
+    testValidatorImpure(
+      validator,
+      [null, [], {}, 1, 0, NaN, undefined, true],
+      [false]
+    );
 
     expect(getExplanations(validator, false)).toEqual([
       {
@@ -13,13 +17,13 @@ describe('v.not', () => {
         schema: {
           schema: {
             type: ExplanationSchemaType.Primitive,
-            value: false,
+            value: false
           },
-          type: ExplanationSchemaType.Not,
+          type: ExplanationSchemaType.Not
         },
         value: false,
-        innerExplanations: [],
-      },
-    ])
-  })
-})
+        innerExplanations: []
+      }
+    ]);
+  });
+});
