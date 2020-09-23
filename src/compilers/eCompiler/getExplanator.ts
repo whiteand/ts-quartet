@@ -143,7 +143,9 @@ export function getExplanator(
           if (!innerExps) {
             return null;
           }
-          innerExplanations.push(...innerExps);
+          for (let j = 0; j < innerExps.length; j++) {
+            innerExplanations.push(innerExps[j]);
+          }
         }
         return [explanation(value, path, schema, innerExplanations)];
       };

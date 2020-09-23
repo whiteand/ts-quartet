@@ -101,9 +101,11 @@ export function ifInvalidReturnFalse(
     case SchemaType.Number:
       return fromNegation(`typeof ${valueAddress} !== 'number'`);
     case SchemaType.Object:
-      const statements: string[] = [];
-      const checkIsNotNull = `if (${valueAddress} == null) return false`;
-      const checkEachDefinedPropStatements = schema.props.map(prop => {
+      const statements: string[] = [
+        `if (${valueAddress} == null) return false`
+      ];
+      for (let i = 0; i < schema.props.length; i++) {
+        const prop = schema.props[i];
         const propSchema = schema.propsSchemas[prop];
         const propAccessor = getAccessorWithAlloc(prop, alloc);
         const checkPropStatement = ifInvalidReturnFalse(
@@ -112,9 +114,8 @@ export function ifInvalidReturnFalse(
           `${valueAddress}${propAccessor}`,
           JSON.stringify(prop)
         );
-        return checkPropStatement;
-      });
-      statements.push(checkIsNotNull, ...checkEachDefinedPropStatements);
+        statements.push(checkPropStatement);
+      }
       if (schema.hasRestValidator) {
         const restOmitDictVar = alloc("ro", schema.restOmitDict);
         const restPropsVar = alloc("r", []);
