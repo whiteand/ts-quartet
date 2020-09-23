@@ -22,8 +22,6 @@ export function eCompileSchema<T = any>(schema: TSchema): CompilationResult<T, a
       return true
     }
   }
-  // TODO: Remove it
-  ;(validator as any).explanator = explanator
 
   return Object.assign(validator as Validator<T>, { explanations })
 }
