@@ -28,8 +28,7 @@ import { ITester, TCustomValidator } from "./types";
 
 export const methods = {
   and(...rawSchemas: RawSchema[]) {
-    const schemas = rawSchemas.map(rawSchemaToSchema);
-    return and(...schemas);
+    return and(rawSchemas.map(rawSchemaToSchema));
   },
   any: anySchema(),
   array: array(),

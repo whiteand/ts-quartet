@@ -9,5 +9,5 @@
     "downlevelIteration": true
   },
   "include": ["src", "src/index.d.ts"],
-  "exclude": ["node_modules", "**/__tests__/*", "examples"]
+  "exclude": ["node_modules", "**/__tests__/*", "**/*.test*", "examples"]
 }

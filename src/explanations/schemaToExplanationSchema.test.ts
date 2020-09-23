@@ -94,7 +94,7 @@ describe("schemaToExplanationSchema", () => {
             `);
   });
   test("and", () => {
-    const schema = and(safeInteger(), min(1, false), max(5, false));
+    const schema = and([safeInteger(), min(1, false), max(5, false)]);
     const explanationSchema = schemaToExplanationSchema(schema);
     expect(explanationSchema).toMatchInlineSnapshot(`
             Object {
