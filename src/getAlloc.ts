@@ -10,8 +10,8 @@ export function getAlloc(context: Record<string, any>, contextVar: string) {
       return `${contextVar}${getAccessor(prefix)}`;
     }
     if (singleton) {
-      if (prefixesCounters[prefix] !== initialValue) {
-        throw new Error("Wrong strict usage");
+      if (context[prefix] !== initialValue) {
+        throw new Error("Wrong singleton usage");
       }
       return `${contextVar}${getAccessor(prefix)}`;
     }
