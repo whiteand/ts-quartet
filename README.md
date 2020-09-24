@@ -813,7 +813,7 @@ suite
       ajvValidator(negative[i])
     }
   })
-  .add('Quartet 9: Allegro', function() {
+  .add('Quartet 10', function() {
     for (let i = 0; i < positive.length; i++) {
       validator(positive[i])
     }
