@@ -35,6 +35,32 @@ describe("v.and(...)", () => {
       ]
     );
   });
+  test("v.and(v.safeInteger, v.and(v.min(1), v.max(5)))", () => {
+    const checkRating = v(v.and(v.safeInteger, v.and(v.min(1), v.max(5))));
+    testValidatorImpure(
+      checkRating,
+      [1, 2, 3, 4, 5],
+      [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        [1],
+        ["1"],
+        [2],
+        ["2"],
+        [5],
+        ["5"],
+        10,
+        0,
+        NaN,
+        Infinity,
+        -Infinity,
+        1.5
+      ]
+    );
+  });
   test("v.and fast path", () => {
     let flag = true;
     const validator = v(

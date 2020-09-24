@@ -709,4 +709,22 @@ describe("v({ ... })", () => {
       }
     ]);
   });
+  test("nested objects", () => {
+    const validator = v({
+      p: {
+        name: v.string
+      }
+    });
+    expect(validator({ p: { name: 1 } })).toBe(false); // false
+    expect(validator.explanations).toEqual([
+      {
+        path: ["p", "name"],
+        innerExplanations: [],
+        schema: {
+          type: "String"
+        },
+        value: 1
+      }
+    ]);
+  });
 });

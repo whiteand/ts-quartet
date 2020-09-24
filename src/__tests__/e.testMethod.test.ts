@@ -122,4 +122,101 @@ describe("v.test", () => {
       }
     ]);
   });
+  test("{ a: v.test }", () => {
+    const tester = /^a/;
+    const validator = v({ a: v.test(tester) });
+    testValidatorImpure(
+      validator,
+      ["a", "andrew"].map(a => ({ a })),
+      ["A", null, false, [], {}, 1, 0, NaN, undefined, true].map(a => ({ a }))
+    );
+    expect(getExplanations(validator, { a: "A" })).toEqual([
+      {
+        path: ["a"],
+        innerExplanations: [],
+        schema: {
+          tester,
+          type: ExplanationSchemaType.Test
+        },
+        value: "A"
+      }
+    ]);
+    expect(getExplanations(validator, { a: false })).toEqual([
+      {
+        path: ["a"],
+        innerExplanations: [],
+        schema: {
+          tester,
+          type: ExplanationSchemaType.Test
+        },
+        value: false
+      }
+    ]);
+    expect(getExplanations(validator, { a: [] })).toEqual([
+      {
+        path: ["a"],
+        innerExplanations: [],
+        schema: {
+          tester,
+          type: ExplanationSchemaType.Test
+        },
+        value: []
+      }
+    ]);
+    expect(getExplanations(validator, { a: {} })).toEqual([
+      {
+        path: ["a"],
+        innerExplanations: [],
+        schema: {
+          tester,
+          type: ExplanationSchemaType.Test
+        },
+        value: {}
+      }
+    ]);
+    expect(getExplanations(validator, { a: 1 })).toEqual([
+      {
+        path: ["a"],
+        innerExplanations: [],
+        schema: {
+          tester,
+          type: ExplanationSchemaType.Test
+        },
+        value: 1
+      }
+    ]);
+    expect(getExplanations(validator, { a: 0 })).toEqual([
+      {
+        path: ["a"],
+        innerExplanations: [],
+        schema: {
+          tester,
+          type: ExplanationSchemaType.Test
+        },
+        value: 0
+      }
+    ]);
+    expect(getExplanations(validator, { a: NaN })).toEqual([
+      {
+        path: ["a"],
+        innerExplanations: [],
+        schema: {
+          tester,
+          type: ExplanationSchemaType.Test
+        },
+        value: NaN
+      }
+    ]);
+    expect(getExplanations(validator, { a: true })).toEqual([
+      {
+        path: ["a"],
+        innerExplanations: [],
+        schema: {
+          tester,
+          type: ExplanationSchemaType.Test
+        },
+        value: true
+      }
+    ]);
+  });
 });
