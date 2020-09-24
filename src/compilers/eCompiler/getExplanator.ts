@@ -2,9 +2,9 @@ import { IExplanation } from "../../explanations";
 import { getAlloc } from "../../getAlloc";
 import { SchemaType } from "../../schemas/SchemaType";
 import { TSchema } from "../../types";
+import { beautifyStatements } from "../beautifyStatements";
 import { explanation } from "./explanation";
 import { returnExplanations } from "./returnExplanations";
-
 export function getExplanator(
   schema: TSchema
 ): (value: any, path: KeyType[]) => null | IExplanation[] {
@@ -20,12 +20,17 @@ export function getExplanator(
       const contextParamName = "ctx";
       const pathParamName = "path";
       const alloc = getAlloc(context, contextParamName);
-      const funcBody = `
-        ${returnExplanations(schema, alloc, "value", pathParamName, []).join(
-          "\n"
-        )}
-        return null
-      `;
+      const statements = returnExplanations(
+        schema,
+        alloc,
+        "value",
+        pathParamName,
+        []
+      );
+      const funcBody = `${beautifyStatements(statements).join(
+        "\n"
+      )}\n  return null`;
+
       const explanator = new Function(
         "value",
         contextParamName,

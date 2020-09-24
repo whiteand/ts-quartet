@@ -1,6 +1,7 @@
 import { getAlloc } from "../../getAlloc";
 import { SchemaType } from "../../schemas/SchemaType";
 import { TSchema } from "../../types";
+import { beautifyStatements } from "../beautifyStatements";
 import { ifInvalidReturnFalse } from "./ifInvalidReturnFalse";
 
 export function getValidatorFromSchema(
@@ -17,10 +18,9 @@ export function getValidatorFromSchema(
       const context: Record<string, any> = {};
       const contextParamName = "ctx";
       const alloc = getAlloc(context, contextParamName);
-      const funcBody = `
-        ${ifInvalidReturnFalse(schema, alloc, "value", key)}
-        return true
-      `;
+      const funcBody = `${beautifyStatements([
+        ifInvalidReturnFalse(schema, alloc, "value", key)
+      ]).join("\n")}\n  return true`;
       const isValid = new Function("value", contextParamName, funcBody) as (
         value: any,
         context: any
