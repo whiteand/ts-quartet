@@ -58,41 +58,39 @@ export function ifInvalidReturnFalse(
       return fromNegation(`typeof ${valueAddress} !== 'function'`);
     case SchemaType.Max:
       const maxValueVar = alloc("maxValue", schema.maxValue);
-
-      return schema.isExclusive
-        ? fromNegation(`${valueAddress} >= ${maxValueVar}`)
-        : fromNegation(`${valueAddress} > ${maxValueVar}`);
+      const cmpMax = schema.isExclusive ? "<" : "<=";
+      return fromNegation(`!(${valueAddress} ${cmpMax} ${maxValueVar})`);
     case SchemaType.MaxLength:
       const maxLengthVar = alloc("maxLength", schema.maxLength);
-
-      return schema.isExclusive
-        ? fromNegation(
-            `${valueAddress} == null || ${valueAddress}.length >= ${maxLengthVar}`
-          )
-        : fromNegation(
-            `${valueAddress} == null || ${valueAddress}.length > ${maxLengthVar}`
-          );
+      const cmpMaxLength = schema.isExclusive ? "<" : "<=";
+      return fromNegation(
+        `${valueAddress} == null || !(${valueAddress}.length ${cmpMaxLength} ${maxLengthVar})`
+      );
     case SchemaType.Min:
       const minValueVar = alloc("minValue", schema.minValue);
-
-      return schema.isExclusive
-        ? fromNegation(`${valueAddress} <= ${minValueVar}`)
-        : fromNegation(`${valueAddress} < ${minValueVar}`);
+      const cmpMin = schema.isExclusive ? ">" : ">=";
+      return fromNegation(`!(${valueAddress} ${cmpMin} ${minValueVar})`);
     case SchemaType.MinLength:
       const minLengthVar = alloc("minLength", schema.minLength);
-
-      return schema.isExclusive
-        ? fromNegation(
-            `${valueAddress} == null || ${valueAddress}.length <= ${minLengthVar}`
-          )
-        : fromNegation(
-            `${valueAddress} == null || ${valueAddress}.length < ${minLengthVar}`
-          );
+      const cmp = schema.isExclusive ? ">" : ">=";
+      return fromNegation(
+        `${valueAddress} == null || !(${valueAddress}.length ${cmp} ${minLengthVar})`
+      );
     case SchemaType.Negative:
-      return fromNegation(`${valueAddress} >= 0`);
+      return fromNegation(`!(${valueAddress} < 0)`);
     case SchemaType.Never:
       return "return false";
     case SchemaType.Not:
+      if (typeof schema.schema !== "object" || schema.schema === null) {
+        if (schema.schema === null) {
+          return fromNegation(`${valueAddress} === null`);
+        }
+        if (schema.schema === undefined) {
+          return fromNegation(`${valueAddress} === undefined`);
+        }
+        const primitiveValueAddress = alloc("primitive", schema.schema);
+        return fromNegation(`${valueAddress} === ${primitiveValueAddress}`);
+      }
       const isValid = getValidatorFromSchema(schema.schema, keyAddress);
       const isValidVar = alloc("isValid", isValid);
       return `if (${isValidVar}(${valueAddress})) return false`;
@@ -153,7 +151,7 @@ export function ifInvalidReturnFalse(
         )}`
       ].join("\n");
     case SchemaType.Positive:
-      return fromNegation(`${valueAddress} <= 0`);
+      return fromNegation(`!(${valueAddress} > 0)`);
     case SchemaType.SafeInteger:
       return fromNegation(`!Number.isSafeInteger(${valueAddress})`);
     case SchemaType.String:
@@ -170,7 +168,5 @@ export function ifInvalidReturnFalse(
     case SchemaType.Custom:
       const customVar = alloc("custom", schema.customValidator);
       return fromNegation(`!${customVar}(${valueAddress})`);
-    default:
-      throw new Error("Not implemented");
   }
 }

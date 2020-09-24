@@ -34,4 +34,12 @@ describe("v([...])", () => {
     validator(1);
     expect(flag).toBeTruthy();
   });
+  test("v({ a: [1, 2] })", () => {
+    const validator = v({ a: [1, 2] });
+    testValidator(
+      validator,
+      [{ a: 1 }, { a: 2 }, { a: 1, b: 2 }, { a: 2, b: 3 }],
+      [{}, null, undefined, { a: "1" }, { a: "2" }]
+    );
+  });
 });

@@ -279,5 +279,4 @@ export function returnExplanations(
         `${expsVar} = [${renderExplanation(valueVar, pathVar, schema, alloc)}]`
       ].concat(statementsBeforeInvalidReturn, [`return ${expsVar}`, `}`]);
   }
-  return [];
 }

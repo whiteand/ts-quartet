@@ -9,4 +9,21 @@ describe("v.test", () => {
       ["A", null, false, [], {}, 1, 0, NaN, undefined, true]
     );
   });
+  test("{ a: v.test }", () => {
+    testValidator(v({ a: v.test(/^a/) }), ["a", "andrew"].map(a => ({ a })), [
+      "A",
+      null,
+      false,
+      [],
+      {},
+      1,
+      0,
+      NaN,
+      undefined,
+      true,
+      ...["A", null, false, [], {}, 1, 0, NaN, undefined, true].map(a => ({
+        a
+      }))
+    ]);
+  });
 });

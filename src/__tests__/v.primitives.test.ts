@@ -18,6 +18,14 @@ describe("v(primitive)", () => {
       [null, true, false, 0, "0", Infinity, -Infinity, 0 / 0, {}, []]
     );
   });
+  test("v({ a: undefined })", () => {
+    const validator = v({ a: undefined });
+    testValidator(
+      validator,
+      [{}, { a: undefined }],
+      [null, undefined, { a: 1 }, { a: "null" }, { a: "undefined" }]
+    );
+  });
   test("v(true)", () => {
     const validator = v(true);
     testValidator(
@@ -40,6 +48,39 @@ describe("v(primitive)", () => {
       validator,
       [NaN],
       [null, undefined, true, false, 0, "0", Infinity, -Infinity, {}, []]
+    );
+  });
+  test("v({ a: NaN })", () => {
+    const validator = v({ a: NaN });
+    testValidator(
+      validator,
+      [{ a: NaN }, { a: NaN, b: 1 }],
+      [
+        null,
+        undefined,
+        true,
+        false,
+        0,
+        "0",
+        Infinity,
+        -Infinity,
+        {},
+        [],
+        ...[
+          null,
+          undefined,
+          true,
+          false,
+          0,
+          "0",
+          Infinity,
+          -Infinity,
+          {},
+          []
+        ].map(a => ({
+          a
+        }))
+      ]
     );
   });
   test("v(0)", () => {
