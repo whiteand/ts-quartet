@@ -51,4 +51,51 @@ describe("v.array", () => {
       ]
     );
   });
+  test("{ a: v.array }", () => {
+    testValidatorWithExplanations(
+      v({ a: v.array }),
+      [[], [1, 2, "3"]].map(a => ({ a })),
+      [
+        [
+          { a: {} },
+          [
+            {
+              value: {},
+              path: ["a"],
+              innerExplanations: [],
+              schema: {
+                type: ExplanationSchemaType.Array
+              }
+            }
+          ]
+        ],
+        [
+          { a: { length: 10 } },
+          [
+            {
+              value: { length: 10 },
+              path: ["a"],
+              innerExplanations: [],
+              schema: {
+                type: ExplanationSchemaType.Array
+              }
+            }
+          ]
+        ],
+        [
+          { a: "Andrew" },
+          [
+            {
+              value: "Andrew",
+              path: ["a"],
+              innerExplanations: [],
+              schema: {
+                type: ExplanationSchemaType.Array
+              }
+            }
+          ]
+        ]
+      ]
+    );
+  });
 });

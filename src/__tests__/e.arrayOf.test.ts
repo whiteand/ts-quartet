@@ -80,6 +80,85 @@ describe("v.arrayOf", () => {
       }
     ]);
   });
+  test("{ a: v.arrayOf(v.number) }", () => {
+    const validator = v({ a: v.arrayOf(v.number) });
+    testValidatorWithExplanations(
+      validator,
+      [[], [1, NaN, 2]].map(a => ({ a })),
+      []
+    );
+    expect(getExplanations(validator, { a: [1, 2, "3"] })).toEqual([
+      {
+        path: ["a", 2],
+        innerExplanations: [],
+        schema: {
+          type: ExplanationSchemaType.Number
+        },
+        value: "3"
+      }
+    ]);
+    expect(getExplanations(validator, { a: ["3"] })).toEqual([
+      {
+        path: ["a", 0],
+        innerExplanations: [],
+        schema: {
+          type: ExplanationSchemaType.Number
+        },
+        value: "3"
+      }
+    ]);
+    expect(getExplanations(validator, { a: [[1]] })).toEqual([
+      {
+        path: ["a", 0],
+        innerExplanations: [],
+        schema: {
+          type: ExplanationSchemaType.Number
+        },
+        value: [1]
+      }
+    ]);
+    expect(getExplanations(validator, { a: {} })).toEqual([
+      {
+        path: ["a"],
+        innerExplanations: [],
+        schema: {
+          elementSchema: {
+            type: ExplanationSchemaType.Number
+          },
+          type: ExplanationSchemaType.ArrayOf
+        },
+        value: {}
+      }
+    ]);
+    expect(getExplanations(validator, { a: { length: 10 } })).toEqual([
+      {
+        path: ["a"],
+        innerExplanations: [],
+        schema: {
+          elementSchema: {
+            type: ExplanationSchemaType.Number
+          },
+          type: ExplanationSchemaType.ArrayOf
+        },
+        value: {
+          length: 10
+        }
+      }
+    ]);
+    expect(getExplanations(validator, { a: "Andrew" })).toEqual([
+      {
+        path: ["a"],
+        innerExplanations: [],
+        schema: {
+          elementSchema: {
+            type: ExplanationSchemaType.Number
+          },
+          type: ExplanationSchemaType.ArrayOf
+        },
+        value: "Andrew"
+      }
+    ]);
+  });
   test("v.arrayOf(v.pair)", () => {
     const customValidator = ({ key, value }: { key: number; value: any }) => {
       return value === key * key;

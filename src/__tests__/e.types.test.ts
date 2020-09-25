@@ -303,6 +303,108 @@ describe("v.[type]", () => {
       }
     ]);
   });
+  test("{ a: v.finite }", () => {
+    const checkFinite = v({ a: v.finite });
+    testValidatorImpure(
+      checkFinite,
+      [1, 0, 1.5, -1].map(a => ({ a })),
+      [
+        "1",
+        Infinity,
+        -Infinity,
+        NaN,
+        null,
+        undefined,
+        {},
+        [],
+        {
+          valueOf() {
+            return 1;
+          }
+        }
+      ].map(a => ({ a }))
+    );
+    expect(getExplanations(checkFinite, { a: "1" })).toEqual([
+      {
+        path: ["a"],
+        innerExplanations: [],
+        schema: {
+          type: ExplanationSchemaType.Finite
+        },
+        value: "1"
+      }
+    ]);
+    expect(getExplanations(checkFinite, { a: Infinity })).toEqual([
+      {
+        path: ["a"],
+        innerExplanations: [],
+        schema: {
+          type: ExplanationSchemaType.Finite
+        },
+        value: Infinity
+      }
+    ]);
+    expect(getExplanations(checkFinite, { a: -Infinity })).toEqual([
+      {
+        path: ["a"],
+        innerExplanations: [],
+        schema: {
+          type: ExplanationSchemaType.Finite
+        },
+        value: -Infinity
+      }
+    ]);
+    expect(getExplanations(checkFinite, { a: NaN })).toEqual([
+      {
+        path: ["a"],
+        innerExplanations: [],
+        schema: {
+          type: ExplanationSchemaType.Finite
+        },
+        value: NaN
+      }
+    ]);
+    expect(getExplanations(checkFinite, { a: null })).toEqual([
+      {
+        path: ["a"],
+        innerExplanations: [],
+        schema: {
+          type: ExplanationSchemaType.Finite
+        },
+        value: null
+      }
+    ]);
+    expect(getExplanations(checkFinite, { a: undefined })).toEqual([
+      {
+        path: ["a"],
+        innerExplanations: [],
+        schema: {
+          type: ExplanationSchemaType.Finite
+        },
+        value: undefined
+      }
+    ]);
+    expect(getExplanations(checkFinite, { a: {} })).toEqual([
+      {
+        path: ["a"],
+        innerExplanations: [],
+        schema: {
+          type: ExplanationSchemaType.Finite
+        },
+        value: {}
+      }
+    ]);
+    expect(getExplanations(checkFinite, { a: [] })).toEqual([
+      {
+        path: ["a"],
+        innerExplanations: [],
+        schema: {
+          type: ExplanationSchemaType.Finite
+        },
+        value: []
+      }
+    ]);
+  });
   test("v.safeInteger", () => {
     const checkSafeInteger = v(v.safeInteger);
     testValidatorImpure(
