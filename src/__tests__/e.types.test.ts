@@ -562,6 +562,50 @@ describe("v.[type]", () => {
       }
     ]);
   });
+  test("{ a: v.function }", () => {
+    const checkFunction = v({ a: v.function });
+    testValidatorImpure(
+      checkFunction,
+      [
+        () => true,
+        function() {
+          return true;
+        },
+        new Function("return true")
+      ].map(a => ({ a })),
+      [1, null, undefined].map(a => ({ a }))
+    );
+    expect(getExplanations(checkFunction, { a: 1 })).toEqual([
+      {
+        path: ["a"],
+        innerExplanations: [],
+        schema: {
+          type: ExplanationSchemaType.Function
+        },
+        value: 1
+      }
+    ]);
+    expect(getExplanations(checkFunction, { a: null })).toEqual([
+      {
+        path: ["a"],
+        innerExplanations: [],
+        schema: {
+          type: ExplanationSchemaType.Function
+        },
+        value: null
+      }
+    ]);
+    expect(getExplanations(checkFunction, { a: undefined })).toEqual([
+      {
+        path: ["a"],
+        innerExplanations: [],
+        schema: {
+          type: ExplanationSchemaType.Function
+        },
+        value: undefined
+      }
+    ]);
+  });
   test("v.symbol", () => {
     const checkSymbol = v(v.symbol);
     testValidatorImpure(

@@ -47,7 +47,51 @@ describe("v.min, v.max, v.minLength, v.maxLength", () => {
       }
     ]);
   });
-  test("v.min exclusive", () => {
+  test("{ a: v.min }", () => {
+    const checkNonNegative = v({ a: v.min(0) });
+    testValidatorImpure(
+      checkNonNegative,
+      [0, 1, 2, 3.1415926, Infinity, [0], ["0"]].map(a => ({ a })),
+      [-1, "-1", [-1]].map(a => ({ a }))
+    );
+    expect(getExplanations(checkNonNegative, { a: -1 })).toEqual([
+      {
+        path: ["a"],
+        innerExplanations: [],
+        schema: {
+          isExclusive: false,
+          minValue: 0,
+          type: ExplanationSchemaType.Min
+        },
+        value: -1
+      }
+    ]);
+    expect(getExplanations(checkNonNegative, { a: "-1" })).toEqual([
+      {
+        path: ["a"],
+        innerExplanations: [],
+        schema: {
+          isExclusive: false,
+          minValue: 0,
+          type: ExplanationSchemaType.Min
+        },
+        value: "-1"
+      }
+    ]);
+    expect(getExplanations(checkNonNegative, { a: [-1] })).toEqual([
+      {
+        path: ["a"],
+        innerExplanations: [],
+        schema: {
+          isExclusive: false,
+          minValue: 0,
+          type: ExplanationSchemaType.Min
+        },
+        value: [-1]
+      }
+    ]);
+  });
+  test("v.min exclusive ", () => {
     const checkPositive = v(v.min(0, true));
     testValidatorImpure(
       checkPositive,
@@ -117,6 +161,86 @@ describe("v.min, v.max, v.minLength, v.maxLength", () => {
     expect(getExplanations(checkPositive, ["0"])).toEqual([
       {
         path: [],
+        innerExplanations: [],
+        schema: {
+          isExclusive: true,
+          minValue: 0,
+          type: ExplanationSchemaType.Min
+        },
+        value: ["0"]
+      }
+    ]);
+  });
+  test("{ a: v.min exclusive }", () => {
+    const checkPositive = v({ a: v.min(0, true) });
+    testValidatorImpure(
+      checkPositive,
+      [1, 2, 3.1415926, Infinity, [1], "1", ["1"]].map(a => ({ a })),
+      [0, -1, "-1", [-1], [0], ["0"]].map(a => ({ a }))
+    );
+    expect(getExplanations(checkPositive, { a: 0 })).toEqual([
+      {
+        path: ["a"],
+        innerExplanations: [],
+        schema: {
+          isExclusive: true,
+          minValue: 0,
+          type: ExplanationSchemaType.Min
+        },
+        value: 0
+      }
+    ]);
+    expect(getExplanations(checkPositive, { a: -1 })).toEqual([
+      {
+        path: ["a"],
+        innerExplanations: [],
+        schema: {
+          isExclusive: true,
+          minValue: 0,
+          type: ExplanationSchemaType.Min
+        },
+        value: -1
+      }
+    ]);
+    expect(getExplanations(checkPositive, { a: "-1" })).toEqual([
+      {
+        path: ["a"],
+        innerExplanations: [],
+        schema: {
+          isExclusive: true,
+          minValue: 0,
+          type: ExplanationSchemaType.Min
+        },
+        value: "-1"
+      }
+    ]);
+    expect(getExplanations(checkPositive, { a: [-1] })).toEqual([
+      {
+        path: ["a"],
+        innerExplanations: [],
+        schema: {
+          isExclusive: true,
+          minValue: 0,
+          type: ExplanationSchemaType.Min
+        },
+        value: [-1]
+      }
+    ]);
+    expect(getExplanations(checkPositive, { a: [0] })).toEqual([
+      {
+        path: ["a"],
+        innerExplanations: [],
+        schema: {
+          isExclusive: true,
+          minValue: 0,
+          type: ExplanationSchemaType.Min
+        },
+        value: [0]
+      }
+    ]);
+    expect(getExplanations(checkPositive, { a: ["0"] })).toEqual([
+      {
+        path: ["a"],
         innerExplanations: [],
         schema: {
           isExclusive: true,
@@ -321,6 +445,98 @@ describe("v.min, v.max, v.minLength, v.maxLength", () => {
     expect(getExplanations(validator, true)).toEqual([
       {
         path: [],
+        innerExplanations: [],
+        schema: {
+          isExclusive: false,
+          minLength: 2,
+          type: ExplanationSchemaType.MinLength
+        },
+        value: true
+      }
+    ]);
+  });
+  test("{ a: v.minLength }", () => {
+    const validator = v({ a: v.minLength(2) });
+    testValidatorImpure(
+      validator,
+      ["ab", [1, 2], { length: 3 }].map(a => ({ a })),
+      ["a", [1], {}, null, undefined, false, true].map(a => ({ a }))
+    );
+    expect(getExplanations(validator, { a: "a" })).toEqual([
+      {
+        path: ["a"],
+        innerExplanations: [],
+        schema: {
+          isExclusive: false,
+          minLength: 2,
+          type: ExplanationSchemaType.MinLength
+        },
+        value: "a"
+      }
+    ]);
+    expect(getExplanations(validator, { a: [1] })).toEqual([
+      {
+        path: ["a"],
+        innerExplanations: [],
+        schema: {
+          isExclusive: false,
+          minLength: 2,
+          type: ExplanationSchemaType.MinLength
+        },
+        value: [1]
+      }
+    ]);
+    expect(getExplanations(validator, { a: {} })).toEqual([
+      {
+        path: ["a"],
+        innerExplanations: [],
+        schema: {
+          isExclusive: false,
+          minLength: 2,
+          type: ExplanationSchemaType.MinLength
+        },
+        value: {}
+      }
+    ]);
+    expect(getExplanations(validator, { a: null })).toEqual([
+      {
+        path: ["a"],
+        innerExplanations: [],
+        schema: {
+          isExclusive: false,
+          minLength: 2,
+          type: ExplanationSchemaType.MinLength
+        },
+        value: null
+      }
+    ]);
+    expect(getExplanations(validator, { a: undefined })).toEqual([
+      {
+        path: ["a"],
+        innerExplanations: [],
+        schema: {
+          isExclusive: false,
+          minLength: 2,
+          type: ExplanationSchemaType.MinLength
+        },
+        value: undefined
+      }
+    ]);
+    expect(getExplanations(validator, { a: false })).toEqual([
+      {
+        path: ["a"],
+        innerExplanations: [],
+        schema: {
+          isExclusive: false,
+          minLength: 2,
+          type: ExplanationSchemaType.MinLength
+        },
+        value: false
+      }
+    ]);
+    expect(getExplanations(validator, { a: true })).toEqual([
+      {
+        path: ["a"],
         innerExplanations: [],
         schema: {
           isExclusive: false,
@@ -543,6 +759,120 @@ describe("v.min, v.max, v.minLength, v.maxLength", () => {
     expect(getExplanations(checkTwoMinusLength, true)).toEqual([
       {
         path: [],
+        innerExplanations: [],
+        schema: {
+          isExclusive: false,
+          maxLength: 2,
+          type: ExplanationSchemaType.MaxLength
+        },
+        value: true
+      }
+    ]);
+  });
+  test("{ a: v.maxLength }", () => {
+    const vMaxLengthPropAValidator = v({ a: v.maxLength(2) });
+    testValidatorImpure(
+      vMaxLengthPropAValidator,
+      ["ab", [1, 2], "a", [1]].map(a => ({ a })),
+      ["abc", [1, 2, 3], { length: 3 }, {}, null, undefined, false, true].map(
+        a => ({ a })
+      )
+    );
+    expect(getExplanations(vMaxLengthPropAValidator, { a: "abc" })).toEqual([
+      {
+        path: ["a"],
+        innerExplanations: [],
+        schema: {
+          isExclusive: false,
+          maxLength: 2,
+          type: ExplanationSchemaType.MaxLength
+        },
+        value: "abc"
+      }
+    ]);
+    expect(getExplanations(vMaxLengthPropAValidator, { a: [1, 2, 3] })).toEqual(
+      [
+        {
+          path: ["a"],
+          innerExplanations: [],
+          schema: {
+            isExclusive: false,
+            maxLength: 2,
+            type: ExplanationSchemaType.MaxLength
+          },
+          value: [1, 2, 3]
+        }
+      ]
+    );
+    expect(
+      getExplanations(vMaxLengthPropAValidator, { a: { length: 3 } })
+    ).toEqual([
+      {
+        path: ["a"],
+        innerExplanations: [],
+        schema: {
+          isExclusive: false,
+          maxLength: 2,
+          type: ExplanationSchemaType.MaxLength
+        },
+        value: {
+          length: 3
+        }
+      }
+    ]);
+    expect(getExplanations(vMaxLengthPropAValidator, { a: {} })).toEqual([
+      {
+        path: ["a"],
+        innerExplanations: [],
+        schema: {
+          isExclusive: false,
+          maxLength: 2,
+          type: ExplanationSchemaType.MaxLength
+        },
+        value: {}
+      }
+    ]);
+    expect(getExplanations(vMaxLengthPropAValidator, { a: null })).toEqual([
+      {
+        path: ["a"],
+        innerExplanations: [],
+        schema: {
+          isExclusive: false,
+          maxLength: 2,
+          type: ExplanationSchemaType.MaxLength
+        },
+        value: null
+      }
+    ]);
+    expect(getExplanations(vMaxLengthPropAValidator, { a: undefined })).toEqual(
+      [
+        {
+          path: ["a"],
+          innerExplanations: [],
+          schema: {
+            isExclusive: false,
+            maxLength: 2,
+            type: ExplanationSchemaType.MaxLength
+          },
+          value: undefined
+        }
+      ]
+    );
+    expect(getExplanations(vMaxLengthPropAValidator, { a: false })).toEqual([
+      {
+        path: ["a"],
+        innerExplanations: [],
+        schema: {
+          isExclusive: false,
+          maxLength: 2,
+          type: ExplanationSchemaType.MaxLength
+        },
+        value: false
+      }
+    ]);
+    expect(getExplanations(vMaxLengthPropAValidator, { a: true })).toEqual([
+      {
+        path: ["a"],
         innerExplanations: [],
         schema: {
           isExclusive: false,
