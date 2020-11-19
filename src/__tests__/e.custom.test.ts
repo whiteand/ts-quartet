@@ -25,17 +25,17 @@ describe("e.custom", () => {
                 path: [],
                 innerExplanations: [],
                 schema: {
-                  type: ExplanationSchemaType.Number,
+                  type: ExplanationSchemaType.Number
                 },
-                value: "1",
-              },
+                value: "1"
+              }
             ],
-            type: ExplanationSchemaType.Custom,
+            type: ExplanationSchemaType.Custom
           },
-          type: ExplanationSchemaType.ArrayOf,
+          type: ExplanationSchemaType.ArrayOf
         },
-        value: null,
-      },
+        value: null
+      }
     ]);
     expect(getExplanations(checkArrNumber, false)).toEqual([
       {
@@ -49,17 +49,17 @@ describe("e.custom", () => {
                 path: [],
                 innerExplanations: [],
                 schema: {
-                  type: ExplanationSchemaType.Number,
+                  type: ExplanationSchemaType.Number
                 },
-                value: "1",
-              },
+                value: "1"
+              }
             ],
-            type: ExplanationSchemaType.Custom,
+            type: ExplanationSchemaType.Custom
           },
-          type: ExplanationSchemaType.ArrayOf,
+          type: ExplanationSchemaType.ArrayOf
         },
-        value: false,
-      },
+        value: false
+      }
     ]);
     expect(getExplanations(checkArrNumber, { length: 1, 0: 1 })).toEqual([
       {
@@ -73,41 +73,41 @@ describe("e.custom", () => {
                 path: [],
                 innerExplanations: [],
                 schema: {
-                  type: ExplanationSchemaType.Number,
+                  type: ExplanationSchemaType.Number
                 },
-                value: "1",
-              },
+                value: "1"
+              }
             ],
-            type: ExplanationSchemaType.Custom,
+            type: ExplanationSchemaType.Custom
           },
-          type: ExplanationSchemaType.ArrayOf,
+          type: ExplanationSchemaType.ArrayOf
         },
         value: {
           "0": 1,
-          length: 1,
-        },
-      },
+          length: 1
+        }
+      }
     ]);
     expect(getExplanations(checkArrNumber, ["1"])).toEqual([
       {
         path: [0],
         innerExplanations: [],
         schema: {
-          description: 'should be number',
+          description: "should be number",
           innerExplanations: [
             {
               path: [],
               innerExplanations: [],
               schema: {
-                type: ExplanationSchemaType.Number,
+                type: ExplanationSchemaType.Number
               },
-              value: "1",
-            },
+              value: "1"
+            }
           ],
-          type: ExplanationSchemaType.Custom,
+          type: ExplanationSchemaType.Custom
         },
-        value: "1",
-      },
+        value: "1"
+      }
     ]);
   });
   test('e(e.arrayOf(e.custom(x => typeof x === "number")))', () => {
@@ -126,12 +126,12 @@ describe("e.custom", () => {
           elementSchema: {
             description: "checkNumber",
             innerExplanations: [],
-            type: ExplanationSchemaType.Custom,
+            type: ExplanationSchemaType.Custom
           },
-          type: ExplanationSchemaType.ArrayOf,
+          type: ExplanationSchemaType.ArrayOf
         },
-        value: null,
-      },
+        value: null
+      }
     ]);
     expect(getExplanations(checkArrNumber, false)).toEqual([
       {
@@ -141,12 +141,12 @@ describe("e.custom", () => {
           elementSchema: {
             description: "checkNumber",
             innerExplanations: [],
-            type: ExplanationSchemaType.Custom,
+            type: ExplanationSchemaType.Custom
           },
-          type: ExplanationSchemaType.ArrayOf,
+          type: ExplanationSchemaType.ArrayOf
         },
-        value: false,
-      },
+        value: false
+      }
     ]);
     expect(getExplanations(checkArrNumber, { length: 1, 0: 1 })).toEqual([
       {
@@ -156,15 +156,15 @@ describe("e.custom", () => {
           elementSchema: {
             description: "checkNumber",
             innerExplanations: [],
-            type: ExplanationSchemaType.Custom,
+            type: ExplanationSchemaType.Custom
           },
-          type: ExplanationSchemaType.ArrayOf,
+          type: ExplanationSchemaType.ArrayOf
         },
         value: {
           "0": 1,
-          length: 1,
-        },
-      },
+          length: 1
+        }
+      }
     ]);
     expect(getExplanations(checkArrNumber, ["1"])).toEqual([
       {
@@ -173,10 +173,10 @@ describe("e.custom", () => {
         schema: {
           description: "checkNumber",
           innerExplanations: [],
-          type: ExplanationSchemaType.Custom,
+          type: ExplanationSchemaType.Custom
         },
-        value: "1",
-      },
+        value: "1"
+      }
     ]);
   });
 });

@@ -22,7 +22,7 @@ import {
   SpecialProp,
   string,
   symbol,
-  testSchema,
+  testSchema
 } from "./schemas";
 import { ITester, TCustomValidator } from "./types";
 
@@ -73,7 +73,7 @@ export const methods = {
   },
   custom(customValidator: TCustomValidator, description?: string) {
     return custom(customValidator, description);
-  },
+  }
 };
 
 export type IMethods = typeof methods;

@@ -31,77 +31,77 @@ export function schemaToExplanationSchema(schema: TSchema): TExplanationSchema {
     case SchemaType.And:
       return {
         type: ExplanationSchemaType.And,
-        schemas: schema.schemas.map(schemaToExplanationSchema),
+        schemas: schema.schemas.map(schemaToExplanationSchema)
       };
     case SchemaType.Any:
       return {
-        type: ExplanationSchemaType.Any,
+        type: ExplanationSchemaType.Any
       };
     case SchemaType.Array:
       return {
-        type: ExplanationSchemaType.Array,
+        type: ExplanationSchemaType.Array
       };
     case SchemaType.ArrayOf:
       return {
         type: ExplanationSchemaType.ArrayOf,
-        elementSchema: schemaToExplanationSchema(schema.elementSchema),
+        elementSchema: schemaToExplanationSchema(schema.elementSchema)
       };
     case SchemaType.Boolean:
       return {
-        type: ExplanationSchemaType.Boolean,
+        type: ExplanationSchemaType.Boolean
       };
     case SchemaType.Finite:
       return {
-        type: ExplanationSchemaType.Finite,
+        type: ExplanationSchemaType.Finite
       };
     case SchemaType.Function:
       return {
-        type: ExplanationSchemaType.Function,
+        type: ExplanationSchemaType.Function
       };
     case SchemaType.Max:
       return {
         type: ExplanationSchemaType.Max,
         maxValue: schema.maxValue,
-        isExclusive: schema.isExclusive,
+        isExclusive: schema.isExclusive
       };
     case SchemaType.MaxLength:
       return {
         type: ExplanationSchemaType.MaxLength,
         maxLength: schema.maxLength,
-        isExclusive: schema.isExclusive,
+        isExclusive: schema.isExclusive
       };
     case SchemaType.Min:
       return {
         type: ExplanationSchemaType.Min,
         minValue: schema.minValue,
-        isExclusive: schema.isExclusive,
+        isExclusive: schema.isExclusive
       };
     case SchemaType.MinLength:
       return {
         type: ExplanationSchemaType.MinLength,
         minLength: schema.minLength,
-        isExclusive: schema.isExclusive,
+        isExclusive: schema.isExclusive
       };
     case SchemaType.Negative:
       return {
-        type: ExplanationSchemaType.Negative,
+        type: ExplanationSchemaType.Negative
       };
     case SchemaType.Never:
       return {
-        type: ExplanationSchemaType.Never,
+        type: ExplanationSchemaType.Never
       };
     case SchemaType.Not:
       return {
         type: ExplanationSchemaType.Not,
-        schema: schemaToExplanationSchema(schema.schema),
+        schema: schemaToExplanationSchema(schema.schema)
       };
     case SchemaType.NotANumber:
       return {
-        type: ExplanationSchemaType.NotANumber,
+        type: ExplanationSchemaType.NotANumber
       };
     case SchemaType.Number:
       return {
-        type: ExplanationSchemaType.Number,
+        type: ExplanationSchemaType.Number
       };
     case SchemaType.Object:
       const propsSchemas: Record<KeyType, TExplanationSchema> = Object.create(
@@ -117,45 +117,45 @@ export function schemaToExplanationSchema(schema: TSchema): TExplanationSchema {
       if (!schema.hasRestValidator) {
         return {
           type: ExplanationSchemaType.Object,
-          propsSchemas,
+          propsSchemas
         };
       }
       return {
         type: ExplanationSchemaType.Object,
         propsSchemas,
         "[v.rest]": schemaToExplanationSchema(schema.rest),
-        "[v.restOmit]": Object.keys(schema.restOmitDict),
+        "[v.restOmit]": Object.keys(schema.restOmitDict)
       };
     case SchemaType.Pair:
       return {
         type: ExplanationSchemaType.Pair,
-        keyValueSchema: schemaToExplanationSchema(schema.keyValueSchema),
+        keyValueSchema: schemaToExplanationSchema(schema.keyValueSchema)
       };
     case SchemaType.Positive:
       return {
-        type: ExplanationSchemaType.Positive,
+        type: ExplanationSchemaType.Positive
       };
     case SchemaType.SafeInteger:
       return {
-        type: ExplanationSchemaType.SafeInteger,
+        type: ExplanationSchemaType.SafeInteger
       };
     case SchemaType.String:
       return {
-        type: ExplanationSchemaType.String,
+        type: ExplanationSchemaType.String
       };
     case SchemaType.Symbol:
       return {
-        type: ExplanationSchemaType.Symbol,
+        type: ExplanationSchemaType.Symbol
       };
     case SchemaType.Test:
       return {
         type: ExplanationSchemaType.Test,
-        description: getTesterDescription(schema.tester),
+        description: getTesterDescription(schema.tester)
       };
     case SchemaType.Variant:
       return {
         type: ExplanationSchemaType.Variant,
-        variants: schema.variants.map(schemaToExplanationSchema),
+        variants: schema.variants.map(schemaToExplanationSchema)
       };
     case SchemaType.Custom:
       const { customValidator, description } = schema;
@@ -172,7 +172,7 @@ export function schemaToExplanationSchema(schema: TSchema): TExplanationSchema {
           description == null
             ? getCustomValidatorDescription(customValidator)
             : description,
-        innerExplanations,
+        innerExplanations
       };
   }
 }
