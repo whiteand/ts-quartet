@@ -124,6 +124,7 @@ export type TCustomValidator = (
 
 export interface ICustomSchema {
   type: SchemaType.Custom;
+  description: string | undefined;
   customValidator: TCustomValidator;
 }
 

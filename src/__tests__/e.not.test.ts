@@ -15,10 +15,7 @@ describe("v.not", () => {
       {
         path: [],
         schema: {
-          schema: {
-            type: ExplanationSchemaType.Primitive,
-            value: false
-          },
+          schema: false,
           type: ExplanationSchemaType.Not
         },
         value: false,

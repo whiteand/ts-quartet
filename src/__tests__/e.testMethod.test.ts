@@ -16,7 +16,7 @@ describe("v.test", () => {
         path: [],
         innerExplanations: [],
         schema: {
-          tester,
+          description: "/^a/",
           type: ExplanationSchemaType.Test
         },
         value: "A"
@@ -27,7 +27,7 @@ describe("v.test", () => {
         path: [],
         innerExplanations: [],
         schema: {
-          tester,
+          description: "/^a/",
           type: ExplanationSchemaType.Test
         },
         value: null
@@ -38,7 +38,7 @@ describe("v.test", () => {
         path: [],
         innerExplanations: [],
         schema: {
-          tester,
+          description: "/^a/",
           type: ExplanationSchemaType.Test
         },
         value: false
@@ -49,7 +49,7 @@ describe("v.test", () => {
         path: [],
         innerExplanations: [],
         schema: {
-          tester,
+          description: "/^a/",
           type: ExplanationSchemaType.Test
         },
         value: []
@@ -60,7 +60,7 @@ describe("v.test", () => {
         path: [],
         innerExplanations: [],
         schema: {
-          tester,
+          description: "/^a/",
           type: ExplanationSchemaType.Test
         },
         value: {}
@@ -71,7 +71,7 @@ describe("v.test", () => {
         path: [],
         innerExplanations: [],
         schema: {
-          tester,
+          description: "/^a/",
           type: ExplanationSchemaType.Test
         },
         value: 1
@@ -82,7 +82,7 @@ describe("v.test", () => {
         path: [],
         innerExplanations: [],
         schema: {
-          tester,
+          description: "/^a/",
           type: ExplanationSchemaType.Test
         },
         value: 0
@@ -93,7 +93,7 @@ describe("v.test", () => {
         path: [],
         innerExplanations: [],
         schema: {
-          tester,
+          description: "/^a/",
           type: ExplanationSchemaType.Test
         },
         value: NaN
@@ -104,7 +104,7 @@ describe("v.test", () => {
         path: [],
         innerExplanations: [],
         schema: {
-          tester,
+          description: "/^a/",
           type: ExplanationSchemaType.Test
         },
         value: undefined
@@ -115,7 +115,7 @@ describe("v.test", () => {
         path: [],
         innerExplanations: [],
         schema: {
-          tester,
+          description: "/^a/",
           type: ExplanationSchemaType.Test
         },
         value: true
@@ -135,7 +135,7 @@ describe("v.test", () => {
         path: ["a"],
         innerExplanations: [],
         schema: {
-          tester,
+          description: "/^a/",
           type: ExplanationSchemaType.Test
         },
         value: "A"
@@ -146,7 +146,7 @@ describe("v.test", () => {
         path: ["a"],
         innerExplanations: [],
         schema: {
-          tester,
+          description: "/^a/",
           type: ExplanationSchemaType.Test
         },
         value: false
@@ -157,7 +157,7 @@ describe("v.test", () => {
         path: ["a"],
         innerExplanations: [],
         schema: {
-          tester,
+          description: "/^a/",
           type: ExplanationSchemaType.Test
         },
         value: []
@@ -168,7 +168,7 @@ describe("v.test", () => {
         path: ["a"],
         innerExplanations: [],
         schema: {
-          tester,
+          description: "/^a/",
           type: ExplanationSchemaType.Test
         },
         value: {}
@@ -179,7 +179,7 @@ describe("v.test", () => {
         path: ["a"],
         innerExplanations: [],
         schema: {
-          tester,
+          description: "/^a/",
           type: ExplanationSchemaType.Test
         },
         value: 1
@@ -190,7 +190,7 @@ describe("v.test", () => {
         path: ["a"],
         innerExplanations: [],
         schema: {
-          tester,
+          description: "/^a/",
           type: ExplanationSchemaType.Test
         },
         value: 0
@@ -201,7 +201,7 @@ describe("v.test", () => {
         path: ["a"],
         innerExplanations: [],
         schema: {
-          tester,
+          description: "/^a/",
           type: ExplanationSchemaType.Test
         },
         value: NaN
@@ -212,7 +212,7 @@ describe("v.test", () => {
         path: ["a"],
         innerExplanations: [],
         schema: {
-          tester,
+          description: "/^a/",
           type: ExplanationSchemaType.Test
         },
         value: true

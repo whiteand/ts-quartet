@@ -174,7 +174,7 @@ describe("v.arrayOf", () => {
         path: [0],
         innerExplanations: [],
         schema: {
-          customValidator,
+          description: "customValidator",
           innerExplanations: [],
           type: ExplanationSchemaType.Custom
         },
@@ -189,7 +189,7 @@ describe("v.arrayOf", () => {
         path: [1],
         innerExplanations: [],
         schema: {
-          customValidator,
+          description: "customValidator",
           innerExplanations: [],
           type: ExplanationSchemaType.Custom
         },
@@ -204,7 +204,7 @@ describe("v.arrayOf", () => {
         path: [0],
         innerExplanations: [],
         schema: {
-          customValidator,
+          description: "customValidator",
           innerExplanations: [],
           type: ExplanationSchemaType.Custom
         },
@@ -219,7 +219,7 @@ describe("v.arrayOf", () => {
         path: [0],
         innerExplanations: [],
         schema: {
-          customValidator,
+          description: "customValidator",
           innerExplanations: [],
           type: ExplanationSchemaType.Custom
         },
@@ -234,7 +234,7 @@ describe("v.arrayOf", () => {
         path: [0],
         innerExplanations: [],
         schema: {
-          customValidator,
+          description: "customValidator",
           innerExplanations: [],
           type: ExplanationSchemaType.Custom
         },
@@ -251,7 +251,7 @@ describe("v.arrayOf", () => {
         schema: {
           elementSchema: {
             keyValueSchema: {
-              customValidator,
+              description: "customValidator",
               innerExplanations: [],
               type: ExplanationSchemaType.Custom
             },
@@ -269,7 +269,7 @@ describe("v.arrayOf", () => {
         schema: {
           elementSchema: {
             keyValueSchema: {
-              customValidator,
+              description: "customValidator",
               innerExplanations: [],
               type: ExplanationSchemaType.Custom
             },
@@ -289,7 +289,7 @@ describe("v.arrayOf", () => {
         schema: {
           elementSchema: {
             keyValueSchema: {
-              customValidator,
+              description: "customValidator",
               innerExplanations: [],
               type: ExplanationSchemaType.Custom
             },

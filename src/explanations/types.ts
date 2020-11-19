@@ -1,7 +1,6 @@
-import { ITester, KeyType, TCustomValidator, TPrimitiveSchema } from "../types";
+import { KeyType, TPrimitiveSchema } from "../types";
 
 export enum ExplanationSchemaType {
-  Primitive = "Primitive",
   And = "And",
   Any = "Any",
   Array = "Array",
@@ -27,11 +26,6 @@ export enum ExplanationSchemaType {
   Test = "Test",
   Variant = "Variant",
   Custom = "Custom"
-}
-
-export interface IPrimitiveExplanationSchema {
-  type: "Primitive";
-  value: TPrimitiveSchema;
 }
 
 export interface IAndExplanationSchema {
@@ -147,7 +141,7 @@ export interface ISymbolExplanationSchema {
 
 export interface ITestExplanationSchema {
   type: ExplanationSchemaType.Test;
-  tester: ITester;
+  description: string;
 }
 
 export interface IVariantExplanationSchema {
@@ -157,12 +151,12 @@ export interface IVariantExplanationSchema {
 
 export interface ICustomExplanationSchema {
   type: ExplanationSchemaType.Custom;
-  customValidator: TCustomValidator;
+  description: string;
   innerExplanations: any[];
 }
 
 export type TExplanationSchema =
-  | IPrimitiveExplanationSchema
+  | TPrimitiveSchema
   | IAndExplanationSchema
   | IAnyExplanationSchema
   | IArrayExplanationSchema
