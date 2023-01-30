@@ -1,4 +1,4 @@
-import { RawSchema } from "./rawSchemaToSchema";
+import { RawSchema } from "./IRawSchema";
 import { CompilationResult } from "./types";
 
 export type Compiler<E = any> = <T = any>(

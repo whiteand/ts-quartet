@@ -1,4 +1,5 @@
 import { EMPTY_OBJ } from "./empty";
+import { IRawSchemaDict, RawSchema } from "./IRawSchema";
 import {
   neverSchema,
   notANumber,
@@ -10,18 +11,6 @@ import {
 import { SpecialProp } from "./schemas/SpecialProp";
 import { KeyType, TSchema } from "./types";
 import { arrToDict, has } from "./utils";
-
-interface IRawSchemaArr extends Array<RawSchema> {}
-
-interface IRawSchemaDict extends Record<KeyType, RawSchema> {}
-
-export type RawSchema =
-  | TSchema
-  | IRawSchemaArr
-  | (IRawSchemaDict & {
-      [SpecialProp.Rest]?: RawSchema;
-      [SpecialProp.RestOmit]?: KeyType[];
-    });
 
 const schemaTypeDict = arrToDict(Object.values(SchemaType));
 

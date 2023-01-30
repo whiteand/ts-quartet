@@ -1,5 +1,5 @@
 import { IfAny } from "./IfAny";
-import { RawSchema } from "./rawSchemaToSchema";
+import { RawSchema } from "./IRawSchema";
 import { SchemaType } from "./schemas/SchemaType";
 
 export interface IAndSchema {

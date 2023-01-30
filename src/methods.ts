@@ -1,4 +1,5 @@
-import { RawSchema, rawSchemaToSchema } from "./rawSchemaToSchema";
+import { rawSchemaToSchema } from "./rawSchemaToSchema";
+import { RawSchema } from "./IRawSchema";
 import {
   and,
   anySchema,
