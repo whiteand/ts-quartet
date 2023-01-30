@@ -1,5 +1,5 @@
-import { rawSchemaToSchema } from "../../rawSchemaToSchema";
 import { RawSchema } from "../../IRawSchema";
+import { rawSchemaToSchema } from "../../rawSchemaToSchema";
 import { CompilationResult } from "../../types";
 import { eCompileSchema } from "./eCompileSchema";
 
