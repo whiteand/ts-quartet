@@ -1,6 +1,9 @@
 import { RawSchema } from "./IRawSchema";
+import { RT, RTA, WR } from "./infer";
 import { rawSchemaToSchema } from "./rawSchemaToSchema";
 import {
+  SchemaType,
+  SpecialProp,
   and,
   anySchema,
   array,
@@ -20,10 +23,9 @@ import {
   pair,
   positive,
   safeInteger,
-  SpecialProp,
   string,
   symbol,
-  testSchema
+  testSchema,
 } from "./schemas";
 import { ITester, TCustomValidator } from "./types";
 
@@ -33,9 +35,9 @@ export const methods = {
   },
   any: anySchema(),
   array: array(),
-  arrayOf(rawElementSchema: RawSchema) {
+  arrayOf<const S extends RawSchema>(rawElementSchema: S): { type: SchemaType.ArrayOf, elementSchema: RT<WR<S>> } {
     const elementSchema = rawSchemaToSchema(rawElementSchema);
-    return arrayOf(elementSchema);
+    return arrayOf(elementSchema) as { type: SchemaType.ArrayOf, elementSchema: RT<WR<S>> };
   },
   boolean: boolean(),
   finite: finite(),
@@ -74,7 +76,16 @@ export const methods = {
   },
   custom(customValidator: TCustomValidator, description?: string) {
     return custom(customValidator, description);
-  }
+  },
 };
 
-export type IMethods = typeof methods;
+interface IAndMethod {
+  and(): { type: SchemaType.And; schemas: [] };
+  and<const R1 extends RawSchema>(r: R1): { type: SchemaType.And; schemas: [RT<WR<R1>>] };
+  and<const R1 extends RawSchema,const R2 extends RawSchema>(r: R1, r2: R2): { type: SchemaType.And; schemas: [RT<WR<R1>>,RT<WR<R2>>] };
+  and<const R1 extends RawSchema,const R2 extends RawSchema,const R3 extends RawSchema>(r: R1, r2: R2, r3: R3): { type: SchemaType.And; schemas: [RT<WR<R1>>,RT<WR<R2>>,RT<WR<R3>>] };
+  and<const R1 extends RawSchema,const R2 extends RawSchema,const R3 extends RawSchema,const R4 extends RawSchema>(r: R1, r2: R2, r3: R3, r4: R4): { type: SchemaType.And; schemas: [RT<WR<R1>>,RT<WR<R2>>,RT<WR<R3>>,RT<WR<R4>>] };
+  and(...rawSchemas: RawSchema[]): { type: SchemaType.And; schemas: RTA<WR<RawSchema>[]> };
+}
+
+export type IMethods = Omit<typeof methods, "and"> & IAndMethod;

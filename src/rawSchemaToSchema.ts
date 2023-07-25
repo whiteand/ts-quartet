@@ -1,12 +1,12 @@
 import { EMPTY_OBJ } from "./empty";
-import { IRawSchemaDict, RawSchema } from "./IRawSchema";
+import { RawSchema } from "./IRawSchema";
 import {
   neverSchema,
   notANumber,
   objectSchemaWithoutRest,
   objectSchemaWithRest,
   SchemaType,
-  variant as variantSchema
+  variant as variantSchema,
 } from "./schemas";
 import { SpecialProp } from "./schemas/SpecialProp";
 import { KeyType, TSchema } from "./types";
@@ -15,7 +15,7 @@ import { arrToDict, has } from "./utils";
 const schemaTypeDict = arrToDict(Object.values(SchemaType));
 
 function rawPropsSchemasToPropsSchemas(
-  rawPropsSchemas: IRawSchemaDict
+  rawPropsSchemas: Record<KeyType, RawSchema>
 ): Record<KeyType, TSchema> {
   const propsSchemas = Object.create(null);
   const keys = Object.keys(rawPropsSchemas);
