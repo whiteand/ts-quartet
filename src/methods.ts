@@ -61,9 +61,9 @@ export const methods = {
     return not(schema);
   },
   number: number(),
-  pair(rawKeyValueSchema: RawSchema) {
+  pair<const S extends RawSchema>(rawKeyValueSchema: S): { type: SchemaType.Pair, keyValueSchema: RT<WR<S>>} {
     const keyValueSchema = rawSchemaToSchema(rawKeyValueSchema);
-    return pair(keyValueSchema);
+    return pair(keyValueSchema) as { type: SchemaType.Pair, keyValueSchema: RT<WR<S>>};
   },
   positive: positive(),
   rest: SpecialProp.Rest as SpecialProp.Rest,

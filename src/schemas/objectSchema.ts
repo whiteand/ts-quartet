@@ -13,7 +13,7 @@ export function objectSchemaWithRest(
     propsSchemas,
     rest,
     restOmitDict,
-    type: SchemaType.Object
+    type: SchemaType.Object,
   };
 }
 export function objectSchemaWithoutRest(
@@ -25,6 +25,6 @@ export function objectSchemaWithoutRest(
     propsSchemas,
     rest: null,
     restOmitDict: EMPTY_OBJ,
-    type: SchemaType.Object
+    type: SchemaType.Object,
   };
 }

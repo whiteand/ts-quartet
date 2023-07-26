@@ -1,3 +1,5 @@
+import { vCompiler } from "./compilers/vCompiler";
+import { SpecialProp } from "./schemas";
 import { SchemaType } from "./schemas/SchemaType";
 import { TPrimitiveSchema } from "./types";
 
@@ -6,12 +8,6 @@ const value = Symbol.for("a");
 type A = RT<never[]>;
 
 /*export function rawSchemaToSchema(rawSchema: RawSchema): TSchema {
-  if (
-    has(rawSchema, "type") &&
-    schemaTypeDict[rawSchema.type as SchemaType] === true
-  ) {
-    return rawSchema as TSchema;
-  }
   if (has(rawSchema, SpecialProp.Rest)) {
     if (has(rawSchema, SpecialProp.RestOmit)) {
       const {
@@ -83,6 +79,29 @@ type Variants<A, B> = A extends (never | [] | never[])
   ? [A, ...B]
   : [A, B];
 
+type Values<T> = T[keyof T]
+type RTObject<O> = O extends { [k in typeof SpecialProp.Rest]: infer R }
+   ? {
+    type: SchemaType.Object,
+    hasRestValidator: true,
+    props: (keyof O)[],
+    propsSchemas: {
+      [k in keyof O]: k extends typeof SpecialProp.Rest ? never : RT<O[k]>
+    }
+    rest: RT<R>,
+    restOmitDict: O extends { [k in typeof SpecialProp.RestOmit]: infer RO } ? Record<Values<RO>, boolean> : never,
+   } : {
+    type: SchemaType.Object,
+    hasRestValidator: false,
+    props: (keyof O)[],
+    propsSchemas: {
+      [k in keyof O]: RT<O[k]>
+    }
+    rest: null
+    restOmitDict: {},
+   }
+
+  
 export type RT<R> = R extends TPrimitiveSchema
   ? R
   : R extends ([] | never[])
@@ -95,8 +114,7 @@ export type RT<R> = R extends TPrimitiveSchema
       variants: Variants<RT<X>, RT<Rest>>;
     }
   : R extends { type: SchemaType }
-  ? R
-  : "not inferred in RT";
+  ? R : RTObject<R>
 
 export type ExpandVariants<VS> = VS extends [infer T]
   ? Inf<T>
@@ -110,10 +128,6 @@ export type ExpandAnd<VS> = VS extends [infer T]
   : VS;
 
 /**
-Not
-NotANumber
-Number
-Object
 Pair
 Positive
 SafeInteger
@@ -126,6 +140,10 @@ Custom
 type AnyFunction = (...args: any[]) => any;
 
 type NumberSchemaTypes = SchemaType.Number | SchemaType.NotANumber | SchemaType.SafeInteger | SchemaType.Finite | SchemaType.Max | SchemaType.Min | SchemaType.Positive | SchemaType.Negative;
+
+type ArrayPair<KV> = KV extends { key: infer K, value: infer V }
+    ? K extends (string | number) ? { [k in K]: V } : KV['value'][]
+    : KV extends { value: infer V } ? V[] : any[];
 
 export type Inf<T> = T extends TPrimitiveSchema
   ? T
@@ -143,7 +161,7 @@ export type Inf<T> = T extends TPrimitiveSchema
   ? { length: number }
   : T extends { type: SchemaType.MinLength }
   ? { length: number }
-  : T extends { type: SchemaType.Any }
+  : T extends { type: SchemaType.Any | SchemaType.Not }
   ? any
   : T extends { type: SchemaType.And; schemas: infer Schemas }
   ? ExpandAnd<Schemas>
@@ -151,6 +169,14 @@ export type Inf<T> = T extends TPrimitiveSchema
   ? any[] 
   : T extends { type: SchemaType.Never }
   ? never 
+  : T extends { type: SchemaType.Object, hasRestValidator: false, propsSchemas: infer PS }
+  ? { [k in keyof PS]: Inf<PS[k]> }
+  : T extends { type: SchemaType.Object, hasRestValidator: true, propsSchemas: infer PS, rest: infer R }
+  ? { [k in keyof PS]: Inf<PS[k]> } & { [key in Exclude<string, keyof PS>]: Inf<R>}
+  : T extends { type: SchemaType.ArrayOf; elementSchema: { type: SchemaType.Pair, keyValueSchema: infer KV } }
+  ? any[] & ArrayPair<Inf<KV>>
+  : T extends { type: SchemaType.Pair, keyValueSchema: infer KV }
+  ? Inf<KV> extends { value: infer V} ? V : any
   : T extends { type: SchemaType.ArrayOf; elementSchema: infer X }
   ? Inf<X>[]
   : T extends { type: infer X } ? X extends string  ?`not inferrred in Inf: ${X}` : 'not inferred in Inf': 'not inferred in Inf';
