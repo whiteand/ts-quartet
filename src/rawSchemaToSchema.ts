@@ -38,7 +38,7 @@ export function rawSchemaToSchema(rawSchema: RawSchema): TSchema {
     }
     return rawSchema;
   }
-  if (Array.isArray(rawSchema)) {
+  if ((Array.isArray as (value: RawSchema)=> value is readonly RawSchema[])(rawSchema)) {
     if (rawSchema.length === 0) {
       return neverSchema();
     }
