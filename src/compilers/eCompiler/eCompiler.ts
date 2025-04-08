@@ -6,6 +6,5 @@ import { eCompileSchema } from "./eCompileSchema";
 export function eCompiler<T = any>(
   rawSchema: RawSchema
 ): CompilationResult<T, any> {
-  const schema = rawSchemaToSchema(rawSchema);
-  return eCompileSchema<T>(schema);
+  return eCompileSchema<T>(rawSchemaToSchema(rawSchema));
 }

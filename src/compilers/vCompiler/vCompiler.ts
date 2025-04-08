@@ -6,6 +6,5 @@ import { vCompileSchema } from "./vCompileSchema";
 export function vCompiler<T = any>(
   rawSchema: RawSchema
 ): CompilationResult<T, any> {
-  const schema = rawSchemaToSchema(rawSchema);
-  return vCompileSchema<T>(schema);
+  return vCompileSchema<T>(rawSchemaToSchema(rawSchema));
 }
