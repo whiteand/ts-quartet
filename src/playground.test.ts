@@ -1,9 +1,6 @@
 import { e as v } from "./e";
 import { InferValidatedByCompilationResult, RawToT } from "./infer";
 
-const x = v.and(v.string, v.min(0));
-const t = v(x);
-
 type A = InferValidatedByCompilationResult<typeof t>;
 
 export const ALL_PURCHASE_STATUSES = [

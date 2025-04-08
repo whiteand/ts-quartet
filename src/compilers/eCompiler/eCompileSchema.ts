@@ -1,5 +1,6 @@
 /* tslint:disable:object-literal-sort-keys */
 import { IExplanation } from "../../explanations";
+import { Z } from "../../infer";
 import { CompilationResult, TSchema, Validator } from "../../types";
 import { getExplanator } from "./getExplanator";
 
@@ -28,5 +29,11 @@ export function eCompileSchema<T = any>(
     }
   }
 
-  return Object.assign(validator as Validator<T>, { explanations, schema });
+  return Object.assign(validator as Validator<T>, {
+    explanations,
+    schema,
+    cast() {
+      return this as Z;
+    },
+  });
 }

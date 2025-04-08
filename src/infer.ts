@@ -3,7 +3,7 @@ import { SchemaType } from "./schemas";
 import { TNumberString } from "./strnum";
 import { CompilationResult, TPrimitiveSchema } from "./types";
 
-type Z = any;
+export type Z = any;
 
 type Values<T> = T[keyof T];
 
@@ -32,9 +32,9 @@ export type Intersect<A, B> = IfAny<A, B, Extract<A, B>>;
 type InferAnd<T, Acc> = T extends readonly []
   ? never
   : T extends readonly [infer U]
-  ? Intersect<Acc, RawToT<U>>
+  ? Intersect<Acc, RawToT<U>> | Intersect<RawToT<U>, Acc>
   : T extends readonly [infer U, ...infer R]
-  ? InferAnd<R, Intersect<Acc, RawToT<U>>>
+  ? InferAnd<R, Intersect<Acc, RawToT<U>> | Intersect<RawToT<U>, Acc>>
   : Z;
 
 type OfT<T> = T extends T ? { readonly type: T } : never;
