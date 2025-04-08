@@ -34,6 +34,6 @@ export function eCompileSchema<T = any>(
     schema,
     cast() {
       return this as Z;
-    },
+    }
   });
 }

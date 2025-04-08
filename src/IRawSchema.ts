@@ -28,7 +28,7 @@ import {
   IVariantSchema,
   KeyType,
   TNonPrimitiveSchema,
-  TPrimitiveSchema,
+  TPrimitiveSchema
 } from "./types";
 
 export interface IRawSchemaArr extends ReadonlyArray<RawSchema> {}

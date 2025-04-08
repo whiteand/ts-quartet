@@ -7,6 +7,6 @@ export function arrayOf<R>(
 ): IArrayOfSchema & IFromRawSchema<R> {
   return {
     type: SchemaType.ArrayOf,
-    elementSchema,
+    elementSchema
   } as IArrayOfSchema & IFromRawSchema<R>;
 }

@@ -11,14 +11,14 @@ type B = ValidatedBy<typeof t2>;
 export const ALL_PURCHASE_STATUSES = [
   "Created",
   "Initiated",
-  "Confirmed",
+  "Confirmed"
 ] as const;
 
 export const ALL_KYC_STATUSES = [
   "Incomplete",
   "Requested",
   "UnderReview",
-  "Completed",
+  "Completed"
 ] as const;
 
 const isValidRowData = v({
@@ -43,12 +43,12 @@ const isValidRowData = v({
       saftLink: [v.string, null],
       explorerLink: [v.string, null],
       creationTimeUtc: v.string,
-      updateTimeUtc: v.string,
+      updateTimeUtc: v.string
     }),
-    null,
+    null
   ],
   activationTimeUtc: [v.string, null],
-  lastLoginTimeUtc: [v.string, null],
+  lastLoginTimeUtc: [v.string, null]
 });
 
 const value: unknown = 42;

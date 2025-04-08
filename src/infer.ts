@@ -46,7 +46,7 @@ type OfT<T> = T extends T ? { readonly type: T } : never;
 type TMinSchemaValue = number | TNumberString | bigint | null;
 
 type TToT<R> = R extends OfT<SchemaType.ArrayOf>
-  ? Array<ValidateBySchema<GetFromRawSchema<R>>>
+  ? ValidateBySchema<GetFromRawSchema<R>>[]
   : R extends OfT<SchemaType.Array>
   ? Z[]
   : R extends OfT<SchemaType.And>

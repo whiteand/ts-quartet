@@ -12,6 +12,6 @@ export function vCompileSchema<T = any>(
     schema,
     cast() {
       return this as Z;
-    },
+    }
   });
 }
