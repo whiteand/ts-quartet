@@ -8,9 +8,9 @@ export type Z = any;
 
 type Values<T> = T[keyof T];
 
-export type FromRawSchema<R> = {
+export interface IFromRawSchema<R> {
   __infer_from_raw_schema: R;
-};
+}
 
 export type GetFromRawSchema<T> = T extends { __infer_from_raw_schema: infer R }
   ? R

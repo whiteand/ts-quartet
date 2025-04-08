@@ -1,5 +1,5 @@
+import { IFromRawSchema } from "./infer";
 import { RawSchema } from "./IRawSchema";
-import { FromRawSchema } from "./infer";
 import { rawSchemaToSchema } from "./rawSchemaToSchema";
 import {
   and,
@@ -29,12 +29,12 @@ import {
 import { IAndSchema, IArrayOfSchema, ITester, TCustomValidator } from "./types";
 
 export const methods = {
-  and<const RR extends readonly RawSchema[]>(...rawSchemas: RR): IAndSchema & FromRawSchema<RR> {
-    return and(rawSchemas.map(rawSchemaToSchema)) as IAndSchema & FromRawSchema<RR>;
+  and<const RR extends readonly RawSchema[]>(...rawSchemas: RR): IAndSchema & IFromRawSchema<RR> {
+    return and(rawSchemas.map(rawSchemaToSchema)) as IAndSchema & IFromRawSchema<RR>;
   },
   any: anySchema(),
   array: array(),
-  arrayOf<const E extends RawSchema>(rawElementSchema: E): IArrayOfSchema & FromRawSchema<E> {
+  arrayOf<const E extends RawSchema>(rawElementSchema: E): IArrayOfSchema & IFromRawSchema<E> {
     const elementSchema = rawSchemaToSchema(rawElementSchema);
     return arrayOf<E>(elementSchema);
   },
