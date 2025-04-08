@@ -6,5 +6,5 @@ export function vCompileSchema<T = any>(
 ): CompilationResult<T, any> {
   const explanations: any[] = [];
   const validator = getValidatorFromSchema(schema, undefined) as Validator<T>;
-  return Object.assign(validator, { explanations });
+  return Object.assign(validator, { explanations, schema });
 }

@@ -28,5 +28,5 @@ export function eCompileSchema<T = any>(
     }
   }
 
-  return Object.assign(validator as Validator<T>, { explanations });
+  return Object.assign(validator as Validator<T>, { explanations, schema });
 }

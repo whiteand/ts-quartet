@@ -176,4 +176,4 @@ export type Validator<T = any> = IfAny<
 >;
 
 export type CompilationResult<T = any, Explanation = any> = Validator<T> &
-  ICompilationResultProps<Explanation>;
+  ICompilationResultProps<Explanation> & { readonly schema: TSchema };

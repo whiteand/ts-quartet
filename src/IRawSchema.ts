@@ -1,11 +1,12 @@
 import { SpecialProp } from "./schemas/SpecialProp";
-import { KeyType, TSchema } from "./types";
+import { CompilationResult, KeyType, TSchema } from "./types";
 
 export interface IRawSchemaArr extends ReadonlyArray<RawSchema> {}
 export interface IRawSchemaDict extends Readonly<Record<KeyType, RawSchema>> {}
 
 export type RawSchema =
   | TSchema
+  | CompilationResult
   | IRawSchemaArr
   | (IRawSchemaDict & {
       readonly [SpecialProp.Rest]?: RawSchema;
