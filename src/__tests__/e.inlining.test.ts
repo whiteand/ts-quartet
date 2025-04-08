@@ -5,9 +5,7 @@ import { testValidatorImpure } from "./testValidatorImpure";
 describe("e.inline", () => {
   test("e(e.arrayOf(e(e.number)))", () => {
     const checkNumber = e(e.number);
-    const checkArrNumber = e(
-      e.arrayOf(checkNumber)
-    );
+    const checkArrNumber = e(e.arrayOf(checkNumber));
     testValidatorImpure(
       checkArrNumber,
       [[], [1], [1, 2, 3]],

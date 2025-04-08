@@ -32,11 +32,13 @@ export function rawSchemaToSchema(rawSchema: RawSchema): TSchema {
   if (rawSchema == null) {
     return rawSchema as null | undefined;
   }
-  if (typeof rawSchema === 'function') {
-    if (!('schema' in rawSchema)) {
-      throw new Error(`Use v.custom(your validation function, explanation) instead of usage of the function directly`);
+  if (typeof rawSchema === "function") {
+    if (!("schema" in rawSchema)) {
+      throw new Error(
+        `Use v.custom(your validation function, explanation) instead of usage of the function directly`
+      );
     }
-    return rawSchema.schema
+    return rawSchema.schema;
   }
   if (typeof rawSchema !== "object") {
     if (typeof rawSchema === "number" && Number.isNaN(rawSchema)) {
