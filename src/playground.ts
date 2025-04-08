@@ -1,7 +1,12 @@
 import { e as v } from "./e";
-import { InferValidatedByCompilationResult, RawToT } from "./infer";
+import { ValidatedBy } from "./infer";
 
-type A = InferValidatedByCompilationResult<typeof t>;
+const x = v.and(42);
+const t = v(x);
+
+type A = ValidatedBy<typeof t>;
+const t2 = v(t);
+type B = ValidatedBy<typeof t2>;
 
 export const ALL_PURCHASE_STATUSES = [
   "Created",
@@ -45,3 +50,9 @@ const isValidRowData = v({
   activationTimeUtc: [v.string, null],
   lastLoginTimeUtc: [v.string, null],
 });
+
+const value: unknown = 42;
+
+if (isValidRowData(value)) {
+  const x = value.purchases;
+}

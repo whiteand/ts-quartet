@@ -1,11 +1,65 @@
 import { SpecialProp } from "./schemas/SpecialProp";
-import { CompilationResult, KeyType, TSchema } from "./types";
+import {
+  CompilationResult,
+  IAndSchema,
+  IAnySchema,
+  IArrayOfSchema,
+  IArraySchema,
+  IBooleanSchema,
+  ICustomSchema,
+  IFiniteSchema,
+  IFunctionSchema,
+  IMaxLengthSchema,
+  IMaxSchema,
+  IMinLengthSchema,
+  IMinSchema,
+  INegativeSchema,
+  INeverSchema,
+  INotANumberSchema,
+  INotSchema,
+  INumberSchema,
+  IObjectSchema,
+  IPairSchema,
+  IPositiveSchema,
+  ISafeIntegerSchema,
+  IStringSchema,
+  ISymbolSchema,
+  ITestSchema,
+  IVariantSchema,
+  KeyType,
+  TNonPrimitiveSchema,
+  TPrimitiveSchema,
+} from "./types";
 
 export interface IRawSchemaArr extends ReadonlyArray<RawSchema> {}
 export interface IRawSchemaDict extends Readonly<Record<KeyType, RawSchema>> {}
 
 export type RawSchema =
-  | TSchema
+  | IAndSchema
+  | IAnySchema
+  | IArraySchema
+  | IArrayOfSchema
+  | IBooleanSchema
+  | IFiniteSchema
+  | IFunctionSchema
+  | IMaxSchema
+  | IMaxLengthSchema
+  | IMinSchema
+  | IMinLengthSchema
+  | INegativeSchema
+  | INeverSchema
+  | INotSchema
+  | INotANumberSchema
+  | INumberSchema
+  | IPairSchema
+  | IPositiveSchema
+  | ISafeIntegerSchema
+  | IStringSchema
+  | ISymbolSchema
+  | ITestSchema
+  | IVariantSchema
+  | ICustomSchema
+  | TPrimitiveSchema
   | CompilationResult
   | IRawSchemaArr
   | (IRawSchemaDict & {

@@ -134,7 +134,7 @@ You can say: How can you call the function `checkResponse` simple?
 We would agree if it were as declarative as the type of `Response` itself. Something like:
 
 ```typescript
-const checkResponse = v<Response>({
+const checkResponse = v({
   user: {
     id: v.number,
     name: v.string,
@@ -167,33 +167,28 @@ npm i -S quartet
 import { v } from "quartet";
 ```
 
-- Describe the type of value you want to check.
-
-This step is optional, and if you do not use TypeScript, you can safely skip it. It just helps you write a validation scheme.
+- Create a validator function based on your data schema
 
 ```typescript
-type MyType = // ...
-```
-
-- Create a validation scheme
-
-```typescript
-const myTypeSchema = // ...
-```
-
-- Compile this schema into a validation function
-
-```typescript
-const checkMyType = v<MyType>(myTypeSchema);
-```
-
-or the same without TypeScript type parameter:
-
-```typescript
-const checkMyType = v(myTypeSchema);
+const checkMyType = v({
+  firstName: v.string
+});
 ```
 
 - Use `checkMyType` on data that you are not sure about. It will return `true` if the data is valid. It will return `false` if the data is not valid.
+
+- You can infer the type of validated value using:
+
+```ts
+import { ValidatedBy } from 'quartet'
+type MyType = ValidatedBy<typeof checkMyType>
+```
+
+If the inference is broken you can redefine automatically inferred type with your own using `cast` method.
+
+```ts
+const checkMyType = v(schemaWithBrokenInference).cast<MyType>()
+```
 
 ### Primitives
 

@@ -4,3 +4,4 @@ export * from "./types";
 export * from "./v";
 export * from "./IQuartetInstance";
 export * from "./IRawSchema";
+export { ValidatedBy, ValidateBySchema } from "./infer";
