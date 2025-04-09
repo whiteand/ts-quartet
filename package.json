@@ -55,6 +55,7 @@
     "lib/**/*"
   ],
   "dependencies": {
-    "@eslint/compat": "^1.2.8"
+    "@eslint/compat": "^1.2.8",
+    "@standard-schema/spec": "^1.0.0"
   }
 }

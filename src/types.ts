@@ -1,3 +1,4 @@
+import { StandardSchemaV1 } from "@standard-schema/spec";
 import { IfAny } from "./IfAny";
 import { SchemaType } from "./schemas/SchemaType";
 
@@ -177,7 +178,7 @@ export type CompilationResult<T = Z, Explanation = Z> = Validator<T> &
   ICompilationResultProps<Explanation> & {
     readonly schema: TSchema;
     cast<U>(): CompilationResult<U, Explanation>;
-  };
+  } & StandardSchemaV1<unknown, T>;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type Z = any;
