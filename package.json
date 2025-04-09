@@ -15,7 +15,7 @@
     "lint": "eslint .",
     "version": "npm run format && git add -A src",
     "postversion": "git push && git push --tags",
-    "coveralls": "jest --coverage --config jestconfig.json && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
+    "coveralls": "vitest run --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
     "size": "size-limit"
   },
   "repository": {
@@ -42,6 +42,7 @@
   "devDependencies": {
     "@eslint/js": "^9.24.0",
     "@size-limit/preset-small-lib": "^4.4.2",
+    "@vitest/coverage-v8": "^3.1.1",
     "coveralls": "^3.0.3",
     "eslint": "^9.24.0",
     "globals": "^16.0.0",
