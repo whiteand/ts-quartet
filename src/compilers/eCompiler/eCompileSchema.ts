@@ -18,15 +18,15 @@ function getExpectedTypeName(schema: TExplanationSchema): string {
     typeof schema === "number" ||
     typeof schema === "string"
   )
-    return `expected to be ${JSON.stringify(schema)}`;
+    return `${JSON.stringify(schema)}`;
   if (typeof schema === "symbol") {
-    return `expected to be ${schema.toString()}`;
+    return `${schema.toString()}`;
   }
   if (typeof schema === "bigint") {
-    return `expected to be ${schema}n`;
+    return `${schema}n`;
   }
   if (schema.type === ExplanationSchemaType.And) {
-    return schema.schemas.map((t) => getExpectedTypeName(t)).join(" & ");
+    return `and<${schema.schemas.map((t) => getExpectedTypeName(t)).join(",")}>`;
   }
   if (schema.type === ExplanationSchemaType.Any) {
     return `any`;
