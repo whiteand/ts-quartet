@@ -8,7 +8,7 @@ describe("e.any", (test) => {
     testValidatorWithExplanations(
       e(e.any),
       [null, false, [], {}, 1, 0, NaN, undefined, true],
-      [],
+      []
     );
   });
   test("{ a: e.any }", () => {
@@ -52,7 +52,7 @@ describe("e.any", (test) => {
             },
           ],
         ],
-      ],
+      ]
     );
   });
 });

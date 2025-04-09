@@ -41,32 +41,46 @@ function getExpectedTypeName(schema: TExplanationSchema): string {
     return `boolean`;
   }
   if (schema.type === ExplanationSchemaType.Finite) {
-    return `finite number`;
+    return `finite`;
   }
   if (schema.type === ExplanationSchemaType.Function) {
     return `function`;
   }
   if (schema.type === ExplanationSchemaType.Max) {
-    return `(${schema.isExclusive ? ">" : ">="} ${schema.maxValue})`;
+    if (schema.isExclusive) {
+      return `lt<${schema.maxValue}>`;
+    } else {
+      return `le<${schema.maxValue}>`;
+    }
   }
   if (schema.type === ExplanationSchemaType.MaxLength) {
-    return `{ length: ${schema.isExclusive ? ">" : ">="} ${schema.maxLength} }`;
+    if (schema.isExclusive) {
+      return `lengthLt<${schema.maxLength}>`;
+    }
+    return `lengthLe<${schema.maxLength}>`;
   }
   if (schema.type === ExplanationSchemaType.Min) {
-    return `(${schema.isExclusive ? "<" : "<="} ${schema.minValue})`;
+    if (schema.isExclusive) {
+      return `gt<${schema.minValue}>`;
+    } else {
+      return `ge<${schema.minValue}>`;
+    }
   }
   if (schema.type === ExplanationSchemaType.MinLength) {
-    return `{ length: ${schema.isExclusive ? "<" : "<="} ${schema.minLength}}`;
+    if (schema.isExclusive) {
+      return `lengthGt<${schema.minLength}>`;
+    }
+    return `lengthGe<${schema.minLength}>`;
   }
   if (schema.type === ExplanationSchemaType.Negative) {
-    return `(< 0)`;
+    return `ge<0>`;
   }
   if (schema.type === ExplanationSchemaType.Never) {
     return `never`;
   }
   if (schema.type === ExplanationSchemaType.Not) {
     const inner = getExpectedTypeName(schema.schema);
-    return `not (${inner})`;
+    return `not<${inner}>`;
   }
   if (schema.type === ExplanationSchemaType.NotANumber) {
     return `NaN`;
@@ -81,10 +95,10 @@ function getExpectedTypeName(schema: TExplanationSchema): string {
     return `pair<${getExpectedTypeName(schema.keyValueSchema)}>`;
   }
   if (schema.type === ExplanationSchemaType.Positive) {
-    return `(> 0)`;
+    return `gt<0>`;
   }
   if (schema.type === ExplanationSchemaType.SafeInteger) {
-    return `safe integer`;
+    return `safeInteger`;
   }
   if (schema.type === ExplanationSchemaType.String) {
     return `string`;
