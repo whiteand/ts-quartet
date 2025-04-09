@@ -1,6 +1,7 @@
+import { Z } from "../types";
 import { getAccessorWithAlloc } from "../utils";
 
-const mockedAlloc = (a: string, b: any, c: boolean = false) =>
+const mockedAlloc = (a: string, b: Z, c: boolean = false) =>
   JSON.stringify({ a, b, c });
 describe("getAccessor", () => {
   test("number", () => {

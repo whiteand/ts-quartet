@@ -1,8 +1,10 @@
+/* eslint-disable */
 import { e as v } from "./e";
 import { ValidatedBy } from "./infer";
 
 const x = v.and(42);
 
+const x: any;
 type A = ValidatedBy<typeof t>;
 const t2 = v(t);
 type B = ValidatedBy<typeof t2>;

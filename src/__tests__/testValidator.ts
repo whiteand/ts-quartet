@@ -1,9 +1,9 @@
-import { CompilationResult } from "../types";
+import { CompilationResult, Z } from "../types";
 
 export function testValidator(
-  validator: CompilationResult<any, any>,
-  valids: any[],
-  invalids: any[]
+  validator: CompilationResult<Z, Z>,
+  valids: Z[],
+  invalids: Z[]
 ) {
   expect(typeof validator).toBe("function");
   expect(Array.isArray(validator.explanations)).toBe(true);

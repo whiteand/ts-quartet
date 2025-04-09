@@ -1,5 +1,5 @@
 import { SchemaType } from "../../schemas";
-import { TSchema } from "../../types";
+import { TSchema, Z } from "../../types";
 import { getAccessorWithAlloc, has } from "../../utils";
 import { getValidatorFromSchema } from "./getValidatorFromSchema";
 
@@ -9,7 +9,7 @@ function fromNegation(negationConditionCode: string) {
 
 export function ifInvalidReturnFalse(
   schema: TSchema,
-  alloc: (varName: string, initialValue: any, singleton?: boolean) => string,
+  alloc: (varName: string, initialValue: Z, singleton?: boolean) => string,
   valueAddress: string,
   keyAddress: string | number | undefined
 ): string {
@@ -24,16 +24,17 @@ export function ifInvalidReturnFalse(
     return fromNegation(`${valueAddress} !== ${primitiveValueAddress}`);
   }
   switch (schema.type) {
-    case SchemaType.And:
-      const ifInvalidReturnFalseStatements = schema.schemas.map(innerSchema =>
+    case SchemaType.And: {
+      const ifInvalidReturnFalseStatements = schema.schemas.map((innerSchema) =>
         ifInvalidReturnFalse(innerSchema, alloc, valueAddress, keyAddress)
       );
       return ifInvalidReturnFalseStatements.join("\n");
+    }
     case SchemaType.Any:
       return "";
     case SchemaType.Array:
       return fromNegation(`!Array.isArray(${valueAddress})`);
-    case SchemaType.ArrayOf:
+    case SchemaType.ArrayOf: {
       const { elementSchema } = schema;
       const incrementVar = alloc("i", 0);
       const elementVar = alloc("e", undefined);
@@ -50,37 +51,42 @@ export function ifInvalidReturnFalse(
         }
       `;
       return [checkIsArray, checkElements].join("\n");
+    }
     case SchemaType.Boolean:
       return fromNegation(`typeof ${valueAddress} !== 'boolean'`);
     case SchemaType.Finite:
       return fromNegation(`!Number.isFinite(${valueAddress})`);
     case SchemaType.Function:
       return fromNegation(`typeof ${valueAddress} !== 'function'`);
-    case SchemaType.Max:
+    case SchemaType.Max: {
       const maxValueVar = alloc("maxValue", schema.maxValue);
       const cmpMax = schema.isExclusive ? "<" : "<=";
       return fromNegation(`!(${valueAddress} ${cmpMax} ${maxValueVar})`);
-    case SchemaType.MaxLength:
+    }
+    case SchemaType.MaxLength: {
       const maxLengthVar = alloc("maxLength", schema.maxLength);
       const cmpMaxLength = schema.isExclusive ? "<" : "<=";
       return fromNegation(
         `${valueAddress} == null || !(${valueAddress}.length ${cmpMaxLength} ${maxLengthVar})`
       );
-    case SchemaType.Min:
+    }
+    case SchemaType.Min: {
       const minValueVar = alloc("minValue", schema.minValue);
       const cmpMin = schema.isExclusive ? ">" : ">=";
       return fromNegation(`!(${valueAddress} ${cmpMin} ${minValueVar})`);
-    case SchemaType.MinLength:
+    }
+    case SchemaType.MinLength: {
       const minLengthVar = alloc("minLength", schema.minLength);
       const cmp = schema.isExclusive ? ">" : ">=";
       return fromNegation(
         `${valueAddress} == null || !(${valueAddress}.length ${cmp} ${minLengthVar})`
       );
+    }
     case SchemaType.Negative:
       return fromNegation(`!(${valueAddress} < 0)`);
     case SchemaType.Never:
       return "return false";
-    case SchemaType.Not:
+    case SchemaType.Not: {
       if (typeof schema.schema !== "object" || schema.schema === null) {
         if (schema.schema === null) {
           return fromNegation(`${valueAddress} === null`);
@@ -94,13 +100,14 @@ export function ifInvalidReturnFalse(
       const isValid = getValidatorFromSchema(schema.schema, keyAddress);
       const isValidVar = alloc("isValid", isValid);
       return `if (${isValidVar}(${valueAddress})) return false`;
+    }
     case SchemaType.NotANumber:
       return fromNegation(`!Number.isNaN(${valueAddress})`);
     case SchemaType.Number:
       return fromNegation(`typeof ${valueAddress} !== 'number'`);
-    case SchemaType.Object:
+    case SchemaType.Object: {
       const statements: string[] = [
-        `if (${valueAddress} == null) return false`
+        `if (${valueAddress} == null) return false`,
       ];
       for (let i = 0; i < schema.props.length; i++) {
         const prop = schema.props[i];
@@ -137,8 +144,8 @@ export function ifInvalidReturnFalse(
         statements.push("}");
       }
       return statements.join("\n");
-
-    case SchemaType.Pair:
+    }
+    case SchemaType.Pair: {
       const pairVar = alloc("pair", { value: undefined, key: undefined });
       return [
         `${pairVar}.value = ${valueAddress}`,
@@ -148,8 +155,9 @@ export function ifInvalidReturnFalse(
           alloc,
           pairVar,
           keyAddress
-        )}`
+        )}`,
       ].join("\n");
+    }
     case SchemaType.Positive:
       return fromNegation(`!(${valueAddress} > 0)`);
     case SchemaType.SafeInteger:
@@ -158,15 +166,18 @@ export function ifInvalidReturnFalse(
       return fromNegation(`typeof ${valueAddress} !== 'string'`);
     case SchemaType.Symbol:
       return fromNegation(`typeof ${valueAddress} !== 'symbol'`);
-    case SchemaType.Test:
+    case SchemaType.Test: {
       const testerVar = alloc("t", schema.tester);
       return fromNegation(`!${testerVar}.test(${valueAddress})`);
-    case SchemaType.Variant:
+    }
+    case SchemaType.Variant: {
       const isOneOf = getValidatorFromSchema(schema, keyAddress);
       const isOneOfVar = alloc("cv", isOneOf);
       return fromNegation(`!${isOneOfVar}(${valueAddress})`);
-    case SchemaType.Custom:
+    }
+    case SchemaType.Custom: {
       const customVar = alloc("custom", schema.customValidator);
       return fromNegation(`!${customVar}(${valueAddress})`);
+    }
   }
 }

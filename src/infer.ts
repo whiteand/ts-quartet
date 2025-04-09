@@ -1,10 +1,8 @@
 import { IfAny } from "./IfAny";
 import { SchemaType, SpecialProp } from "./schemas";
 import { TNumberString } from "./strnum";
-import { CompilationResult, TPrimitiveSchema } from "./types";
+import { CompilationResult, TPrimitiveSchema, Z } from "./types";
 import { KeyType } from "./types";
-
-export type Z = any;
 
 type Values<T> = T[keyof T];
 
@@ -20,13 +18,13 @@ export type InferOr<T> = Values<
   { [K in Extract<keyof T, number>]: ValidateBySchema<T[K]> }
 >;
 
-export type UnionToIntersection<T> = (T extends any
-  ? (param: T) => any
-  : never) extends (param: infer TI) => any
+export type UnionToIntersection<T> = (T extends Z
+  ? (param: T) => Z
+  : never) extends (param: infer TI) => Z
   ? TI
   : never;
 
-type AnyFunction = (...args: any[]) => any;
+type AnyFunction = (...args: Z[]) => Z;
 
 export type Intersect<A, B> = IfAny<A, B, Extract<A, B>>;
 
@@ -48,7 +46,7 @@ type TMinSchemaValue = number | TNumberString | bigint | null;
 /// It is not strictly right, but it is almost impossible for a person to use regexps not for strings
 type InferTester<T> = T extends RegExp ? string : Z;
 
-type InferCustom<T> = T extends (value: any) => value is infer X ? X : Z;
+type InferCustom<T> = T extends (value: Z) => value is infer X ? X : Z;
 
 type TToT<R> = R extends OfT<SchemaType.ArrayOf>
   ? ValidateBySchema<GetFromRawSchema<R>>[]

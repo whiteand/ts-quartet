@@ -1,13 +1,14 @@
 import { IExplanation } from "../../explanations";
 import { getAlloc } from "../../getAlloc";
 import { SchemaType } from "../../schemas/SchemaType";
-import { TSchema } from "../../types";
+import { TSchema, Z } from "../../types";
 import { beautifyStatements } from "../beautifyStatements";
 import { explanation } from "./explanation";
 import { returnExplanations } from "./returnExplanations";
+
 export function getExplanator(
   schema: TSchema
-): (value: any, path: KeyType[]) => null | IExplanation[] {
+): (value: Z, path: KeyType[]) => null | IExplanation[] {
   if (typeof schema !== "object" || schema === null) {
     return (value, path) =>
       value === schema ? null : [explanation(value, path, schema)];
@@ -15,8 +16,8 @@ export function getExplanator(
   switch (schema.type) {
     case SchemaType.And:
     case SchemaType.ArrayOf:
-    case SchemaType.Object:
-      const context: Record<string, any> = {};
+    case SchemaType.Object: {
+      const context: Record<string, Z> = {};
       const contextParamName = "ctx";
       const pathParamName = "path";
       const alloc = getAlloc(context, contextParamName);
@@ -36,9 +37,9 @@ export function getExplanator(
         contextParamName,
         pathParamName,
         funcBody
-      ) as (value: any, context: any, path: KeyType[]) => null | IExplanation[];
-      return (value: any, path: KeyType[]) => explanator(value, context, path);
-
+      ) as (value: Z, context: Z, path: KeyType[]) => null | IExplanation[];
+      return (value: Z, path: KeyType[]) => explanator(value, context, path);
+    }
     case SchemaType.Any:
       return () => null;
     case SchemaType.Array:
@@ -95,24 +96,26 @@ export function getExplanator(
 
     case SchemaType.Never:
       return (value, path) => [explanation(value, path, schema)];
-    case SchemaType.Not:
+    case SchemaType.Not: {
       const oppositeExplanator = getExplanator(schema.schema);
       return (value, path) =>
         oppositeExplanator(value, path)
           ? null
           : [explanation(value, path, schema)];
+    }
     case SchemaType.NotANumber:
       return (value, path) =>
         Number.isNaN(value) ? null : [explanation(value, path, schema)];
     case SchemaType.Number:
       return (value, path) =>
         typeof value === "number" ? null : [explanation(value, path, schema)];
-    case SchemaType.Pair:
+    case SchemaType.Pair: {
       const pairValidationExplanator = getExplanator(schema.keyValueSchema);
       return (value, path) => {
         const pair = { value, key: path[path.length - 1] };
         return pairValidationExplanator(pair, path);
       };
+    }
     case SchemaType.Positive:
       return (value, path) =>
         value > 0 ? null : [explanation(value, path, schema)];
@@ -136,8 +139,8 @@ export function getExplanator(
         }
         return [explanation(value, path, schema)];
       };
-    case SchemaType.Variant:
-      const explanators = schema.variants.map(variantSchema =>
+    case SchemaType.Variant: {
+      const explanators = schema.variants.map((variantSchema) =>
         getExplanator(variantSchema)
       );
       return (value, path) => {
@@ -154,5 +157,6 @@ export function getExplanator(
         }
         return [explanation(value, path, schema, innerExplanations)];
       };
+    }
   }
 }

@@ -1,3 +1,4 @@
+import { Z } from "../types";
 import { v } from "../v";
 import { testValidator } from "./testValidator";
 
@@ -13,7 +14,7 @@ describe("v.arrayOf", () => {
     const checkSquares = v(
       v.arrayOf(
         v.pair(
-          v.custom(({ key, value }: { key: number; value: any }) => {
+          v.custom(({ key, value }: { key: number; value: Z }) => {
             return value === key * key;
           })
         )

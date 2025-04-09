@@ -1,6 +1,8 @@
-const EMPTY: any = {};
+import { Z } from "./types";
 
-export function has(obj: any, key: string | number): boolean {
+const EMPTY: Z = {};
+
+export function has(obj: Z, key: string | number): boolean {
   if (obj == null) {
     return false;
   }
@@ -35,7 +37,7 @@ export function getAccessor(prop: string | number) {
 }
 export function getAccessorWithAlloc(
   prop: string | number,
-  alloc: (varName: string, initialValue: any, singleton?: boolean) => string
+  alloc: (varName: string, initialValue: Z, singleton?: boolean) => string
 ) {
   if (typeof prop === "number") {
     if (Number.isSafeInteger(prop)) {

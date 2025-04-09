@@ -1,9 +1,10 @@
+import { Z } from "./types";
 import { getAccessor } from "./utils";
 
-export function getAlloc(context: Record<string, any>, contextVar: string) {
+export function getAlloc(context: Record<string, Z>, contextVar: string) {
   const prefixesCounters: Record<string, number> = {};
 
-  return (prefix: string, initialValue: any, singleton?: boolean) => {
+  return (prefix: string, initialValue: Z, singleton?: boolean) => {
     if (!prefixesCounters[prefix]) {
       context[prefix] = initialValue;
       prefixesCounters[prefix] = 1;

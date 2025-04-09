@@ -1,10 +1,10 @@
 import { RawSchema } from "../../IRawSchema";
 import { rawSchemaToSchema } from "../../rawSchemaToSchema";
-import { CompilationResult } from "../../types";
+import { CompilationResult, Z } from "../../types";
 import { vCompileSchema } from "./vCompileSchema";
 
-export function vCompiler<T = any>(
+export function vCompiler<T = Z>(
   rawSchema: RawSchema
-): CompilationResult<T, any> {
+): CompilationResult<T, Z> {
   return vCompileSchema<T>(rawSchemaToSchema(rawSchema));
 }

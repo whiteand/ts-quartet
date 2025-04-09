@@ -1,3 +1,4 @@
+import { Z } from "../types";
 import { v } from "../v";
 import { testValidator } from "./testValidator";
 
@@ -24,13 +25,13 @@ describe("v({ ... })", () => {
   });
   test("v({ [restOmit]: something })", () => {
     const notNull = v({
-      [v.restOmit]: ["andrew"]
+      [v.restOmit]: ["andrew"],
     });
     testValidator(notNull, [{}, 1, 0, false, true, "", []], [null, undefined]);
   });
   test("v({ [rest]: number })", () => {
     const notNull = v({
-      [v.rest]: v.number
+      [v.rest]: v.number,
     });
     testValidator(
       notNull,
@@ -42,7 +43,7 @@ describe("v({ ... })", () => {
   test('v({ [rest]: number, [restOmit]: ["valid"] })', () => {
     const notNull = v({
       [v.rest]: v.number,
-      [v.restOmit]: ["valid"]
+      [v.restOmit]: ["valid"],
     });
     testValidator(
       notNull,
@@ -56,7 +57,7 @@ describe("v({ ... })", () => {
         [],
         { a: 1 },
         { a: 1, valid: null },
-        { valid: null }
+        { valid: null },
       ],
       [{ b: "string" }, null, undefined]
     );
@@ -64,7 +65,7 @@ describe("v({ ... })", () => {
   test("v({ a: string, [rest]: number })", () => {
     const notNull = v({
       a: v.string,
-      [v.rest]: v.number
+      [v.rest]: v.number,
     });
     testValidator(
       notNull,
@@ -77,7 +78,7 @@ describe("v({ ... })", () => {
         {},
         [],
         { a: null },
-        { a: "1", b: "1" }
+        { a: "1", b: "1" },
       ]
     );
   });
@@ -85,7 +86,7 @@ describe("v({ ... })", () => {
     const notNull = v({
       a: v.string,
       [v.rest]: v.number,
-      [v.restOmit]: ["b"]
+      [v.restOmit]: ["b"],
     });
     testValidator(
       notNull,
@@ -95,48 +96,48 @@ describe("v({ ... })", () => {
         { a: "1", b: 1 },
         { a: "1", b: 1, c: 2 },
         { a: "1", b: null },
-        { a: "1", b: 2 }
+        { a: "1", b: 2 },
       ],
       [{ b: "string" }, null, undefined, { a: 1 }, {}, [], { a: null }]
     );
   });
   test("{ v.pair }", () => {
-    let pairFromValidator: any | null = null;
+    let pairFromValidator: Z | null = null;
     const checkDict = v({
       [v.rest]: v.pair(
-        v.custom(pair => {
+        v.custom((pair) => {
           pairFromValidator = pair;
           return true;
         })
-      )
+      ),
     });
     expect(
       checkDict({
-        a: 123
+        a: 123,
       })
     ).toBe(true);
     expect(pairFromValidator).toEqual({ key: "a", value: 123 });
   });
   test("{ v.pair }", () => {
-    let pairFromValidator: any | null = null;
+    let pairFromValidator: Z | null = null;
     const checkDict = v({
       a: v.pair(
-        v.custom(pair => {
+        v.custom((pair) => {
           pairFromValidator = pair;
           return true;
         })
-      )
+      ),
     });
     expect(
       checkDict({
-        a: 123
+        a: 123,
       })
     ).toBe(true);
     expect(pairFromValidator).toEqual({ key: "a", value: 123 });
   });
   test("symbol prop", () => {
     const checkQuartet = v({
-      [Symbol.for("quartet")]: v.number
+      [Symbol.for("quartet")]: v.number,
     });
     testValidator(
       checkQuartet,
@@ -147,7 +148,7 @@ describe("v({ ... })", () => {
         0,
         1,
         false,
-        true
+        true,
       ],
       [null, undefined]
     );

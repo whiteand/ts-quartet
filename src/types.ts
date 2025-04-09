@@ -104,7 +104,7 @@ export interface ISymbolSchema {
 }
 
 export interface ITester {
-  readonly test: (value: any) => boolean;
+  readonly test: (value: Z) => boolean;
 }
 
 export interface ITestSchema {
@@ -117,9 +117,7 @@ export interface IVariantSchema {
   readonly variants: readonly TSchema[];
 }
 
-export type TCustomValidator = (
-  value: any
-) => boolean & { explanations?: any[] };
+export type TCustomValidator = (value: Z) => boolean & { explanations?: Z[] };
 
 export interface ICustomSchema {
   readonly type: SchemaType.Custom;
@@ -166,17 +164,20 @@ export type TSchema = TNonPrimitiveSchema | TPrimitiveSchema;
 
 export interface ICompilationResultProps<Explanation> {
   explanations: Explanation[];
-  [key: string]: any;
+  [key: string]: Z;
 }
 
-export type Validator<T = any> = IfAny<
+export type Validator<T = Z> = IfAny<
   T,
-  (value: any) => boolean,
-  (value: any) => value is T
+  (value: Z) => boolean,
+  (value: Z) => value is T
 >;
 
-export type CompilationResult<T = any, Explanation = any> = Validator<T> &
+export type CompilationResult<T = Z, Explanation = Z> = Validator<T> &
   ICompilationResultProps<Explanation> & {
     readonly schema: TSchema;
     cast<U>(): CompilationResult<U, Explanation>;
   };
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type Z = any;

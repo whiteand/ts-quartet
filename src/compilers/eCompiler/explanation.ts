@@ -1,9 +1,10 @@
 /* tslint:disable:object-literal-sort-keys */
 import { IExplanation, schemaToExplanationSchema } from "../../explanations";
-import { KeyType, TSchema } from "../../types";
+import { KeyType, TSchema, Z } from "../../types";
 const EMPTY_PATH: KeyType[] = [];
+
 export function explanation(
-  value: any,
+  value: Z,
   path: KeyType[],
   schema: TSchema,
   innerExplanations: IExplanation[] = []
@@ -12,6 +13,6 @@ export function explanation(
     value,
     schema: schemaToExplanationSchema(schema),
     path: EMPTY_PATH.concat(path),
-    innerExplanations
+    innerExplanations,
   };
 }

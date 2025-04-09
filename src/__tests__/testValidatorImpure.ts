@@ -1,9 +1,9 @@
-import { CompilationResult } from "../types";
+import { CompilationResult, Z } from "../types";
 
 export function testValidatorImpure(
-  validator: CompilationResult<any, any>,
-  valids: any[],
-  invalids: any[],
+  validator: CompilationResult<Z, Z>,
+  valids: Z[],
+  invalids: Z[],
   matchExplanationSnapshot: boolean = false
 ) {
   expect(typeof validator).toBe("function");

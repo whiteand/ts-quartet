@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-empty-object-type */
+
 export type IfAny<T, Any, NotAny> = true extends T
   ? ("1" extends T
       ? (1 extends T

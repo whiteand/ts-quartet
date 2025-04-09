@@ -6,7 +6,7 @@
  * This method has such type: v.and(schema, schema2, ...) => Validator
  */
 
-const { v } = require("quartet"); // import { v } from 'quartet'
+import { v } from "quartet"; // const { v } = require('quartet')
 
 const checkNotEmptyArray = v(v.and(v.array, v.minLength(1)));
 

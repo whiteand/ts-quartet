@@ -1,15 +1,16 @@
 import { getAlloc } from "../getAlloc";
+import { Z } from "../types";
 
 describe("getAlloc", () => {
   test("single prefix", () => {
-    const ctx: Record<string, any> = {};
+    const ctx: Record<string, Z> = {};
     const alloc = getAlloc(ctx, "ctx");
 
     expect(alloc("something", 42)).toEqual("ctx.something");
     expect(ctx).toEqual({ something: 42 });
   });
   test("singleton alloc", () => {
-    const ctx: Record<string, any> = {};
+    const ctx: Record<string, Z> = {};
     const alloc = getAlloc(ctx, "ctx");
 
     expect(alloc("something", 42, true)).toEqual("ctx.something");
@@ -17,7 +18,7 @@ describe("getAlloc", () => {
     expect(ctx).toEqual({ something: 42 });
   });
   test("wrong singleton", () => {
-    const ctx: Record<string, any> = {};
+    const ctx: Record<string, Z> = {};
     const alloc = getAlloc(ctx, "ctx");
 
     expect(alloc("something", 42, true)).toEqual("ctx.something");

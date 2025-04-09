@@ -1,4 +1,4 @@
-import { e as v, ExplanationSchemaType } from "..";
+import { e as v, ExplanationSchemaType, Z } from "..";
 import { getExplanations } from "./getExplanations";
 import { testValidatorImpure } from "./testValidatorImpure";
 
@@ -16,10 +16,10 @@ describe("v({ ... })", () => {
         innerExplanations: [],
         schema: {
           propsSchemas: {},
-          type: ExplanationSchemaType.Object
+          type: ExplanationSchemaType.Object,
         },
-        value: null
-      }
+        value: null,
+      },
     ]);
     expect(getExplanations(notNull, undefined)).toEqual([
       {
@@ -27,10 +27,10 @@ describe("v({ ... })", () => {
         innerExplanations: [],
         schema: {
           propsSchemas: {},
-          type: ExplanationSchemaType.Object
+          type: ExplanationSchemaType.Object,
         },
-        value: undefined
-      }
+        value: undefined,
+      },
     ]);
   });
   test("v({ a: number })", () => {
@@ -47,13 +47,13 @@ describe("v({ ... })", () => {
         schema: {
           propsSchemas: {
             a: {
-              type: ExplanationSchemaType.Number
-            }
+              type: ExplanationSchemaType.Number,
+            },
           },
-          type: ExplanationSchemaType.Object
+          type: ExplanationSchemaType.Object,
         },
-        value: null
-      }
+        value: null,
+      },
     ]);
     expect(getExplanations(notNull, undefined)).toEqual([
       {
@@ -62,83 +62,83 @@ describe("v({ ... })", () => {
         schema: {
           propsSchemas: {
             a: {
-              type: ExplanationSchemaType.Number
-            }
+              type: ExplanationSchemaType.Number,
+            },
           },
-          type: ExplanationSchemaType.Object
+          type: ExplanationSchemaType.Object,
         },
-        value: undefined
-      }
+        value: undefined,
+      },
     ]);
     expect(getExplanations(notNull, {})).toEqual([
       {
         path: ["a"],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.Number
+          type: ExplanationSchemaType.Number,
         },
-        value: undefined
-      }
+        value: undefined,
+      },
     ]);
     expect(getExplanations(notNull, 1)).toEqual([
       {
         path: ["a"],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.Number
+          type: ExplanationSchemaType.Number,
         },
-        value: undefined
-      }
+        value: undefined,
+      },
     ]);
     expect(getExplanations(notNull, 0)).toEqual([
       {
         path: ["a"],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.Number
+          type: ExplanationSchemaType.Number,
         },
-        value: undefined
-      }
+        value: undefined,
+      },
     ]);
     expect(getExplanations(notNull, false)).toEqual([
       {
         path: ["a"],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.Number
+          type: ExplanationSchemaType.Number,
         },
-        value: undefined
-      }
+        value: undefined,
+      },
     ]);
     expect(getExplanations(notNull, true)).toEqual([
       {
         path: ["a"],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.Number
+          type: ExplanationSchemaType.Number,
         },
-        value: undefined
-      }
+        value: undefined,
+      },
     ]);
     expect(getExplanations(notNull, "")).toEqual([
       {
         path: ["a"],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.Number
+          type: ExplanationSchemaType.Number,
         },
-        value: undefined
-      }
+        value: undefined,
+      },
     ]);
     expect(getExplanations(notNull, [])).toEqual([
       {
         path: ["a"],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.Number
+          type: ExplanationSchemaType.Number,
         },
-        value: undefined
-      }
+        value: undefined,
+      },
     ]);
   });
   test('v({ a: number, [restOmit]: ["valid"] })', () => {
@@ -155,13 +155,13 @@ describe("v({ ... })", () => {
         schema: {
           propsSchemas: {
             a: {
-              type: ExplanationSchemaType.Number
-            }
+              type: ExplanationSchemaType.Number,
+            },
           },
-          type: ExplanationSchemaType.Object
+          type: ExplanationSchemaType.Object,
         },
-        value: null
-      }
+        value: null,
+      },
     ]);
     expect(getExplanations(notNull, undefined)).toEqual([
       {
@@ -170,88 +170,88 @@ describe("v({ ... })", () => {
         schema: {
           propsSchemas: {
             a: {
-              type: ExplanationSchemaType.Number
-            }
+              type: ExplanationSchemaType.Number,
+            },
           },
-          type: ExplanationSchemaType.Object
+          type: ExplanationSchemaType.Object,
         },
-        value: undefined
-      }
+        value: undefined,
+      },
     ]);
     expect(getExplanations(notNull, {})).toEqual([
       {
         path: ["a"],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.Number
+          type: ExplanationSchemaType.Number,
         },
-        value: undefined
-      }
+        value: undefined,
+      },
     ]);
     expect(getExplanations(notNull, 1)).toEqual([
       {
         path: ["a"],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.Number
+          type: ExplanationSchemaType.Number,
         },
-        value: undefined
-      }
+        value: undefined,
+      },
     ]);
     expect(getExplanations(notNull, 0)).toEqual([
       {
         path: ["a"],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.Number
+          type: ExplanationSchemaType.Number,
         },
-        value: undefined
-      }
+        value: undefined,
+      },
     ]);
     expect(getExplanations(notNull, false)).toEqual([
       {
         path: ["a"],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.Number
+          type: ExplanationSchemaType.Number,
         },
-        value: undefined
-      }
+        value: undefined,
+      },
     ]);
     expect(getExplanations(notNull, true)).toEqual([
       {
         path: ["a"],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.Number
+          type: ExplanationSchemaType.Number,
         },
-        value: undefined
-      }
+        value: undefined,
+      },
     ]);
     expect(getExplanations(notNull, "")).toEqual([
       {
         path: ["a"],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.Number
+          type: ExplanationSchemaType.Number,
         },
-        value: undefined
-      }
+        value: undefined,
+      },
     ]);
     expect(getExplanations(notNull, [])).toEqual([
       {
         path: ["a"],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.Number
+          type: ExplanationSchemaType.Number,
         },
-        value: undefined
-      }
+        value: undefined,
+      },
     ]);
   });
   test("v({ [restOmit]: something })", () => {
     const notNull = v({
-      [v.restOmit]: ["andrew"]
+      [v.restOmit]: ["andrew"],
     });
     testValidatorImpure(
       notNull,
@@ -264,10 +264,10 @@ describe("v({ ... })", () => {
         innerExplanations: [],
         schema: {
           propsSchemas: {},
-          type: ExplanationSchemaType.Object
+          type: ExplanationSchemaType.Object,
         },
-        value: null
-      }
+        value: null,
+      },
     ]);
     expect(getExplanations(notNull, undefined)).toEqual([
       {
@@ -275,15 +275,15 @@ describe("v({ ... })", () => {
         innerExplanations: [],
         schema: {
           propsSchemas: {},
-          type: ExplanationSchemaType.Object
+          type: ExplanationSchemaType.Object,
         },
-        value: undefined
-      }
+        value: undefined,
+      },
     ]);
   });
   test("v({ [rest]: number })", () => {
     const notNull = v({
-      [v.rest]: v.number
+      [v.rest]: v.number,
     });
     testValidatorImpure(
       notNull,
@@ -295,10 +295,10 @@ describe("v({ ... })", () => {
         path: ["b"],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.Number
+          type: ExplanationSchemaType.Number,
         },
-        value: "string"
-      }
+        value: "string",
+      },
     ]);
     expect(getExplanations(notNull, null)).toEqual([
       {
@@ -307,13 +307,13 @@ describe("v({ ... })", () => {
         schema: {
           "[v.restOmit]": [],
           "[v.rest]": {
-            type: ExplanationSchemaType.Number
+            type: ExplanationSchemaType.Number,
           },
           propsSchemas: {},
-          type: ExplanationSchemaType.Object
+          type: ExplanationSchemaType.Object,
         },
-        value: null
-      }
+        value: null,
+      },
     ]);
     expect(getExplanations(notNull, undefined)).toEqual([
       {
@@ -322,20 +322,20 @@ describe("v({ ... })", () => {
         schema: {
           "[v.restOmit]": [],
           "[v.rest]": {
-            type: ExplanationSchemaType.Number
+            type: ExplanationSchemaType.Number,
           },
           propsSchemas: {},
-          type: ExplanationSchemaType.Object
+          type: ExplanationSchemaType.Object,
         },
-        value: undefined
-      }
+        value: undefined,
+      },
     ]);
   });
 
   test('v({ [rest]: number, [restOmit]: ["valid"] })', () => {
     const notNull = v({
       [v.rest]: v.number,
-      [v.restOmit]: ["valid"]
+      [v.restOmit]: ["valid"],
     });
     testValidatorImpure(
       notNull,
@@ -349,7 +349,7 @@ describe("v({ ... })", () => {
         [],
         { a: 1 },
         { a: 1, valid: null },
-        { valid: null }
+        { valid: null },
       ],
       [{ b: "string" }, null, undefined]
     );
@@ -358,10 +358,10 @@ describe("v({ ... })", () => {
         path: ["b"],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.Number
+          type: ExplanationSchemaType.Number,
         },
-        value: "string"
-      }
+        value: "string",
+      },
     ]);
     expect(getExplanations(notNull, null)).toEqual([
       {
@@ -370,13 +370,13 @@ describe("v({ ... })", () => {
         schema: {
           "[v.restOmit]": ["valid"],
           "[v.rest]": {
-            type: ExplanationSchemaType.Number
+            type: ExplanationSchemaType.Number,
           },
           propsSchemas: {},
-          type: ExplanationSchemaType.Object
+          type: ExplanationSchemaType.Object,
         },
-        value: null
-      }
+        value: null,
+      },
     ]);
     expect(getExplanations(notNull, undefined)).toEqual([
       {
@@ -385,19 +385,19 @@ describe("v({ ... })", () => {
         schema: {
           "[v.restOmit]": ["valid"],
           "[v.rest]": {
-            type: ExplanationSchemaType.Number
+            type: ExplanationSchemaType.Number,
           },
           propsSchemas: {},
-          type: ExplanationSchemaType.Object
+          type: ExplanationSchemaType.Object,
         },
-        value: undefined
-      }
+        value: undefined,
+      },
     ]);
   });
   test("v({ a: string, [rest]: number })", () => {
     const notNull = v({
       a: v.string,
-      [v.rest]: v.number
+      [v.rest]: v.number,
     });
     testValidatorImpure(
       notNull,
@@ -410,7 +410,7 @@ describe("v({ ... })", () => {
         {},
         [],
         { a: null },
-        { a: "1", b: "1" }
+        { a: "1", b: "1" },
       ]
     );
     expect(getExplanations(notNull, { b: "string" })).toEqual([
@@ -418,10 +418,10 @@ describe("v({ ... })", () => {
         path: ["a"],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.String
+          type: ExplanationSchemaType.String,
         },
-        value: undefined
-      }
+        value: undefined,
+      },
     ]);
     expect(getExplanations(notNull, null)).toEqual([
       {
@@ -430,17 +430,17 @@ describe("v({ ... })", () => {
         schema: {
           "[v.restOmit]": [],
           "[v.rest]": {
-            type: ExplanationSchemaType.Number
+            type: ExplanationSchemaType.Number,
           },
           propsSchemas: {
             a: {
-              type: ExplanationSchemaType.String
-            }
+              type: ExplanationSchemaType.String,
+            },
           },
-          type: ExplanationSchemaType.Object
+          type: ExplanationSchemaType.Object,
         },
-        value: null
-      }
+        value: null,
+      },
     ]);
     expect(getExplanations(notNull, undefined)).toEqual([
       {
@@ -449,74 +449,74 @@ describe("v({ ... })", () => {
         schema: {
           "[v.restOmit]": [],
           "[v.rest]": {
-            type: ExplanationSchemaType.Number
+            type: ExplanationSchemaType.Number,
           },
           propsSchemas: {
             a: {
-              type: ExplanationSchemaType.String
-            }
+              type: ExplanationSchemaType.String,
+            },
           },
-          type: ExplanationSchemaType.Object
+          type: ExplanationSchemaType.Object,
         },
-        value: undefined
-      }
+        value: undefined,
+      },
     ]);
     expect(getExplanations(notNull, { a: 1 })).toEqual([
       {
         path: ["a"],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.String
+          type: ExplanationSchemaType.String,
         },
-        value: 1
-      }
+        value: 1,
+      },
     ]);
     expect(getExplanations(notNull, {})).toEqual([
       {
         path: ["a"],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.String
+          type: ExplanationSchemaType.String,
         },
-        value: undefined
-      }
+        value: undefined,
+      },
     ]);
     expect(getExplanations(notNull, [])).toEqual([
       {
         path: ["a"],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.String
+          type: ExplanationSchemaType.String,
         },
-        value: undefined
-      }
+        value: undefined,
+      },
     ]);
     expect(getExplanations(notNull, { a: null })).toEqual([
       {
         path: ["a"],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.String
+          type: ExplanationSchemaType.String,
         },
-        value: null
-      }
+        value: null,
+      },
     ]);
     expect(getExplanations(notNull, { a: "1", b: "1" })).toEqual([
       {
         path: ["b"],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.Number
+          type: ExplanationSchemaType.Number,
         },
-        value: "1"
-      }
+        value: "1",
+      },
     ]);
   });
   test('v({ [rest]: number, a: string, [restOmit]: ["b"] })', () => {
     const notNull = v({
       a: v.string,
       [v.rest]: v.number,
-      [v.restOmit]: ["b"]
+      [v.restOmit]: ["b"],
     });
     testValidatorImpure(
       notNull,
@@ -526,7 +526,7 @@ describe("v({ ... })", () => {
         { a: "1", b: 1 },
         { a: "1", b: 1, c: 2 },
         { a: "1", b: null },
-        { a: "1", b: 2 }
+        { a: "1", b: 2 },
       ],
       [{ b: "string" }, null, undefined, { a: 1 }, {}, [], { a: null }]
     );
@@ -535,10 +535,10 @@ describe("v({ ... })", () => {
         path: ["a"],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.String
+          type: ExplanationSchemaType.String,
         },
-        value: undefined
-      }
+        value: undefined,
+      },
     ]);
     expect(getExplanations(notNull, null)).toEqual([
       {
@@ -547,17 +547,17 @@ describe("v({ ... })", () => {
         schema: {
           "[v.restOmit]": ["b"],
           "[v.rest]": {
-            type: ExplanationSchemaType.Number
+            type: ExplanationSchemaType.Number,
           },
           propsSchemas: {
             a: {
-              type: ExplanationSchemaType.String
-            }
+              type: ExplanationSchemaType.String,
+            },
           },
-          type: ExplanationSchemaType.Object
+          type: ExplanationSchemaType.Object,
         },
-        value: null
-      }
+        value: null,
+      },
     ]);
     expect(getExplanations(notNull, undefined)).toEqual([
       {
@@ -566,96 +566,96 @@ describe("v({ ... })", () => {
         schema: {
           "[v.restOmit]": ["b"],
           "[v.rest]": {
-            type: ExplanationSchemaType.Number
+            type: ExplanationSchemaType.Number,
           },
           propsSchemas: {
             a: {
-              type: ExplanationSchemaType.String
-            }
+              type: ExplanationSchemaType.String,
+            },
           },
-          type: ExplanationSchemaType.Object
+          type: ExplanationSchemaType.Object,
         },
-        value: undefined
-      }
+        value: undefined,
+      },
     ]);
     expect(getExplanations(notNull, { a: 1 })).toEqual([
       {
         path: ["a"],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.String
+          type: ExplanationSchemaType.String,
         },
-        value: 1
-      }
+        value: 1,
+      },
     ]);
     expect(getExplanations(notNull, {})).toEqual([
       {
         path: ["a"],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.String
+          type: ExplanationSchemaType.String,
         },
-        value: undefined
-      }
+        value: undefined,
+      },
     ]);
     expect(getExplanations(notNull, [])).toEqual([
       {
         path: ["a"],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.String
+          type: ExplanationSchemaType.String,
         },
-        value: undefined
-      }
+        value: undefined,
+      },
     ]);
     expect(getExplanations(notNull, { a: null })).toEqual([
       {
         path: ["a"],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.String
+          type: ExplanationSchemaType.String,
         },
-        value: null
-      }
+        value: null,
+      },
     ]);
   });
   test("{ v.pair }", () => {
-    let pairFromValidator: any | null = null;
+    let pairFromValidator: Z | null = null;
     const checkDict = v({
       [v.rest]: v.pair(
-        v.custom(pair => {
+        v.custom((pair) => {
           pairFromValidator = pair;
           return true;
         })
-      )
+      ),
     });
     expect(
       checkDict({
-        a: 123
+        a: 123,
       })
     ).toBe(true);
     expect(pairFromValidator).toEqual({ key: "a", value: 123 });
   });
   test("{ v.pair }", () => {
-    let pairFromValidator: any | null = null;
+    let pairFromValidator: Z | null = null;
     const checkDict = v({
       a: v.pair(
-        v.custom(pair => {
+        v.custom((pair) => {
           pairFromValidator = pair;
           return true;
         })
-      )
+      ),
     });
     expect(
       checkDict({
-        a: 123
+        a: 123,
       })
     ).toBe(true);
     expect(pairFromValidator).toEqual({ key: "a", value: 123 });
   });
   test("symbol prop", () => {
     const checkQuartet = v({
-      [Symbol.for("quartet")]: v.number
+      [Symbol.for("quartet")]: v.number,
     });
     testValidatorImpure(
       checkQuartet,
@@ -666,7 +666,7 @@ describe("v({ ... })", () => {
         0,
         1,
         false,
-        true
+        true,
       ],
       [null, undefined]
     );
@@ -676,10 +676,10 @@ describe("v({ ... })", () => {
         innerExplanations: [],
         schema: {
           propsSchemas: {},
-          type: ExplanationSchemaType.Object
+          type: ExplanationSchemaType.Object,
         },
-        value: null
-      }
+        value: null,
+      },
     ]);
     expect(getExplanations(checkQuartet, undefined)).toEqual([
       {
@@ -687,15 +687,15 @@ describe("v({ ... })", () => {
         innerExplanations: [],
         schema: {
           propsSchemas: {},
-          type: ExplanationSchemaType.Object
+          type: ExplanationSchemaType.Object,
         },
-        value: undefined
-      }
+        value: undefined,
+      },
     ]);
   });
   test("for readme", () => {
     const checkPerson = v({
-      name: v.string
+      name: v.string,
     });
     expect(checkPerson({ name: 1 })).toBe(false); // false
     expect(checkPerson.explanations).toEqual([
@@ -703,17 +703,17 @@ describe("v({ ... })", () => {
         path: ["name"],
         innerExplanations: [],
         schema: {
-          type: "String"
+          type: "String",
         },
-        value: 1
-      }
+        value: 1,
+      },
     ]);
   });
   test("nested objects", () => {
     const validator = v({
       p: {
-        name: v.string
-      }
+        name: v.string,
+      },
     });
     expect(validator({ p: { name: 1 } })).toBe(false); // false
     expect(validator.explanations).toEqual([
@@ -721,10 +721,10 @@ describe("v({ ... })", () => {
         path: ["p", "name"],
         innerExplanations: [],
         schema: {
-          type: "String"
+          type: "String",
         },
-        value: 1
-      }
+        value: 1,
+      },
     ]);
   });
 });

@@ -4,7 +4,7 @@
  * This file contains little example of full flow of api request with validation
  */
 
-const { v } = require("quartet"); // import { v } from 'quartet'
+import { v } from "quartet"; // const { v } = require("quartet")
 
 const checkUser = v({
   id: v.number,
@@ -12,7 +12,7 @@ const checkUser = v({
   age: v.and(v.positive, v.safeInteger),
   sex: ["male", "female"],
   house: [null, { address: v.string }],
-  hasWord: v.boolean
+  hasWord: v.boolean,
 });
 
 // Function that will validate response from fetcher and returns valid response
@@ -28,27 +28,27 @@ const safeFetchUser = async (fetcher, userId) => {
   // Validation of response
   if (!checkUser(response)) {
     // get validation with
-    throw new TypeError("wrong user response data")
+    throw new TypeError("wrong user response data");
   }
   return response;
 };
 
 // Mock async function that returns valid user data
-const validFetcher = async userId => ({
+const validFetcher = async (userId) => ({
   id: userId,
   name: "Andrew",
   age: 22,
   sex: "male",
   house: { address: "st. Yanhelya, 5" },
-  hasWord: true
+  hasWord: true,
 });
 
 // Mock async function that returns invalid user data
-const invalidFetcher = async userId => ({
+const invalidFetcher = async (userId) => ({
   id: userId,
   name: "Andrew",
   age: 22.5,
-  sex: null
+  sex: null,
 });
 
 // Demo function
@@ -69,8 +69,9 @@ async function demo() {
       "hasWord": true
     }
     */
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const invalidUser = await safeFetchUser(invalidFetcher, 2); // throws Error with explanations
-  } catch (error) {
+  } catch {
     // Handle Error
   }
 }

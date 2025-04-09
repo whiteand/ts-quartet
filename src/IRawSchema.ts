@@ -28,7 +28,9 @@ import {
   TPrimitiveSchema,
 } from "./types";
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface IRawSchemaArr extends ReadonlyArray<RawSchema> {}
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface IRawSchemaDict extends Readonly<Record<KeyType, RawSchema>> {}
 
 export type RawSchema =

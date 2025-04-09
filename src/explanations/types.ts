@@ -1,4 +1,4 @@
-import { KeyType, TPrimitiveSchema } from "../types";
+import { KeyType, TPrimitiveSchema, Z } from "../types";
 
 export enum ExplanationSchemaType {
   And = "And",
@@ -25,7 +25,7 @@ export enum ExplanationSchemaType {
   Symbol = "Symbol",
   Test = "Test",
   Variant = "Variant",
-  Custom = "Custom"
+  Custom = "Custom",
 }
 
 export interface IAndExplanationSchema {
@@ -152,7 +152,7 @@ export interface IVariantExplanationSchema {
 export interface ICustomExplanationSchema {
   type: ExplanationSchemaType.Custom;
   description: string;
-  innerExplanations: any[];
+  innerExplanations: Z[];
 }
 
 export type TExplanationSchema =
@@ -184,7 +184,7 @@ export type TExplanationSchema =
   | ICustomExplanationSchema;
 
 export interface IExplanation {
-  value: any;
+  value: Z;
   path: KeyType[];
   schema: TExplanationSchema;
   innerExplanations: IExplanation[];

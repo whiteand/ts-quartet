@@ -6,10 +6,10 @@ import {
   objectSchemaWithoutRest,
   objectSchemaWithRest,
   SchemaType,
-  variant as variantSchema
+  variant as variantSchema,
 } from "./schemas";
 import { SpecialProp } from "./schemas/SpecialProp";
-import { KeyType, TSchema } from "./types";
+import { KeyType, TSchema, Z } from "./types";
 import { arrToDict, has } from "./utils";
 
 const schemaTypeDict = arrToDict(Object.values(SchemaType));
@@ -77,7 +77,7 @@ export function rawSchemaToSchema(rawSchema: RawSchema): TSchema {
         [SpecialProp.Rest]: rawRest,
         [SpecialProp.RestOmit]: restOmit,
         ...rawPropsSchemas
-      } = rawSchema as any;
+      } = rawSchema as Z;
       const restSchema = rawSchemaToSchema(rawRest);
       const propsSchemas = rawPropsSchemasToPropsSchemas(
         rawPropsSchemas as Record<KeyType, RawSchema>
@@ -88,10 +88,7 @@ export function rawSchemaToSchema(rawSchema: RawSchema): TSchema {
         arrToDict(restOmit)
       );
     }
-    const {
-      [SpecialProp.Rest]: rawRest,
-      ...rawPropsSchemas
-    } = rawSchema as any;
+    const { [SpecialProp.Rest]: rawRest, ...rawPropsSchemas } = rawSchema as Z;
     const restSchema = rawSchemaToSchema(rawRest);
     const propsSchemas = rawPropsSchemasToPropsSchemas(
       rawPropsSchemas as Record<KeyType, RawSchema>
@@ -99,10 +96,8 @@ export function rawSchemaToSchema(rawSchema: RawSchema): TSchema {
     return objectSchemaWithRest(propsSchemas, restSchema, EMPTY_OBJ);
   }
   if (has(rawSchema, SpecialProp.RestOmit)) {
-    const {
-      [SpecialProp.RestOmit]: restOmit,
-      ...rawPropsSchemas
-    } = rawSchema as any;
+    const rawPropsSchemas = { ...rawSchema } as Z;
+    delete rawPropsSchemas[SpecialProp.RestOmit];
     const propsSchemas = rawPropsSchemasToPropsSchemas(
       rawPropsSchemas as Record<KeyType, RawSchema>
     );

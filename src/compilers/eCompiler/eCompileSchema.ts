@@ -1,18 +1,18 @@
 /* tslint:disable:object-literal-sort-keys */
 import { IExplanation } from "../../explanations";
-import { Z } from "../../infer";
+import { Z } from "../../types";
 import { CompilationResult, TSchema, Validator } from "../../types";
 import { getExplanator } from "./getExplanator";
 
-export function eCompileSchema<T = any>(
+export function eCompileSchema<T = Z>(
   schema: TSchema
-): CompilationResult<T, any> {
+): CompilationResult<T, Z> {
   const explanator: (
-    value: any,
+    value: Z,
     path: KeyType[]
   ) => null | IExplanation[] = getExplanator(schema);
   const explanations: IExplanation[] = [];
-  function validator(value: any) {
+  function validator(value: Z) {
     const explanationsOrNull = explanator(value, []);
     if (explanationsOrNull) {
       ((validator as unknown) as CompilationResult<
@@ -34,6 +34,6 @@ export function eCompileSchema<T = any>(
     schema,
     cast() {
       return this as Z;
-    }
+    },
   });
 }
