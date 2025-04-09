@@ -35,7 +35,7 @@ export function rawSchemaToSchema(rawSchema: RawSchema): TSchema {
   if (typeof rawSchema === "function") {
     if (!("schema" in rawSchema)) {
       throw new Error(
-        `Use v.custom(your validation function, explanation) instead of usage of the function directly`
+        `Wrap your validation function with v.custom(...) instead of usage of the function directly`
       );
     }
     return rawSchema.schema;

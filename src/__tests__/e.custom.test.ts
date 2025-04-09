@@ -180,4 +180,23 @@ describe("e.custom", (test) => {
       },
     ]);
   });
+  test("it has proper description", () => {
+    const check = e(e.custom((x) => x === 42, "not 42"));
+    expect(check(42)).toBe(true);
+    expect(check(41)).toBe(false);
+    expect(check.explanations).toMatchInlineSnapshot(`
+      [
+        {
+          "innerExplanations": [],
+          "path": [],
+          "schema": {
+            "description": "not 42",
+            "innerExplanations": [],
+            "type": "Custom",
+          },
+          "value": 41,
+        },
+      ]
+    `);
+  });
 });
