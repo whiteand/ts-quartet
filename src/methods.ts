@@ -26,7 +26,10 @@ import {
   symbol,
   testSchema
 } from "./schemas";
-import { IAndSchema, IArrayOfSchema, ICustomSchema, ITester, ITestSchema, TCustomValidator } from "./types";
+import { IAndSchema, IArrayOfSchema, ICustomSchema, IStringSchema, ITester, ITestSchema, TCustomValidator } from "./types";
+
+const EMAIL_REGEX =
+/^(?!\.)(?!.*\.\.)([A-Z0-9_'+\-.]*)[A-Z0-9_+-]@([A-Z0-9][A-Z0-9-]*\.)+[A-Z]{2,}$/i;
 
 export const methods = {
   and<const RR extends readonly RawSchema[]>(...rawSchemas: RR): IAndSchema & IFromRawSchema<RR> {
@@ -70,8 +73,9 @@ export const methods = {
   safeInteger: safeInteger(),
   string: string(),
   symbol: symbol(),
+  email: and([string(), testSchema(EMAIL_REGEX)]) as IAndSchema & IFromRawSchema<readonly [IStringSchema, ITestSchema & IFromRawSchema<RegExp>]>,
   test<const T extends ITester>(tester: T): ITestSchema & IFromRawSchema<T> {
-    return testSchema(tester) as ITestSchema & IFromRawSchema<T>
+    return testSchema(tester)
   },
   custom<const T extends TCustomValidator>(customValidator: T, description?: string): ICustomSchema & IFromRawSchema<T> {
     return custom(customValidator, description) as ICustomSchema & IFromRawSchema<T>

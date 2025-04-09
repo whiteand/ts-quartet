@@ -1,9 +1,10 @@
-import { ITester, ITestSchema } from "../types";
+import { IFromRawSchema } from "../infer";
+import { ITester, ITestSchema, Z } from "../types";
 import { SchemaType } from "./SchemaType";
 
-export function testSchema(tester: ITester): ITestSchema {
+export function testSchema<const T extends ITester>(tester: T): ITestSchema & IFromRawSchema<T> {
   return {
     tester,
-    type: SchemaType.Test
-  };
+    type: SchemaType.Test,
+  } as Z as ITestSchema & IFromRawSchema<T>
 }

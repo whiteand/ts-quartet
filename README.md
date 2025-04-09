@@ -17,6 +17,7 @@ It is a declarative and fast tool for data validation.
       - [`v.any: Schema`](#vany-schema)
       - [`v.array: Schema`](#varray-schema)
       - [`v.boolean: Schema`](#vboolean-schema)
+      - [`v.email: Schema`](#vemail-schema)
       - [`v.finite: Schema`](#vfinite-schema)
       - [`v.function: Schema`](#vfunction-schema)
       - [`v.negative: Schema`](#vnegative-schema)
@@ -237,6 +238,16 @@ const checkBoolean = (value) => Array.isArray(v);
 const checkBoolean = v(v.boolean);
 // same as
 const checkBoolean = (x) => typeof x === "boolean";
+```
+
+#### `v.email: Schema`
+
+```typescript
+const checkEmail = v(v.email);
+
+// same as
+
+const checkEmail = (value) => typeof value === 'string' && /^(?!\.)(?!.*\.\.)([A-Z0-9_'+\-.]*)[A-Z0-9_+-]@([A-Z0-9][A-Z0-9-]*\.)+[A-Z]{2,}$/i.test(value);
 ```
 
 #### `v.finite: Schema`
