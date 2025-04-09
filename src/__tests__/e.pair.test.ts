@@ -1,6 +1,6 @@
+import { describe } from "vitest";
 import { e as v } from "../e";
 import { testValidatorImpure } from "./testValidatorImpure";
-import { describe, expect } from "vitest";
 
 describe("v.pair", (test) => {
   test("v.pair", () => {

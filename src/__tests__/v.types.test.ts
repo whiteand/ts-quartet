@@ -1,6 +1,6 @@
+import { describe } from "vitest";
 import { v } from "../v";
 import { testValidator } from "./testValidator";
-import { describe, expect } from "vitest";
 
 describe("v.[type]", (test) => {
   test("v.boolean", () => {
