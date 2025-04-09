@@ -715,7 +715,7 @@ import { e } from "quartet"; // Instance with explanations.
 
 `// TODO: Write it!`
 
-## Ajv vs Quartet 10
+## Ajv vs Quartet 11
 
 I wrote a benchmark in order to compare one of the fastest `ajv` validation libraries with my example from the introduction.
 
@@ -873,6 +873,6 @@ suite
 And the result is this:
 
 ```
-ajv                x 1,029,338 ops/sec ±0.79% (90 runs sampled)
-Quartet 9: Allegro x 3,727,212 ops/sec ±9.26% (66 runs sampled)
+ajv x 3,180,537 ops/sec ±2.31% (91 runs sampled)
+Quartet 11 x 9,354,634 ops/sec ±1.18% (94 runs sampled)
 ```
