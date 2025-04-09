@@ -5,6 +5,7 @@ export default defineConfig({
     // ...
     coverage: {
       reporter: [["lcov", { projectRoot: "." }]],
+      exclude: ["lib/**", "examples/**"],
     },
   },
 });
