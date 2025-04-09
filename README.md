@@ -2,11 +2,11 @@
 
 [![Coverage Status](https://coveralls.io/repos/github/whiteand/ts-quartet/badge.svg?branch=master)](https://coveralls.io/github/whiteand/ts-quartet?branch=master)
 
-**Size: 5.39 KB** (minified and gzipped). No dependencies. [Size Limit](https://github.com/ai/size-limit) controls the size.
+**Size: 6.76 KB** (minified and gzipped). No dependencies. [Size Limit](https://github.com/ai/size-limit) controls the size.
 
 It is a declarative and fast tool for data validation.
 
-- [Quartet 10](#quartet-10)
+- [Quartet 11](#quartet-11)
   - [Examples](#examples)
   - [Is there extra word in this list?](#is-there-extra-word-in-this-list)
   - [Objections](#objections)

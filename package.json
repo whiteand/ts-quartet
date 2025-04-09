@@ -41,14 +41,12 @@
   "homepage": "https://github.com/whiteand/ts-quartet#readme",
   "devDependencies": {
     "@eslint/js": "^9.24.0",
-    "@size-limit/preset-small-lib": "^4.4.2",
+    "@size-limit/preset-small-lib": "^11.2.0",
     "@vitest/coverage-v8": "^3.1.1",
-    "coveralls": "^3.0.3",
     "eslint": "^9.24.0",
     "globals": "^16.0.0",
     "prettier": "^3.5.3",
-    "size-limit": "^4.4.2",
-    "ts-node": "^8.1.0",
+    "size-limit": "^11.2.0",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.29.1",
     "vitest": "^3.1.1"
