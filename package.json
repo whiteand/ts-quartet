@@ -7,6 +7,7 @@
   "scripts": {
     "test": "vitest --run",
     "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
     "build": "tsc",
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
     "prepare": "npm run build",
@@ -15,7 +16,6 @@
     "lint": "eslint .",
     "version": "npm run format && git add -A src",
     "postversion": "git push && git push --tags",
-    "coveralls": "vitest run --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
     "size": "size-limit"
   },
   "repository": {
