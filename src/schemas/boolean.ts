@@ -2,7 +2,7 @@ import { IBooleanSchema } from "../types";
 import { SchemaType } from "./SchemaType";
 
 const BOOLEAN_SCHEMA: IBooleanSchema = {
-  type: SchemaType.Boolean
+  type: SchemaType.Boolean,
 };
 
 export function boolean(): IBooleanSchema {

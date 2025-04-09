@@ -12,7 +12,7 @@ describe("v.[type]", (test) => {
     testValidator(
       checkBoolean,
       [{ a: true }, { a: false }],
-      ["true", "false", 1, 0].map((a) => ({ a }))
+      ["true", "false", 1, 0].map((a) => ({ a })),
     );
   });
   test("v.number", () => {
@@ -31,7 +31,7 @@ describe("v.[type]", (test) => {
             return 1;
           },
         },
-      ]
+      ],
     );
   });
   test("v.string", () => {
@@ -39,7 +39,7 @@ describe("v.[type]", (test) => {
     testValidator(
       checkString,
       ["1", ""],
-      [Symbol.for("quartet"), String, null, 0, undefined, true, false]
+      [Symbol.for("quartet"), String, null, 0, undefined, true, false],
     );
   });
   test("v.finite", () => {
@@ -61,26 +61,15 @@ describe("v.[type]", (test) => {
             return 1;
           },
         },
-      ]
+      ],
     );
   });
   test("{ a: v.finite }", () => {
     const checkFinite = v({ a: v.finite });
-    testValidator(checkFinite, [1, 0, 1.5, -1].map((a) => ({ a })), [
-      "1",
-      Infinity,
-      -Infinity,
-      NaN,
-      null,
-      undefined,
-      {},
-      [],
-      {
-        valueOf() {
-          return 1;
-        },
-      },
-      ...[
+    testValidator(
+      checkFinite,
+      [1, 0, 1.5, -1].map((a) => ({ a })),
+      [
         "1",
         Infinity,
         -Infinity,
@@ -94,8 +83,23 @@ describe("v.[type]", (test) => {
             return 1;
           },
         },
-      ].map((a) => ({ a })),
-    ]);
+        ...[
+          "1",
+          Infinity,
+          -Infinity,
+          NaN,
+          null,
+          undefined,
+          {},
+          [],
+          {
+            valueOf() {
+              return 1;
+            },
+          },
+        ].map((a) => ({ a })),
+      ],
+    );
   });
   test("v.safeInteger", () => {
     const checkSafeInteger = v(v.safeInteger);
@@ -117,7 +121,7 @@ describe("v.[type]", (test) => {
             return 1;
           },
         },
-      ]
+      ],
     );
   });
   test("v.function", () => {
@@ -126,12 +130,12 @@ describe("v.[type]", (test) => {
       checkFunction,
       [
         () => true,
-        function() {
+        function () {
           return true;
         },
         new Function("return true"),
       ],
-      [1, null, undefined]
+      [1, null, undefined],
     );
   });
   test("{ a: v.function}", () => {
@@ -140,12 +144,12 @@ describe("v.[type]", (test) => {
       checkFunction,
       [
         () => true,
-        function() {
+        function () {
           return true;
         },
         new Function("return true"),
       ].map((a) => ({ a })),
-      [1, null, undefined, {}, [], { a: 1 }, { a: null }]
+      [1, null, undefined, {}, [], { a: 1 }, { a: null }],
     );
   });
   test("v.symbol", () => {
@@ -153,7 +157,7 @@ describe("v.[type]", (test) => {
     testValidator(
       checkSymbol,
       [Symbol.for("quartet"), Symbol.for("andrew"), Symbol("123")],
-      ["symbol", null, undefined]
+      ["symbol", null, undefined],
     );
   });
   test("{ a: v.symbol }", () => {
@@ -168,7 +172,7 @@ describe("v.[type]", (test) => {
         null,
         undefined,
         ...["symbol", null, undefined].map((a) => ({ a })),
-      ]
+      ],
     );
   });
   test("v.positive", () => {
@@ -187,7 +191,7 @@ describe("v.[type]", (test) => {
           },
         },
       ],
-      [0, null, -Infinity, -1, NaN, undefined, {}, []]
+      [0, null, -Infinity, -1, NaN, undefined, {}, []],
     );
   });
   test("{ a: v.positive }", () => {
@@ -216,7 +220,7 @@ describe("v.[type]", (test) => {
         {},
         [],
         ...[0, null, -Infinity, -1, NaN, undefined, {}, []].map((a) => ({ a })),
-      ]
+      ],
     );
   });
   test("v.negative", () => {
@@ -235,7 +239,7 @@ describe("v.[type]", (test) => {
           },
         },
       ],
-      [0, null, Infinity, 1, NaN, undefined, {}, []]
+      [0, null, Infinity, 1, NaN, undefined, {}, []],
     );
   });
   test("{ a: v.negative }", () => {
@@ -264,7 +268,7 @@ describe("v.[type]", (test) => {
         {},
         [],
         ...[0, null, Infinity, 1, NaN, undefined, {}, []].map((a) => ({ a })),
-      ]
+      ],
     );
   });
 });

@@ -23,5 +23,5 @@ export enum SchemaType {
   Symbol = "__!quartet/Symbol!__",
   Test = "__!quartet/Test!__",
   Variant = "__!quartet/Variant!__",
-  Custom = "__!quartet/Custom!__"
+  Custom = "__!quartet/Custom!__",
 }

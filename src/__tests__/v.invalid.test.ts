@@ -7,7 +7,9 @@ describe("invalid", (it) => {
     expect(() =>
       v({
         a: (x) => x !== 42,
-      } as Z)
-    ).toThrowErrorMatchingInlineSnapshot(`[Error: Wrap your validation function with v.custom(...) instead of usage of the function directly]`);
+      } as Z),
+    ).toThrowErrorMatchingInlineSnapshot(
+      `[Error: Wrap your validation function with v.custom(...) instead of usage of the function directly]`,
+    );
   });
 });

@@ -13,7 +13,7 @@ export function has(obj: Z, key: string | number): boolean {
 }
 
 export function arrToDict<T extends string | number | symbol>(
-  values: T[]
+  values: T[],
 ): { [key in T]: boolean } {
   const res: { [key in T]: boolean } = Object.create(null);
 
@@ -37,7 +37,7 @@ export function getAccessor(prop: string | number) {
 }
 export function getAccessorWithAlloc(
   prop: string | number,
-  alloc: (varName: string, initialValue: Z, singleton?: boolean) => string
+  alloc: (varName: string, initialValue: Z, singleton?: boolean) => string,
 ) {
   if (typeof prop === "number") {
     if (Number.isSafeInteger(prop)) {

@@ -7,7 +7,7 @@ describe("v.and(...)", (test) => {
     testValidator(
       v(v.and()),
       [null, false, [], {}, 1, 0, NaN, undefined, true],
-      []
+      [],
     );
   });
   test("v.and(v.safeInteger, v.min(1), v.max(5))", () => {
@@ -33,7 +33,7 @@ describe("v.and(...)", (test) => {
         Infinity,
         -Infinity,
         1.5,
-      ]
+      ],
     );
   });
   test("v.and fast path", () => {
@@ -44,8 +44,8 @@ describe("v.and(...)", (test) => {
         v.custom(() => {
           flag = false;
           return true;
-        })
-      )
+        }),
+      ),
     );
     validator(1);
     expect(flag).toBe(true);

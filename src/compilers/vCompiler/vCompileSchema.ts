@@ -3,7 +3,7 @@ import { CompilationResult, TSchema, Validator } from "../../types";
 import { getValidatorFromSchema } from "./getValidatorFromSchema";
 
 export function vCompileSchema<T = Z>(
-  schema: TSchema
+  schema: TSchema,
 ): CompilationResult<T, Z> {
   const explanations: Z[] = [];
   const validator = getValidatorFromSchema(schema, undefined) as Validator<T>;

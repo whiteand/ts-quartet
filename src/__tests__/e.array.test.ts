@@ -49,7 +49,7 @@ describe("v.array", (test) => {
             },
           ],
         ],
-      ]
+      ],
     );
   });
   test("{ a: v.array }", () => {
@@ -96,7 +96,7 @@ describe("v.array", (test) => {
             },
           ],
         ],
-      ]
+      ],
     );
   });
 });

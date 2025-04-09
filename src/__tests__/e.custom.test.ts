@@ -7,12 +7,12 @@ describe("e.custom", (test) => {
   test("e(e.arrayOf(e.custom(e(e.number))))", () => {
     const checkNumber = e(e.number);
     const checkArrNumber = e(
-      e.arrayOf(e.custom(checkNumber, "should be number"))
+      e.arrayOf(e.custom(checkNumber, "should be number")),
     );
     testValidatorImpure(
       checkArrNumber,
       [[], [1], [1, 2, 3]],
-      [null, false, { length: 1, 0: 1 }, ["1"]]
+      [null, false, { length: 1, 0: 1 }, ["1"]],
     );
     expect(getExplanations(checkArrNumber, null)).toEqual([
       {
@@ -117,7 +117,7 @@ describe("e.custom", (test) => {
     testValidatorImpure(
       checkArrNumber,
       [[], [1], [1, 2, 3]],
-      [null, false, { length: 1, 0: 1 }, ["1"]]
+      [null, false, { length: 1, 0: 1 }, ["1"]],
     );
     expect(getExplanations(checkArrNumber, null)).toEqual([
       {

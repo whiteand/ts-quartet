@@ -15,7 +15,7 @@ import { arrToDict, has } from "./utils";
 const schemaTypeDict = arrToDict(Object.values(SchemaType));
 
 function rawPropsSchemasToPropsSchemas(
-  rawPropsSchemas: IRawSchemaDict
+  rawPropsSchemas: IRawSchemaDict,
 ): Record<KeyType, TSchema> {
   const propsSchemas = Object.create(null);
   const keys = Object.keys(rawPropsSchemas);
@@ -35,7 +35,7 @@ export function rawSchemaToSchema(rawSchema: RawSchema): TSchema {
   if (typeof rawSchema === "function") {
     if (!("schema" in rawSchema)) {
       throw new Error(
-        `Wrap your validation function with v.custom(...) instead of usage of the function directly`
+        `Wrap your validation function with v.custom(...) instead of usage of the function directly`,
       );
     }
     return rawSchema.schema;
@@ -48,7 +48,7 @@ export function rawSchemaToSchema(rawSchema: RawSchema): TSchema {
   }
   if (
     (Array.isArray as (value: RawSchema) => value is readonly RawSchema[])(
-      rawSchema
+      rawSchema,
     )
   ) {
     if (rawSchema.length === 0) {
@@ -80,18 +80,18 @@ export function rawSchemaToSchema(rawSchema: RawSchema): TSchema {
       } = rawSchema as Z;
       const restSchema = rawSchemaToSchema(rawRest);
       const propsSchemas = rawPropsSchemasToPropsSchemas(
-        rawPropsSchemas as Record<KeyType, RawSchema>
+        rawPropsSchemas as Record<KeyType, RawSchema>,
       );
       return objectSchemaWithRest(
         propsSchemas,
         restSchema,
-        arrToDict(restOmit)
+        arrToDict(restOmit),
       );
     }
     const { [SpecialProp.Rest]: rawRest, ...rawPropsSchemas } = rawSchema as Z;
     const restSchema = rawSchemaToSchema(rawRest);
     const propsSchemas = rawPropsSchemasToPropsSchemas(
-      rawPropsSchemas as Record<KeyType, RawSchema>
+      rawPropsSchemas as Record<KeyType, RawSchema>,
     );
     return objectSchemaWithRest(propsSchemas, restSchema, EMPTY_OBJ);
   }
@@ -99,13 +99,12 @@ export function rawSchemaToSchema(rawSchema: RawSchema): TSchema {
     const rawPropsSchemas = { ...rawSchema } as Z;
     delete rawPropsSchemas[SpecialProp.RestOmit];
     const propsSchemas = rawPropsSchemasToPropsSchemas(
-      rawPropsSchemas as Record<KeyType, RawSchema>
+      rawPropsSchemas as Record<KeyType, RawSchema>,
     );
     return objectSchemaWithoutRest(propsSchemas);
   }
-  const propsSchemas = rawPropsSchemasToPropsSchemas(rawSchema as Record<
-    KeyType,
-    RawSchema
-  >);
+  const propsSchemas = rawPropsSchemasToPropsSchemas(
+    rawSchema as Record<KeyType, RawSchema>,
+  );
   return objectSchemaWithoutRest(propsSchemas);
 }

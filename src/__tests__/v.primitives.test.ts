@@ -8,7 +8,7 @@ describe("v(primitive)", (test) => {
     testValidator(
       validator,
       [null],
-      [undefined, true, false, 0, "0", Infinity, -Infinity, 0 / 0, {}, []]
+      [undefined, true, false, 0, "0", Infinity, -Infinity, 0 / 0, {}, []],
     );
   });
   test("v(undefined)", () => {
@@ -16,7 +16,7 @@ describe("v(primitive)", (test) => {
     testValidator(
       validator,
       [undefined],
-      [null, true, false, 0, "0", Infinity, -Infinity, 0 / 0, {}, []]
+      [null, true, false, 0, "0", Infinity, -Infinity, 0 / 0, {}, []],
     );
   });
   test("v({ a: undefined })", () => {
@@ -24,7 +24,7 @@ describe("v(primitive)", (test) => {
     testValidator(
       validator,
       [{}, { a: undefined }],
-      [null, undefined, { a: 1 }, { a: "null" }, { a: "undefined" }]
+      [null, undefined, { a: 1 }, { a: "null" }, { a: "undefined" }],
     );
   });
   test("v(true)", () => {
@@ -32,7 +32,7 @@ describe("v(primitive)", (test) => {
     testValidator(
       validator,
       [true],
-      [null, undefined, false, 0, "0", Infinity, -Infinity, 0 / 0, {}, []]
+      [null, undefined, false, 0, "0", Infinity, -Infinity, 0 / 0, {}, []],
     );
   });
   test("v(false)", () => {
@@ -40,7 +40,7 @@ describe("v(primitive)", (test) => {
     testValidator(
       validator,
       [false],
-      [null, undefined, true, 0, "0", Infinity, -Infinity, 0 / 0, {}, []]
+      [null, undefined, true, 0, "0", Infinity, -Infinity, 0 / 0, {}, []],
     );
   });
   test("v(NaN)", () => {
@@ -48,7 +48,7 @@ describe("v(primitive)", (test) => {
     testValidator(
       validator,
       [NaN],
-      [null, undefined, true, false, 0, "0", Infinity, -Infinity, {}, []]
+      [null, undefined, true, false, 0, "0", Infinity, -Infinity, {}, []],
     );
   });
   test("v({ a: NaN })", () => {
@@ -81,7 +81,7 @@ describe("v(primitive)", (test) => {
         ].map((a) => ({
           a,
         })),
-      ]
+      ],
     );
   });
   test("v(0)", () => {
@@ -89,7 +89,7 @@ describe("v(primitive)", (test) => {
     testValidator(
       validator,
       [0],
-      [null, undefined, true, false, "0", Infinity, -Infinity, 0 / 0, {}, []]
+      [null, undefined, true, false, "0", Infinity, -Infinity, 0 / 0, {}, []],
     );
   });
   test("v(1)", () => {
@@ -97,7 +97,19 @@ describe("v(primitive)", (test) => {
     testValidator(
       validator,
       [1],
-      [null, undefined, true, false, 0, "0", Infinity, -Infinity, 0 / 0, {}, []]
+      [
+        null,
+        undefined,
+        true,
+        false,
+        0,
+        "0",
+        Infinity,
+        -Infinity,
+        0 / 0,
+        {},
+        [],
+      ],
     );
   });
   test('v("0")', () => {
@@ -105,7 +117,7 @@ describe("v(primitive)", (test) => {
     testValidator(
       validator,
       ["0"],
-      [null, undefined, true, false, 0, Infinity, -Infinity, 0 / 0, {}, []]
+      [null, undefined, true, false, 0, Infinity, -Infinity, 0 / 0, {}, []],
     );
   });
   test('v(Symbol.for("quartet"))', () => {
@@ -113,7 +125,19 @@ describe("v(primitive)", (test) => {
     testValidator(
       validator,
       [Symbol.for("quartet")],
-      [null, undefined, true, false, 0, "0", Infinity, -Infinity, 0 / 0, {}, []]
+      [
+        null,
+        undefined,
+        true,
+        false,
+        0,
+        "0",
+        Infinity,
+        -Infinity,
+        0 / 0,
+        {},
+        [],
+      ],
     );
   });
 });

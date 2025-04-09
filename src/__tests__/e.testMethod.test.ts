@@ -10,7 +10,7 @@ describe("v.test", (test) => {
     testValidatorImpure(
       validator,
       ["a", "andrew"],
-      ["A", null, false, [], {}, 1, 0, NaN, undefined, true]
+      ["A", null, false, [], {}, 1, 0, NaN, undefined, true],
     );
     expect(getExplanations(validator, "A")).toEqual([
       {
@@ -129,7 +129,9 @@ describe("v.test", (test) => {
     testValidatorImpure(
       validator,
       ["a", "andrew"].map((a) => ({ a })),
-      ["A", null, false, [], {}, 1, 0, NaN, undefined, true].map((a) => ({ a }))
+      ["A", null, false, [], {}, 1, 0, NaN, undefined, true].map((a) => ({
+        a,
+      })),
     );
     expect(getExplanations(validator, { a: "A" })).toEqual([
       {

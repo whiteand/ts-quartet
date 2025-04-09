@@ -3,11 +3,11 @@ import { SchemaType } from "./SchemaType";
 
 export function custom(
   customValidator: TCustomValidator,
-  description?: string
+  description?: string,
 ): ICustomSchema {
   return {
     customValidator,
     description,
-    type: SchemaType.Custom
+    type: SchemaType.Custom,
   };
 }

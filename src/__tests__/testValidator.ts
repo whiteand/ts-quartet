@@ -4,7 +4,7 @@ import { expect } from "vitest";
 export function testValidator(
   validator: CompilationResult<Z, Z>,
   valids: Z[],
-  invalids: Z[]
+  invalids: Z[],
 ) {
   expect(typeof validator).toBe("function");
   expect(Array.isArray(validator.explanations)).toBe(true);

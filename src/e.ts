@@ -5,5 +5,5 @@ import { methods } from "./methods";
 
 export const e: IQuartetInstance<IExplanation> = Object.assign(
   eCompiler,
-  methods
+  methods,
 );

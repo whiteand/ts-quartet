@@ -5,26 +5,22 @@ import { CompilationResult, TSchema, Validator } from "../../types";
 import { getExplanator } from "./getExplanator";
 
 export function eCompileSchema<T = Z>(
-  schema: TSchema
+  schema: TSchema,
 ): CompilationResult<T, Z> {
-  const explanator: (
-    value: Z,
-    path: KeyType[]
-  ) => null | IExplanation[] = getExplanator(schema);
+  const explanator: (value: Z, path: KeyType[]) => null | IExplanation[] =
+    getExplanator(schema);
   const explanations: IExplanation[] = [];
   function validator(value: Z) {
     const explanationsOrNull = explanator(value, []);
     if (explanationsOrNull) {
-      ((validator as unknown) as CompilationResult<
-        T,
-        IExplanation
-      >).explanations = explanationsOrNull;
+      (
+        validator as unknown as CompilationResult<T, IExplanation>
+      ).explanations = explanationsOrNull;
       return false;
     } else {
-      ((validator as unknown) as CompilationResult<
-        T,
-        IExplanation
-      >).explanations = [];
+      (
+        validator as unknown as CompilationResult<T, IExplanation>
+      ).explanations = [];
       return true;
     }
   }

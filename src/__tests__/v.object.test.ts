@@ -13,7 +13,7 @@ describe("v({ ... })", (test) => {
     testValidator(
       notNull,
       [{ a: NaN }, { a: Infinity }, { a: 1, b: "123" }],
-      [null, undefined, {}, 1, 0, false, true, "", []]
+      [null, undefined, {}, 1, 0, false, true, "", []],
     );
   });
   test('v({ a: number, [restOmit]: ["valid"] })', () => {
@@ -21,7 +21,7 @@ describe("v({ ... })", (test) => {
     testValidator(
       notNull,
       [{ a: NaN }, { a: Infinity }, { a: 1 }],
-      [null, undefined, {}, 1, 0, false, true, "", []]
+      [null, undefined, {}, 1, 0, false, true, "", []],
     );
   });
   test("v({ [restOmit]: something })", () => {
@@ -37,7 +37,7 @@ describe("v({ ... })", (test) => {
     testValidator(
       notNull,
       [{}, 1, 0, false, true, "", [], { a: 1 }],
-      [{ b: "string" }, null, undefined]
+      [{ b: "string" }, null, undefined],
     );
   });
 
@@ -60,7 +60,7 @@ describe("v({ ... })", (test) => {
         { a: 1, valid: null },
         { valid: null },
       ],
-      [{ b: "string" }, null, undefined]
+      [{ b: "string" }, null, undefined],
     );
   });
   test("v({ a: string, [rest]: number })", () => {
@@ -80,7 +80,7 @@ describe("v({ ... })", (test) => {
         [],
         { a: null },
         { a: "1", b: "1" },
-      ]
+      ],
     );
   });
   test('v({ [rest]: number, a: string, [restOmit]: ["b"] })', () => {
@@ -99,7 +99,7 @@ describe("v({ ... })", (test) => {
         { a: "1", b: null },
         { a: "1", b: 2 },
       ],
-      [{ b: "string" }, null, undefined, { a: 1 }, {}, [], { a: null }]
+      [{ b: "string" }, null, undefined, { a: 1 }, {}, [], { a: null }],
     );
   });
   test("{ v.pair }", () => {
@@ -109,13 +109,13 @@ describe("v({ ... })", (test) => {
         v.custom((pair) => {
           pairFromValidator = pair;
           return true;
-        })
+        }),
       ),
     });
     expect(
       checkDict({
         a: 123,
-      })
+      }),
     ).toBe(true);
     expect(pairFromValidator).toEqual({ key: "a", value: 123 });
   });
@@ -126,13 +126,13 @@ describe("v({ ... })", (test) => {
         v.custom((pair) => {
           pairFromValidator = pair;
           return true;
-        })
+        }),
       ),
     });
     expect(
       checkDict({
         a: 123,
-      })
+      }),
     ).toBe(true);
     expect(pairFromValidator).toEqual({ key: "a", value: 123 });
   });
@@ -151,7 +151,7 @@ describe("v({ ... })", (test) => {
         false,
         true,
       ],
-      [null, undefined]
+      [null, undefined],
     );
   });
 });

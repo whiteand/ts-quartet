@@ -1,1 +1,1 @@
-export type TNumberString = `${number}`
+export type TNumberString = `${number}`;

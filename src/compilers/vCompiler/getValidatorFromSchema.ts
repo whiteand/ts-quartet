@@ -6,7 +6,7 @@ import { ifInvalidReturnFalse } from "./ifInvalidReturnFalse";
 
 export function getValidatorFromSchema(
   schema: TSchema,
-  key: string | number | undefined
+  key: string | number | undefined,
 ): (value: Z) => boolean {
   if (typeof schema !== "object" || schema === null) {
     return (value: Z) => value === schema;
@@ -23,7 +23,7 @@ export function getValidatorFromSchema(
       ]).join("\n")}\n  return true`;
       const isValid = new Function("value", contextParamName, funcBody) as (
         value: Z,
-        context: Z
+        context: Z,
       ) => boolean;
       return (value) => isValid(value, context);
     }
@@ -91,7 +91,7 @@ export function getValidatorFromSchema(
     case SchemaType.Variant: {
       const { variants } = schema;
       const compiledVariants = variants.map((innerSchema) =>
-        getValidatorFromSchema(innerSchema, key)
+        getValidatorFromSchema(innerSchema, key),
       );
       return (value) => {
         for (let i = 0; i < compiledVariants.length; i++) {

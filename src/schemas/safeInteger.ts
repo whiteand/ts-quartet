@@ -2,7 +2,7 @@ import { ISafeIntegerSchema } from "../types";
 import { SchemaType } from "./SchemaType";
 
 const SAFE_INTEGER_SCHEMA: ISafeIntegerSchema = {
-  type: SchemaType.SafeInteger
+  type: SchemaType.SafeInteger,
 };
 
 export function safeInteger(): ISafeIntegerSchema {

@@ -5,6 +5,6 @@ export function min(minValue: number, isExclusive: boolean): IMinSchema {
   return {
     isExclusive,
     minValue,
-    type: SchemaType.Min
+    type: SchemaType.Min,
   };
 }

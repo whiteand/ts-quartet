@@ -8,7 +8,7 @@ function addTabs(line: string, tabsCount: number): string {
 
 export function beautifyStatements(
   statements: string[],
-  intialTabSize: number = 1
+  intialTabSize: number = 1,
 ): string[] {
   const res: string[] = [];
   let tabsCount = intialTabSize;

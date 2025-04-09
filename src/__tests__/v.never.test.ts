@@ -7,7 +7,7 @@ describe("v.never", (test) => {
     testValidator(
       v(v.never),
       [],
-      [null, false, [], {}, 1, 0, NaN, undefined, true]
+      [null, false, [], {}, 1, 0, NaN, undefined, true],
     );
   });
 });

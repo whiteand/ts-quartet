@@ -11,7 +11,7 @@ describe("getAccessor", (test) => {
   });
   test("not simple number", () => {
     expect(getAccessorWithAlloc(123.531231, mockedAlloc)).toEqual(
-      `[{"a":"c","b":123.531231,"c":false}]`
+      `[{"a":"c","b":123.531231,"c":false}]`,
     );
   });
   test("not simple prop", () => {

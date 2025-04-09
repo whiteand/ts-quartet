@@ -2,7 +2,7 @@ import { IStringSchema } from "../types";
 import { SchemaType } from "./SchemaType";
 
 const STRING_SCHEMA: IStringSchema = {
-  type: SchemaType.String
+  type: SchemaType.String,
 };
 
 export function string(): IStringSchema {

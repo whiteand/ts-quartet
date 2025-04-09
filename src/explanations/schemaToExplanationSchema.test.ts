@@ -34,7 +34,7 @@ describe("schemaToExplanationSchema", (test) => {
   test("primitives", () => {
     expect(schemaToExplanationSchema(null)).toMatchInlineSnapshot(`null`);
     expect(schemaToExplanationSchema(undefined)).toMatchInlineSnapshot(
-      `undefined`
+      `undefined`,
     );
     expect(schemaToExplanationSchema(NaN)).toMatchInlineSnapshot(`NaN`);
     expect(schemaToExplanationSchema(false)).toMatchInlineSnapshot(`false`);
@@ -42,13 +42,13 @@ describe("schemaToExplanationSchema", (test) => {
     expect(schemaToExplanationSchema(0)).toMatchInlineSnapshot(`0`);
     expect(schemaToExplanationSchema(1)).toMatchInlineSnapshot(`1`);
     expect(schemaToExplanationSchema(Infinity)).toMatchInlineSnapshot(
-      `Infinity`
+      `Infinity`,
     );
     expect(schemaToExplanationSchema(-Infinity)).toMatchInlineSnapshot(
-      `-Infinity`
+      `-Infinity`,
     );
     expect(
-      schemaToExplanationSchema(Symbol.for("quartet"))
+      schemaToExplanationSchema(Symbol.for("quartet")),
     ).toMatchInlineSnapshot(`Symbol(quartet)`);
   });
   test("and", () => {
@@ -273,8 +273,8 @@ describe("schemaToExplanationSchema", (test) => {
       `);
     expect(
       schemaToExplanationSchema(
-        objectSchemaWithRest({ a: number() }, v.string, {})
-      )
+        objectSchemaWithRest({ a: number() }, v.string, {}),
+      ),
     ).toMatchInlineSnapshot(`
       {
         "[v.restOmit]": [],
@@ -291,8 +291,8 @@ describe("schemaToExplanationSchema", (test) => {
     `);
     expect(
       schemaToExplanationSchema(
-        objectSchemaWithRest({ a: number() }, v.string, { valid: true })
-      )
+        objectSchemaWithRest({ a: number() }, v.string, { valid: true }),
+      ),
     ).toMatchInlineSnapshot(`
       {
         "[v.restOmit]": [
@@ -312,7 +312,7 @@ describe("schemaToExplanationSchema", (test) => {
   });
   test("pair", () => {
     const schema = pair(
-      objectSchemaWithoutRest({ key: testSchema(/^valid/), value: number() })
+      objectSchemaWithoutRest({ key: testSchema(/^valid/), value: number() }),
     );
     const explanationSchema = schemaToExplanationSchema(schema);
     expect(explanationSchema).toMatchInlineSnapshot(`

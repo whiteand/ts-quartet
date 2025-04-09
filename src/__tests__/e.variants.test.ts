@@ -9,7 +9,7 @@ describe("v([...])", (test) => {
     testValidatorImpure(
       validator,
       [],
-      [null, false, [], {}, 1, 0, NaN, undefined, true]
+      [null, false, [], {}, 1, 0, NaN, undefined, true],
     );
     expect(getExplanations(validator, null)).toEqual([
       {
@@ -107,7 +107,7 @@ describe("v([...])", (test) => {
     testValidatorImpure(
       validator,
       [1],
-      [null, false, [], {}, 0, NaN, undefined, true]
+      [null, false, [], {}, 0, NaN, undefined, true],
     );
     expect(getExplanations(validator, null)).toEqual([
       {
@@ -179,7 +179,7 @@ describe("v([...])", (test) => {
     testValidatorImpure(
       validator,
       [1, 2],
-      ["2", "1", null, false, [], {}, 0, NaN, undefined, true]
+      ["2", "1", null, false, [], {}, 0, NaN, undefined, true],
     );
     expect(getExplanations(validator, "2")).toEqual([
       {
@@ -429,7 +429,7 @@ describe("v([...])", (test) => {
       [{ a: 1 }, { a: 2 }],
       ["2", "1", null, false, [], {}, 0, NaN, undefined, true].map((a) => ({
         a,
-      }))
+      })),
     );
     expect(getExplanations(validator, { a: "2" })).toEqual([
       {
@@ -677,7 +677,7 @@ describe("v([...])", (test) => {
     testValidatorImpure(
       validator,
       [1, "2"],
-      [2, "1", null, false, [], {}, 0, NaN, undefined, true]
+      [2, "1", null, false, [], {}, 0, NaN, undefined, true],
     );
     expect(getExplanations(validator, 2)).toEqual([
       {

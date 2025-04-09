@@ -9,7 +9,7 @@ describe("v({ ... })", (test) => {
     testValidatorImpure(
       notNull,
       [{}, 1, 0, false, true, "", []],
-      [null, undefined]
+      [null, undefined],
     );
     expect(getExplanations(notNull, null)).toEqual([
       {
@@ -39,7 +39,7 @@ describe("v({ ... })", (test) => {
     testValidatorImpure(
       notNull,
       [{ a: NaN }, { a: Infinity }, { a: 1, b: "123" }],
-      [null, undefined, {}, 1, 0, false, true, "", []]
+      [null, undefined, {}, 1, 0, false, true, "", []],
     );
     expect(getExplanations(notNull, null)).toEqual([
       {
@@ -147,7 +147,7 @@ describe("v({ ... })", (test) => {
     testValidatorImpure(
       notNull,
       [{ a: NaN }, { a: Infinity }, { a: 1 }],
-      [null, undefined, {}, 1, 0, false, true, "", []]
+      [null, undefined, {}, 1, 0, false, true, "", []],
     );
     expect(getExplanations(notNull, null)).toEqual([
       {
@@ -257,7 +257,7 @@ describe("v({ ... })", (test) => {
     testValidatorImpure(
       notNull,
       [{}, 1, 0, false, true, "", []],
-      [null, undefined]
+      [null, undefined],
     );
     expect(getExplanations(notNull, null)).toEqual([
       {
@@ -289,7 +289,7 @@ describe("v({ ... })", (test) => {
     testValidatorImpure(
       notNull,
       [{}, 1, 0, false, true, "", [], { a: 1 }],
-      [{ b: "string" }, null, undefined]
+      [{ b: "string" }, null, undefined],
     );
     expect(getExplanations(notNull, { b: "string" })).toEqual([
       {
@@ -352,7 +352,7 @@ describe("v({ ... })", (test) => {
         { a: 1, valid: null },
         { valid: null },
       ],
-      [{ b: "string" }, null, undefined]
+      [{ b: "string" }, null, undefined],
     );
     expect(getExplanations(notNull, { b: "string" })).toEqual([
       {
@@ -412,7 +412,7 @@ describe("v({ ... })", (test) => {
         [],
         { a: null },
         { a: "1", b: "1" },
-      ]
+      ],
     );
     expect(getExplanations(notNull, { b: "string" })).toEqual([
       {
@@ -529,7 +529,7 @@ describe("v({ ... })", (test) => {
         { a: "1", b: null },
         { a: "1", b: 2 },
       ],
-      [{ b: "string" }, null, undefined, { a: 1 }, {}, [], { a: null }]
+      [{ b: "string" }, null, undefined, { a: 1 }, {}, [], { a: null }],
     );
     expect(getExplanations(notNull, { b: "string" })).toEqual([
       {
@@ -627,13 +627,13 @@ describe("v({ ... })", (test) => {
         v.custom((pair) => {
           pairFromValidator = pair;
           return true;
-        })
+        }),
       ),
     });
     expect(
       checkDict({
         a: 123,
-      })
+      }),
     ).toBe(true);
     expect(pairFromValidator).toEqual({ key: "a", value: 123 });
   });
@@ -644,13 +644,13 @@ describe("v({ ... })", (test) => {
         v.custom((pair) => {
           pairFromValidator = pair;
           return true;
-        })
+        }),
       ),
     });
     expect(
       checkDict({
         a: 123,
-      })
+      }),
     ).toBe(true);
     expect(pairFromValidator).toEqual({ key: "a", value: 123 });
   });
@@ -669,7 +669,7 @@ describe("v({ ... })", (test) => {
         false,
         true,
       ],
-      [null, undefined]
+      [null, undefined],
     );
     expect(getExplanations(checkQuartet, null)).toEqual([
       {

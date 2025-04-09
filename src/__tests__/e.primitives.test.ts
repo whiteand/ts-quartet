@@ -9,7 +9,7 @@ describe("v(primitive)", (test) => {
     testValidatorImpure(
       validator,
       [null],
-      [undefined, true, false, 0, "0", Infinity, -Infinity, 0 / 0, {}, []]
+      [undefined, true, false, 0, "0", Infinity, -Infinity, 0 / 0, {}, []],
     );
     expect(getExplanations(validator, undefined)).toEqual([
       {
@@ -97,7 +97,7 @@ describe("v(primitive)", (test) => {
     testValidatorImpure(
       validator,
       [undefined],
-      [null, true, false, 0, "0", Infinity, -Infinity, 0 / 0, {}, []]
+      [null, true, false, 0, "0", Infinity, -Infinity, 0 / 0, {}, []],
     );
     expect(getExplanations(validator, null)).toEqual([
       {
@@ -185,7 +185,7 @@ describe("v(primitive)", (test) => {
     testValidatorImpure(
       validator,
       [true],
-      [null, undefined, false, 0, "0", Infinity, -Infinity, 0 / 0, {}, []]
+      [null, undefined, false, 0, "0", Infinity, -Infinity, 0 / 0, {}, []],
     );
     expect(getExplanations(validator, null)).toEqual([
       {
@@ -273,7 +273,7 @@ describe("v(primitive)", (test) => {
     testValidatorImpure(
       validator,
       [false],
-      [null, undefined, true, 0, "0", Infinity, -Infinity, 0 / 0, {}, []]
+      [null, undefined, true, 0, "0", Infinity, -Infinity, 0 / 0, {}, []],
     );
     expect(getExplanations(validator, null)).toEqual([
       {
@@ -361,7 +361,7 @@ describe("v(primitive)", (test) => {
     testValidatorImpure(
       validator,
       [NaN],
-      [null, undefined, true, false, 0, "0", Infinity, -Infinity, {}, []]
+      [null, undefined, true, false, 0, "0", Infinity, -Infinity, {}, []],
     );
     expect(getExplanations(validator, null)).toEqual([
       {
@@ -472,8 +472,8 @@ describe("v(primitive)", (test) => {
       [null, undefined, true, false, 0, "0", Infinity, -Infinity, {}, []].map(
         (a) => ({
           a,
-        })
-      )
+        }),
+      ),
     );
     expect(getExplanations(validator, { a: null })).toEqual([
       {
@@ -581,7 +581,7 @@ describe("v(primitive)", (test) => {
     testValidatorImpure(
       validator,
       [0],
-      [null, undefined, true, false, "0", Infinity, -Infinity, 0 / 0, {}, []]
+      [null, undefined, true, false, "0", Infinity, -Infinity, 0 / 0, {}, []],
     );
     expect(getExplanations(validator, null)).toEqual([
       {
@@ -669,7 +669,19 @@ describe("v(primitive)", (test) => {
     testValidatorImpure(
       validator,
       [1],
-      [null, undefined, true, false, 0, "0", Infinity, -Infinity, 0 / 0, {}, []]
+      [
+        null,
+        undefined,
+        true,
+        false,
+        0,
+        "0",
+        Infinity,
+        -Infinity,
+        0 / 0,
+        {},
+        [],
+      ],
     );
     expect(getExplanations(validator, null)).toEqual([
       {
@@ -765,7 +777,7 @@ describe("v(primitive)", (test) => {
     testValidatorImpure(
       validator,
       ["0"],
-      [null, undefined, true, false, 0, Infinity, -Infinity, 0 / 0, {}, []]
+      [null, undefined, true, false, 0, Infinity, -Infinity, 0 / 0, {}, []],
     );
     expect(getExplanations(validator, null)).toEqual([
       {
@@ -853,7 +865,19 @@ describe("v(primitive)", (test) => {
     testValidatorImpure(
       validator,
       [Symbol.for("quartet")],
-      [null, undefined, true, false, 0, "0", Infinity, -Infinity, 0 / 0, {}, []]
+      [
+        null,
+        undefined,
+        true,
+        false,
+        0,
+        "0",
+        Infinity,
+        -Infinity,
+        0 / 0,
+        {},
+        [],
+      ],
     );
     expect(getExplanations(validator, null)).toEqual([
       {

@@ -7,7 +7,7 @@ export function explanation(
   value: Z,
   path: KeyType[],
   schema: TSchema,
-  innerExplanations: IExplanation[] = []
+  innerExplanations: IExplanation[] = [],
 ): IExplanation {
   return {
     value,

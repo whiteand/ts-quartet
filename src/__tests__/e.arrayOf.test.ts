@@ -86,7 +86,7 @@ describe("v.arrayOf", (test) => {
     testValidatorWithExplanations(
       validator,
       [[], [1, NaN, 2]].map((a) => ({ a })),
-      []
+      [],
     );
     expect(getExplanations(validator, { a: [1, 2, "3"] })).toEqual([
       {
@@ -168,7 +168,7 @@ describe("v.arrayOf", (test) => {
     testValidatorImpure(
       checkSquares,
       [[], [0, 1], [0, 1, 4]],
-      [[1], [0, 2], [1, 2, "3"], ["3"], [[1]], {}, { length: 10 }, "Andrew"]
+      [[1], [0, 2], [1, 2, "3"], ["3"], [[1]], {}, { length: 10 }, "Andrew"],
     );
     expect(getExplanations(checkSquares, [1])).toEqual([
       {
@@ -312,9 +312,9 @@ describe("v.arrayOf", (test) => {
             checked.push(value);
             return true;
           }),
-          v.number
-        )
-      )
+          v.number,
+        ),
+      ),
     );
     expect(checkArr(arr)).toBe(false);
     expect(checked).toEqual([1, 2, 3, "4"]);

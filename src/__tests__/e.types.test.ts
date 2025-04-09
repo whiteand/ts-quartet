@@ -23,7 +23,7 @@ describe("v.[type]", (test) => {
     testValidatorImpure(
       checkBoolean,
       [true, false].map((a) => ({ a })),
-      ["true", "false", 1, 0].map((a) => ({ a }))
+      ["true", "false", 1, 0].map((a) => ({ a })),
     );
     expect(getExplanations(checkBoolean, { a: "1" })).toEqual([
       {
@@ -52,7 +52,7 @@ describe("v.[type]", (test) => {
             return 1;
           },
         },
-      ]
+      ],
     );
   });
   test("{ a: v.number }", () => {
@@ -71,7 +71,7 @@ describe("v.[type]", (test) => {
             return 1;
           },
         },
-      ].map((a) => ({ a }))
+      ].map((a) => ({ a })),
     );
     expect(getExplanations(checkNumber, { a: "1" })).toEqual([
       {
@@ -129,7 +129,7 @@ describe("v.[type]", (test) => {
     testValidatorImpure(
       checkString,
       ["1", ""],
-      [Symbol.for("quartet"), String, null, 0, undefined, true, false]
+      [Symbol.for("quartet"), String, null, 0, undefined, true, false],
     );
     expect(getExplanations(checkString, Symbol.for("quartet"))).toEqual([
       {
@@ -221,7 +221,7 @@ describe("v.[type]", (test) => {
             return 1;
           },
         },
-      ]
+      ],
     );
     expect(getExplanations(checkFinite, "1")).toEqual([
       {
@@ -323,7 +323,7 @@ describe("v.[type]", (test) => {
             return 1;
           },
         },
-      ].map((a) => ({ a }))
+      ].map((a) => ({ a })),
     );
     expect(getExplanations(checkFinite, { a: "1" })).toEqual([
       {
@@ -426,7 +426,7 @@ describe("v.[type]", (test) => {
             return 1;
           },
         },
-      ]
+      ],
     );
     expect(getExplanations(checkSafeInteger, "1")).toEqual([
       {
@@ -525,12 +525,12 @@ describe("v.[type]", (test) => {
       checkFunction,
       [
         () => true,
-        function() {
+        function () {
           return true;
         },
         new Function("return true"),
       ],
-      [1, null, undefined]
+      [1, null, undefined],
     );
     expect(getExplanations(checkFunction, 1)).toEqual([
       {
@@ -569,12 +569,12 @@ describe("v.[type]", (test) => {
       checkFunction,
       [
         () => true,
-        function() {
+        function () {
           return true;
         },
         new Function("return true"),
       ].map((a) => ({ a })),
-      [1, null, undefined].map((a) => ({ a }))
+      [1, null, undefined].map((a) => ({ a })),
     );
     expect(getExplanations(checkFunction, { a: 1 })).toEqual([
       {
@@ -612,7 +612,7 @@ describe("v.[type]", (test) => {
     testValidatorImpure(
       checkSymbol,
       [Symbol.for("quartet"), Symbol.for("andrew"), Symbol("123")],
-      ["symbol", null, undefined]
+      ["symbol", null, undefined],
     );
     expect(getExplanations(checkSymbol, "symbol")).toEqual([
       {
@@ -652,7 +652,7 @@ describe("v.[type]", (test) => {
       [Symbol.for("quartet"), Symbol.for("andrew"), Symbol("123")].map((a) => ({
         a,
       })),
-      ["symbol", null, undefined].map((a) => ({ a }))
+      ["symbol", null, undefined].map((a) => ({ a })),
     );
     expect(getExplanations(checkSymbol, { a: "symbol" })).toEqual([
       {
@@ -701,7 +701,7 @@ describe("v.[type]", (test) => {
           },
         },
       ],
-      [0, null, -Infinity, -1, NaN, undefined, {}, []]
+      [0, null, -Infinity, -1, NaN, undefined, {}, []],
     );
     expect(getExplanations(checkPositive, 0)).toEqual([
       {
@@ -800,7 +800,7 @@ describe("v.[type]", (test) => {
           },
         },
       ].map((a) => ({ a })),
-      [0, null, -Infinity, -1, NaN, undefined, {}, []].map((a) => ({ a }))
+      [0, null, -Infinity, -1, NaN, undefined, {}, []].map((a) => ({ a })),
     );
     expect(getExplanations(checkPositive, { a: 0 })).toEqual([
       {
@@ -899,7 +899,7 @@ describe("v.[type]", (test) => {
           },
         },
       ],
-      [0, null, Infinity, 1, NaN, undefined, {}, []]
+      [0, null, Infinity, 1, NaN, undefined, {}, []],
     );
     expect(getExplanations(checkNegative, 0)).toEqual([
       {
@@ -998,7 +998,7 @@ describe("v.[type]", (test) => {
           },
         },
       ].map((a) => ({ a })),
-      [0, null, Infinity, 1, NaN, undefined, {}, []].map((a) => ({ a }))
+      [0, null, Infinity, 1, NaN, undefined, {}, []].map((a) => ({ a })),
     );
     expect(getExplanations(checkNegative, { a: 0 })).toEqual([
       {

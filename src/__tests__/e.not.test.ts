@@ -9,7 +9,7 @@ describe("v.not", (test) => {
     testValidatorImpure(
       validator,
       [null, [], {}, 1, 0, NaN, undefined, true],
-      [false]
+      [false],
     );
 
     expect(getExplanations(validator, false)).toEqual([

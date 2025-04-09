@@ -10,7 +10,7 @@ describe("e.inline", (test) => {
     testValidatorImpure(
       checkArrNumber,
       [[], [1], [1, 2, 3]],
-      [null, false, { length: 1, 0: 1 }, ["1"]]
+      [null, false, { length: 1, 0: 1 }, ["1"]],
     );
     expect(getExplanations(checkArrNumber, null)).toEqual([
       {

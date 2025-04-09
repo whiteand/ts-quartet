@@ -3,10 +3,10 @@ import { IArrayOfSchema, TSchema } from "../types";
 import { SchemaType } from "./SchemaType";
 
 export function arrayOf<R>(
-  elementSchema: TSchema
+  elementSchema: TSchema,
 ): IArrayOfSchema & IFromRawSchema<R> {
   return {
     type: SchemaType.ArrayOf,
-    elementSchema
+    elementSchema,
   } as IArrayOfSchema & IFromRawSchema<R>;
 }

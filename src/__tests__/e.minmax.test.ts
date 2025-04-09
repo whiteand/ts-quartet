@@ -9,7 +9,7 @@ describe("v.min, v.max, v.minLength, v.maxLength", (test) => {
     testValidatorImpure(
       checkNonNegative,
       [0, 1, 2, 3.1415926, Infinity, [0], ["0"]],
-      [-1, "-1", [-1]]
+      [-1, "-1", [-1]],
     );
     expect(getExplanations(checkNonNegative, -1)).toEqual([
       {
@@ -53,7 +53,7 @@ describe("v.min, v.max, v.minLength, v.maxLength", (test) => {
     testValidatorImpure(
       checkNonNegative,
       [0, 1, 2, 3.1415926, Infinity, [0], ["0"]].map((a) => ({ a })),
-      [-1, "-1", [-1]].map((a) => ({ a }))
+      [-1, "-1", [-1]].map((a) => ({ a })),
     );
     expect(getExplanations(checkNonNegative, { a: -1 })).toEqual([
       {
@@ -97,7 +97,7 @@ describe("v.min, v.max, v.minLength, v.maxLength", (test) => {
     testValidatorImpure(
       checkPositive,
       [1, 2, 3.1415926, Infinity, [1], "1", ["1"]],
-      [0, -1, "-1", [-1], [0], ["0"]]
+      [0, -1, "-1", [-1], [0], ["0"]],
     );
     expect(getExplanations(checkPositive, 0)).toEqual([
       {
@@ -177,7 +177,7 @@ describe("v.min, v.max, v.minLength, v.maxLength", (test) => {
     testValidatorImpure(
       checkPositive,
       [1, 2, 3.1415926, Infinity, [1], "1", ["1"]].map((a) => ({ a })),
-      [0, -1, "-1", [-1], [0], ["0"]].map((a) => ({ a }))
+      [0, -1, "-1", [-1], [0], ["0"]].map((a) => ({ a })),
     );
     expect(getExplanations(checkPositive, { a: 0 })).toEqual([
       {
@@ -257,7 +257,7 @@ describe("v.min, v.max, v.minLength, v.maxLength", (test) => {
     testValidatorImpure(
       checkNonPositive,
       [0, -1, -2, -3.1415926, -Infinity, [0], ["0"]],
-      [1, "1", [1]]
+      [1, "1", [1]],
     );
     expect(getExplanations(checkNonPositive, 1)).toEqual([
       {
@@ -301,7 +301,7 @@ describe("v.min, v.max, v.minLength, v.maxLength", (test) => {
     testValidatorImpure(
       checkNegative,
       [-1, -2, -3.1415926, -Infinity, [-1], "-1", ["-1"]],
-      [0, 1, "1", [0], ["0"]]
+      [0, 1, "1", [0], ["0"]],
     );
     expect(getExplanations(checkNegative, 0)).toEqual([
       {
@@ -369,7 +369,7 @@ describe("v.min, v.max, v.minLength, v.maxLength", (test) => {
     testValidatorImpure(
       validator,
       ["ab", [1, 2], { length: 3 }],
-      ["a", [1], {}, null, undefined, false, true]
+      ["a", [1], {}, null, undefined, false, true],
     );
     expect(getExplanations(validator, "a")).toEqual([
       {
@@ -461,7 +461,7 @@ describe("v.min, v.max, v.minLength, v.maxLength", (test) => {
     testValidatorImpure(
       validator,
       ["ab", [1, 2], { length: 3 }].map((a) => ({ a })),
-      ["a", [1], {}, null, undefined, false, true].map((a) => ({ a }))
+      ["a", [1], {}, null, undefined, false, true].map((a) => ({ a })),
     );
     expect(getExplanations(validator, { a: "a" })).toEqual([
       {
@@ -553,7 +553,7 @@ describe("v.min, v.max, v.minLength, v.maxLength", (test) => {
     testValidatorImpure(
       checkThreePlusLength,
       ["abc", [1, 2, 3], { length: 3 }],
-      ["ab", [1, 2], "a", [1], {}, null, undefined, false, true]
+      ["ab", [1, 2], "a", [1], {}, null, undefined, false, true],
     );
     expect(getExplanations(checkThreePlusLength, "ab")).toEqual([
       {
@@ -669,7 +669,7 @@ describe("v.min, v.max, v.minLength, v.maxLength", (test) => {
     testValidatorImpure(
       checkTwoMinusLength,
       ["ab", [1, 2], "a", [1]],
-      ["abc", [1, 2, 3], { length: 3 }, {}, null, undefined, false, true]
+      ["abc", [1, 2, 3], { length: 3 }, {}, null, undefined, false, true],
     );
     expect(getExplanations(checkTwoMinusLength, "abc")).toEqual([
       {
@@ -776,8 +776,8 @@ describe("v.min, v.max, v.minLength, v.maxLength", (test) => {
       vMaxLengthPropAValidator,
       ["ab", [1, 2], "a", [1]].map((a) => ({ a })),
       ["abc", [1, 2, 3], { length: 3 }, {}, null, undefined, false, true].map(
-        (a) => ({ a })
-      )
+        (a) => ({ a }),
+      ),
     );
     expect(getExplanations(vMaxLengthPropAValidator, { a: "abc" })).toEqual([
       {
@@ -803,10 +803,10 @@ describe("v.min, v.max, v.minLength, v.maxLength", (test) => {
           },
           value: [1, 2, 3],
         },
-      ]
+      ],
     );
     expect(
-      getExplanations(vMaxLengthPropAValidator, { a: { length: 3 } })
+      getExplanations(vMaxLengthPropAValidator, { a: { length: 3 } }),
     ).toEqual([
       {
         path: ["a"],
@@ -857,7 +857,7 @@ describe("v.min, v.max, v.minLength, v.maxLength", (test) => {
           },
           value: undefined,
         },
-      ]
+      ],
     );
     expect(getExplanations(vMaxLengthPropAValidator, { a: false })).toEqual([
       {
@@ -889,7 +889,7 @@ describe("v.min, v.max, v.minLength, v.maxLength", (test) => {
     testValidatorImpure(
       validator,
       ["a", [1]],
-      ["ab", [1, 2], { length: 3 }, {}, null, undefined, false, true]
+      ["ab", [1, 2], { length: 3 }, {}, null, undefined, false, true],
     );
     expect(getExplanations(validator, "ab")).toEqual([
       {

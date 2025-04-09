@@ -11,7 +11,7 @@ export function ifInvalidReturnFalse(
   schema: TSchema,
   alloc: (varName: string, initialValue: Z, singleton?: boolean) => string,
   valueAddress: string,
-  keyAddress: string | number | undefined
+  keyAddress: string | number | undefined,
 ): string {
   if (schema === null) {
     return fromNegation(`${valueAddress} !== null`);
@@ -26,7 +26,7 @@ export function ifInvalidReturnFalse(
   switch (schema.type) {
     case SchemaType.And: {
       const ifInvalidReturnFalseStatements = schema.schemas.map((innerSchema) =>
-        ifInvalidReturnFalse(innerSchema, alloc, valueAddress, keyAddress)
+        ifInvalidReturnFalse(innerSchema, alloc, valueAddress, keyAddress),
       );
       return ifInvalidReturnFalseStatements.join("\n");
     }
@@ -46,7 +46,7 @@ export function ifInvalidReturnFalse(
               elementSchema,
               alloc,
               elementVar,
-              incrementVar
+              incrementVar,
             )}
         }
       `;
@@ -67,7 +67,7 @@ export function ifInvalidReturnFalse(
       const maxLengthVar = alloc("maxLength", schema.maxLength);
       const cmpMaxLength = schema.isExclusive ? "<" : "<=";
       return fromNegation(
-        `${valueAddress} == null || !(${valueAddress}.length ${cmpMaxLength} ${maxLengthVar})`
+        `${valueAddress} == null || !(${valueAddress}.length ${cmpMaxLength} ${maxLengthVar})`,
       );
     }
     case SchemaType.Min: {
@@ -79,7 +79,7 @@ export function ifInvalidReturnFalse(
       const minLengthVar = alloc("minLength", schema.minLength);
       const cmp = schema.isExclusive ? ">" : ">=";
       return fromNegation(
-        `${valueAddress} == null || !(${valueAddress}.length ${cmp} ${minLengthVar})`
+        `${valueAddress} == null || !(${valueAddress}.length ${cmp} ${minLengthVar})`,
       );
     }
     case SchemaType.Negative:
@@ -117,7 +117,7 @@ export function ifInvalidReturnFalse(
           propSchema,
           alloc,
           `${valueAddress}${propAccessor}`,
-          JSON.stringify(prop)
+          JSON.stringify(prop),
         );
         statements.push(checkPropStatement);
       }
@@ -127,19 +127,19 @@ export function ifInvalidReturnFalse(
         const incVar = alloc("i", 0);
         statements.push(`${restPropsVar} = Object.keys(${valueAddress})`);
         statements.push(
-          `for (${incVar} = 0; ${incVar} < ${restPropsVar}.length; ${incVar}++) {`
+          `for (${incVar} = 0; ${incVar} < ${restPropsVar}.length; ${incVar}++) {`,
         );
         const restPropVar = alloc("rp", undefined);
         statements.push(`${restPropVar} = ${restPropsVar}[${incVar}];`);
         const propsSchemasVar = alloc("ps", schema.propsSchemas);
         const hasVar = alloc("has", has, true);
         statements.push(
-          `if (${hasVar}(${propsSchemasVar}, ${restPropVar}) || ${restOmitDictVar}[${restPropVar}] === true) continue;`
+          `if (${hasVar}(${propsSchemasVar}, ${restPropVar}) || ${restOmitDictVar}[${restPropVar}] === true) continue;`,
         );
         const restValueVar = alloc("rv", undefined);
         statements.push(`${restValueVar} = ${valueAddress}[${restPropVar}]`);
         statements.push(
-          ifInvalidReturnFalse(schema.rest, alloc, restValueVar, restPropVar)
+          ifInvalidReturnFalse(schema.rest, alloc, restValueVar, restPropVar),
         );
         statements.push("}");
       }
@@ -154,7 +154,7 @@ export function ifInvalidReturnFalse(
           schema.keyValueSchema,
           alloc,
           pairVar,
-          keyAddress
+          keyAddress,
         )}`,
       ].join("\n");
     }

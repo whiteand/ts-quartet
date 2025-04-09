@@ -4,6 +4,6 @@ import { SchemaType } from "./SchemaType";
 export function not(schema: TSchema): INotSchema {
   return {
     schema,
-    type: SchemaType.Not
+    type: SchemaType.Not,
   };
 }

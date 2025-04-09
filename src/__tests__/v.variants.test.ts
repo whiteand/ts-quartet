@@ -13,14 +13,14 @@ describe("v([...])", (test) => {
     testValidator(
       v([1, 2]),
       [1, 2],
-      ["2", "1", null, false, [], {}, 0, NaN, undefined, true]
+      ["2", "1", null, false, [], {}, 0, NaN, undefined, true],
     );
   });
   test("v([1, '2'])", () => {
     testValidator(
       v([1, "2"]),
       [1, "2"],
-      [2, "1", null, false, [], {}, 0, NaN, undefined, true]
+      [2, "1", null, false, [], {}, 0, NaN, undefined, true],
     );
   });
   test("v([true, false])", () => {
@@ -40,7 +40,7 @@ describe("v([...])", (test) => {
     testValidator(
       validator,
       [{ a: 1 }, { a: 2 }, { a: 1, b: 2 }, { a: 2, b: 3 }],
-      [{}, null, undefined, { a: "1" }, { a: "2" }]
+      [{}, null, undefined, { a: "1" }, { a: "2" }],
     );
   });
 });

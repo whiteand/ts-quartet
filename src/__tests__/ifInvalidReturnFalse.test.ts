@@ -8,7 +8,7 @@ describe("coverage of ifInvalidReturnFalse", (test) => {
     testValidator(
       validator,
       [{ a: null }, { a: null, b: false }],
-      [null, false, undefined, {}, { a: undefined }, { a: "null" }]
+      [null, false, undefined, {}, { a: undefined }, { a: "null" }],
     );
   });
 });

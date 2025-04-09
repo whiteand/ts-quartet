@@ -5,7 +5,7 @@ import { SchemaType } from "./SchemaType";
 export function objectSchemaWithRest(
   propsSchemas: Record<KeyType, TSchema>,
   rest: TSchema,
-  restOmitDict: Record<KeyType, boolean>
+  restOmitDict: Record<KeyType, boolean>,
 ): IObjectSchema {
   return {
     hasRestValidator: true,
@@ -13,11 +13,11 @@ export function objectSchemaWithRest(
     propsSchemas,
     rest,
     restOmitDict,
-    type: SchemaType.Object
+    type: SchemaType.Object,
   };
 }
 export function objectSchemaWithoutRest(
-  propsSchemas: Record<KeyType, TSchema>
+  propsSchemas: Record<KeyType, TSchema>,
 ): IObjectSchema {
   return {
     hasRestValidator: false,
@@ -25,6 +25,6 @@ export function objectSchemaWithoutRest(
     propsSchemas,
     rest: null,
     restOmitDict: EMPTY_OBJ,
-    type: SchemaType.Object
+    type: SchemaType.Object,
   };
 }

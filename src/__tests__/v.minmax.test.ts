@@ -8,7 +8,7 @@ describe("v.min, v.max, v.minLength, v.maxLength", (test) => {
     testValidator(
       checkNonNegative,
       [0, 1, 2, 3.1415926, Infinity, [0], ["0"]],
-      [-1, "-1", [-1]]
+      [-1, "-1", [-1]],
     );
   });
   test("{ a: v.min }", () => {
@@ -16,7 +16,7 @@ describe("v.min, v.max, v.minLength, v.maxLength", (test) => {
     testValidator(
       checkNonNegative,
       [0, 1, 2, 3.1415926, Infinity, [0], ["0"]].map((a) => ({ a })),
-      [-1, "-1", [-1]].map((a) => ({ a }))
+      [-1, "-1", [-1]].map((a) => ({ a })),
     );
   });
   test("v.min exclusive", () => {
@@ -24,7 +24,7 @@ describe("v.min, v.max, v.minLength, v.maxLength", (test) => {
     testValidator(
       checkPositive,
       [1, 2, 3.1415926, Infinity, [1], "1", ["1"]],
-      [0, -1, "-1", [-1], [0], ["0"]]
+      [0, -1, "-1", [-1], [0], ["0"]],
     );
   });
   test("{ a: v.min } exclusive", () => {
@@ -32,7 +32,7 @@ describe("v.min, v.max, v.minLength, v.maxLength", (test) => {
     testValidator(
       checkPositive,
       [1, 2, 3.1415926, Infinity, [1], "1", ["1"]].map((a) => ({ a })),
-      [0, -1, "-1", [-1], [0], ["0"]].map((a) => ({ a }))
+      [0, -1, "-1", [-1], [0], ["0"]].map((a) => ({ a })),
     );
   });
   test("v.max", () => {
@@ -40,7 +40,7 @@ describe("v.min, v.max, v.minLength, v.maxLength", (test) => {
     testValidator(
       checkNonPositive,
       [0, -1, -2, -3.1415926, -Infinity, [0], ["0"]],
-      [1, "1", [1]]
+      [1, "1", [1]],
     );
   });
   test("{a : v.max }", () => {
@@ -48,7 +48,7 @@ describe("v.min, v.max, v.minLength, v.maxLength", (test) => {
     testValidator(
       checkNonPositive,
       [0, -1, -2, -3.1415926, -Infinity, [0], ["0"]].map((a) => ({ a })),
-      [1, "1", [1]].map((a) => ({ a }))
+      [1, "1", [1]].map((a) => ({ a })),
     );
   });
   test("v.max exclusive", () => {
@@ -56,7 +56,7 @@ describe("v.min, v.max, v.minLength, v.maxLength", (test) => {
     testValidator(
       checkNegative,
       [-1, -2, -3.1415926, -Infinity, [-1], "-1", ["-1"]],
-      [0, 1, "1", [0], ["0"]]
+      [0, 1, "1", [0], ["0"]],
     );
   });
   test("{ a: v.max } exclusive", () => {
@@ -64,7 +64,7 @@ describe("v.min, v.max, v.minLength, v.maxLength", (test) => {
     testValidator(
       checkNegative,
       [-1, -2, -3.1415926, -Infinity, [-1], "-1", ["-1"]].map((a) => ({ a })),
-      [0, 1, "1", [0], ["0"]].map((a) => ({ a }))
+      [0, 1, "1", [0], ["0"]].map((a) => ({ a })),
     );
   });
   test("v.minLength", () => {
@@ -72,7 +72,7 @@ describe("v.min, v.max, v.minLength, v.maxLength", (test) => {
     testValidator(
       validator,
       ["ab", [1, 2], { length: 3 }],
-      ["a", [1], {}, null, undefined, false, true]
+      ["a", [1], {}, null, undefined, false, true],
     );
   });
   test("{ a: v.minLength }", () => {
@@ -89,7 +89,7 @@ describe("v.min, v.max, v.minLength, v.maxLength", (test) => {
         false,
         true,
         ...["a", [1], {}, null, undefined, false, true].map((a) => ({ a })),
-      ]
+      ],
     );
   });
   test("v.minLength exclusive", () => {
@@ -97,7 +97,7 @@ describe("v.min, v.max, v.minLength, v.maxLength", (test) => {
     testValidator(
       checkPositive,
       ["abc", [1, 2, 3], { length: 3 }],
-      ["ab", [1, 2], "a", [1], {}, null, undefined, false, true]
+      ["ab", [1, 2], "a", [1], {}, null, undefined, false, true],
     );
   });
   test("{ a: v.minLength } exclusive", () => {
@@ -116,9 +116,9 @@ describe("v.min, v.max, v.minLength, v.maxLength", (test) => {
         false,
         true,
         ...["ab", [1, 2], "a", [1], {}, null, undefined, false, true].map(
-          (a) => ({ a })
+          (a) => ({ a }),
         ),
-      ]
+      ],
     );
   });
   test("v.maxLength", () => {
@@ -126,7 +126,7 @@ describe("v.min, v.max, v.minLength, v.maxLength", (test) => {
     testValidator(
       checkNonPositive,
       ["ab", [1, 2], "a", [1]],
-      ["abc", [1, 2, 3], { length: 3 }, {}, null, undefined, false, true]
+      ["abc", [1, 2, 3], { length: 3 }, {}, null, undefined, false, true],
     );
   });
   test("{ a: v.maxLength }", () => {
@@ -149,7 +149,7 @@ describe("v.min, v.max, v.minLength, v.maxLength", (test) => {
         ].map((a) => ({
           a,
         })),
-      ]
+      ],
     );
   });
   test("v.maxLength exclusive", () => {
@@ -157,7 +157,7 @@ describe("v.min, v.max, v.minLength, v.maxLength", (test) => {
     testValidator(
       validator,
       ["a", [1]],
-      ["ab", [1, 2], { length: 3 }, {}, null, undefined, false, true]
+      ["ab", [1, 2], { length: 3 }, {}, null, undefined, false, true],
     );
   });
   test("{ a: v.maxLength } exclusive", () => {
@@ -166,8 +166,8 @@ describe("v.min, v.max, v.minLength, v.maxLength", (test) => {
       validator,
       [{ a: "a" }, { a: [1] }],
       ["ab", [1, 2], { length: 3 }, {}, null, undefined, false, true].map(
-        (a) => ({ a })
-      )
+        (a) => ({ a }),
+      ),
     );
   });
 });

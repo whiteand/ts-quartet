@@ -9,12 +9,12 @@ function renderExplanation(
   pathVar: string,
   schema: TSchema,
   alloc: (varName: string, initialValue: Z, singleton?: boolean) => string,
-  innerExplanationsVar?: string
+  innerExplanationsVar?: string,
 ): string {
   const getExpVar = alloc(
     "e",
     (value: Z, path: KeyType[], innerExplanations: Z[] = []) =>
-      explanation(value, path, schema, innerExplanations)
+      explanation(value, path, schema, innerExplanations),
   );
 
   return innerExplanationsVar
@@ -27,7 +27,7 @@ export function returnExplanations(
   alloc: (varName: string, initialValue: Z, singleton?: boolean) => string,
   valueVar: string,
   pathVar: string,
-  statementsBeforeInvalidReturn: string[]
+  statementsBeforeInvalidReturn: string[],
 ): string[] {
   const expsVar = alloc("es", []);
   if (typeof schema !== "object" || schema === null) {
@@ -35,7 +35,7 @@ export function returnExplanations(
     const statements: string[] = [];
     statements.push(
       `if (${valueVar} !== ${constantVar}) {`,
-      `${expsVar} = [${renderExplanation(valueVar, pathVar, schema, alloc)}]`
+      `${expsVar} = [${renderExplanation(valueVar, pathVar, schema, alloc)}]`,
     );
     for (let i = 0; i < statementsBeforeInvalidReturn.length; i++) {
       statements.push(statementsBeforeInvalidReturn[i]);
@@ -52,7 +52,7 @@ export function returnExplanations(
       const funcStatements: string[] = [];
       funcStatements.push(
         `${expsVar} = ${explanatorVar}(${valueVar}, ${pathVar})`,
-        `if (${expsVar}) {`
+        `if (${expsVar}) {`,
       );
       for (let i = 0; i < statementsBeforeInvalidReturn.length; i++) {
         funcStatements.push(statementsBeforeInvalidReturn[i]);
@@ -69,7 +69,7 @@ export function returnExplanations(
           alloc,
           valueVar,
           pathVar,
-          statementsBeforeInvalidReturn
+          statementsBeforeInvalidReturn,
         );
         for (let j = 0; j < innerStatements.length; j++) {
           andStatements.push(innerStatements[j]);
@@ -104,14 +104,14 @@ export function returnExplanations(
       arrayOfStatements.push(
         `for (${indexVar} = 0; ${indexVar} < ${valueVar}.length; ${indexVar}++) {`,
         `${elemVar} = ${valueVar}[${indexVar}]`,
-        `${pathVar}.push(${indexVar})`
+        `${pathVar}.push(${indexVar})`,
       );
       const handleElementStatements = returnExplanations(
         schema.elementSchema,
         alloc,
         elemVar,
         pathVar,
-        statementsBeforeInvalidReturn.concat([`${pathVar}.pop()`])
+        statementsBeforeInvalidReturn.concat([`${pathVar}.pop()`]),
       );
 
       for (let i = 0; i < handleElementStatements.length; i++) {
@@ -194,7 +194,7 @@ export function returnExplanations(
       const statements: string[] = [];
       statements.push(
         `if (${valueVar} == null) {`,
-        `${expsVar} = [${renderExplanation(valueVar, pathVar, schema, alloc)}]`
+        `${expsVar} = [${renderExplanation(valueVar, pathVar, schema, alloc)}]`,
       );
       for (let i = 0; i < statementsBeforeInvalidReturn.length; i++) {
         statements.push(statementsBeforeInvalidReturn[i]);
@@ -211,7 +211,7 @@ export function returnExplanations(
           alloc,
           `${valueVar}${getAccessorWithAlloc(prop, alloc)}`,
           pathVar,
-          statementsBeforeInvalidReturn.concat([`${pathVar}.pop()`])
+          statementsBeforeInvalidReturn.concat([`${pathVar}.pop()`]),
         );
         for (let j = 0; j < handlePropStatements.length; j++) {
           statements.push(handlePropStatements[j]);
@@ -234,14 +234,14 @@ export function returnExplanations(
           `${restPropVar} = ${restPropsVar}[${indexVar}]`,
           `if (${hasVar}(${propsSchemasVar}, ${restPropVar}) || ${restOmitDictVar}[${restPropVar}] === true) continue;`,
           `${restPropValueVar} = ${valueVar}[${restPropVar}]`,
-          `${pathVar}.push(${restPropVar})`
+          `${pathVar}.push(${restPropVar})`,
         );
         const handleRestPropStatements = returnExplanations(
           schema.rest,
           alloc,
           restPropValueVar,
           pathVar,
-          [`${pathVar}.pop()`]
+          [`${pathVar}.pop()`],
         );
         for (let j = 0; j < handleRestPropStatements.length; j++) {
           statements.push(handleRestPropStatements[j]);
