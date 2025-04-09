@@ -18,17 +18,14 @@ import {
   INotANumberSchema,
   INotSchema,
   INumberSchema,
-  IObjectSchema,
   IPairSchema,
   IPositiveSchema,
   ISafeIntegerSchema,
   IStringSchema,
   ISymbolSchema,
   ITestSchema,
-  IVariantSchema,
   KeyType,
-  TNonPrimitiveSchema,
-  TPrimitiveSchema
+  TPrimitiveSchema,
 } from "./types";
 
 export interface IRawSchemaArr extends ReadonlyArray<RawSchema> {}
@@ -57,7 +54,6 @@ export type RawSchema =
   | IStringSchema
   | ISymbolSchema
   | ITestSchema
-  | IVariantSchema
   | ICustomSchema
   | TPrimitiveSchema
   | CompilationResult

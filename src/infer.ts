@@ -45,6 +45,11 @@ type OfT<T> = T extends T ? { readonly type: T } : never;
 
 type TMinSchemaValue = number | TNumberString | bigint | null;
 
+/// It is not strictly right, but it is almost impossible for a person to use regexps not for strings
+type InferTester<T> = T extends RegExp ? string : Z;
+
+type InferCustom<T> = T extends (value: any) => value is infer X ? X : Z;
+
 type TToT<R> = R extends OfT<SchemaType.ArrayOf>
   ? ValidateBySchema<GetFromRawSchema<R>>[]
   : R extends OfT<SchemaType.Array>
@@ -81,13 +86,12 @@ type TToT<R> = R extends OfT<SchemaType.ArrayOf>
   ? never
   : R extends OfT<SchemaType.Not>
   ? Z
+  : R extends OfT<SchemaType.Test>
+  ? InferTester<GetFromRawSchema<R>>
+  : R extends OfT<SchemaType.Custom>
+  ? InferCustom<GetFromRawSchema<R>>
   : Z;
-// TODO: IPairSchema
-// TODO: IStringSchema
-// TODO: ISymbolSchema
-// TODO: ITestSchema
-// TODO: IVariantSchema
-// TODO: ICustomSchema;
+// TODO: IPairSchema;
 
 type InferRestRestOmit<T, Rest, RestOmit> = InferRestless<T> &
   Record<Extract<KeyType, Values<RestOmit>>, ValidateBySchema<Rest>>;

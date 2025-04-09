@@ -26,7 +26,7 @@ import {
   symbol,
   testSchema
 } from "./schemas";
-import { IAndSchema, IArrayOfSchema, ITester, TCustomValidator } from "./types";
+import { IAndSchema, IArrayOfSchema, ICustomSchema, ITester, ITestSchema, TCustomValidator } from "./types";
 
 export const methods = {
   and<const RR extends readonly RawSchema[]>(...rawSchemas: RR): IAndSchema & IFromRawSchema<RR> {
@@ -70,11 +70,11 @@ export const methods = {
   safeInteger: safeInteger(),
   string: string(),
   symbol: symbol(),
-  test(tester: ITester) {
-    return testSchema(tester);
+  test<const T extends ITester>(tester: T): ITestSchema & IFromRawSchema<T> {
+    return testSchema(tester) as ITestSchema & IFromRawSchema<T>
   },
-  custom(customValidator: TCustomValidator, description?: string) {
-    return custom(customValidator, description);
+  custom<const T extends TCustomValidator>(customValidator: T, description?: string): ICustomSchema & IFromRawSchema<T> {
+    return custom(customValidator, description) as ICustomSchema & IFromRawSchema<T>
   }
 };
 
