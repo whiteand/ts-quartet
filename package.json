@@ -1,6 +1,6 @@
 {
   "name": "quartet",
-  "version": "11.0.2",
+  "version": "11.0.3",
   "description": "functional and convenient validation library",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -49,12 +49,13 @@
     "size-limit": "^11.2.0",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.29.1",
-    "vitest": "^3.1.1"
+    "vitest": "^3.1.1",
+    "@eslint/compat": "^1.2.8"
   },
   "files": [
     "lib/**/*"
   ],
   "dependencies": {
-    "@eslint/compat": "^1.2.8"
+    "@standard-schema/spec": "^1.0.0"
   }
 }
