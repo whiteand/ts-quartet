@@ -1,8 +1,9 @@
 import { e, ExplanationSchemaType, Z } from "..";
 import { getExplanations } from "./getExplanations";
 import { testValidatorImpure } from "./testValidatorImpure";
+import { describe, expect } from "vitest";
 
-describe("e.custom", () => {
+describe("e.custom", (test) => {
   test("e(e.arrayOf(e.custom(e(e.number))))", () => {
     const checkNumber = e(e.number);
     const checkArrNumber = e(

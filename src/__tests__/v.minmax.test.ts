@@ -1,7 +1,8 @@
 import { v } from "../v";
 import { testValidator } from "./testValidator";
+import { describe } from "vitest";
 
-describe("v.min, v.max, v.minLength, v.maxLength", () => {
+describe("v.min, v.max, v.minLength, v.maxLength", (test) => {
   test("v.min", () => {
     const checkNonNegative = v(v.min(0));
     testValidator(
@@ -14,8 +15,8 @@ describe("v.min, v.max, v.minLength, v.maxLength", () => {
     const checkNonNegative = v({ a: v.min(0) });
     testValidator(
       checkNonNegative,
-      [0, 1, 2, 3.1415926, Infinity, [0], ["0"]].map(a => ({ a })),
-      [-1, "-1", [-1]].map(a => ({ a }))
+      [0, 1, 2, 3.1415926, Infinity, [0], ["0"]].map((a) => ({ a })),
+      [-1, "-1", [-1]].map((a) => ({ a }))
     );
   });
   test("v.min exclusive", () => {
@@ -30,8 +31,8 @@ describe("v.min, v.max, v.minLength, v.maxLength", () => {
     const checkPositive = v({ a: v.min(0, true) });
     testValidator(
       checkPositive,
-      [1, 2, 3.1415926, Infinity, [1], "1", ["1"]].map(a => ({ a })),
-      [0, -1, "-1", [-1], [0], ["0"]].map(a => ({ a }))
+      [1, 2, 3.1415926, Infinity, [1], "1", ["1"]].map((a) => ({ a })),
+      [0, -1, "-1", [-1], [0], ["0"]].map((a) => ({ a }))
     );
   });
   test("v.max", () => {
@@ -46,8 +47,8 @@ describe("v.min, v.max, v.minLength, v.maxLength", () => {
     const checkNonPositive = v({ a: v.max(0) });
     testValidator(
       checkNonPositive,
-      [0, -1, -2, -3.1415926, -Infinity, [0], ["0"]].map(a => ({ a })),
-      [1, "1", [1]].map(a => ({ a }))
+      [0, -1, -2, -3.1415926, -Infinity, [0], ["0"]].map((a) => ({ a })),
+      [1, "1", [1]].map((a) => ({ a }))
     );
   });
   test("v.max exclusive", () => {
@@ -62,8 +63,8 @@ describe("v.min, v.max, v.minLength, v.maxLength", () => {
     const checkNegative = v({ a: v.max(0, true) });
     testValidator(
       checkNegative,
-      [-1, -2, -3.1415926, -Infinity, [-1], "-1", ["-1"]].map(a => ({ a })),
-      [0, 1, "1", [0], ["0"]].map(a => ({ a }))
+      [-1, -2, -3.1415926, -Infinity, [-1], "-1", ["-1"]].map((a) => ({ a })),
+      [0, 1, "1", [0], ["0"]].map((a) => ({ a }))
     );
   });
   test("v.minLength", () => {
@@ -76,16 +77,20 @@ describe("v.min, v.max, v.minLength, v.maxLength", () => {
   });
   test("{ a: v.minLength }", () => {
     const validator = v({ a: v.minLength(2) });
-    testValidator(validator, ["ab", [1, 2], { length: 3 }].map(a => ({ a })), [
-      "a",
-      [1],
-      {},
-      null,
-      undefined,
-      false,
-      true,
-      ...["a", [1], {}, null, undefined, false, true].map(a => ({ a }))
-    ]);
+    testValidator(
+      validator,
+      ["ab", [1, 2], { length: 3 }].map((a) => ({ a })),
+      [
+        "a",
+        [1],
+        {},
+        null,
+        undefined,
+        false,
+        true,
+        ...["a", [1], {}, null, undefined, false, true].map((a) => ({ a })),
+      ]
+    );
   });
   test("v.minLength exclusive", () => {
     const checkPositive = v(v.minLength(2, true));
@@ -99,7 +104,7 @@ describe("v.min, v.max, v.minLength, v.maxLength", () => {
     const checkPositive = v({ a: v.minLength(2, true) });
     testValidator(
       checkPositive,
-      ["abc", [1, 2, 3], { length: 3 }].map(a => ({ a })),
+      ["abc", [1, 2, 3], { length: 3 }].map((a) => ({ a })),
       [
         "ab",
         [1, 2],
@@ -111,8 +116,8 @@ describe("v.min, v.max, v.minLength, v.maxLength", () => {
         false,
         true,
         ...["ab", [1, 2], "a", [1], {}, null, undefined, false, true].map(
-          a => ({ a })
-        )
+          (a) => ({ a })
+        ),
       ]
     );
   });
@@ -128,7 +133,7 @@ describe("v.min, v.max, v.minLength, v.maxLength", () => {
     const checkNonPositive = v({ a: v.maxLength(2) });
     testValidator(
       checkNonPositive,
-      ["ab", [1, 2], "a", [1]].map(a => ({ a })),
+      ["ab", [1, 2], "a", [1]].map((a) => ({ a })),
       [
         null,
         undefined,
@@ -140,10 +145,10 @@ describe("v.min, v.max, v.minLength, v.maxLength", () => {
           null,
           undefined,
           false,
-          true
-        ].map(a => ({
-          a
-        }))
+          true,
+        ].map((a) => ({
+          a,
+        })),
       ]
     );
   });
@@ -161,7 +166,7 @@ describe("v.min, v.max, v.minLength, v.maxLength", () => {
       validator,
       [{ a: "a" }, { a: [1] }],
       ["ab", [1, 2], { length: 3 }, {}, null, undefined, false, true].map(
-        a => ({ a })
+        (a) => ({ a })
       )
     );
   });

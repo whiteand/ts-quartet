@@ -1,7 +1,8 @@
 import { e as v } from "..";
 import { testValidatorImpure } from "./testValidatorImpure";
+import { describe, expect } from "vitest";
 
-describe("v.and(...)", () => {
+describe("v.and(...)", (test) => {
   test("v.and()", () => {
     testValidatorImpure(
       v(v.and()),
@@ -31,7 +32,7 @@ describe("v.and(...)", () => {
         NaN,
         Infinity,
         -Infinity,
-        1.5
+        1.5,
       ]
     );
   });
@@ -57,7 +58,7 @@ describe("v.and(...)", () => {
         NaN,
         Infinity,
         -Infinity,
-        1.5
+        1.5,
       ]
     );
   });

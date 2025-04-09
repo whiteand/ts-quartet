@@ -1,8 +1,9 @@
 import { e as v, ExplanationSchemaType } from "..";
 import { getExplanations } from "./getExplanations";
 import { testValidatorImpure } from "./testValidatorImpure";
+import { describe, expect } from "vitest";
 
-describe("v.test", () => {
+describe("v.test", (test) => {
   test("v.test", () => {
     const tester = /^a/;
     const validator = v(v.test(tester));
@@ -17,10 +18,10 @@ describe("v.test", () => {
         innerExplanations: [],
         schema: {
           description: "/^a/",
-          type: ExplanationSchemaType.Test
+          type: ExplanationSchemaType.Test,
         },
-        value: "A"
-      }
+        value: "A",
+      },
     ]);
     expect(getExplanations(validator, null)).toEqual([
       {
@@ -28,10 +29,10 @@ describe("v.test", () => {
         innerExplanations: [],
         schema: {
           description: "/^a/",
-          type: ExplanationSchemaType.Test
+          type: ExplanationSchemaType.Test,
         },
-        value: null
-      }
+        value: null,
+      },
     ]);
     expect(getExplanations(validator, false)).toEqual([
       {
@@ -39,10 +40,10 @@ describe("v.test", () => {
         innerExplanations: [],
         schema: {
           description: "/^a/",
-          type: ExplanationSchemaType.Test
+          type: ExplanationSchemaType.Test,
         },
-        value: false
-      }
+        value: false,
+      },
     ]);
     expect(getExplanations(validator, [])).toEqual([
       {
@@ -50,10 +51,10 @@ describe("v.test", () => {
         innerExplanations: [],
         schema: {
           description: "/^a/",
-          type: ExplanationSchemaType.Test
+          type: ExplanationSchemaType.Test,
         },
-        value: []
-      }
+        value: [],
+      },
     ]);
     expect(getExplanations(validator, {})).toEqual([
       {
@@ -61,10 +62,10 @@ describe("v.test", () => {
         innerExplanations: [],
         schema: {
           description: "/^a/",
-          type: ExplanationSchemaType.Test
+          type: ExplanationSchemaType.Test,
         },
-        value: {}
-      }
+        value: {},
+      },
     ]);
     expect(getExplanations(validator, 1)).toEqual([
       {
@@ -72,10 +73,10 @@ describe("v.test", () => {
         innerExplanations: [],
         schema: {
           description: "/^a/",
-          type: ExplanationSchemaType.Test
+          type: ExplanationSchemaType.Test,
         },
-        value: 1
-      }
+        value: 1,
+      },
     ]);
     expect(getExplanations(validator, 0)).toEqual([
       {
@@ -83,10 +84,10 @@ describe("v.test", () => {
         innerExplanations: [],
         schema: {
           description: "/^a/",
-          type: ExplanationSchemaType.Test
+          type: ExplanationSchemaType.Test,
         },
-        value: 0
-      }
+        value: 0,
+      },
     ]);
     expect(getExplanations(validator, NaN)).toEqual([
       {
@@ -94,10 +95,10 @@ describe("v.test", () => {
         innerExplanations: [],
         schema: {
           description: "/^a/",
-          type: ExplanationSchemaType.Test
+          type: ExplanationSchemaType.Test,
         },
-        value: NaN
-      }
+        value: NaN,
+      },
     ]);
     expect(getExplanations(validator, undefined)).toEqual([
       {
@@ -105,10 +106,10 @@ describe("v.test", () => {
         innerExplanations: [],
         schema: {
           description: "/^a/",
-          type: ExplanationSchemaType.Test
+          type: ExplanationSchemaType.Test,
         },
-        value: undefined
-      }
+        value: undefined,
+      },
     ]);
     expect(getExplanations(validator, true)).toEqual([
       {
@@ -116,10 +117,10 @@ describe("v.test", () => {
         innerExplanations: [],
         schema: {
           description: "/^a/",
-          type: ExplanationSchemaType.Test
+          type: ExplanationSchemaType.Test,
         },
-        value: true
-      }
+        value: true,
+      },
     ]);
   });
   test("{ a: v.test }", () => {
@@ -127,8 +128,8 @@ describe("v.test", () => {
     const validator = v({ a: v.test(tester) });
     testValidatorImpure(
       validator,
-      ["a", "andrew"].map(a => ({ a })),
-      ["A", null, false, [], {}, 1, 0, NaN, undefined, true].map(a => ({ a }))
+      ["a", "andrew"].map((a) => ({ a })),
+      ["A", null, false, [], {}, 1, 0, NaN, undefined, true].map((a) => ({ a }))
     );
     expect(getExplanations(validator, { a: "A" })).toEqual([
       {
@@ -136,10 +137,10 @@ describe("v.test", () => {
         innerExplanations: [],
         schema: {
           description: "/^a/",
-          type: ExplanationSchemaType.Test
+          type: ExplanationSchemaType.Test,
         },
-        value: "A"
-      }
+        value: "A",
+      },
     ]);
     expect(getExplanations(validator, { a: false })).toEqual([
       {
@@ -147,10 +148,10 @@ describe("v.test", () => {
         innerExplanations: [],
         schema: {
           description: "/^a/",
-          type: ExplanationSchemaType.Test
+          type: ExplanationSchemaType.Test,
         },
-        value: false
-      }
+        value: false,
+      },
     ]);
     expect(getExplanations(validator, { a: [] })).toEqual([
       {
@@ -158,10 +159,10 @@ describe("v.test", () => {
         innerExplanations: [],
         schema: {
           description: "/^a/",
-          type: ExplanationSchemaType.Test
+          type: ExplanationSchemaType.Test,
         },
-        value: []
-      }
+        value: [],
+      },
     ]);
     expect(getExplanations(validator, { a: {} })).toEqual([
       {
@@ -169,10 +170,10 @@ describe("v.test", () => {
         innerExplanations: [],
         schema: {
           description: "/^a/",
-          type: ExplanationSchemaType.Test
+          type: ExplanationSchemaType.Test,
         },
-        value: {}
-      }
+        value: {},
+      },
     ]);
     expect(getExplanations(validator, { a: 1 })).toEqual([
       {
@@ -180,10 +181,10 @@ describe("v.test", () => {
         innerExplanations: [],
         schema: {
           description: "/^a/",
-          type: ExplanationSchemaType.Test
+          type: ExplanationSchemaType.Test,
         },
-        value: 1
-      }
+        value: 1,
+      },
     ]);
     expect(getExplanations(validator, { a: 0 })).toEqual([
       {
@@ -191,10 +192,10 @@ describe("v.test", () => {
         innerExplanations: [],
         schema: {
           description: "/^a/",
-          type: ExplanationSchemaType.Test
+          type: ExplanationSchemaType.Test,
         },
-        value: 0
-      }
+        value: 0,
+      },
     ]);
     expect(getExplanations(validator, { a: NaN })).toEqual([
       {
@@ -202,10 +203,10 @@ describe("v.test", () => {
         innerExplanations: [],
         schema: {
           description: "/^a/",
-          type: ExplanationSchemaType.Test
+          type: ExplanationSchemaType.Test,
         },
-        value: NaN
-      }
+        value: NaN,
+      },
     ]);
     expect(getExplanations(validator, { a: true })).toEqual([
       {
@@ -213,10 +214,10 @@ describe("v.test", () => {
         innerExplanations: [],
         schema: {
           description: "/^a/",
-          type: ExplanationSchemaType.Test
+          type: ExplanationSchemaType.Test,
         },
-        value: true
-      }
+        value: true,
+      },
     ]);
   });
 });

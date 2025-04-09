@@ -1,8 +1,9 @@
 import { Z } from "../types";
 import { v } from "../v";
 import { testValidator } from "./testValidator";
+import { describe } from "vitest";
 
-describe("v.arrayOf", () => {
+describe("v.arrayOf", (test) => {
   test("v.arrayOf(v.number)", () => {
     testValidator(
       v(v.arrayOf(v.number)),

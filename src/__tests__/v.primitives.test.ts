@@ -1,7 +1,8 @@
 import { v } from "../v";
 import { testValidator } from "./testValidator";
+import { describe } from "vitest";
 
-describe("v(primitive)", () => {
+describe("v(primitive)", (test) => {
   test("v(null)", () => {
     const validator = v<null>(null);
     testValidator(
@@ -76,10 +77,10 @@ describe("v(primitive)", () => {
           Infinity,
           -Infinity,
           {},
-          []
-        ].map(a => ({
-          a
-        }))
+          [],
+        ].map((a) => ({
+          a,
+        })),
       ]
     );
   });

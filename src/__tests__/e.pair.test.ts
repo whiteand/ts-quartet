@@ -1,7 +1,8 @@
 import { e as v } from "../e";
 import { testValidatorImpure } from "./testValidatorImpure";
+import { describe, expect } from "vitest";
 
-describe("v.pair", () => {
+describe("v.pair", (test) => {
   test("v.pair", () => {
     testValidatorImpure(
       v(v.pair({ key: undefined, value: 10 })),
@@ -13,7 +14,7 @@ describe("v.pair", () => {
     testValidatorImpure(
       v({ a: v.pair({ key: "a", value: 10 }) }),
       [{ a: 10 }],
-      [null, false, undefined, "10", { valueOf: () => 10 }].map(a => ({ a }))
+      [null, false, undefined, "10", { valueOf: () => 10 }].map((a) => ({ a }))
     );
   });
 });

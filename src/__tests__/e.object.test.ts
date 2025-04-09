@@ -1,8 +1,9 @@
 import { e as v, ExplanationSchemaType, Z } from "..";
 import { getExplanations } from "./getExplanations";
 import { testValidatorImpure } from "./testValidatorImpure";
+import { describe, expect } from "vitest";
 
-describe("v({ ... })", () => {
+describe("v({ ... })", (test) => {
   test("v({})", () => {
     const notNull = v({});
     testValidatorImpure(

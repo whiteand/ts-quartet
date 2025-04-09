@@ -5,8 +5,8 @@
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
-    "test": "jest ./src --config jestconfig.json",
-    "test:watch": "jest ./src --watch --config jestconfig.json",
+    "test": "vitest --run",
+    "test:watch": "vitest",
     "build": "tsc",
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
     "prepare": "npm run build",
@@ -42,17 +42,15 @@
   "devDependencies": {
     "@eslint/js": "^9.24.0",
     "@size-limit/preset-small-lib": "^4.4.2",
-    "@types/jest": "^24.0.13",
     "coveralls": "^3.0.3",
     "eslint": "^9.24.0",
     "globals": "^16.0.0",
-    "jest": "^24.8.0",
     "prettier": "^1.17.1",
     "size-limit": "^4.4.2",
-    "ts-jest": "^24.0.2",
     "ts-node": "^8.1.0",
     "typescript": "^5.8.3",
-    "typescript-eslint": "^8.29.1"
+    "typescript-eslint": "^8.29.1",
+    "vitest": "^3.1.1"
   },
   "files": [
     "lib/**/*"

@@ -1,7 +1,8 @@
 import { getAlloc } from "../getAlloc";
 import { Z } from "../types";
+import { describe, expect } from "vitest";
 
-describe("getAlloc", () => {
+describe("getAlloc", (test) => {
   test("single prefix", () => {
     const ctx: Record<string, Z> = {};
     const alloc = getAlloc(ctx, "ctx");
@@ -24,7 +25,7 @@ describe("getAlloc", () => {
     expect(alloc("something", 42, true)).toEqual("ctx.something");
     expect(() =>
       alloc("something", 43, true)
-    ).toThrowErrorMatchingInlineSnapshot(`"Wrong singleton usage"`);
+    ).toThrowErrorMatchingInlineSnapshot(`[Error: Wrong singleton usage]`);
     expect(ctx).toEqual({ something: 42 });
   });
 });

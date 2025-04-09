@@ -1,7 +1,8 @@
 import { v } from "../v";
 import { testValidator } from "./testValidator";
+import { describe, expect } from "vitest";
 
-describe("v.[type]", () => {
+describe("v.[type]", (test) => {
   test("v.boolean", () => {
     const checkBoolean = v(v.boolean);
     testValidator(checkBoolean, [true, false], ["true", "false", 1, 0]);
@@ -11,7 +12,7 @@ describe("v.[type]", () => {
     testValidator(
       checkBoolean,
       [{ a: true }, { a: false }],
-      ["true", "false", 1, 0].map(a => ({ a }))
+      ["true", "false", 1, 0].map((a) => ({ a }))
     );
   });
   test("v.number", () => {
@@ -28,8 +29,8 @@ describe("v.[type]", () => {
         {
           valueOf() {
             return 1;
-          }
-        }
+          },
+        },
       ]
     );
   });
@@ -58,14 +59,14 @@ describe("v.[type]", () => {
         {
           valueOf() {
             return 1;
-          }
-        }
+          },
+        },
       ]
     );
   });
   test("{ a: v.finite }", () => {
     const checkFinite = v({ a: v.finite });
-    testValidator(checkFinite, [1, 0, 1.5, -1].map(a => ({ a })), [
+    testValidator(checkFinite, [1, 0, 1.5, -1].map((a) => ({ a })), [
       "1",
       Infinity,
       -Infinity,
@@ -77,7 +78,7 @@ describe("v.[type]", () => {
       {
         valueOf() {
           return 1;
-        }
+        },
       },
       ...[
         "1",
@@ -91,9 +92,9 @@ describe("v.[type]", () => {
         {
           valueOf() {
             return 1;
-          }
-        }
-      ].map(a => ({ a }))
+          },
+        },
+      ].map((a) => ({ a })),
     ]);
   });
   test("v.safeInteger", () => {
@@ -114,8 +115,8 @@ describe("v.[type]", () => {
         {
           valueOf() {
             return 1;
-          }
-        }
+          },
+        },
       ]
     );
   });
@@ -128,7 +129,7 @@ describe("v.[type]", () => {
         function() {
           return true;
         },
-        new Function("return true")
+        new Function("return true"),
       ],
       [1, null, undefined]
     );
@@ -142,8 +143,8 @@ describe("v.[type]", () => {
         function() {
           return true;
         },
-        new Function("return true")
-      ].map(a => ({ a })),
+        new Function("return true"),
+      ].map((a) => ({ a })),
       [1, null, undefined, {}, [], { a: 1 }, { a: null }]
     );
   });
@@ -159,14 +160,14 @@ describe("v.[type]", () => {
     const checkSymbol = v({ a: v.symbol });
     testValidator(
       checkSymbol,
-      [Symbol.for("quartet"), Symbol.for("andrew"), Symbol("123")].map(a => ({
-        a
+      [Symbol.for("quartet"), Symbol.for("andrew"), Symbol("123")].map((a) => ({
+        a,
       })),
       [
         "symbol",
         null,
         undefined,
-        ...["symbol", null, undefined].map(a => ({ a }))
+        ...["symbol", null, undefined].map((a) => ({ a })),
       ]
     );
   });
@@ -183,8 +184,8 @@ describe("v.[type]", () => {
         {
           valueOf() {
             return 1;
-          }
-        }
+          },
+        },
       ],
       [0, null, -Infinity, -1, NaN, undefined, {}, []]
     );
@@ -202,9 +203,9 @@ describe("v.[type]", () => {
         {
           valueOf() {
             return 1;
-          }
-        }
-      ].map(a => ({ a })),
+          },
+        },
+      ].map((a) => ({ a })),
       [
         0,
         null,
@@ -214,7 +215,7 @@ describe("v.[type]", () => {
         undefined,
         {},
         [],
-        ...[0, null, -Infinity, -1, NaN, undefined, {}, []].map(a => ({ a }))
+        ...[0, null, -Infinity, -1, NaN, undefined, {}, []].map((a) => ({ a })),
       ]
     );
   });
@@ -231,8 +232,8 @@ describe("v.[type]", () => {
         {
           valueOf() {
             return -1;
-          }
-        }
+          },
+        },
       ],
       [0, null, Infinity, 1, NaN, undefined, {}, []]
     );
@@ -250,9 +251,9 @@ describe("v.[type]", () => {
         {
           valueOf() {
             return -1;
-          }
-        }
-      ].map(a => ({ a })),
+          },
+        },
+      ].map((a) => ({ a })),
       [
         0,
         null,
@@ -262,7 +263,7 @@ describe("v.[type]", () => {
         undefined,
         {},
         [],
-        ...[0, null, Infinity, 1, NaN, undefined, {}, []].map(a => ({ a }))
+        ...[0, null, Infinity, 1, NaN, undefined, {}, []].map((a) => ({ a })),
       ]
     );
   });

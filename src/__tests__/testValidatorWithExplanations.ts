@@ -1,5 +1,6 @@
 import { IExplanation } from "../explanations";
 import { CompilationResult, Z } from "../types";
+import { expect } from "vitest";
 
 export function testValidatorWithExplanations(
   validator: CompilationResult<Z, Z>,

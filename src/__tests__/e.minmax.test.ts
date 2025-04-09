@@ -1,8 +1,9 @@
 import { e as v, ExplanationSchemaType } from "..";
 import { getExplanations } from "./getExplanations";
 import { testValidatorImpure } from "./testValidatorImpure";
+import { describe, expect } from "vitest";
 
-describe("v.min, v.max, v.minLength, v.maxLength", () => {
+describe("v.min, v.max, v.minLength, v.maxLength", (test) => {
   test("v.min", () => {
     const checkNonNegative = v(v.min(0));
     testValidatorImpure(
@@ -17,10 +18,10 @@ describe("v.min, v.max, v.minLength, v.maxLength", () => {
         schema: {
           isExclusive: false,
           minValue: 0,
-          type: ExplanationSchemaType.Min
+          type: ExplanationSchemaType.Min,
         },
-        value: -1
-      }
+        value: -1,
+      },
     ]);
     expect(getExplanations(checkNonNegative, "-1")).toEqual([
       {
@@ -29,10 +30,10 @@ describe("v.min, v.max, v.minLength, v.maxLength", () => {
         schema: {
           isExclusive: false,
           minValue: 0,
-          type: ExplanationSchemaType.Min
+          type: ExplanationSchemaType.Min,
         },
-        value: "-1"
-      }
+        value: "-1",
+      },
     ]);
     expect(getExplanations(checkNonNegative, [-1])).toEqual([
       {
@@ -41,18 +42,18 @@ describe("v.min, v.max, v.minLength, v.maxLength", () => {
         schema: {
           isExclusive: false,
           minValue: 0,
-          type: ExplanationSchemaType.Min
+          type: ExplanationSchemaType.Min,
         },
-        value: [-1]
-      }
+        value: [-1],
+      },
     ]);
   });
   test("{ a: v.min }", () => {
     const checkNonNegative = v({ a: v.min(0) });
     testValidatorImpure(
       checkNonNegative,
-      [0, 1, 2, 3.1415926, Infinity, [0], ["0"]].map(a => ({ a })),
-      [-1, "-1", [-1]].map(a => ({ a }))
+      [0, 1, 2, 3.1415926, Infinity, [0], ["0"]].map((a) => ({ a })),
+      [-1, "-1", [-1]].map((a) => ({ a }))
     );
     expect(getExplanations(checkNonNegative, { a: -1 })).toEqual([
       {
@@ -61,10 +62,10 @@ describe("v.min, v.max, v.minLength, v.maxLength", () => {
         schema: {
           isExclusive: false,
           minValue: 0,
-          type: ExplanationSchemaType.Min
+          type: ExplanationSchemaType.Min,
         },
-        value: -1
-      }
+        value: -1,
+      },
     ]);
     expect(getExplanations(checkNonNegative, { a: "-1" })).toEqual([
       {
@@ -73,10 +74,10 @@ describe("v.min, v.max, v.minLength, v.maxLength", () => {
         schema: {
           isExclusive: false,
           minValue: 0,
-          type: ExplanationSchemaType.Min
+          type: ExplanationSchemaType.Min,
         },
-        value: "-1"
-      }
+        value: "-1",
+      },
     ]);
     expect(getExplanations(checkNonNegative, { a: [-1] })).toEqual([
       {
@@ -85,10 +86,10 @@ describe("v.min, v.max, v.minLength, v.maxLength", () => {
         schema: {
           isExclusive: false,
           minValue: 0,
-          type: ExplanationSchemaType.Min
+          type: ExplanationSchemaType.Min,
         },
-        value: [-1]
-      }
+        value: [-1],
+      },
     ]);
   });
   test("v.min exclusive ", () => {
@@ -105,10 +106,10 @@ describe("v.min, v.max, v.minLength, v.maxLength", () => {
         schema: {
           isExclusive: true,
           minValue: 0,
-          type: ExplanationSchemaType.Min
+          type: ExplanationSchemaType.Min,
         },
-        value: 0
-      }
+        value: 0,
+      },
     ]);
     expect(getExplanations(checkPositive, -1)).toEqual([
       {
@@ -117,10 +118,10 @@ describe("v.min, v.max, v.minLength, v.maxLength", () => {
         schema: {
           isExclusive: true,
           minValue: 0,
-          type: ExplanationSchemaType.Min
+          type: ExplanationSchemaType.Min,
         },
-        value: -1
-      }
+        value: -1,
+      },
     ]);
     expect(getExplanations(checkPositive, "-1")).toEqual([
       {
@@ -129,10 +130,10 @@ describe("v.min, v.max, v.minLength, v.maxLength", () => {
         schema: {
           isExclusive: true,
           minValue: 0,
-          type: ExplanationSchemaType.Min
+          type: ExplanationSchemaType.Min,
         },
-        value: "-1"
-      }
+        value: "-1",
+      },
     ]);
     expect(getExplanations(checkPositive, [-1])).toEqual([
       {
@@ -141,10 +142,10 @@ describe("v.min, v.max, v.minLength, v.maxLength", () => {
         schema: {
           isExclusive: true,
           minValue: 0,
-          type: ExplanationSchemaType.Min
+          type: ExplanationSchemaType.Min,
         },
-        value: [-1]
-      }
+        value: [-1],
+      },
     ]);
     expect(getExplanations(checkPositive, [0])).toEqual([
       {
@@ -153,10 +154,10 @@ describe("v.min, v.max, v.minLength, v.maxLength", () => {
         schema: {
           isExclusive: true,
           minValue: 0,
-          type: ExplanationSchemaType.Min
+          type: ExplanationSchemaType.Min,
         },
-        value: [0]
-      }
+        value: [0],
+      },
     ]);
     expect(getExplanations(checkPositive, ["0"])).toEqual([
       {
@@ -165,18 +166,18 @@ describe("v.min, v.max, v.minLength, v.maxLength", () => {
         schema: {
           isExclusive: true,
           minValue: 0,
-          type: ExplanationSchemaType.Min
+          type: ExplanationSchemaType.Min,
         },
-        value: ["0"]
-      }
+        value: ["0"],
+      },
     ]);
   });
   test("{ a: v.min exclusive }", () => {
     const checkPositive = v({ a: v.min(0, true) });
     testValidatorImpure(
       checkPositive,
-      [1, 2, 3.1415926, Infinity, [1], "1", ["1"]].map(a => ({ a })),
-      [0, -1, "-1", [-1], [0], ["0"]].map(a => ({ a }))
+      [1, 2, 3.1415926, Infinity, [1], "1", ["1"]].map((a) => ({ a })),
+      [0, -1, "-1", [-1], [0], ["0"]].map((a) => ({ a }))
     );
     expect(getExplanations(checkPositive, { a: 0 })).toEqual([
       {
@@ -185,10 +186,10 @@ describe("v.min, v.max, v.minLength, v.maxLength", () => {
         schema: {
           isExclusive: true,
           minValue: 0,
-          type: ExplanationSchemaType.Min
+          type: ExplanationSchemaType.Min,
         },
-        value: 0
-      }
+        value: 0,
+      },
     ]);
     expect(getExplanations(checkPositive, { a: -1 })).toEqual([
       {
@@ -197,10 +198,10 @@ describe("v.min, v.max, v.minLength, v.maxLength", () => {
         schema: {
           isExclusive: true,
           minValue: 0,
-          type: ExplanationSchemaType.Min
+          type: ExplanationSchemaType.Min,
         },
-        value: -1
-      }
+        value: -1,
+      },
     ]);
     expect(getExplanations(checkPositive, { a: "-1" })).toEqual([
       {
@@ -209,10 +210,10 @@ describe("v.min, v.max, v.minLength, v.maxLength", () => {
         schema: {
           isExclusive: true,
           minValue: 0,
-          type: ExplanationSchemaType.Min
+          type: ExplanationSchemaType.Min,
         },
-        value: "-1"
-      }
+        value: "-1",
+      },
     ]);
     expect(getExplanations(checkPositive, { a: [-1] })).toEqual([
       {
@@ -221,10 +222,10 @@ describe("v.min, v.max, v.minLength, v.maxLength", () => {
         schema: {
           isExclusive: true,
           minValue: 0,
-          type: ExplanationSchemaType.Min
+          type: ExplanationSchemaType.Min,
         },
-        value: [-1]
-      }
+        value: [-1],
+      },
     ]);
     expect(getExplanations(checkPositive, { a: [0] })).toEqual([
       {
@@ -233,10 +234,10 @@ describe("v.min, v.max, v.minLength, v.maxLength", () => {
         schema: {
           isExclusive: true,
           minValue: 0,
-          type: ExplanationSchemaType.Min
+          type: ExplanationSchemaType.Min,
         },
-        value: [0]
-      }
+        value: [0],
+      },
     ]);
     expect(getExplanations(checkPositive, { a: ["0"] })).toEqual([
       {
@@ -245,10 +246,10 @@ describe("v.min, v.max, v.minLength, v.maxLength", () => {
         schema: {
           isExclusive: true,
           minValue: 0,
-          type: ExplanationSchemaType.Min
+          type: ExplanationSchemaType.Min,
         },
-        value: ["0"]
-      }
+        value: ["0"],
+      },
     ]);
   });
   test("v.max", () => {
@@ -265,10 +266,10 @@ describe("v.min, v.max, v.minLength, v.maxLength", () => {
         schema: {
           isExclusive: false,
           maxValue: 0,
-          type: ExplanationSchemaType.Max
+          type: ExplanationSchemaType.Max,
         },
-        value: 1
-      }
+        value: 1,
+      },
     ]);
     expect(getExplanations(checkNonPositive, "1")).toEqual([
       {
@@ -277,10 +278,10 @@ describe("v.min, v.max, v.minLength, v.maxLength", () => {
         schema: {
           isExclusive: false,
           maxValue: 0,
-          type: ExplanationSchemaType.Max
+          type: ExplanationSchemaType.Max,
         },
-        value: "1"
-      }
+        value: "1",
+      },
     ]);
     expect(getExplanations(checkNonPositive, [1])).toEqual([
       {
@@ -289,10 +290,10 @@ describe("v.min, v.max, v.minLength, v.maxLength", () => {
         schema: {
           isExclusive: false,
           maxValue: 0,
-          type: ExplanationSchemaType.Max
+          type: ExplanationSchemaType.Max,
         },
-        value: [1]
-      }
+        value: [1],
+      },
     ]);
   });
   test("v.max exclusive", () => {
@@ -309,10 +310,10 @@ describe("v.min, v.max, v.minLength, v.maxLength", () => {
         schema: {
           isExclusive: true,
           maxValue: 0,
-          type: ExplanationSchemaType.Max
+          type: ExplanationSchemaType.Max,
         },
-        value: 0
-      }
+        value: 0,
+      },
     ]);
     expect(getExplanations(checkNegative, 1)).toEqual([
       {
@@ -321,10 +322,10 @@ describe("v.min, v.max, v.minLength, v.maxLength", () => {
         schema: {
           isExclusive: true,
           maxValue: 0,
-          type: ExplanationSchemaType.Max
+          type: ExplanationSchemaType.Max,
         },
-        value: 1
-      }
+        value: 1,
+      },
     ]);
     expect(getExplanations(checkNegative, "1")).toEqual([
       {
@@ -333,10 +334,10 @@ describe("v.min, v.max, v.minLength, v.maxLength", () => {
         schema: {
           isExclusive: true,
           maxValue: 0,
-          type: ExplanationSchemaType.Max
+          type: ExplanationSchemaType.Max,
         },
-        value: "1"
-      }
+        value: "1",
+      },
     ]);
     expect(getExplanations(checkNegative, [0])).toEqual([
       {
@@ -345,10 +346,10 @@ describe("v.min, v.max, v.minLength, v.maxLength", () => {
         schema: {
           isExclusive: true,
           maxValue: 0,
-          type: ExplanationSchemaType.Max
+          type: ExplanationSchemaType.Max,
         },
-        value: [0]
-      }
+        value: [0],
+      },
     ]);
     expect(getExplanations(checkNegative, ["0"])).toEqual([
       {
@@ -357,10 +358,10 @@ describe("v.min, v.max, v.minLength, v.maxLength", () => {
         schema: {
           isExclusive: true,
           maxValue: 0,
-          type: ExplanationSchemaType.Max
+          type: ExplanationSchemaType.Max,
         },
-        value: ["0"]
-      }
+        value: ["0"],
+      },
     ]);
   });
   test("v.minLength", () => {
@@ -377,10 +378,10 @@ describe("v.min, v.max, v.minLength, v.maxLength", () => {
         schema: {
           isExclusive: false,
           minLength: 2,
-          type: ExplanationSchemaType.MinLength
+          type: ExplanationSchemaType.MinLength,
         },
-        value: "a"
-      }
+        value: "a",
+      },
     ]);
     expect(getExplanations(validator, [1])).toEqual([
       {
@@ -389,10 +390,10 @@ describe("v.min, v.max, v.minLength, v.maxLength", () => {
         schema: {
           isExclusive: false,
           minLength: 2,
-          type: ExplanationSchemaType.MinLength
+          type: ExplanationSchemaType.MinLength,
         },
-        value: [1]
-      }
+        value: [1],
+      },
     ]);
     expect(getExplanations(validator, {})).toEqual([
       {
@@ -401,10 +402,10 @@ describe("v.min, v.max, v.minLength, v.maxLength", () => {
         schema: {
           isExclusive: false,
           minLength: 2,
-          type: ExplanationSchemaType.MinLength
+          type: ExplanationSchemaType.MinLength,
         },
-        value: {}
-      }
+        value: {},
+      },
     ]);
     expect(getExplanations(validator, null)).toEqual([
       {
@@ -413,10 +414,10 @@ describe("v.min, v.max, v.minLength, v.maxLength", () => {
         schema: {
           isExclusive: false,
           minLength: 2,
-          type: ExplanationSchemaType.MinLength
+          type: ExplanationSchemaType.MinLength,
         },
-        value: null
-      }
+        value: null,
+      },
     ]);
     expect(getExplanations(validator, undefined)).toEqual([
       {
@@ -425,10 +426,10 @@ describe("v.min, v.max, v.minLength, v.maxLength", () => {
         schema: {
           isExclusive: false,
           minLength: 2,
-          type: ExplanationSchemaType.MinLength
+          type: ExplanationSchemaType.MinLength,
         },
-        value: undefined
-      }
+        value: undefined,
+      },
     ]);
     expect(getExplanations(validator, false)).toEqual([
       {
@@ -437,10 +438,10 @@ describe("v.min, v.max, v.minLength, v.maxLength", () => {
         schema: {
           isExclusive: false,
           minLength: 2,
-          type: ExplanationSchemaType.MinLength
+          type: ExplanationSchemaType.MinLength,
         },
-        value: false
-      }
+        value: false,
+      },
     ]);
     expect(getExplanations(validator, true)).toEqual([
       {
@@ -449,18 +450,18 @@ describe("v.min, v.max, v.minLength, v.maxLength", () => {
         schema: {
           isExclusive: false,
           minLength: 2,
-          type: ExplanationSchemaType.MinLength
+          type: ExplanationSchemaType.MinLength,
         },
-        value: true
-      }
+        value: true,
+      },
     ]);
   });
   test("{ a: v.minLength }", () => {
     const validator = v({ a: v.minLength(2) });
     testValidatorImpure(
       validator,
-      ["ab", [1, 2], { length: 3 }].map(a => ({ a })),
-      ["a", [1], {}, null, undefined, false, true].map(a => ({ a }))
+      ["ab", [1, 2], { length: 3 }].map((a) => ({ a })),
+      ["a", [1], {}, null, undefined, false, true].map((a) => ({ a }))
     );
     expect(getExplanations(validator, { a: "a" })).toEqual([
       {
@@ -469,10 +470,10 @@ describe("v.min, v.max, v.minLength, v.maxLength", () => {
         schema: {
           isExclusive: false,
           minLength: 2,
-          type: ExplanationSchemaType.MinLength
+          type: ExplanationSchemaType.MinLength,
         },
-        value: "a"
-      }
+        value: "a",
+      },
     ]);
     expect(getExplanations(validator, { a: [1] })).toEqual([
       {
@@ -481,10 +482,10 @@ describe("v.min, v.max, v.minLength, v.maxLength", () => {
         schema: {
           isExclusive: false,
           minLength: 2,
-          type: ExplanationSchemaType.MinLength
+          type: ExplanationSchemaType.MinLength,
         },
-        value: [1]
-      }
+        value: [1],
+      },
     ]);
     expect(getExplanations(validator, { a: {} })).toEqual([
       {
@@ -493,10 +494,10 @@ describe("v.min, v.max, v.minLength, v.maxLength", () => {
         schema: {
           isExclusive: false,
           minLength: 2,
-          type: ExplanationSchemaType.MinLength
+          type: ExplanationSchemaType.MinLength,
         },
-        value: {}
-      }
+        value: {},
+      },
     ]);
     expect(getExplanations(validator, { a: null })).toEqual([
       {
@@ -505,10 +506,10 @@ describe("v.min, v.max, v.minLength, v.maxLength", () => {
         schema: {
           isExclusive: false,
           minLength: 2,
-          type: ExplanationSchemaType.MinLength
+          type: ExplanationSchemaType.MinLength,
         },
-        value: null
-      }
+        value: null,
+      },
     ]);
     expect(getExplanations(validator, { a: undefined })).toEqual([
       {
@@ -517,10 +518,10 @@ describe("v.min, v.max, v.minLength, v.maxLength", () => {
         schema: {
           isExclusive: false,
           minLength: 2,
-          type: ExplanationSchemaType.MinLength
+          type: ExplanationSchemaType.MinLength,
         },
-        value: undefined
-      }
+        value: undefined,
+      },
     ]);
     expect(getExplanations(validator, { a: false })).toEqual([
       {
@@ -529,10 +530,10 @@ describe("v.min, v.max, v.minLength, v.maxLength", () => {
         schema: {
           isExclusive: false,
           minLength: 2,
-          type: ExplanationSchemaType.MinLength
+          type: ExplanationSchemaType.MinLength,
         },
-        value: false
-      }
+        value: false,
+      },
     ]);
     expect(getExplanations(validator, { a: true })).toEqual([
       {
@@ -541,10 +542,10 @@ describe("v.min, v.max, v.minLength, v.maxLength", () => {
         schema: {
           isExclusive: false,
           minLength: 2,
-          type: ExplanationSchemaType.MinLength
+          type: ExplanationSchemaType.MinLength,
         },
-        value: true
-      }
+        value: true,
+      },
     ]);
   });
   test("v.minLength exclusive", () => {
@@ -561,10 +562,10 @@ describe("v.min, v.max, v.minLength, v.maxLength", () => {
         schema: {
           isExclusive: true,
           minLength: 2,
-          type: ExplanationSchemaType.MinLength
+          type: ExplanationSchemaType.MinLength,
         },
-        value: "ab"
-      }
+        value: "ab",
+      },
     ]);
     expect(getExplanations(checkThreePlusLength, [1, 2])).toEqual([
       {
@@ -573,10 +574,10 @@ describe("v.min, v.max, v.minLength, v.maxLength", () => {
         schema: {
           isExclusive: true,
           minLength: 2,
-          type: ExplanationSchemaType.MinLength
+          type: ExplanationSchemaType.MinLength,
         },
-        value: [1, 2]
-      }
+        value: [1, 2],
+      },
     ]);
     expect(getExplanations(checkThreePlusLength, "a")).toEqual([
       {
@@ -585,10 +586,10 @@ describe("v.min, v.max, v.minLength, v.maxLength", () => {
         schema: {
           isExclusive: true,
           minLength: 2,
-          type: ExplanationSchemaType.MinLength
+          type: ExplanationSchemaType.MinLength,
         },
-        value: "a"
-      }
+        value: "a",
+      },
     ]);
     expect(getExplanations(checkThreePlusLength, [1])).toEqual([
       {
@@ -597,10 +598,10 @@ describe("v.min, v.max, v.minLength, v.maxLength", () => {
         schema: {
           isExclusive: true,
           minLength: 2,
-          type: ExplanationSchemaType.MinLength
+          type: ExplanationSchemaType.MinLength,
         },
-        value: [1]
-      }
+        value: [1],
+      },
     ]);
     expect(getExplanations(checkThreePlusLength, {})).toEqual([
       {
@@ -609,10 +610,10 @@ describe("v.min, v.max, v.minLength, v.maxLength", () => {
         schema: {
           isExclusive: true,
           minLength: 2,
-          type: ExplanationSchemaType.MinLength
+          type: ExplanationSchemaType.MinLength,
         },
-        value: {}
-      }
+        value: {},
+      },
     ]);
     expect(getExplanations(checkThreePlusLength, null)).toEqual([
       {
@@ -621,10 +622,10 @@ describe("v.min, v.max, v.minLength, v.maxLength", () => {
         schema: {
           isExclusive: true,
           minLength: 2,
-          type: ExplanationSchemaType.MinLength
+          type: ExplanationSchemaType.MinLength,
         },
-        value: null
-      }
+        value: null,
+      },
     ]);
     expect(getExplanations(checkThreePlusLength, undefined)).toEqual([
       {
@@ -633,10 +634,10 @@ describe("v.min, v.max, v.minLength, v.maxLength", () => {
         schema: {
           isExclusive: true,
           minLength: 2,
-          type: ExplanationSchemaType.MinLength
+          type: ExplanationSchemaType.MinLength,
         },
-        value: undefined
-      }
+        value: undefined,
+      },
     ]);
     expect(getExplanations(checkThreePlusLength, false)).toEqual([
       {
@@ -645,10 +646,10 @@ describe("v.min, v.max, v.minLength, v.maxLength", () => {
         schema: {
           isExclusive: true,
           minLength: 2,
-          type: ExplanationSchemaType.MinLength
+          type: ExplanationSchemaType.MinLength,
         },
-        value: false
-      }
+        value: false,
+      },
     ]);
     expect(getExplanations(checkThreePlusLength, true)).toEqual([
       {
@@ -657,10 +658,10 @@ describe("v.min, v.max, v.minLength, v.maxLength", () => {
         schema: {
           isExclusive: true,
           minLength: 2,
-          type: ExplanationSchemaType.MinLength
+          type: ExplanationSchemaType.MinLength,
         },
-        value: true
-      }
+        value: true,
+      },
     ]);
   });
   test("v.maxLength", () => {
@@ -677,10 +678,10 @@ describe("v.min, v.max, v.minLength, v.maxLength", () => {
         schema: {
           isExclusive: false,
           maxLength: 2,
-          type: ExplanationSchemaType.MaxLength
+          type: ExplanationSchemaType.MaxLength,
         },
-        value: "abc"
-      }
+        value: "abc",
+      },
     ]);
     expect(getExplanations(checkTwoMinusLength, [1, 2, 3])).toEqual([
       {
@@ -689,10 +690,10 @@ describe("v.min, v.max, v.minLength, v.maxLength", () => {
         schema: {
           isExclusive: false,
           maxLength: 2,
-          type: ExplanationSchemaType.MaxLength
+          type: ExplanationSchemaType.MaxLength,
         },
-        value: [1, 2, 3]
-      }
+        value: [1, 2, 3],
+      },
     ]);
     expect(getExplanations(checkTwoMinusLength, { length: 3 })).toEqual([
       {
@@ -701,12 +702,12 @@ describe("v.min, v.max, v.minLength, v.maxLength", () => {
         schema: {
           isExclusive: false,
           maxLength: 2,
-          type: ExplanationSchemaType.MaxLength
+          type: ExplanationSchemaType.MaxLength,
         },
         value: {
-          length: 3
-        }
-      }
+          length: 3,
+        },
+      },
     ]);
     expect(getExplanations(checkTwoMinusLength, {})).toEqual([
       {
@@ -715,10 +716,10 @@ describe("v.min, v.max, v.minLength, v.maxLength", () => {
         schema: {
           isExclusive: false,
           maxLength: 2,
-          type: ExplanationSchemaType.MaxLength
+          type: ExplanationSchemaType.MaxLength,
         },
-        value: {}
-      }
+        value: {},
+      },
     ]);
     expect(getExplanations(checkTwoMinusLength, null)).toEqual([
       {
@@ -727,10 +728,10 @@ describe("v.min, v.max, v.minLength, v.maxLength", () => {
         schema: {
           isExclusive: false,
           maxLength: 2,
-          type: ExplanationSchemaType.MaxLength
+          type: ExplanationSchemaType.MaxLength,
         },
-        value: null
-      }
+        value: null,
+      },
     ]);
     expect(getExplanations(checkTwoMinusLength, undefined)).toEqual([
       {
@@ -739,10 +740,10 @@ describe("v.min, v.max, v.minLength, v.maxLength", () => {
         schema: {
           isExclusive: false,
           maxLength: 2,
-          type: ExplanationSchemaType.MaxLength
+          type: ExplanationSchemaType.MaxLength,
         },
-        value: undefined
-      }
+        value: undefined,
+      },
     ]);
     expect(getExplanations(checkTwoMinusLength, false)).toEqual([
       {
@@ -751,10 +752,10 @@ describe("v.min, v.max, v.minLength, v.maxLength", () => {
         schema: {
           isExclusive: false,
           maxLength: 2,
-          type: ExplanationSchemaType.MaxLength
+          type: ExplanationSchemaType.MaxLength,
         },
-        value: false
-      }
+        value: false,
+      },
     ]);
     expect(getExplanations(checkTwoMinusLength, true)).toEqual([
       {
@@ -763,19 +764,19 @@ describe("v.min, v.max, v.minLength, v.maxLength", () => {
         schema: {
           isExclusive: false,
           maxLength: 2,
-          type: ExplanationSchemaType.MaxLength
+          type: ExplanationSchemaType.MaxLength,
         },
-        value: true
-      }
+        value: true,
+      },
     ]);
   });
   test("{ a: v.maxLength }", () => {
     const vMaxLengthPropAValidator = v({ a: v.maxLength(2) });
     testValidatorImpure(
       vMaxLengthPropAValidator,
-      ["ab", [1, 2], "a", [1]].map(a => ({ a })),
+      ["ab", [1, 2], "a", [1]].map((a) => ({ a })),
       ["abc", [1, 2, 3], { length: 3 }, {}, null, undefined, false, true].map(
-        a => ({ a })
+        (a) => ({ a })
       )
     );
     expect(getExplanations(vMaxLengthPropAValidator, { a: "abc" })).toEqual([
@@ -785,10 +786,10 @@ describe("v.min, v.max, v.minLength, v.maxLength", () => {
         schema: {
           isExclusive: false,
           maxLength: 2,
-          type: ExplanationSchemaType.MaxLength
+          type: ExplanationSchemaType.MaxLength,
         },
-        value: "abc"
-      }
+        value: "abc",
+      },
     ]);
     expect(getExplanations(vMaxLengthPropAValidator, { a: [1, 2, 3] })).toEqual(
       [
@@ -798,10 +799,10 @@ describe("v.min, v.max, v.minLength, v.maxLength", () => {
           schema: {
             isExclusive: false,
             maxLength: 2,
-            type: ExplanationSchemaType.MaxLength
+            type: ExplanationSchemaType.MaxLength,
           },
-          value: [1, 2, 3]
-        }
+          value: [1, 2, 3],
+        },
       ]
     );
     expect(
@@ -813,12 +814,12 @@ describe("v.min, v.max, v.minLength, v.maxLength", () => {
         schema: {
           isExclusive: false,
           maxLength: 2,
-          type: ExplanationSchemaType.MaxLength
+          type: ExplanationSchemaType.MaxLength,
         },
         value: {
-          length: 3
-        }
-      }
+          length: 3,
+        },
+      },
     ]);
     expect(getExplanations(vMaxLengthPropAValidator, { a: {} })).toEqual([
       {
@@ -827,10 +828,10 @@ describe("v.min, v.max, v.minLength, v.maxLength", () => {
         schema: {
           isExclusive: false,
           maxLength: 2,
-          type: ExplanationSchemaType.MaxLength
+          type: ExplanationSchemaType.MaxLength,
         },
-        value: {}
-      }
+        value: {},
+      },
     ]);
     expect(getExplanations(vMaxLengthPropAValidator, { a: null })).toEqual([
       {
@@ -839,10 +840,10 @@ describe("v.min, v.max, v.minLength, v.maxLength", () => {
         schema: {
           isExclusive: false,
           maxLength: 2,
-          type: ExplanationSchemaType.MaxLength
+          type: ExplanationSchemaType.MaxLength,
         },
-        value: null
-      }
+        value: null,
+      },
     ]);
     expect(getExplanations(vMaxLengthPropAValidator, { a: undefined })).toEqual(
       [
@@ -852,10 +853,10 @@ describe("v.min, v.max, v.minLength, v.maxLength", () => {
           schema: {
             isExclusive: false,
             maxLength: 2,
-            type: ExplanationSchemaType.MaxLength
+            type: ExplanationSchemaType.MaxLength,
           },
-          value: undefined
-        }
+          value: undefined,
+        },
       ]
     );
     expect(getExplanations(vMaxLengthPropAValidator, { a: false })).toEqual([
@@ -865,10 +866,10 @@ describe("v.min, v.max, v.minLength, v.maxLength", () => {
         schema: {
           isExclusive: false,
           maxLength: 2,
-          type: ExplanationSchemaType.MaxLength
+          type: ExplanationSchemaType.MaxLength,
         },
-        value: false
-      }
+        value: false,
+      },
     ]);
     expect(getExplanations(vMaxLengthPropAValidator, { a: true })).toEqual([
       {
@@ -877,10 +878,10 @@ describe("v.min, v.max, v.minLength, v.maxLength", () => {
         schema: {
           isExclusive: false,
           maxLength: 2,
-          type: ExplanationSchemaType.MaxLength
+          type: ExplanationSchemaType.MaxLength,
         },
-        value: true
-      }
+        value: true,
+      },
     ]);
   });
   test("v.maxLength exclusive", () => {
@@ -897,10 +898,10 @@ describe("v.min, v.max, v.minLength, v.maxLength", () => {
         schema: {
           isExclusive: true,
           maxLength: 2,
-          type: ExplanationSchemaType.MaxLength
+          type: ExplanationSchemaType.MaxLength,
         },
-        value: "ab"
-      }
+        value: "ab",
+      },
     ]);
     expect(getExplanations(validator, [1, 2])).toEqual([
       {
@@ -909,10 +910,10 @@ describe("v.min, v.max, v.minLength, v.maxLength", () => {
         schema: {
           isExclusive: true,
           maxLength: 2,
-          type: ExplanationSchemaType.MaxLength
+          type: ExplanationSchemaType.MaxLength,
         },
-        value: [1, 2]
-      }
+        value: [1, 2],
+      },
     ]);
     expect(getExplanations(validator, { length: 3 })).toEqual([
       {
@@ -921,12 +922,12 @@ describe("v.min, v.max, v.minLength, v.maxLength", () => {
         schema: {
           isExclusive: true,
           maxLength: 2,
-          type: ExplanationSchemaType.MaxLength
+          type: ExplanationSchemaType.MaxLength,
         },
         value: {
-          length: 3
-        }
-      }
+          length: 3,
+        },
+      },
     ]);
     expect(getExplanations(validator, {})).toEqual([
       {
@@ -935,10 +936,10 @@ describe("v.min, v.max, v.minLength, v.maxLength", () => {
         schema: {
           isExclusive: true,
           maxLength: 2,
-          type: ExplanationSchemaType.MaxLength
+          type: ExplanationSchemaType.MaxLength,
         },
-        value: {}
-      }
+        value: {},
+      },
     ]);
     expect(getExplanations(validator, null)).toEqual([
       {
@@ -947,10 +948,10 @@ describe("v.min, v.max, v.minLength, v.maxLength", () => {
         schema: {
           isExclusive: true,
           maxLength: 2,
-          type: ExplanationSchemaType.MaxLength
+          type: ExplanationSchemaType.MaxLength,
         },
-        value: null
-      }
+        value: null,
+      },
     ]);
     expect(getExplanations(validator, undefined)).toEqual([
       {
@@ -959,10 +960,10 @@ describe("v.min, v.max, v.minLength, v.maxLength", () => {
         schema: {
           isExclusive: true,
           maxLength: 2,
-          type: ExplanationSchemaType.MaxLength
+          type: ExplanationSchemaType.MaxLength,
         },
-        value: undefined
-      }
+        value: undefined,
+      },
     ]);
     expect(getExplanations(validator, false)).toEqual([
       {
@@ -971,10 +972,10 @@ describe("v.min, v.max, v.minLength, v.maxLength", () => {
         schema: {
           isExclusive: true,
           maxLength: 2,
-          type: ExplanationSchemaType.MaxLength
+          type: ExplanationSchemaType.MaxLength,
         },
-        value: false
-      }
+        value: false,
+      },
     ]);
     expect(getExplanations(validator, true)).toEqual([
       {
@@ -983,10 +984,10 @@ describe("v.min, v.max, v.minLength, v.maxLength", () => {
         schema: {
           isExclusive: true,
           maxLength: 2,
-          type: ExplanationSchemaType.MaxLength
+          type: ExplanationSchemaType.MaxLength,
         },
-        value: true
-      }
+        value: true,
+      },
     ]);
   });
 });

@@ -1,7 +1,8 @@
 import { v } from "../v";
 import { testValidator } from "./testValidator";
+import { describe, expect } from "vitest";
 
-describe("v([...])", () => {
+describe("v([...])", (test) => {
   test("v([])", () => {
     testValidator(v([]), [], [null, false, [], {}, 1, 0, NaN, undefined, true]);
   });
@@ -29,7 +30,7 @@ describe("v([...])", () => {
       v.custom(() => {
         flag = false;
         return false;
-      })
+      }),
     ]);
     validator(1);
     expect(flag).toBeTruthy();

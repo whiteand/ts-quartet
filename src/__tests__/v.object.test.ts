@@ -1,8 +1,9 @@
 import { Z } from "../types";
 import { v } from "../v";
 import { testValidator } from "./testValidator";
+import { describe, expect } from "vitest";
 
-describe("v({ ... })", () => {
+describe("v({ ... })", (test) => {
   test("v({})", () => {
     const notNull = v({});
     testValidator(notNull, [{}, 1, 0, false, true, "", []], [null, undefined]);

@@ -1,4 +1,5 @@
 import { CompilationResult, Z } from "../types";
+import { expect } from "vitest";
 
 export function testValidatorImpure(
   validator: CompilationResult<Z, Z>,

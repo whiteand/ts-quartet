@@ -3,8 +3,9 @@ import { ExplanationSchemaType } from "../explanations";
 import { getExplanations } from "./getExplanations";
 import { testValidatorImpure } from "./testValidatorImpure";
 import { testValidatorWithExplanations } from "./testValidatorWithExplanations";
+import { describe, expect } from "vitest";
 
-describe("v.arrayOf", () => {
+describe("v.arrayOf", (test) => {
   test("v.arrayOf(v.number)", () => {
     const validator = v(v.arrayOf(v.number));
     testValidatorWithExplanations(validator, [[], [1, NaN, 2]], []);

@@ -1,9 +1,11 @@
 import { Z } from "../types";
 import { getAccessorWithAlloc } from "../utils";
+import { describe, expect } from "vitest";
 
 const mockedAlloc = (a: string, b: Z, c: boolean = false) =>
   JSON.stringify({ a, b, c });
-describe("getAccessor", () => {
+
+describe("getAccessor", (test) => {
   test("number", () => {
     expect(getAccessorWithAlloc(123, mockedAlloc)).toEqual("[123]");
   });

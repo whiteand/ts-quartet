@@ -1,8 +1,9 @@
 import { e as v, ExplanationSchemaType } from "..";
 import { getExplanations } from "./getExplanations";
 import { testValidatorImpure } from "./testValidatorImpure";
+import { describe, expect } from "vitest";
 
-describe("v.not", () => {
+describe("v.not", (test) => {
   test("v.not", () => {
     const validator = v(v.not(false));
     testValidatorImpure(
@@ -16,11 +17,11 @@ describe("v.not", () => {
         path: [],
         schema: {
           schema: false,
-          type: ExplanationSchemaType.Not
+          type: ExplanationSchemaType.Not,
         },
         value: false,
-        innerExplanations: []
-      }
+        innerExplanations: [],
+      },
     ]);
   });
 });

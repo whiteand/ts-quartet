@@ -24,12 +24,13 @@ import {
   string,
   symbol,
   testSchema,
-  variant
+  variant,
 } from "../schemas";
 import { v } from "../v";
 import { schemaToExplanationSchema } from "./schemaToExplanationSchema";
+import { describe, expect } from "vitest";
 
-describe("schemaToExplanationSchema", () => {
+describe("schemaToExplanationSchema", (test) => {
   test("primitives", () => {
     expect(schemaToExplanationSchema(null)).toMatchInlineSnapshot(`null`);
     expect(schemaToExplanationSchema(undefined)).toMatchInlineSnapshot(
@@ -54,72 +55,72 @@ describe("schemaToExplanationSchema", () => {
     const schema = and([safeInteger(), min(1, false), max(5, false)]);
     const explanationSchema = schemaToExplanationSchema(schema);
     expect(explanationSchema).toMatchInlineSnapshot(`
-                  Object {
-                    "schemas": Array [
-                      Object {
-                        "type": "SafeInteger",
-                      },
-                      Object {
-                        "isExclusive": false,
-                        "minValue": 1,
-                        "type": "Min",
-                      },
-                      Object {
-                        "isExclusive": false,
-                        "maxValue": 5,
-                        "type": "Max",
-                      },
-                    ],
-                    "type": "And",
-                  }
-            `);
+      {
+        "schemas": [
+          {
+            "type": "SafeInteger",
+          },
+          {
+            "isExclusive": false,
+            "minValue": 1,
+            "type": "Min",
+          },
+          {
+            "isExclusive": false,
+            "maxValue": 5,
+            "type": "Max",
+          },
+        ],
+        "type": "And",
+      }
+    `);
   });
   test("anySchema", () => {
     const schema = anySchema();
     const explanationSchema = schemaToExplanationSchema(schema);
     expect(explanationSchema).toMatchInlineSnapshot(`
-                  Object {
-                    "type": "Any",
-                  }
-            `);
+      {
+        "type": "Any",
+      }
+    `);
   });
   test("array", () => {
     const schema = array();
     const explanationSchema = schemaToExplanationSchema(schema);
     expect(explanationSchema).toMatchInlineSnapshot(`
-                  Object {
-                    "type": "Array",
-                  }
-            `);
+      {
+        "type": "Array",
+      }
+    `);
   });
   test("arrayOf", () => {
     const schema = arrayOf(number());
     const explanationSchema = schemaToExplanationSchema(schema);
     expect(explanationSchema).toMatchInlineSnapshot(`
-                  Object {
-                    "elementSchema": Object {
-                      "type": "Number",
-                    },
-                    "type": "ArrayOf",
-                  }
-            `);
+      {
+        "elementSchema": {
+          "type": "Number",
+        },
+        "type": "ArrayOf",
+      }
+    `);
   });
   test("boolean", () => {
     const schema = boolean();
     const explanationSchema = schemaToExplanationSchema(schema);
     expect(explanationSchema).toMatchInlineSnapshot(`
-                  Object {
-                    "type": "Boolean",
-                  }
-            `);
+      {
+        "type": "Boolean",
+      }
+    `);
   });
   test("custom", () => {
-    const schema = custom(value => typeof value === "number");
+    const schema = custom((value) => typeof value === "number");
     const explanationSchema = schemaToExplanationSchema(schema);
     expect(explanationSchema).toMatchInlineSnapshot(`
-      Object {
+      {
         "description": "custom",
-        "innerExplanations": Array [],
+        "innerExplanations": [],
         "type": "Custom",
       }
     `);
@@ -128,186 +129,186 @@ describe("schemaToExplanationSchema", () => {
     const schema = finite();
     const explanationSchema = schemaToExplanationSchema(schema);
     expect(explanationSchema).toMatchInlineSnapshot(`
-                  Object {
-                    "type": "Finite",
-                  }
-            `);
+      {
+        "type": "Finite",
+      }
+    `);
   });
   test("functionSchema", () => {
     const schema = functionSchema();
     const explanationSchema = schemaToExplanationSchema(schema);
     expect(explanationSchema).toMatchInlineSnapshot(`
-                  Object {
-                    "type": "Function",
-                  }
-            `);
+      {
+        "type": "Function",
+      }
+    `);
   });
   test("max", () => {
     expect(schemaToExplanationSchema(max(5, true))).toMatchInlineSnapshot(`
-                  Object {
-                    "isExclusive": true,
-                    "maxValue": 5,
-                    "type": "Max",
-                  }
-            `);
+      {
+        "isExclusive": true,
+        "maxValue": 5,
+        "type": "Max",
+      }
+    `);
     expect(schemaToExplanationSchema(max(5, false))).toMatchInlineSnapshot(`
-                  Object {
-                    "isExclusive": false,
-                    "maxValue": 5,
-                    "type": "Max",
-                  }
-            `);
+      {
+        "isExclusive": false,
+        "maxValue": 5,
+        "type": "Max",
+      }
+    `);
   });
   test("maxLength", () => {
     expect(schemaToExplanationSchema(maxLength(5, true)))
       .toMatchInlineSnapshot(`
-                  Object {
-                    "isExclusive": true,
-                    "maxLength": 5,
-                    "type": "MaxLength",
-                  }
-            `);
+        {
+          "isExclusive": true,
+          "maxLength": 5,
+          "type": "MaxLength",
+        }
+      `);
     expect(schemaToExplanationSchema(maxLength(5, false)))
       .toMatchInlineSnapshot(`
-                  Object {
-                    "isExclusive": false,
-                    "maxLength": 5,
-                    "type": "MaxLength",
-                  }
-            `);
+        {
+          "isExclusive": false,
+          "maxLength": 5,
+          "type": "MaxLength",
+        }
+      `);
   });
   test("min", () => {
     expect(schemaToExplanationSchema(min(5, true))).toMatchInlineSnapshot(`
-                  Object {
-                    "isExclusive": true,
-                    "minValue": 5,
-                    "type": "Min",
-                  }
-            `);
+      {
+        "isExclusive": true,
+        "minValue": 5,
+        "type": "Min",
+      }
+    `);
     expect(schemaToExplanationSchema(min(5, false))).toMatchInlineSnapshot(`
-                  Object {
-                    "isExclusive": false,
-                    "minValue": 5,
-                    "type": "Min",
-                  }
-            `);
+      {
+        "isExclusive": false,
+        "minValue": 5,
+        "type": "Min",
+      }
+    `);
   });
   test("minLength", () => {
     expect(schemaToExplanationSchema(minLength(5, true)))
       .toMatchInlineSnapshot(`
-                  Object {
-                    "isExclusive": true,
-                    "minLength": 5,
-                    "type": "MinLength",
-                  }
-            `);
+        {
+          "isExclusive": true,
+          "minLength": 5,
+          "type": "MinLength",
+        }
+      `);
     expect(schemaToExplanationSchema(minLength(5, false)))
       .toMatchInlineSnapshot(`
-                  Object {
-                    "isExclusive": false,
-                    "minLength": 5,
-                    "type": "MinLength",
-                  }
-            `);
+        {
+          "isExclusive": false,
+          "minLength": 5,
+          "type": "MinLength",
+        }
+      `);
   });
   test("negative", () => {
     const schema = negative();
     const explanationSchema = schemaToExplanationSchema(schema);
     expect(explanationSchema).toMatchInlineSnapshot(`
-                  Object {
-                    "type": "Negative",
-                  }
-            `);
+      {
+        "type": "Negative",
+      }
+    `);
   });
   test("neverSchema", () => {
     const schema = neverSchema();
     const explanationSchema = schemaToExplanationSchema(schema);
     expect(explanationSchema).toMatchInlineSnapshot(`
-                  Object {
-                    "type": "Never",
-                  }
-            `);
+      {
+        "type": "Never",
+      }
+    `);
   });
   test("not", () => {
     const schema = not(number());
     const explanationSchema = schemaToExplanationSchema(schema);
     expect(explanationSchema).toMatchInlineSnapshot(`
-                  Object {
-                    "schema": Object {
-                      "type": "Number",
-                    },
-                    "type": "Not",
-                  }
-            `);
+      {
+        "schema": {
+          "type": "Number",
+        },
+        "type": "Not",
+      }
+    `);
   });
   test("notANumber", () => {
     const schema = notANumber();
     const explanationSchema = schemaToExplanationSchema(schema);
     expect(explanationSchema).toMatchInlineSnapshot(`
-                  Object {
-                    "type": "NotANumber",
-                  }
-            `);
+      {
+        "type": "NotANumber",
+      }
+    `);
   });
   test("number", () => {
     const schema = number();
     const explanationSchema = schemaToExplanationSchema(schema);
     expect(explanationSchema).toMatchInlineSnapshot(`
-                  Object {
-                    "type": "Number",
-                  }
-            `);
+      {
+        "type": "Number",
+      }
+    `);
   });
   test("object schema", () => {
     expect(schemaToExplanationSchema(objectSchemaWithoutRest({ a: number() })))
       .toMatchInlineSnapshot(`
-                  Object {
-                    "propsSchemas": Object {
-                      "a": Object {
-                        "type": "Number",
-                      },
-                    },
-                    "type": "Object",
-                  }
-            `);
+        {
+          "propsSchemas": {
+            "a": {
+              "type": "Number",
+            },
+          },
+          "type": "Object",
+        }
+      `);
     expect(
       schemaToExplanationSchema(
         objectSchemaWithRest({ a: number() }, v.string, {})
       )
     ).toMatchInlineSnapshot(`
-                  Object {
-                    "[v.restOmit]": Array [],
-                    "[v.rest]": Object {
-                      "type": "String",
-                    },
-                    "propsSchemas": Object {
-                      "a": Object {
-                        "type": "Number",
-                      },
-                    },
-                    "type": "Object",
-                  }
-            `);
+      {
+        "[v.restOmit]": [],
+        "[v.rest]": {
+          "type": "String",
+        },
+        "propsSchemas": {
+          "a": {
+            "type": "Number",
+          },
+        },
+        "type": "Object",
+      }
+    `);
     expect(
       schemaToExplanationSchema(
         objectSchemaWithRest({ a: number() }, v.string, { valid: true })
       )
     ).toMatchInlineSnapshot(`
-                  Object {
-                    "[v.restOmit]": Array [
-                      "valid",
-                    ],
-                    "[v.rest]": Object {
-                      "type": "String",
-                    },
-                    "propsSchemas": Object {
-                      "a": Object {
-                        "type": "Number",
-                      },
-                    },
-                    "type": "Object",
-                  }
-            `);
+      {
+        "[v.restOmit]": [
+          "valid",
+        ],
+        "[v.rest]": {
+          "type": "String",
+        },
+        "propsSchemas": {
+          "a": {
+            "type": "Number",
+          },
+        },
+        "type": "Object",
+      }
+    `);
   });
   test("pair", () => {
     const schema = pair(
@@ -315,14 +316,14 @@ describe("schemaToExplanationSchema", () => {
     );
     const explanationSchema = schemaToExplanationSchema(schema);
     expect(explanationSchema).toMatchInlineSnapshot(`
-      Object {
-        "keyValueSchema": Object {
-          "propsSchemas": Object {
-            "key": Object {
+      {
+        "keyValueSchema": {
+          "propsSchemas": {
+            "key": {
               "description": "/^valid/",
               "type": "Test",
             },
-            "value": Object {
+            "value": {
               "type": "Number",
             },
           },
@@ -336,43 +337,43 @@ describe("schemaToExplanationSchema", () => {
     const schema = positive();
     const explanationSchema = schemaToExplanationSchema(schema);
     expect(explanationSchema).toMatchInlineSnapshot(`
-                  Object {
-                    "type": "Positive",
-                  }
-            `);
+      {
+        "type": "Positive",
+      }
+    `);
   });
   test("safeInteger", () => {
     const schema = safeInteger();
     const explanationSchema = schemaToExplanationSchema(schema);
     expect(explanationSchema).toMatchInlineSnapshot(`
-                  Object {
-                    "type": "SafeInteger",
-                  }
-            `);
+      {
+        "type": "SafeInteger",
+      }
+    `);
   });
   test("string", () => {
     const schema = string();
     const explanationSchema = schemaToExplanationSchema(schema);
     expect(explanationSchema).toMatchInlineSnapshot(`
-                  Object {
-                    "type": "String",
-                  }
-            `);
+      {
+        "type": "String",
+      }
+    `);
   });
   test("symbol", () => {
     const schema = symbol();
     const explanationSchema = schemaToExplanationSchema(schema);
     expect(explanationSchema).toMatchInlineSnapshot(`
-                  Object {
-                    "type": "Symbol",
-                  }
-            `);
+      {
+        "type": "Symbol",
+      }
+    `);
   });
   test("testSchema", () => {
     const schema = testSchema(/^valid/);
     const explanationSchema = schemaToExplanationSchema(schema);
     expect(explanationSchema).toMatchInlineSnapshot(`
-      Object {
+      {
         "description": "/^valid/",
         "type": "Test",
       }
@@ -382,9 +383,9 @@ describe("schemaToExplanationSchema", () => {
     const schema = variant([1, 2, 3, 4, 5]);
     const explanationSchema = schemaToExplanationSchema(schema);
     expect(explanationSchema).toMatchInlineSnapshot(`
-      Object {
+      {
         "type": "Variant",
-        "variants": Array [
+        "variants": [
           1,
           2,
           3,

@@ -1,8 +1,9 @@
+import { describe } from "vitest";
 import { e } from "../e";
 import { ExplanationSchemaType } from "../explanations/types";
 import { testValidatorWithExplanations } from "./testValidatorWithExplanations";
 
-describe("e.any", () => {
+describe("e.any", (test) => {
   test("e.any", () => {
     testValidatorWithExplanations(
       e(e.any),
@@ -13,7 +14,7 @@ describe("e.any", () => {
   test("{ a: e.any }", () => {
     testValidatorWithExplanations(
       e({ a: e.any }),
-      [null, false, [], {}, 1, 0, NaN, undefined, true].map(a => ({ a })),
+      [null, false, [], {}, 1, 0, NaN, undefined, true].map((a) => ({ a })),
       [
         [
           null,
@@ -24,14 +25,14 @@ describe("e.any", () => {
               schema: {
                 propsSchemas: {
                   a: {
-                    type: ExplanationSchemaType.Any
-                  }
+                    type: ExplanationSchemaType.Any,
+                  },
                 },
-                type: ExplanationSchemaType.Object
+                type: ExplanationSchemaType.Object,
               },
-              value: null
-            }
-          ]
+              value: null,
+            },
+          ],
         ],
         [
           undefined,
@@ -42,15 +43,15 @@ describe("e.any", () => {
               schema: {
                 propsSchemas: {
                   a: {
-                    type: ExplanationSchemaType.Any
-                  }
+                    type: ExplanationSchemaType.Any,
+                  },
                 },
-                type: ExplanationSchemaType.Object
+                type: ExplanationSchemaType.Object,
               },
-              value: undefined
-            }
-          ]
-        ]
+              value: undefined,
+            },
+          ],
+        ],
       ]
     );
   });

@@ -1,6 +1,7 @@
 import { getAccessor } from "../utils";
+import { describe, expect } from "vitest";
 
-describe("getAccessor", () => {
+describe("getAccessor", (test) => {
   test("number", () => {
     expect(getAccessor(123)).toEqual("[123]");
   });

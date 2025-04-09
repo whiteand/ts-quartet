@@ -1,8 +1,9 @@
 import { e as v, ExplanationSchemaType } from "..";
 import { getExplanations } from "./getExplanations";
 import { testValidatorImpure } from "./testValidatorImpure";
+import { describe, expect } from "vitest";
 
-describe("v.[type]", () => {
+describe("v.[type]", (test) => {
   test("v.boolean", () => {
     const checkBoolean = v(v.boolean);
     testValidatorImpure(checkBoolean, [true, false], ["true", "false", 1, 0]);
@@ -11,28 +12,28 @@ describe("v.[type]", () => {
         path: [],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.Boolean
+          type: ExplanationSchemaType.Boolean,
         },
-        value: "1"
-      }
+        value: "1",
+      },
     ]);
   });
   test("{ a: v.boolean }", () => {
     const checkBoolean = v({ a: v.boolean });
     testValidatorImpure(
       checkBoolean,
-      [true, false].map(a => ({ a })),
-      ["true", "false", 1, 0].map(a => ({ a }))
+      [true, false].map((a) => ({ a })),
+      ["true", "false", 1, 0].map((a) => ({ a }))
     );
     expect(getExplanations(checkBoolean, { a: "1" })).toEqual([
       {
         path: ["a"],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.Boolean
+          type: ExplanationSchemaType.Boolean,
         },
-        value: "1"
-      }
+        value: "1",
+      },
     ]);
   });
   test("v.number", () => {
@@ -49,8 +50,8 @@ describe("v.[type]", () => {
         {
           valueOf() {
             return 1;
-          }
-        }
+          },
+        },
       ]
     );
   });
@@ -58,7 +59,7 @@ describe("v.[type]", () => {
     const checkNumber = v({ a: v.number });
     testValidatorImpure(
       checkNumber,
-      [1, 0, 1.5, Infinity, -Infinity, -1, NaN].map(a => ({ a })),
+      [1, 0, 1.5, Infinity, -Infinity, -1, NaN].map((a) => ({ a })),
       [
         "1",
         null,
@@ -68,59 +69,59 @@ describe("v.[type]", () => {
         {
           valueOf() {
             return 1;
-          }
-        }
-      ].map(a => ({ a }))
+          },
+        },
+      ].map((a) => ({ a }))
     );
     expect(getExplanations(checkNumber, { a: "1" })).toEqual([
       {
         path: ["a"],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.Number
+          type: ExplanationSchemaType.Number,
         },
-        value: "1"
-      }
+        value: "1",
+      },
     ]);
     expect(getExplanations(checkNumber, { a: null })).toEqual([
       {
         path: ["a"],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.Number
+          type: ExplanationSchemaType.Number,
         },
-        value: null
-      }
+        value: null,
+      },
     ]);
     expect(getExplanations(checkNumber, { a: undefined })).toEqual([
       {
         path: ["a"],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.Number
+          type: ExplanationSchemaType.Number,
         },
-        value: undefined
-      }
+        value: undefined,
+      },
     ]);
     expect(getExplanations(checkNumber, { a: {} })).toEqual([
       {
         path: ["a"],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.Number
+          type: ExplanationSchemaType.Number,
         },
-        value: {}
-      }
+        value: {},
+      },
     ]);
     expect(getExplanations(checkNumber, { a: [] })).toEqual([
       {
         path: ["a"],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.Number
+          type: ExplanationSchemaType.Number,
         },
-        value: []
-      }
+        value: [],
+      },
     ]);
   });
   test("v.string", () => {
@@ -135,70 +136,70 @@ describe("v.[type]", () => {
         path: [],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.String
+          type: ExplanationSchemaType.String,
         },
-        value: Symbol.for("quartet")
-      }
+        value: Symbol.for("quartet"),
+      },
     ]);
     expect(getExplanations(checkString, String)).toEqual([
       {
         path: [],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.String
+          type: ExplanationSchemaType.String,
         },
-        value: String
-      }
+        value: String,
+      },
     ]);
     expect(getExplanations(checkString, null)).toEqual([
       {
         path: [],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.String
+          type: ExplanationSchemaType.String,
         },
-        value: null
-      }
+        value: null,
+      },
     ]);
     expect(getExplanations(checkString, 0)).toEqual([
       {
         path: [],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.String
+          type: ExplanationSchemaType.String,
         },
-        value: 0
-      }
+        value: 0,
+      },
     ]);
     expect(getExplanations(checkString, undefined)).toEqual([
       {
         path: [],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.String
+          type: ExplanationSchemaType.String,
         },
-        value: undefined
-      }
+        value: undefined,
+      },
     ]);
     expect(getExplanations(checkString, true)).toEqual([
       {
         path: [],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.String
+          type: ExplanationSchemaType.String,
         },
-        value: true
-      }
+        value: true,
+      },
     ]);
     expect(getExplanations(checkString, false)).toEqual([
       {
         path: [],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.String
+          type: ExplanationSchemaType.String,
         },
-        value: false
-      }
+        value: false,
+      },
     ]);
   });
   test("v.finite", () => {
@@ -218,8 +219,8 @@ describe("v.[type]", () => {
         {
           valueOf() {
             return 1;
-          }
-        }
+          },
+        },
       ]
     );
     expect(getExplanations(checkFinite, "1")).toEqual([
@@ -227,87 +228,87 @@ describe("v.[type]", () => {
         path: [],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.Finite
+          type: ExplanationSchemaType.Finite,
         },
-        value: "1"
-      }
+        value: "1",
+      },
     ]);
     expect(getExplanations(checkFinite, Infinity)).toEqual([
       {
         path: [],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.Finite
+          type: ExplanationSchemaType.Finite,
         },
-        value: Infinity
-      }
+        value: Infinity,
+      },
     ]);
     expect(getExplanations(checkFinite, -Infinity)).toEqual([
       {
         path: [],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.Finite
+          type: ExplanationSchemaType.Finite,
         },
-        value: -Infinity
-      }
+        value: -Infinity,
+      },
     ]);
     expect(getExplanations(checkFinite, NaN)).toEqual([
       {
         path: [],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.Finite
+          type: ExplanationSchemaType.Finite,
         },
-        value: NaN
-      }
+        value: NaN,
+      },
     ]);
     expect(getExplanations(checkFinite, null)).toEqual([
       {
         path: [],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.Finite
+          type: ExplanationSchemaType.Finite,
         },
-        value: null
-      }
+        value: null,
+      },
     ]);
     expect(getExplanations(checkFinite, undefined)).toEqual([
       {
         path: [],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.Finite
+          type: ExplanationSchemaType.Finite,
         },
-        value: undefined
-      }
+        value: undefined,
+      },
     ]);
     expect(getExplanations(checkFinite, {})).toEqual([
       {
         path: [],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.Finite
+          type: ExplanationSchemaType.Finite,
         },
-        value: {}
-      }
+        value: {},
+      },
     ]);
     expect(getExplanations(checkFinite, [])).toEqual([
       {
         path: [],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.Finite
+          type: ExplanationSchemaType.Finite,
         },
-        value: []
-      }
+        value: [],
+      },
     ]);
   });
   test("{ a: v.finite }", () => {
     const checkFinite = v({ a: v.finite });
     testValidatorImpure(
       checkFinite,
-      [1, 0, 1.5, -1].map(a => ({ a })),
+      [1, 0, 1.5, -1].map((a) => ({ a })),
       [
         "1",
         Infinity,
@@ -320,89 +321,89 @@ describe("v.[type]", () => {
         {
           valueOf() {
             return 1;
-          }
-        }
-      ].map(a => ({ a }))
+          },
+        },
+      ].map((a) => ({ a }))
     );
     expect(getExplanations(checkFinite, { a: "1" })).toEqual([
       {
         path: ["a"],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.Finite
+          type: ExplanationSchemaType.Finite,
         },
-        value: "1"
-      }
+        value: "1",
+      },
     ]);
     expect(getExplanations(checkFinite, { a: Infinity })).toEqual([
       {
         path: ["a"],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.Finite
+          type: ExplanationSchemaType.Finite,
         },
-        value: Infinity
-      }
+        value: Infinity,
+      },
     ]);
     expect(getExplanations(checkFinite, { a: -Infinity })).toEqual([
       {
         path: ["a"],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.Finite
+          type: ExplanationSchemaType.Finite,
         },
-        value: -Infinity
-      }
+        value: -Infinity,
+      },
     ]);
     expect(getExplanations(checkFinite, { a: NaN })).toEqual([
       {
         path: ["a"],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.Finite
+          type: ExplanationSchemaType.Finite,
         },
-        value: NaN
-      }
+        value: NaN,
+      },
     ]);
     expect(getExplanations(checkFinite, { a: null })).toEqual([
       {
         path: ["a"],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.Finite
+          type: ExplanationSchemaType.Finite,
         },
-        value: null
-      }
+        value: null,
+      },
     ]);
     expect(getExplanations(checkFinite, { a: undefined })).toEqual([
       {
         path: ["a"],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.Finite
+          type: ExplanationSchemaType.Finite,
         },
-        value: undefined
-      }
+        value: undefined,
+      },
     ]);
     expect(getExplanations(checkFinite, { a: {} })).toEqual([
       {
         path: ["a"],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.Finite
+          type: ExplanationSchemaType.Finite,
         },
-        value: {}
-      }
+        value: {},
+      },
     ]);
     expect(getExplanations(checkFinite, { a: [] })).toEqual([
       {
         path: ["a"],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.Finite
+          type: ExplanationSchemaType.Finite,
         },
-        value: []
-      }
+        value: [],
+      },
     ]);
   });
   test("v.safeInteger", () => {
@@ -423,8 +424,8 @@ describe("v.[type]", () => {
         {
           valueOf() {
             return 1;
-          }
-        }
+          },
+        },
       ]
     );
     expect(getExplanations(checkSafeInteger, "1")).toEqual([
@@ -432,90 +433,90 @@ describe("v.[type]", () => {
         path: [],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.SafeInteger
+          type: ExplanationSchemaType.SafeInteger,
         },
-        value: "1"
-      }
+        value: "1",
+      },
     ]);
     expect(getExplanations(checkSafeInteger, 1.5)).toEqual([
       {
         path: [],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.SafeInteger
+          type: ExplanationSchemaType.SafeInteger,
         },
-        value: 1.5
-      }
+        value: 1.5,
+      },
     ]);
     expect(getExplanations(checkSafeInteger, Infinity)).toEqual([
       {
         path: [],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.SafeInteger
+          type: ExplanationSchemaType.SafeInteger,
         },
-        value: Infinity
-      }
+        value: Infinity,
+      },
     ]);
     expect(getExplanations(checkSafeInteger, -Infinity)).toEqual([
       {
         path: [],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.SafeInteger
+          type: ExplanationSchemaType.SafeInteger,
         },
-        value: -Infinity
-      }
+        value: -Infinity,
+      },
     ]);
     expect(getExplanations(checkSafeInteger, NaN)).toEqual([
       {
         path: [],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.SafeInteger
+          type: ExplanationSchemaType.SafeInteger,
         },
-        value: NaN
-      }
+        value: NaN,
+      },
     ]);
     expect(getExplanations(checkSafeInteger, null)).toEqual([
       {
         path: [],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.SafeInteger
+          type: ExplanationSchemaType.SafeInteger,
         },
-        value: null
-      }
+        value: null,
+      },
     ]);
     expect(getExplanations(checkSafeInteger, undefined)).toEqual([
       {
         path: [],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.SafeInteger
+          type: ExplanationSchemaType.SafeInteger,
         },
-        value: undefined
-      }
+        value: undefined,
+      },
     ]);
     expect(getExplanations(checkSafeInteger, {})).toEqual([
       {
         path: [],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.SafeInteger
+          type: ExplanationSchemaType.SafeInteger,
         },
-        value: {}
-      }
+        value: {},
+      },
     ]);
     expect(getExplanations(checkSafeInteger, [])).toEqual([
       {
         path: [],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.SafeInteger
+          type: ExplanationSchemaType.SafeInteger,
         },
-        value: []
-      }
+        value: [],
+      },
     ]);
   });
   test("v.function", () => {
@@ -527,7 +528,7 @@ describe("v.[type]", () => {
         function() {
           return true;
         },
-        new Function("return true")
+        new Function("return true"),
       ],
       [1, null, undefined]
     );
@@ -536,30 +537,30 @@ describe("v.[type]", () => {
         path: [],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.Function
+          type: ExplanationSchemaType.Function,
         },
-        value: 1
-      }
+        value: 1,
+      },
     ]);
     expect(getExplanations(checkFunction, null)).toEqual([
       {
         path: [],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.Function
+          type: ExplanationSchemaType.Function,
         },
-        value: null
-      }
+        value: null,
+      },
     ]);
     expect(getExplanations(checkFunction, undefined)).toEqual([
       {
         path: [],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.Function
+          type: ExplanationSchemaType.Function,
         },
-        value: undefined
-      }
+        value: undefined,
+      },
     ]);
   });
   test("{ a: v.function }", () => {
@@ -571,39 +572,39 @@ describe("v.[type]", () => {
         function() {
           return true;
         },
-        new Function("return true")
-      ].map(a => ({ a })),
-      [1, null, undefined].map(a => ({ a }))
+        new Function("return true"),
+      ].map((a) => ({ a })),
+      [1, null, undefined].map((a) => ({ a }))
     );
     expect(getExplanations(checkFunction, { a: 1 })).toEqual([
       {
         path: ["a"],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.Function
+          type: ExplanationSchemaType.Function,
         },
-        value: 1
-      }
+        value: 1,
+      },
     ]);
     expect(getExplanations(checkFunction, { a: null })).toEqual([
       {
         path: ["a"],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.Function
+          type: ExplanationSchemaType.Function,
         },
-        value: null
-      }
+        value: null,
+      },
     ]);
     expect(getExplanations(checkFunction, { a: undefined })).toEqual([
       {
         path: ["a"],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.Function
+          type: ExplanationSchemaType.Function,
         },
-        value: undefined
-      }
+        value: undefined,
+      },
     ]);
   });
   test("v.symbol", () => {
@@ -618,70 +619,70 @@ describe("v.[type]", () => {
         path: [],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.Symbol
+          type: ExplanationSchemaType.Symbol,
         },
-        value: "symbol"
-      }
+        value: "symbol",
+      },
     ]);
     expect(getExplanations(checkSymbol, null)).toEqual([
       {
         path: [],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.Symbol
+          type: ExplanationSchemaType.Symbol,
         },
-        value: null
-      }
+        value: null,
+      },
     ]);
     expect(getExplanations(checkSymbol, undefined)).toEqual([
       {
         path: [],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.Symbol
+          type: ExplanationSchemaType.Symbol,
         },
-        value: undefined
-      }
+        value: undefined,
+      },
     ]);
   });
   test("{ a: v.symbol }", () => {
     const checkSymbol = v({ a: v.symbol });
     testValidatorImpure(
       checkSymbol,
-      [Symbol.for("quartet"), Symbol.for("andrew"), Symbol("123")].map(a => ({
-        a
+      [Symbol.for("quartet"), Symbol.for("andrew"), Symbol("123")].map((a) => ({
+        a,
       })),
-      ["symbol", null, undefined].map(a => ({ a }))
+      ["symbol", null, undefined].map((a) => ({ a }))
     );
     expect(getExplanations(checkSymbol, { a: "symbol" })).toEqual([
       {
         path: ["a"],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.Symbol
+          type: ExplanationSchemaType.Symbol,
         },
-        value: "symbol"
-      }
+        value: "symbol",
+      },
     ]);
     expect(getExplanations(checkSymbol, { a: null })).toEqual([
       {
         path: ["a"],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.Symbol
+          type: ExplanationSchemaType.Symbol,
         },
-        value: null
-      }
+        value: null,
+      },
     ]);
     expect(getExplanations(checkSymbol, { a: undefined })).toEqual([
       {
         path: ["a"],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.Symbol
+          type: ExplanationSchemaType.Symbol,
         },
-        value: undefined
-      }
+        value: undefined,
+      },
     ]);
   });
   test("v.positive", () => {
@@ -697,8 +698,8 @@ describe("v.[type]", () => {
         {
           valueOf() {
             return 1;
-          }
-        }
+          },
+        },
       ],
       [0, null, -Infinity, -1, NaN, undefined, {}, []]
     );
@@ -707,80 +708,80 @@ describe("v.[type]", () => {
         path: [],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.Positive
+          type: ExplanationSchemaType.Positive,
         },
-        value: 0
-      }
+        value: 0,
+      },
     ]);
     expect(getExplanations(checkPositive, null)).toEqual([
       {
         path: [],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.Positive
+          type: ExplanationSchemaType.Positive,
         },
-        value: null
-      }
+        value: null,
+      },
     ]);
     expect(getExplanations(checkPositive, -Infinity)).toEqual([
       {
         path: [],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.Positive
+          type: ExplanationSchemaType.Positive,
         },
-        value: -Infinity
-      }
+        value: -Infinity,
+      },
     ]);
     expect(getExplanations(checkPositive, -1)).toEqual([
       {
         path: [],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.Positive
+          type: ExplanationSchemaType.Positive,
         },
-        value: -1
-      }
+        value: -1,
+      },
     ]);
     expect(getExplanations(checkPositive, NaN)).toEqual([
       {
         path: [],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.Positive
+          type: ExplanationSchemaType.Positive,
         },
-        value: NaN
-      }
+        value: NaN,
+      },
     ]);
     expect(getExplanations(checkPositive, undefined)).toEqual([
       {
         path: [],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.Positive
+          type: ExplanationSchemaType.Positive,
         },
-        value: undefined
-      }
+        value: undefined,
+      },
     ]);
     expect(getExplanations(checkPositive, {})).toEqual([
       {
         path: [],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.Positive
+          type: ExplanationSchemaType.Positive,
         },
-        value: {}
-      }
+        value: {},
+      },
     ]);
     expect(getExplanations(checkPositive, [])).toEqual([
       {
         path: [],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.Positive
+          type: ExplanationSchemaType.Positive,
         },
-        value: []
-      }
+        value: [],
+      },
     ]);
   });
   test("{ a: v.positive }", () => {
@@ -796,90 +797,90 @@ describe("v.[type]", () => {
         {
           valueOf() {
             return 1;
-          }
-        }
-      ].map(a => ({ a })),
-      [0, null, -Infinity, -1, NaN, undefined, {}, []].map(a => ({ a }))
+          },
+        },
+      ].map((a) => ({ a })),
+      [0, null, -Infinity, -1, NaN, undefined, {}, []].map((a) => ({ a }))
     );
     expect(getExplanations(checkPositive, { a: 0 })).toEqual([
       {
         path: ["a"],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.Positive
+          type: ExplanationSchemaType.Positive,
         },
-        value: 0
-      }
+        value: 0,
+      },
     ]);
     expect(getExplanations(checkPositive, { a: null })).toEqual([
       {
         path: ["a"],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.Positive
+          type: ExplanationSchemaType.Positive,
         },
-        value: null
-      }
+        value: null,
+      },
     ]);
     expect(getExplanations(checkPositive, { a: -Infinity })).toEqual([
       {
         path: ["a"],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.Positive
+          type: ExplanationSchemaType.Positive,
         },
-        value: -Infinity
-      }
+        value: -Infinity,
+      },
     ]);
     expect(getExplanations(checkPositive, { a: -1 })).toEqual([
       {
         path: ["a"],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.Positive
+          type: ExplanationSchemaType.Positive,
         },
-        value: -1
-      }
+        value: -1,
+      },
     ]);
     expect(getExplanations(checkPositive, { a: NaN })).toEqual([
       {
         path: ["a"],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.Positive
+          type: ExplanationSchemaType.Positive,
         },
-        value: NaN
-      }
+        value: NaN,
+      },
     ]);
     expect(getExplanations(checkPositive, { a: undefined })).toEqual([
       {
         path: ["a"],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.Positive
+          type: ExplanationSchemaType.Positive,
         },
-        value: undefined
-      }
+        value: undefined,
+      },
     ]);
     expect(getExplanations(checkPositive, { a: {} })).toEqual([
       {
         path: ["a"],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.Positive
+          type: ExplanationSchemaType.Positive,
         },
-        value: {}
-      }
+        value: {},
+      },
     ]);
     expect(getExplanations(checkPositive, { a: [] })).toEqual([
       {
         path: ["a"],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.Positive
+          type: ExplanationSchemaType.Positive,
         },
-        value: []
-      }
+        value: [],
+      },
     ]);
   });
   test("v.negative", () => {
@@ -895,8 +896,8 @@ describe("v.[type]", () => {
         {
           valueOf() {
             return -1;
-          }
-        }
+          },
+        },
       ],
       [0, null, Infinity, 1, NaN, undefined, {}, []]
     );
@@ -905,80 +906,80 @@ describe("v.[type]", () => {
         path: [],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.Negative
+          type: ExplanationSchemaType.Negative,
         },
-        value: 0
-      }
+        value: 0,
+      },
     ]);
     expect(getExplanations(checkNegative, null)).toEqual([
       {
         path: [],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.Negative
+          type: ExplanationSchemaType.Negative,
         },
-        value: null
-      }
+        value: null,
+      },
     ]);
     expect(getExplanations(checkNegative, Infinity)).toEqual([
       {
         path: [],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.Negative
+          type: ExplanationSchemaType.Negative,
         },
-        value: Infinity
-      }
+        value: Infinity,
+      },
     ]);
     expect(getExplanations(checkNegative, 1)).toEqual([
       {
         path: [],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.Negative
+          type: ExplanationSchemaType.Negative,
         },
-        value: 1
-      }
+        value: 1,
+      },
     ]);
     expect(getExplanations(checkNegative, NaN)).toEqual([
       {
         path: [],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.Negative
+          type: ExplanationSchemaType.Negative,
         },
-        value: NaN
-      }
+        value: NaN,
+      },
     ]);
     expect(getExplanations(checkNegative, undefined)).toEqual([
       {
         path: [],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.Negative
+          type: ExplanationSchemaType.Negative,
         },
-        value: undefined
-      }
+        value: undefined,
+      },
     ]);
     expect(getExplanations(checkNegative, {})).toEqual([
       {
         path: [],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.Negative
+          type: ExplanationSchemaType.Negative,
         },
-        value: {}
-      }
+        value: {},
+      },
     ]);
     expect(getExplanations(checkNegative, [])).toEqual([
       {
         path: [],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.Negative
+          type: ExplanationSchemaType.Negative,
         },
-        value: []
-      }
+        value: [],
+      },
     ]);
   });
   test("{ a: v.negative }", () => {
@@ -994,90 +995,90 @@ describe("v.[type]", () => {
         {
           valueOf() {
             return -1;
-          }
-        }
-      ].map(a => ({ a })),
-      [0, null, Infinity, 1, NaN, undefined, {}, []].map(a => ({ a }))
+          },
+        },
+      ].map((a) => ({ a })),
+      [0, null, Infinity, 1, NaN, undefined, {}, []].map((a) => ({ a }))
     );
     expect(getExplanations(checkNegative, { a: 0 })).toEqual([
       {
         path: ["a"],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.Negative
+          type: ExplanationSchemaType.Negative,
         },
-        value: 0
-      }
+        value: 0,
+      },
     ]);
     expect(getExplanations(checkNegative, { a: null })).toEqual([
       {
         path: ["a"],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.Negative
+          type: ExplanationSchemaType.Negative,
         },
-        value: null
-      }
+        value: null,
+      },
     ]);
     expect(getExplanations(checkNegative, { a: Infinity })).toEqual([
       {
         path: ["a"],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.Negative
+          type: ExplanationSchemaType.Negative,
         },
-        value: Infinity
-      }
+        value: Infinity,
+      },
     ]);
     expect(getExplanations(checkNegative, { a: 1 })).toEqual([
       {
         path: ["a"],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.Negative
+          type: ExplanationSchemaType.Negative,
         },
-        value: 1
-      }
+        value: 1,
+      },
     ]);
     expect(getExplanations(checkNegative, { a: NaN })).toEqual([
       {
         path: ["a"],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.Negative
+          type: ExplanationSchemaType.Negative,
         },
-        value: NaN
-      }
+        value: NaN,
+      },
     ]);
     expect(getExplanations(checkNegative, { a: undefined })).toEqual([
       {
         path: ["a"],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.Negative
+          type: ExplanationSchemaType.Negative,
         },
-        value: undefined
-      }
+        value: undefined,
+      },
     ]);
     expect(getExplanations(checkNegative, { a: {} })).toEqual([
       {
         path: ["a"],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.Negative
+          type: ExplanationSchemaType.Negative,
         },
-        value: {}
-      }
+        value: {},
+      },
     ]);
     expect(getExplanations(checkNegative, { a: [] })).toEqual([
       {
         path: ["a"],
         innerExplanations: [],
         schema: {
-          type: ExplanationSchemaType.Negative
+          type: ExplanationSchemaType.Negative,
         },
-        value: []
-      }
+        value: [],
+      },
     ]);
   });
 });

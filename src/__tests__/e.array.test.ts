@@ -1,9 +1,10 @@
 /* tslint:disable:object-literal-sort-keys */
+import { describe } from "vitest";
 import { e as v } from "..";
 import { ExplanationSchemaType } from "../explanations";
 import { testValidatorWithExplanations } from "./testValidatorWithExplanations";
 
-describe("v.array", () => {
+describe("v.array", (test) => {
   test("v.array", () => {
     testValidatorWithExplanations(
       v(v.array),
@@ -17,10 +18,10 @@ describe("v.array", () => {
               path: [],
               innerExplanations: [],
               schema: {
-                type: ExplanationSchemaType.Array
-              }
-            }
-          ]
+                type: ExplanationSchemaType.Array,
+              },
+            },
+          ],
         ],
         [
           { length: 10 },
@@ -30,10 +31,10 @@ describe("v.array", () => {
               path: [],
               innerExplanations: [],
               schema: {
-                type: ExplanationSchemaType.Array
-              }
-            }
-          ]
+                type: ExplanationSchemaType.Array,
+              },
+            },
+          ],
         ],
         [
           "Andrew",
@@ -43,18 +44,18 @@ describe("v.array", () => {
               path: [],
               innerExplanations: [],
               schema: {
-                type: ExplanationSchemaType.Array
-              }
-            }
-          ]
-        ]
+                type: ExplanationSchemaType.Array,
+              },
+            },
+          ],
+        ],
       ]
     );
   });
   test("{ a: v.array }", () => {
     testValidatorWithExplanations(
       v({ a: v.array }),
-      [[], [1, 2, "3"]].map(a => ({ a })),
+      [[], [1, 2, "3"]].map((a) => ({ a })),
       [
         [
           { a: {} },
@@ -64,10 +65,10 @@ describe("v.array", () => {
               path: ["a"],
               innerExplanations: [],
               schema: {
-                type: ExplanationSchemaType.Array
-              }
-            }
-          ]
+                type: ExplanationSchemaType.Array,
+              },
+            },
+          ],
         ],
         [
           { a: { length: 10 } },
@@ -77,10 +78,10 @@ describe("v.array", () => {
               path: ["a"],
               innerExplanations: [],
               schema: {
-                type: ExplanationSchemaType.Array
-              }
-            }
-          ]
+                type: ExplanationSchemaType.Array,
+              },
+            },
+          ],
         ],
         [
           { a: "Andrew" },
@@ -90,11 +91,11 @@ describe("v.array", () => {
               path: ["a"],
               innerExplanations: [],
               schema: {
-                type: ExplanationSchemaType.Array
-              }
-            }
-          ]
-        ]
+                type: ExplanationSchemaType.Array,
+              },
+            },
+          ],
+        ],
       ]
     );
   });

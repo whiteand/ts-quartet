@@ -1,6 +1,7 @@
 import { has } from "../utils";
+import { describe, expect } from "vitest";
 
-describe("has", () => {
+describe("has", (test) => {
   test('has(null, "toString")', () => {
     expect(has(null, "toString")).toBe(false);
   });
