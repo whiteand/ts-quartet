@@ -126,13 +126,13 @@ function getMessage(explanation: IExplanation): string {
 }
 
 function getPath(
-  explanation: IExplanation
+  explanation: IExplanation,
 ): ReadonlyArray<PropertyKey | StandardSchemaV1.PathSegment> | undefined {
   return [...explanation.path];
 }
 
 export function eCompileSchema<T = Z>(
-  schema: TSchema
+  schema: TSchema,
 ): CompilationResult<T, Z> {
   const explanator: (value: Z, path: KeyType[]) => null | IExplanation[] =
     getExplanator(schema);
@@ -172,7 +172,7 @@ export function eCompileSchema<T = Z>(
           path,
         };
       });
-    }
+    },
   );
   return res;
 }

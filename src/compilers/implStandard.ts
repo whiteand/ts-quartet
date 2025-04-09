@@ -3,7 +3,7 @@ import { CompilationResult } from "../types";
 
 export function implStandard<const T, const E>(
   v: CompilationResult<T, E>,
-  explanationsToIssues: (explanation: readonly E[]) => StandardSchemaV1.Issue[]
+  explanationsToIssues: (explanation: readonly E[]) => StandardSchemaV1.Issue[],
 ): StandardSchemaV1<unknown, T>["~standard"] {
   return {
     validate: (value) =>
