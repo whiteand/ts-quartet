@@ -50,7 +50,7 @@ export const methods = {
   any: anySchema(),
   array: array(),
   arrayOf<const E extends RawSchema>(
-    rawElementSchema: E
+    rawElementSchema: E,
   ): IArrayOfSchema & IFromRawSchema<E> {
     const elementSchema = rawSchemaToSchema(rawElementSchema);
     return arrayOf<E>(elementSchema);
@@ -97,7 +97,7 @@ export const methods = {
   },
   custom<const T extends TCustomValidator>(
     customValidator: T,
-    description?: string
+    description?: string,
   ): ICustomSchema & IFromRawSchema<T> {
     return custom(customValidator, description) as ICustomSchema &
       IFromRawSchema<T>;
