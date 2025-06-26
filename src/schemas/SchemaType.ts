@@ -20,6 +20,7 @@ export enum SchemaType {
   Positive = "__!quartet/Positive!__",
   SafeInteger = "__!quartet/SafeInteger!__",
   String = "__!quartet/String!__",
+  BigInt = "__!quartet/BigInt!__",
   Symbol = "__!quartet/Symbol!__",
   Test = "__!quartet/Test!__",
   Variant = "__!quartet/Variant!__",

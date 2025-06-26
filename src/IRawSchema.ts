@@ -5,6 +5,7 @@ import {
   IAnySchema,
   IArrayOfSchema,
   IArraySchema,
+  IBigIntSchema,
   IBooleanSchema,
   ICustomSchema,
   IFiniteSchema,
@@ -54,6 +55,7 @@ export type RawSchema =
   | IPositiveSchema
   | ISafeIntegerSchema
   | IStringSchema
+  | IBigIntSchema
   | ISymbolSchema
   | ITestSchema
   | ICustomSchema

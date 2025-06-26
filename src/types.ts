@@ -9,6 +9,9 @@ export interface IAndSchema {
 export interface IAnySchema {
   readonly type: SchemaType.Any;
 }
+export interface IBigIntSchema {
+  readonly type: SchemaType.BigInt;
+}
 
 export interface IArraySchema {
   readonly type: SchemaType.Array;
@@ -148,6 +151,7 @@ export type TNonPrimitiveSchema =
   | IPositiveSchema
   | ISafeIntegerSchema
   | IStringSchema
+  | IBigIntSchema
   | ISymbolSchema
   | ITestSchema
   | IVariantSchema

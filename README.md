@@ -26,6 +26,7 @@ It is a declarative and fast tool for data validation.
       - [`v.positive: Schema`](#vpositive-schema)
       - [`v.safeInteger: Schema`](#vsafeinteger-schema)
       - [`v.string: Schema`](#vstring-schema)
+      - [`v.bigint: Schema`](#vbigint-schema)
       - [`v.symbol: Schema`](#vsymbol-schema)
     - [Schemas created using quartet methods](#schemas-created-using-quartet-methods)
       - [`v.and(...schemas: Schema[]): Schema`](#vandschemas-schema-schema)
@@ -312,6 +313,14 @@ const checkSafeInteger = (x) => Number.isSafeInteger(x);
 const checkString = v(v.string);
 // same as
 const checkString = (x) => typeof x === "string";
+```
+
+#### `v.bigint: Schema`
+
+```typescript
+const checkBigInt = v(v.bigint);
+// same as
+const checkBigInt = (x) => typeof x === "bigint";
 ```
 
 #### `v.symbol: Schema`

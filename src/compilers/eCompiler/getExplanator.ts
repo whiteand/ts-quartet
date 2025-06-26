@@ -7,7 +7,7 @@ import { explanation } from "./explanation";
 import { returnExplanations } from "./returnExplanations";
 
 export function getExplanator(
-  schema: TSchema,
+  schema: TSchema
 ): (value: Z, path: KeyType[]) => null | IExplanation[] {
   if (typeof schema !== "object" || schema === null) {
     return (value, path) =>
@@ -26,17 +26,17 @@ export function getExplanator(
         alloc,
         "value",
         pathParamName,
-        [],
+        []
       );
       const funcBody = `${beautifyStatements(statements).join(
-        "\n",
+        "\n"
       )}\n  return null`;
 
       const explanator = new Function(
         "value",
         contextParamName,
         pathParamName,
-        funcBody,
+        funcBody
       ) as (value: Z, context: Z, path: KeyType[]) => null | IExplanation[];
       return (value: Z, path: KeyType[]) => explanator(value, context, path);
     }
@@ -125,6 +125,9 @@ export function getExplanator(
     case SchemaType.String:
       return (value, path) =>
         typeof value === "string" ? null : [explanation(value, path, schema)];
+    case SchemaType.BigInt:
+      return (value, path) =>
+        typeof value === "bigint" ? null : [explanation(value, path, schema)];
     case SchemaType.Symbol:
       return (value, path) =>
         typeof value === "symbol" ? null : [explanation(value, path, schema)];
@@ -141,7 +144,7 @@ export function getExplanator(
       };
     case SchemaType.Variant: {
       const explanators = schema.variants.map((variantSchema) =>
-        getExplanator(variantSchema),
+        getExplanator(variantSchema)
       );
       return (value, path) => {
         const innerExplanations: IExplanation[] = [];

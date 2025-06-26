@@ -9,7 +9,7 @@ describe("v({ ... })", (test) => {
     testValidatorImpure(
       notNull,
       [{}, 1, 0, false, true, "", []],
-      [null, undefined],
+      [null, undefined]
     );
     expect(getExplanations(notNull, null)).toEqual([
       {
@@ -39,7 +39,7 @@ describe("v({ ... })", (test) => {
     testValidatorImpure(
       notNull,
       [{ a: NaN }, { a: Infinity }, { a: 1, b: "123" }],
-      [null, undefined, {}, 1, 0, false, true, "", []],
+      [null, undefined, {}, 1, 0, false, true, "", []]
     );
     expect(getExplanations(notNull, null)).toEqual([
       {
@@ -147,7 +147,7 @@ describe("v({ ... })", (test) => {
     testValidatorImpure(
       notNull,
       [{ a: NaN }, { a: Infinity }, { a: 1 }],
-      [null, undefined, {}, 1, 0, false, true, "", []],
+      [null, undefined, {}, 1, 0, false, true, "", []]
     );
     expect(getExplanations(notNull, null)).toEqual([
       {
@@ -257,7 +257,7 @@ describe("v({ ... })", (test) => {
     testValidatorImpure(
       notNull,
       [{}, 1, 0, false, true, "", []],
-      [null, undefined],
+      [null, undefined]
     );
     expect(getExplanations(notNull, null)).toEqual([
       {
@@ -289,7 +289,7 @@ describe("v({ ... })", (test) => {
     testValidatorImpure(
       notNull,
       [{}, 1, 0, false, true, "", [], { a: 1 }],
-      [{ b: "string" }, null, undefined],
+      [{ b: "string" }, null, undefined]
     );
     expect(getExplanations(notNull, { b: "string" })).toEqual([
       {
@@ -352,7 +352,7 @@ describe("v({ ... })", (test) => {
         { a: 1, valid: null },
         { valid: null },
       ],
-      [{ b: "string" }, null, undefined],
+      [{ b: "string" }, null, undefined]
     );
     expect(getExplanations(notNull, { b: "string" })).toEqual([
       {
@@ -412,7 +412,7 @@ describe("v({ ... })", (test) => {
         [],
         { a: null },
         { a: "1", b: "1" },
-      ],
+      ]
     );
     expect(getExplanations(notNull, { b: "string" })).toEqual([
       {
@@ -513,6 +513,124 @@ describe("v({ ... })", (test) => {
       },
     ]);
   });
+  test("v({ a: bigint, [rest]: number })", () => {
+    const notNull = v({
+      a: v.bigint,
+      [v.rest]: v.number,
+    });
+    testValidatorImpure(
+      notNull,
+      [{ a: 0n }, { a: 1n }, { a: 1n, b: 1 }],
+      [
+        { b: "string" },
+        null,
+        undefined,
+        { a: 1 },
+        {},
+        [],
+        { a: null },
+        { a: "1", b: "1" },
+      ]
+    );
+    expect(getExplanations(notNull, { b: "string" })).toEqual([
+      {
+        path: ["a"],
+        innerExplanations: [],
+        schema: {
+          type: ExplanationSchemaType.BigInt,
+        },
+        value: undefined,
+      },
+    ]);
+    expect(getExplanations(notNull, null)).toEqual([
+      {
+        path: [],
+        innerExplanations: [],
+        schema: {
+          "[v.restOmit]": [],
+          "[v.rest]": {
+            type: ExplanationSchemaType.Number,
+          },
+          propsSchemas: {
+            a: {
+              type: ExplanationSchemaType.BigInt,
+            },
+          },
+          type: ExplanationSchemaType.Object,
+        },
+        value: null,
+      },
+    ]);
+    expect(getExplanations(notNull, undefined)).toEqual([
+      {
+        path: [],
+        innerExplanations: [],
+        schema: {
+          "[v.restOmit]": [],
+          "[v.rest]": {
+            type: ExplanationSchemaType.Number,
+          },
+          propsSchemas: {
+            a: {
+              type: ExplanationSchemaType.BigInt,
+            },
+          },
+          type: ExplanationSchemaType.Object,
+        },
+        value: undefined,
+      },
+    ]);
+    expect(getExplanations(notNull, { a: 1 })).toEqual([
+      {
+        path: ["a"],
+        innerExplanations: [],
+        schema: {
+          type: ExplanationSchemaType.BigInt,
+        },
+        value: 1,
+      },
+    ]);
+    expect(getExplanations(notNull, {})).toEqual([
+      {
+        path: ["a"],
+        innerExplanations: [],
+        schema: {
+          type: ExplanationSchemaType.BigInt,
+        },
+        value: undefined,
+      },
+    ]);
+    expect(getExplanations(notNull, [])).toEqual([
+      {
+        path: ["a"],
+        innerExplanations: [],
+        schema: {
+          type: ExplanationSchemaType.BigInt,
+        },
+        value: undefined,
+      },
+    ]);
+    expect(getExplanations(notNull, { a: null })).toEqual([
+      {
+        path: ["a"],
+        innerExplanations: [],
+        schema: {
+          type: ExplanationSchemaType.BigInt,
+        },
+        value: null,
+      },
+    ]);
+    expect(getExplanations(notNull, { a: 1n, b: "1" })).toEqual([
+      {
+        path: ["b"],
+        innerExplanations: [],
+        schema: {
+          type: ExplanationSchemaType.Number,
+        },
+        value: "1",
+      },
+    ]);
+  });
   test('v({ [rest]: number, a: string, [restOmit]: ["b"] })', () => {
     const notNull = v({
       a: v.string,
@@ -529,7 +647,7 @@ describe("v({ ... })", (test) => {
         { a: "1", b: null },
         { a: "1", b: 2 },
       ],
-      [{ b: "string" }, null, undefined, { a: 1 }, {}, [], { a: null }],
+      [{ b: "string" }, null, undefined, { a: 1 }, {}, [], { a: null }]
     );
     expect(getExplanations(notNull, { b: "string" })).toEqual([
       {
@@ -627,13 +745,13 @@ describe("v({ ... })", (test) => {
         v.custom((pair) => {
           pairFromValidator = pair;
           return true;
-        }),
+        })
       ),
     });
     expect(
       checkDict({
         a: 123,
-      }),
+      })
     ).toBe(true);
     expect(pairFromValidator).toEqual({ key: "a", value: 123 });
   });
@@ -644,13 +762,13 @@ describe("v({ ... })", (test) => {
         v.custom((pair) => {
           pairFromValidator = pair;
           return true;
-        }),
+        })
       ),
     });
     expect(
       checkDict({
         a: 123,
-      }),
+      })
     ).toBe(true);
     expect(pairFromValidator).toEqual({ key: "a", value: 123 });
   });
@@ -669,7 +787,7 @@ describe("v({ ... })", (test) => {
         false,
         true,
       ],
-      [null, undefined],
+      [null, undefined]
     );
     expect(getExplanations(checkQuartet, null)).toEqual([
       {

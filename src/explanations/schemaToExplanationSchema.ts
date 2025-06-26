@@ -110,7 +110,7 @@ export function schemaToExplanationSchema(schema: TSchema): TExplanationSchema {
       for (let i = 0; i < props.length; i++) {
         const prop = props[i];
         propsSchemas[prop] = schemaToExplanationSchema(
-          schema.propsSchemas[prop as string],
+          schema.propsSchemas[prop as string]
         );
       }
       if (!schema.hasRestValidator) {
@@ -142,6 +142,10 @@ export function schemaToExplanationSchema(schema: TSchema): TExplanationSchema {
     case SchemaType.String:
       return {
         type: ExplanationSchemaType.String,
+      };
+    case SchemaType.BigInt:
+      return {
+        type: ExplanationSchemaType.BigInt,
       };
     case SchemaType.Symbol:
       return {

@@ -80,17 +80,19 @@ type TToT<R> =
                     ? number
                     : R extends OfT<SchemaType.String>
                       ? string
-                      : R extends OfT<SchemaType.Symbol>
-                        ? symbol
-                        : R extends OfT<SchemaType.Never>
-                          ? never
-                          : R extends OfT<SchemaType.Not>
-                            ? Z
-                            : R extends OfT<SchemaType.Test>
-                              ? InferTester<GetFromRawSchema<R>>
-                              : R extends OfT<SchemaType.Custom>
-                                ? InferCustom<GetFromRawSchema<R>>
-                                : Z;
+                      : R extends OfT<SchemaType.BigInt>
+                        ? bigint
+                        : R extends OfT<SchemaType.Symbol>
+                          ? symbol
+                          : R extends OfT<SchemaType.Never>
+                            ? never
+                            : R extends OfT<SchemaType.Not>
+                              ? Z
+                              : R extends OfT<SchemaType.Test>
+                                ? InferTester<GetFromRawSchema<R>>
+                                : R extends OfT<SchemaType.Custom>
+                                  ? InferCustom<GetFromRawSchema<R>>
+                                  : Z;
 // TODO: IPairSchema;
 
 type InferRestRestOmit<T, Rest, RestOmit> = InferRestless<T> &

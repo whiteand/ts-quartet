@@ -26,6 +26,7 @@ import {
   symbol,
   testSchema,
 } from "./schemas";
+import { bigint } from "./schemas/bigint";
 import {
   IAndSchema,
   IArrayOfSchema,
@@ -49,13 +50,14 @@ export const methods = {
   any: anySchema(),
   array: array(),
   arrayOf<const E extends RawSchema>(
-    rawElementSchema: E,
+    rawElementSchema: E
   ): IArrayOfSchema & IFromRawSchema<E> {
     const elementSchema = rawSchemaToSchema(rawElementSchema);
     return arrayOf<E>(elementSchema);
   },
   boolean: boolean(),
   finite: finite(),
+  bigint: bigint(),
   function: functionSchema(),
   max(maxValue: number, isExclusive: boolean = false) {
     return max(maxValue, isExclusive);
@@ -95,7 +97,7 @@ export const methods = {
   },
   custom<const T extends TCustomValidator>(
     customValidator: T,
-    description?: string,
+    description?: string
   ): ICustomSchema & IFromRawSchema<T> {
     return custom(customValidator, description) as ICustomSchema &
       IFromRawSchema<T>;

@@ -22,6 +22,7 @@ export enum ExplanationSchemaType {
   Positive = "Positive",
   SafeInteger = "SafeInteger",
   String = "String",
+  BigInt = "BigInt",
   Symbol = "Symbol",
   Test = "Test",
   Variant = "Variant",
@@ -134,6 +135,9 @@ export interface ISafeIntegerExplanationSchema {
 export interface IStringExplanationSchema {
   type: ExplanationSchemaType.String;
 }
+export interface IBigIntExplanationSchema {
+  type: ExplanationSchemaType.BigInt;
+}
 
 export interface ISymbolExplanationSchema {
   type: ExplanationSchemaType.Symbol;
@@ -178,6 +182,7 @@ export type TExplanationSchema =
   | IPositiveExplanationSchema
   | ISafeIntegerExplanationSchema
   | IStringExplanationSchema
+  | IBigIntExplanationSchema
   | ISymbolExplanationSchema
   | ITestExplanationSchema
   | IVariantExplanationSchema
